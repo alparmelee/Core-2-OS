@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#64d2ff"/>
+      <stop offset="100%" stop-color="#0a84ff"/>
+    </linearGradient>
+    <linearGradient id="key" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffe566"/>
+      <stop offset="100%" stop-color="#ff9f0a"/>
+    </linearGradient>
+    <clipPath id="sq"><rect width="128" height="128" rx="28"/></clipPath>
+  </defs>
+  <g clip-path="url(#sq)">
+    <rect width="128" height="128" fill="url(#bg)"/>
+    <g transform="translate(40 28)">
+      <circle cx="24" cy="22" r="16" fill="none" stroke="url(#key)" stroke-width="8"/>
+      <rect x="20" y="34" width="8" height="42" rx="3" fill="url(#key)"/>
+      <rect x="28" y="52" width="16" height="7" rx="2" fill="url(#key)"/>
+      <rect x="28" y="64" width="12" height="7" rx="2" fill="url(#key)"/>
+    </g>
+    <g transform="translate(58 38) rotate(25)">
+      <circle cx="24" cy="22" r="14" fill="none" stroke="#e5e5ea" stroke-width="7"/>
+      <rect x="20" y="32" width="7" height="36" rx="3" fill="#e5e5ea"/>
+      <rect x="27" y="48" width="14" height="6" rx="2" fill="#e5e5ea"/>
+    </g>
+  </g>
+</svg>

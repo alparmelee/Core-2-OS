@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.3 Microsoft Windows Editions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#121820;
+    --muted:#4a5568;
+    --paper:#eef2f7;
+    --line:rgba(18,24,32,0.12);
+    --accent:#0067c0;
+    --accent-soft:#d8e8f8;
+    --good:#166534;
+    --warn:#9a3412;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(0,103,192,0.14), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.08), transparent 50%),
+      linear-gradient(180deg, #e4ebf3 0%, var(--paper) 40%, #e8eef5 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#f4f8fc;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,28,56,0.25) 0%, rgba(8,28,56,0.72) 52%, rgba(8,28,56,0.94) 100%),
+      url("1.3/Windows 11 Pro.avif") center/cover no-repeat;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:34ch;
+    color:#dceaf8;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:46ch;
+    color:#a8c0d8;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#dceaf8;
+    color:#0a3d62;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#dceaf8;
+    border:1px solid rgba(220,234,248,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(238,242,247,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+  .visual.logo{ padding:1rem; background:#fff; }
+  .visual.logo img{ width:100%; height:140px; object-fit:contain; }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body ul{
+    margin:0.5rem 0 0.7rem;
+    padding-left:1.2rem;
+  }
+  .body li{ margin-bottom:0.35rem; }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(0,103,192,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+  .note.warn{
+    border-left-color:var(--danger);
+    background:rgba(180,35,24,0.08);
+    color:#7a271a;
+  }
+
+  .split{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0.7rem;
+    margin-top:0.8rem;
+  }
+  .pill{
+    border-radius:14px;
+    padding:0.85rem 1rem;
+    font-size:0.9rem;
+  }
+  .pill strong{
+    display:block;
+    margin-bottom:0.25rem;
+    font-size:0.74rem;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+  }
+  .pill.pro{ background:#e8f6ee; color:var(--good); }
+  .pill.con{ background:#fdece7; color:var(--warn); }
+  .pill p{ margin:0; color:inherit; }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .split{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">1.3</p>
+    <h1>Microsoft Windows Editions</h1>
+    <p>Home vs Pro vs Enterprise, Windows 10 vs 11, and the features that separate each edition.</p>
+    <div class="hero-cta">
+      <a href="#win10">Windows 10</a>
+      <a class="ghost" href="#win11">Windows 11</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#tpm">TPM</a>
+    <a href="#uefi">UEFI</a>
+    <a href="#win10">Win 10</a>
+    <a href="#win11">Win 11</a>
+    <a href="#n-versions">N versions</a>
+    <a href="#domain-workgroup">Domain</a>
+    <a href="#rdp">RDP</a>
+    <a href="#bitlocker">BitLocker</a>
+    <a href="#gpedit">gpedit</a>
+    <a href="#upgrade-paths">Upgrade paths</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ===== PART A: Hardware / firmware prerequisites ===== -->
+  <section id="prereqs">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Hardware and firmware prerequisites</h2>
+        <p>Security chips and modern firmware that Windows — especially Windows 11 — depends on.</p>
+      </div>
+
+      <article class="term" id="tpm">
+        <div class="visual photo">
+          <img src="1.3/TPM.png" alt="Trusted Platform Module TPM chip" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Trusted Platform Module (TPM)</h3>
+          <span class="aka">TPM 2.0 required for Windows 11</span>
+          <p>A dedicated hardware-based security microchip that securely stores cryptographic keys, credentials, and encryption measurements used by features like BitLocker.</p>
+          <div class="note"><strong>Windows 11:</strong> specifically requires <strong>TPM 2.0</strong>.</div>
+        </div>
+      </article>
+
+      <article class="term" id="uefi">
+        <div class="visual logo">
+          <img src="1.3/UEFI.webp" alt="UEFI firmware" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Unified Extensible Firmware Interface (UEFI)</h3>
+          <span class="aka">Replaced legacy BIOS</span>
+          <p>Modern motherboard system firmware that replaced legacy BIOS, offering faster boot times, support for large drives, and enhanced startup security features like <strong>Secure Boot</strong>.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART B: Windows 10 editions ===== -->
+  <section id="win10">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Windows 10 editions</h2>
+        <p>From retail home PCs to large enterprise deployments.</p>
+      </div>
+
+      <article class="term" id="win10-home">
+        <div class="visual logo">
+          <img src="1.3/Windows 10 Home.avif" alt="Windows 10 Home" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Windows 10 Home</h3>
+          <span class="aka">Consumer / retail</span>
+          <p>Designed for home users and purchased at a retail store. Integration with Microsoft account and OneDrive backup. Includes Windows Defender. You can use Cortana to talk to your OS.</p>
+          <ul class="tags">
+            <li>Microsoft account</li>
+            <li>OneDrive backup</li>
+            <li>Windows Defender</li>
+            <li>Cortana</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="win10-pro">
+        <div class="visual logo">
+          <img src="1.3/Windows 10 Pro.webp" alt="Windows 10 Pro" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Windows 10 Pro</h3>
+          <span class="aka">Business version</span>
+          <p>The business version of Windows with additional management features.</p>
+          <ul>
+            <li><strong>Remote Desktop host</strong> — remotely control each computer</li>
+            <li><strong>BitLocker</strong> — full disk encryption (FDE)</li>
+            <li>Join a <strong>Windows domain</strong></li>
+            <li><strong>Group Policy</strong> management</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="win10-pro-workstations">
+        <div class="visual logo">
+          <img src="1.3/Windows Pro Workstation.webp" alt="Windows 10 Pro for Workstations" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Windows 10 Pro for Workstations</h3>
+          <span class="aka">High-end desktops</span>
+          <p>An edition for high-end desktops with enhanced performance and storage options.</p>
+          <ul class="tags">
+            <li>Up to 4 physical CPUs</li>
+            <li>Up to 6 TB RAM</li>
+            <li>ReFS (Resilient File System)</li>
+            <li>Same ReFS support as Windows Server</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="win10-enterprise">
+        <div class="visual logo">
+          <img src="1.3/Windows-10-Enterprise.webp" alt="Windows 10 Enterprise" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Windows 10 Enterprise</h3>
+          <span class="aka">Large implementations</span>
+          <p>Built for large implementations with volume licensing.</p>
+          <ul>
+            <li><strong>AppLocker</strong> — control what applications can run</li>
+            <li><strong>BranchCache</strong> — remote site file caching</li>
+            <li><strong>Granular User Experience (UX) control</strong> — define the user environment</li>
+          </ul>
+          <div class="note">Useful for kiosk and workstation customization.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART C: Windows 11 editions ===== -->
+  <section id="win11">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Windows 11 editions</h2>
+        <p>The same Home / Pro / Enterprise ladder, with Windows 11–specific features.</p>
+      </div>
+
+      <article class="term" id="win11-home">
+        <div class="visual logo">
+          <img src="1.3/Windows 11 Home.avif" alt="Windows 11 Home" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Windows 11 Home</h3>
+          <span class="aka">Consumer version</span>
+          <p>Designed for home use. Integrated with Microsoft accounts. Can be installed with a local account. Limited management functionality — no support for Active Directory.</p>
+          <p>Includes <strong>Device Encryption</strong> — a consumer version of full disk encryption. Stores the recovery information in the user’s Microsoft account.</p>
+        </div>
+      </article>
+
+      <article class="term" id="win11-pro">
+        <div class="visual logo">
+          <img src="1.3/Windows 11 Pro.avif" alt="Windows 11 Pro" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Windows 11 Pro</h3>
+          <span class="aka">Designed for business</span>
+          <p>Large-scale system management. Integrates with <strong>Active Directory</strong> (Microsoft’s directory services).</p>
+          <ul class="tags">
+            <li>BitLocker (FDE)</li>
+            <li>Active Directory</li>
+            <li>Microsoft Hyper-V</li>
+            <li>Integrated virtualization</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="win11-enterprise">
+        <div class="visual photo">
+          <img src="1.3/Windows 11 Enterprise.jfif" alt="Windows 11 Enterprise" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Windows 11 Enterprise</h3>
+          <span class="aka">Large company deployments</span>
+          <p>Built for large company deployments with volume licensing and server-style management features.</p>
+          <ul class="tags">
+            <li>Volume licensing</li>
+            <li>MDM &amp; MAM</li>
+            <li>Device management</li>
+            <li>ReFS support</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART D: Special editions ===== -->
+  <section id="special">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part D</span>
+        <h2>Special editions</h2>
+        <p>Regional variants you may still see on the exam.</p>
+      </div>
+
+      <article class="term" id="n-versions">
+        <div class="visual logo">
+          <img src="1.3/N Versions.avif" alt="Windows N versions" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>N Versions</h3>
+          <span class="aka">Windows editions for Europe</span>
+          <p>The result of antitrust investigations by the European Commission. No Windows Media Player included. Media features can be added to Windows later.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART E: Features that differ by edition ===== -->
+  <section id="features">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part E</span>
+        <h2>Features that differ by edition</h2>
+        <p>Networking model, UI, remote access, memory caps, encryption, and Group Policy.</p>
+      </div>
+
+      <article class="term" id="domain-workgroup">
+        <div class="visual logo">
+          <img src="1.3/Domain Vs Workgroup.png" alt="Domain vs Workgroup" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Domain vs Workgroup</h3>
+          <div class="split">
+            <div class="pill pro">
+              <strong>Domain</strong>
+              <p>Centralized network management. User accounts and security policies are managed by a central server (Domain Controller).</p>
+            </div>
+            <div class="pill con">
+              <strong>Workgroup</strong>
+              <p>Peer-to-peer model. Every computer manages its own local user accounts and security settings independently.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="term" id="desktop-ui">
+        <div class="visual photo">
+          <img src="1.3/user interface.avif" alt="Windows desktop user interface" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Desktop styles / user interface</h3>
+          <p>The visual presentation, layouts, Start menu behaviors, and taskbar configurations provided by different Windows versions or editions.</p>
+          <div class="note"><strong>Example:</strong> centered taskbar alignment in Windows 11 vs. left-aligned layout in Windows 10.</div>
+        </div>
+      </article>
+
+      <article class="term" id="rdp">
+        <div class="visual photo">
+          <img src="1.3/RDP.jfif" alt="Remote Desktop Protocol" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Availability of Remote Desktop Protocol (RDP)</h3>
+          <p>RDP allows a user to remotely control a PC over a network connection.</p>
+          <ul>
+            <li><strong>All editions</strong> can act as an RDP <em>client</em> (connecting to other PCs).</li>
+            <li>Only <strong>Pro, Enterprise, and Education</strong> can act as an RDP <em>host</em> (receiving incoming connections).</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="ram">
+        <div class="visual photo">
+          <img src="1.3/RAM limitations.jfif" alt="RAM support limitations" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Random-access memory (RAM) support limitations</h3>
+          <p>Physical memory caps built into specific Windows editions and architectures.</p>
+          <ul class="tags">
+            <li>32-bit Windows → 4 GB max</li>
+            <li>Home → up to 128 GB</li>
+            <li>Pro → up to 2 TB</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="bitlocker">
+        <div class="visual photo">
+          <img src="1.3/Bitlocker.jpg" alt="BitLocker full disk encryption" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>BitLocker</h3>
+          <span class="aka">Full-disk encryption (FDE)</span>
+          <p>A full-disk encryption security feature included in Windows <strong>Pro, Enterprise, and Education</strong> editions that protects drive contents by scrambling data when the system is offline or powered down.</p>
+          <div class="note">Home uses a lighter <strong>Device Encryption</strong> model (recovery key tied to the Microsoft account).</div>
+        </div>
+      </article>
+
+      <article class="term" id="gpedit">
+        <div class="visual logo">
+          <img src="1.3/gpedit.msc.webp" alt="Local Group Policy Editor gpedit.msc" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>gpedit.msc</h3>
+          <span class="aka">Local Group Policy Editor</span>
+          <p>The Local Group Policy Editor console, available in <strong>Pro and higher</strong> editions, used by administrators to configure system-wide security policies, user restrictions, and OS configurations on a local machine.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART F: Upgrade paths ===== -->
+  <section id="upgrade-paths">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part F</span>
+        <h2>Upgrade paths</h2>
+        <p>Two ways to move to a newer Windows version or edition.</p>
+      </div>
+
+      <article class="term" id="inplace-upgrade">
+        <div class="visual photo">
+          <img src="1.3/In-place upgrade.png" alt="In-place upgrade" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>In-place upgrade</h3>
+          <p>Updating an existing Windows installation to a newer version or edition while keeping all existing files, settings, and installed applications intact.</p>
+        </div>
+      </article>
+
+      <article class="term" id="clean-install">
+        <div class="visual photo">
+          <img src="1.3/Clean.webp" alt="Clean install" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Clean install</h3>
+          <p>Completely wiping the storage drive (formatting) and installing a fresh copy of the operating system from scratch, requiring manually restoring files and reinstalling software.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Images in the <code>1.3</code> folder. Study notes for Core 2 objective 1.3 — Microsoft Windows Editions.
+  </div>
+</footer>
+
+  <script src="study-lightbox.js"></script>
+</body>
+</html>

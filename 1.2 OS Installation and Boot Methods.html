@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.2 OS Installation and Boot Methods</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1a1820;
+    --muted:#4f4a5c;
+    --paper:#f2f0f5;
+    --line:rgba(26,24,32,0.12);
+    --accent:#5b3ea8;
+    --accent-soft:#e8e0f8;
+    --good:#166534;
+    --warn:#9a3412;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(91,62,168,0.14), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.08), transparent 50%),
+      linear-gradient(180deg, #e8e6ed 0%, var(--paper) 40%, #ebe8f0 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#f8f6fc;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(26,16,48,0.25) 0%, rgba(26,16,48,0.72) 52%, rgba(26,16,48,0.94) 100%),
+      url("1.2/windows-10-clean-install-hero.webp") center/cover no-repeat;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:32ch;
+    color:#ece6f8;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:44ch;
+    color:#c8bfd8;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#ece6f8;
+    color:#2a1848;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#ece6f8;
+    border:1px solid rgba(236,230,248,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(242,240,245,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+  .visual.logo{ padding:1rem; background:#fff; }
+  .visual.logo img{ width:100%; height:140px; object-fit:contain; }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body ul{
+    margin:0.5rem 0 0.7rem;
+    padding-left:1.2rem;
+  }
+  .body li{ margin-bottom:0.35rem; }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(91,62,168,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+  .note.warn{
+    border-left-color:var(--danger);
+    background:rgba(180,35,24,0.08);
+    color:#7a271a;
+  }
+
+  .split{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0.7rem;
+    margin-top:0.8rem;
+  }
+  .pill{
+    border-radius:14px;
+    padding:0.85rem 1rem;
+    font-size:0.9rem;
+  }
+  .pill strong{
+    display:block;
+    margin-bottom:0.25rem;
+    font-size:0.74rem;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+  }
+  .pill.pro{ background:#e8f6ee; color:var(--good); }
+  .pill.con{ background:#fdece7; color:var(--warn); }
+  .pill p{ margin:0; color:inherit; }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .split{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">1.2</p>
+    <h1>OS Installation and Boot Methods</h1>
+    <p>How systems start up, how operating systems get installed, and how drives are prepared.</p>
+    <div class="hero-cta">
+      <a href="#partitioning">Partitioning &amp; GPT</a>
+      <a class="ghost" href="#install-types">Installation types</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#gpt">GPT</a>
+    <a href="#boot-methods">Boot methods</a>
+    <a href="#usb-boot">USB</a>
+    <a href="#pxe">PXE</a>
+    <a href="#install-types">Install types</a>
+    <a href="#zero-touch">Zero-touch</a>
+    <a href="#partitioning">Partitioning</a>
+    <a href="#mbr">MBR</a>
+    <a href="#quick-format">Quick format</a>
+    <a href="#upgrade">Why upgrade</a>
+    <a href="#pre-install">Pre-install checks</a>
+    <a href="#lifecycle">Lifecycle</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ===== PART A: Partitioning standards ===== -->
+  <section id="partitioning">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Partitioning standards</h2>
+        <p>How a drive is divided before an OS is installed — and the modern standard most new PCs use.</p>
+      </div>
+
+      <article class="term" id="guid">
+        <div class="visual logo">
+          <img src="1.2/GUID.png" alt="GUID Globally Unique Identifier" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>GUID</h3>
+          <p><strong>Globally Unique Identifier</strong> — a 128-bit value used to uniquely identify partitions, disks, and other objects in modern systems.</p>
+        </div>
+      </article>
+
+      <article class="term" id="gpt">
+        <div class="visual logo">
+          <img src="1.2/gpt-partition-table.webp" alt="GPT GUID Partition Table diagram" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>GPT (GUID Partition Table)</h3>
+          <span class="aka">Latest partition format standard</span>
+          <p>The latest partition format standard. Requires a <strong>UEFI BIOS</strong>.</p>
+          <ul class="tags">
+            <li>Up to 128 partitions</li>
+            <li>Max partition size over 9 billion TB</li>
+            <li>Windows max partition currently 256 TB</li>
+            <li>No extended partitions or logical drives needed</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="mbr">
+        <div class="visual logo">
+          <img src="1.2/mbr.webp" alt="Master Boot Record MBR" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Master Boot Record (MBR)</h3>
+          <span class="aka">The old standby — with old limitations</span>
+          <p>Maximum partition size of <strong>2 TB</strong>. Maximum of <strong>four primary partitions</strong> per storage drive. One primary partition can be marked as <strong>Active</strong> (bootable).</p>
+          <div class="split">
+            <div class="pill pro">
+              <strong>Primary</strong>
+              <p>Bootable partitions. Up to four per drive.</p>
+            </div>
+            <div class="pill con">
+              <strong>Extended / Logical</strong>
+              <p>One optional extended partition per device holds additional logical partitions — but logical partitions inside an extended partition are <em>not</em> bootable.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="term" id="disk-partitioning">
+        <div class="visual photo">
+          <img src="1.2/disk partition.png" alt="Disk partitioning diagram" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Disk Partitioning</h3>
+          <p>First step when preparing disks. The drive may already be partitioned; existing partitions may not always be compatible with your new OS.</p>
+          <ul>
+            <li><strong>MBR</strong> hard disks can have up to four partitions.</li>
+            <li><strong>GPT</strong> supports up to 128 partitions and requires UEFI BIOS (or BIOS compatibility mode).</li>
+            <li>BIOS compatibility mode disables <strong>UEFI Secure Boot</strong>.</li>
+          </ul>
+          <div class="note warn"><strong>Be careful.</strong> Serious potential for data loss. Not an everyday occurrence, but always verify the target drive before repartitioning.</div>
+        </div>
+      </article>
+
+      <article class="term" id="partitioning-volumes">
+        <div class="visual photo">
+          <img src="1.2/Internal hard drive (partition).png" alt="Internal hard drive partitions" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Partitioning</h3>
+          <p>Separate the physical drive into logical pieces. Useful to keep data separated; multiple partitions are not always necessary.</p>
+          <p>Formatted partitions are called <strong>volumes</strong> — Microsoft’s nomenclature. Applies across Windows, Linux, and other OSes.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART B: Boot methods ===== -->
+  <section id="boot-methods">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Boot methods</h2>
+        <p>Distinct sources and protocols a computer’s firmware uses to locate and load an operating system into memory during startup.</p>
+      </div>
+
+      <article class="term" id="usb-boot">
+        <div class="visual photo">
+          <img src="1.2/ktc-usb-flash-drives-differences-usb-2-gen1-gen2-og.jpg" alt="USB flash drives" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>USB</h3>
+          <p>The USB device must be <strong>bootable</strong>. The computer must support booting from USB.</p>
+        </div>
+      </article>
+
+      <article class="term" id="pxe">
+        <div class="visual logo">
+          <img src="1.2/PXE_diagram.png" alt="PXE Preboot Execution Environment diagram" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Network — PXE</h3>
+          <span class="aka">Preboot eXecution Environment (“Pixie”)</span>
+          <p>Perform a remote network installation. The computer must support booting with PXE.</p>
+        </div>
+      </article>
+
+      <article class="term" id="ssd-boot">
+        <div class="visual photo">
+          <img src="1.2/Solid-state  flash drives.jfif" alt="Solid-state flash drives" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Solid-state / flash drives</h3>
+          <p>Store many OS installation files. Often used as the target drive or as installation media depending on the deployment method.</p>
+        </div>
+      </article>
+
+      <article class="term" id="internet-boot">
+        <div class="visual photo">
+          <img src="1.2/Kinds-of-Internet-Connection-1.webp" alt="Internet connection types" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Internet-based</h3>
+          <p>Boot or install across the internet. Examples include Linux distributions, macOS Recovery installation, and Windows updates.</p>
+        </div>
+      </article>
+
+      <article class="term" id="external-boot">
+        <div class="visual photo">
+          <img src="1.2/IBM_TotalStorage_Exp400.jpg" alt="External hot-swappable storage drive" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>External / hot-swappable drive</h3>
+          <p>Some external drives can mount an <strong>ISO image</strong> (optical drive image). Can also boot from USB.</p>
+        </div>
+      </article>
+
+      <article class="term" id="internal-boot">
+        <div class="visual photo">
+          <img src="1.2/Internal hard drive (partition).png" alt="Internal hard drive partition" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Internal hard drive (partition)</h3>
+          <p>Install and boot from separate drives, or create and boot from a new partition on an existing internal drive.</p>
+        </div>
+      </article>
+
+      <article class="term" id="multiboot">
+        <div class="visual photo">
+          <img src="1.2/Multiboot.jfif" alt="Multiboot operating systems" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Multiboot</h3>
+          <p>Pick from two or more operating systems from a boot menu — Windows, Linux, etc.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART C: Installation types ===== -->
+  <section id="install-types">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Types of installations</h2>
+        <p>How installation files are placed on the system — from a full wipe to fully automated enterprise deployment.</p>
+      </div>
+
+      <article class="term" id="clean-install">
+        <div class="visual photo">
+          <img src="1.2/windows-10-clean-install-hero.webp" alt="Windows clean install" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Clean install</h3>
+          <p>Wipe the slate clean and reinstall. A migration tool can help move data afterward.</p>
+        </div>
+      </article>
+
+      <article class="term" id="upgrade">
+        <div class="visual photo">
+          <img src="1.2/upgrade.jpg" alt="Operating system upgrade" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Upgrade</h3>
+          <p>Maintain existing applications and data while moving to a newer OS version.</p>
+        </div>
+      </article>
+
+      <article class="term" id="image-deployment">
+        <div class="visual photo">
+          <img src="1.2/osd-top-banner-1.png" alt="OS image deployment" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Image deployment</h3>
+          <p>Deploy a clone on every computer. Relatively quick and can be completely automated.</p>
+        </div>
+      </article>
+
+      <article class="term" id="remote-install">
+        <div class="visual photo">
+          <img src="1.2/Remote network installation.jpg" alt="Remote network installation" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Remote network installation</h3>
+          <p>Install from a local server or shared drive — or across the internet.</p>
+        </div>
+      </article>
+
+      <article class="term" id="zero-touch">
+        <div class="visual logo">
+          <img src="1.2/Zero Touch.png" alt="Zero-touch deployment" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Zero-touch deployment</h3>
+          <p>An automatic install with streamlined implementation. Customize the installation process and automate the entire workflow.</p>
+          <ul class="tags">
+            <li>Company-specific configurations</li>
+            <li>Seamless user experience</li>
+            <li>Turn on the system and go</li>
+            <li>No domain questions or account issues</li>
+            <li>Ship a laptop anywhere — installation takes care of itself</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="recovery-partition">
+        <div class="visual photo">
+          <img src="1.2/partition-recovery.jpg" alt="Recovery partition" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Recovery partition</h3>
+          <p>Hidden partition with installation files used to restore or reinstall the OS without external media.</p>
+        </div>
+      </article>
+
+      <article class="term" id="repair-install">
+        <div class="visual photo">
+          <img src="1.2/Repair Install.jpg" alt="Repair installation" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Repair installation</h3>
+          <p>Fix problems with the Windows OS. Does <strong>not</strong> modify user files.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART D: Formatting & other considerations ===== -->
+  <section id="formatting">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part D</span>
+        <h2>Formatting and other considerations</h2>
+        <p>Drive preparation, third-party drivers, and the difference between quick and full formats.</p>
+      </div>
+
+      <article class="term" id="third-party-drivers">
+        <div class="visual photo">
+          <img src="1.2/third party driver.jpg" alt="Third-party drivers" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Third-party drivers</h3>
+          <p>Load alternate third-party drivers when necessary — disk controller drivers, storage drivers, etc.</p>
+        </div>
+      </article>
+
+      <article class="term" id="quick-format">
+        <div class="visual photo">
+          <img src="1.2/pros-cons-of-quick-format.webp" alt="Quick format" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Quick format</h3>
+          <p>Creates a new file table. Looks like data is erased, but it is not. No additional checks.</p>
+          <p>Quick format is the default during installation in Windows 10 and 11. Use <strong>diskpart</strong> for a full format.</p>
+          <div class="note"><strong>Full format</strong> writes zeros to the whole disk — data is unrecoverable. Also checks the disk for bad sectors (time consuming).</div>
+        </div>
+      </article>
+
+      <article class="term" id="drive-format">
+        <div class="visual photo">
+          <img src="1.2/Drive format.jpg" alt="Drive format" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Drive format</h3>
+          <p>Determining whether a target drive already contains data, has been formatted, or requires partition setup prior to OS installation.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART E: Pre-install & upgrade planning ===== -->
+  <section id="pre-install">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part E</span>
+        <h2>Pre-install checks and upgrade planning</h2>
+        <p>What to verify before wiping a drive or upgrading an existing system.</p>
+      </div>
+
+      <article class="term" id="why-upgrade">
+        <div class="visual photo">
+          <img src="1.2/what-is-an-operating-system-1024x557.png" alt="Why upgrade an operating system" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Why upgrade?</h3>
+          <ul class="tags">
+            <li>Keep files in place</li>
+            <li>Maintain consistency</li>
+            <li>Customized configurations</li>
+            <li>Multiple local user accounts</li>
+            <li>Save hours of time</li>
+            <li>Avoid application reinstall</li>
+            <li>Keep user data intact</li>
+            <li>Keep user settings</li>
+            <li>Get up and running quickly</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="backup">
+        <div class="visual photo">
+          <img src="1.2/Backup files .jfif" alt="Backup files and preferences" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Backup files and user preferences</h3>
+          <p>Preserving important files, personal documents, and user preferences prior to installation or drive wiping.</p>
+        </div>
+      </article>
+
+      <article class="term" id="app-compatibility">
+        <div class="visual photo">
+          <img src="1.2/backward compatibility.jpg" alt="Application backward compatibility" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Application and driver support / backward compatibility</h3>
+          <p>Verifying that current applications, documents, and system settings will remain supported and functional when updating the OS.</p>
+        </div>
+      </article>
+
+      <article class="term" id="hardware-compatibility">
+        <div class="visual photo">
+          <img src="1.2/Hardware compatibility.jpg" alt="Hardware compatibility" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Hardware compatibility</h3>
+          <p>Checking that hardware meets minimum system specifications (memory, disk space) and required hardware security capabilities, such as <strong>TPM 2.0</strong> and <strong>UEFI Secure Boot</strong>.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART F: EOL, updates, compatibility ===== -->
+  <section id="lifecycle">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part F</span>
+        <h2>Updates, EOL, and compatibility</h2>
+        <p>Support timelines, how updates are delivered, and what moves between operating systems.</p>
+      </div>
+
+      <article class="term" id="eol">
+        <div class="visual photo">
+          <img src="1.2/End of Life.jpg" alt="End of life EOL" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>End-of-life (EOL)</h3>
+          <p>Vendor-specific limitations. Different companies set their own EOL policies for when a product stops receiving updates and support.</p>
+        </div>
+      </article>
+
+      <article class="term" id="updates">
+        <div class="visual photo">
+          <img src="1.2/Update limitations.jpg" alt="Update limitations" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Update limitations</h3>
+          <p>iOS, Android, and Windows check and prompt for updates. Chrome OS will update automatically.</p>
+        </div>
+      </article>
+
+      <article class="term" id="compatibility">
+        <div class="visual logo">
+          <img src="1.2/comp concerns.png" alt="Compatibility concerns between operating systems" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Compatibility concerns between operating systems</h3>
+          <p>Some movies and music can be shared. However, there is no direct application compatibility. Fortunately, many apps have been built to run on different OSes.</p>
+          <p>Some data files can be moved across systems. Web-based apps have strong potential for cross-platform use.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART G: Windows feature updates & lifecycle ===== -->
+  <section id="windows-lifecycle">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part G</span>
+        <h2>Feature updates and product lifecycle</h2>
+        <p>How Microsoft delivers new capabilities and how long an OS version stays supported.</p>
+      </div>
+
+      <article class="term" id="feature-updates">
+        <div class="visual photo">
+          <img src="1.2/Feature-Updates-in-Intune.png" alt="Feature updates" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Feature updates</h3>
+          <p>Annual operating system releases that introduce new capabilities, UI features, and system updates.</p>
+        </div>
+      </article>
+
+      <article class="term" id="product-lifecycle">
+        <div class="visual photo">
+          <img src="1.2/product life cycles.jfif" alt="Product life cycle" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Product life cycle</h3>
+          <p>The period post-release — typically <strong>18 to 36 months</strong> depending on the Windows edition — during which an OS version receives security patches and support under the <strong>Modern Lifecycle Policy</strong>.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Images in the <code>1.2</code> folder. Study notes for Core 2 objective 1.2 — OS Installation and Boot Methods.
+  </div>
+</footer>
+
+  <script src="study-lightbox.js"></script>
+</body>
+</html>

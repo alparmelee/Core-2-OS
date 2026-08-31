@@ -1,0 +1,70 @@
+when we get a new piece of equipment or accessory we generally take it out of the box and start
+using it but there's important documentation contained in those packing materials if you
+look around you'll probably find a material safety data sheet or an msds this is a document required
+by the united states department of labor occupational safety and health administration
+or osha if you want more information on osha you can find it on their website at osha.gov
+you might also hear this referred to as a safety data sheet or sds it is exactly the same thing as
+a material safety data sheet there's just different names that we use depending on where you are in the
+world this document provides you with all of the hazard and safety information associated with
+this product so any products that have hazardous materials such as toner cartridges ink cartridges
+or batteries are all subject to these material safety data sheets you'll see that a great deal
+information is included on this msds including the company and product information for example
+the toner cartridge and who made it the composition and ingredients of that particular product any
+hazard information first aid measures firefighting measures and so on anything regarding the health
+and safety of the people using this product is documented in this material safety data sheet
+we use a lot of batteries in it not just the batteries that we have for our laptops and mobile
+devices but we also have a lot of batteries that we use inside of our uninterruptible power supplies
+or our ups there might be one or many of these battery types inside of those ups systems and of course we
+need to understand how to properly dispose of all of these batteries the same thing applies for the toner
+cartridges that we use in our printers we need to dispose of these properly and in many cases the
+printer manufacturer has a recycle program and they include a return label in the box with the toner
+that's not the case with every toner cartridge and you may find that some local office supply houses
+will provide you with a discount if you bring in used toner cartridges if you're not able to recycle
+or trade in these cartridges for a discount you might want to refer back to your material safety data sheet
+to determine the best way to dispose of these toner cartridges you should certainly not throw away
+batteries and toner in your normal garbage you should always dispose of hazardous materials at the
+proper location near you we also have to think about the environment that we have inside of our work
+areas specifically room control for temperature all of these powered devices create heat in the memory
+and the cpu of these systems so we need to make sure that we have the proper cooling so that they work
+at an optimal temperature the same thing applies for humidity although we can minimize electrostatic
+discharge by having high humidity levels that also makes your work area a bit uncomfortable we need
+to find the right balance between temperature and humidity level but if you keep the humidity at about
+50 percent that's a good number to strive to and of course if we're cleaning out dusty computers and
+printers with a lot of paper inside of it then we'll want to have proper ventilation in our work area
+but if you're working with very dusty systems you may want to make sure that you're using a vacuum if
+it's inside of the building and it may be more appropriate to take the computer outside of the
+building to use compressed air to clean out all of that dust we often think of a ups as a single
+unit that sits under our desk or it slides into a rack but in an entire building a ups can be quite large
+an entire room full of nothing but batteries it's important to know how to manage maintain and keep
+all of these systems up to date and running well we have to use these ups systems for our backup power
+in case we lose main power to our facility and of course if you have under voltage events or power
+surges your ups can help protect you against those as well you may be using a standby ups that switches
+over from regular power to the battery source there's usually a small delay during that switching
+time frame you might be using a line interactive ups so as you lose voltage on the main line your
+battery begins to provide additional power or perhaps you have an online ups where you're always
+running from the battery and the main power is simply there to continue to charge all of those
+batteries the ups of course is providing more than simply power for your computer they may have
+features that provide auto shutdown when you're not anywhere nearby you may be able to get different
+sizes of ups to provide different capacities of power the number of outlets on the ups can also be
+customized so you get a system that can support many different units and phone line and ethernet power
+suppression is often built into a number of these uninterruptible power supplies if you don't need
+standby power but you would like to make sure that you're using the cleanest power possible
+you might want to install a surge suppressor during the day your power voltage goes up and down there
+are spikes and noise on the line and occasionally there will be a storm that adds additional noise to
+the power source a surge suppressor will notice these spikes occurring and will take any excess voltage and
+redirect it to the ground many surge suppressors also include noise filters to remove noise from the
+electrical line and they work by filtering a certain decibel level of noise at a specified frequency
+this means a surge suppressor with a higher decibel rating will be able to filter more line noise
+we also have to think about how the surge suppressor will handle spikes if you get a large amount of
+voltage at one time you can absorb that surge and most suppressors will tell you just how many joules
+they're able to suppress 200 joules is good 400 is better but the best suppressors are over 600 joules of
+spike suppression along the same lines there is a surge amp rating associated with these suppressors
+if you get a higher amp rating it's a better quality suppressor and another good specification to look for
+on your surge suppressor is a ul 1449 voltage let through rating you'll see suppressors rated at 500 400
+and 330 volts and the lower you get with these values the better quality suppressor
+you
+you
+you
+you
+you
+you

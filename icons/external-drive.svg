@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d6dbe3"/>
+      <stop offset="100%" stop-color="#8b93a1"/>
+    </linearGradient>
+    <clipPath id="sq"><rect width="128" height="128" rx="28"/></clipPath>
+  </defs>
+  <g clip-path="url(#sq)">
+    <rect width="128" height="128" fill="url(#bg)"/>
+    <rect x="24" y="36" width="80" height="56" rx="6" fill="#f2f2f7" stroke="#636366" stroke-width="2"/>
+    <rect x="24" y="36" width="80" height="12" fill="#aeaeb2"/>
+    <circle cx="34" cy="42" r="2.5" fill="#ff453a"/>
+    <circle cx="44" cy="42" r="2.5" fill="#ffd60a"/>
+    <circle cx="54" cy="42" r="2.5" fill="#30d158"/>
+  </g>
+</svg>

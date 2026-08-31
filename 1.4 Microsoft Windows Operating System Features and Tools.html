@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>1.4 Microsoft Windows Operating System Features and Tools</title>
+<style>
+  :root{
+    --accent:#0067c0;
+    --accent-light:#3a96dd;
+    --taskbar-bg: rgba(32,32,32,0.78);
+    --win-bg:#f3f3f3;
+    --win-bg-dark:#202020;
+    --panel-border:#d9d9d9;
+    --text-dark:#1b1b1b;
+    --text-light:#f2f2f2;
+    --mono: "Cascadia Mono","Consolas",monospace;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; margin:0; font-family:"Segoe UI",Arial,sans-serif; overflow:hidden; }
+  body{ background:#202020; }
+
+  .layout{ display:flex; height:100%; gap:14px; padding:14px; }
+  .screen-frame{ width:min(78%,1180px); height:100%; border-radius:10px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.5); flex-shrink:0; }
+  .win-root{ position:relative; width:100%; height:100%; overflow:hidden; user-select:none; background:#000; }
+
+  /* ---------------- Desktop ---------------- */
+  .desktop{
+    position:absolute; inset:0;
+    background:
+      radial-gradient(1200px 700px at 15% 15%, #1b3a63 0%, transparent 55%),
+      radial-gradient(1000px 800px at 85% 25%, #2e5f8a 0%, transparent 60%),
+      radial-gradient(1400px 900px at 50% 100%, #0b2647 0%, transparent 60%),
+      linear-gradient(160deg,#0a3d62 0%, #1e5f8f 40%, #5aa9c9 75%, #bfe3f0 100%);
+  }
+  .desktop-icons{ position:absolute; top:14px; left:14px; display:flex; flex-direction:column; flex-wrap:wrap; gap:2px; height:calc(100% - 90px); align-content:flex-start; }
+  .di{ width:84px; padding:8px 4px; border-radius:4px; display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; }
+  .di:hover{ background:rgba(255,255,255,0.12); }
+  .di.selected{ background:rgba(255,255,255,0.22); }
+  .di .di-label{ color:#fff; font-size:11.5px; text-align:center; text-shadow:0 1px 3px rgba(0,0,0,0.85); line-height:1.25; }
+
+  /* ---------------- App icon tiles ---------------- */
+  .app-icon{ width:40px; height:40px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; box-shadow:0 2px 5px rgba(0,0,0,0.35); }
+  .app-icon.sm{ width:22px; height:22px; border-radius:6px; font-size:12px; }
+  .app-icon.lg{ width:52px; height:52px; border-radius:12px; font-size:26px; }
+  .ic-0{ background:linear-gradient(135deg,#3a96dd,#0067c0); }
+  .ic-1{ background:linear-gradient(135deg,#8e6bd1,#5b3fa0); }
+  .ic-2{ background:linear-gradient(135deg,#e0954f,#c9701f); }
+  .ic-3{ background:linear-gradient(135deg,#4fbf8e,#1f8f5f); }
+  .ic-4{ background:linear-gradient(135deg,#e0637a,#b6304a); }
+  .ic-5{ background:linear-gradient(135deg,#5fb0c9,#2c7f97); }
+  .ic-6{ background:linear-gradient(135deg,#c9b23a,#9e8814); }
+  .ic-7{ background:linear-gradient(135deg,#7f8ea3,#4d5a6c); }
+
+  /* ---------------- Windows ---------------- */
+  #windowLayer{ position:absolute; inset:0; pointer-events:none; }
+  .win-window{
+    position:absolute; pointer-events:auto;
+    background:var(--win-bg); border-radius:8px; overflow:hidden;
+    display:flex; flex-direction:column;
+    box-shadow:0 20px 50px rgba(0,0,0,0.5);
+    border:1px solid rgba(0,0,0,0.15);
+    resize:both; min-width:460px; min-height:320px;
+  }
+  .win-window.maximized{ border-radius:0; }
+  .win-titlebar{
+    height:36px; background:#e9e9e9; display:flex; align-items:center; padding:0 6px 0 10px; cursor:move; flex-shrink:0;
+    border-bottom:1px solid #d6d6d6; gap:8px;
+  }
+  .win-titlebar .app-icon{ width:16px; height:16px; border-radius:4px; font-size:10px; }
+  .win-title{ font-size:12.5px; color:#222; flex:1; }
+  .win-controls{ display:flex; height:100%; margin-right:-6px; }
+  .win-controls button{
+    width:42px; height:36px; border:none; background:transparent; cursor:pointer; font-size:12px; color:#333;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .win-controls button:hover{ background:#dcdcdc; }
+  .win-controls button.wc-close:hover{ background:#e81123; color:#fff; }
+  .win-content{ flex:1; overflow:auto; font-size:12.5px; background:#fff; color:#1b1b1b; position:relative; }
+
+  /* Toolbar */
+  .toolbar{ display:flex; align-items:center; gap:6px; padding:6px 10px; background:#f7f7f7; border-bottom:1px solid #e2e2e2; flex-shrink:0; flex-wrap:wrap; }
+  .toolbar button, .btn{
+    border:1px solid #c8c8c8; background:#fff; border-radius:4px; padding:5px 11px; font-size:12px; cursor:pointer; color:#1b1b1b;
+  }
+  .toolbar button:hover, .btn:hover{ background:#f0f6fc; border-color:var(--accent-light); }
+  .btn.primary{ background:var(--accent); color:#fff; border-color:var(--accent); }
+  .btn.primary:hover{ background:var(--accent-light); }
+  .btn.danger{ background:#fff; border-color:#d0362b; color:#c0271b; }
+  .btn.danger:hover{ background:#fdecea; }
+  .btn.small{ padding:3px 9px; font-size:11.5px; }
+  .toolbar .sep{ width:1px; height:20px; background:#d8d8d8; margin:0 4px; }
+  .statusbar{ padding:5px 12px; background:#f2f2f2; border-top:1px solid #e2e2e2; font-size:11px; color:#666; flex-shrink:0; }
+
+  /* Console (tree + panel) layout */
+  .console{ display:flex; height:100%; }
+  .console-tree{ width:230px; flex-shrink:0; background:#fbfbfb; border-right:1px solid #e2e2e2; overflow-y:auto; padding:6px 0; }
+  .console-panel{ flex:1; display:flex; flex-direction:column; overflow:hidden; }
+  .console-panel-body{ flex:1; overflow:auto; padding:14px 16px; }
+  .tree-row{ display:flex; align-items:center; gap:5px; padding:4px 8px 4px 4px; cursor:pointer; font-size:12.5px; white-space:nowrap; border-radius:3px; margin:0 4px; }
+  .tree-row:hover{ background:#eef4fb; }
+  .tree-row.selected{ background:#cfe4fb; }
+  .tree-caret{ width:12px; text-align:center; color:#777; font-size:10px; flex-shrink:0; }
+  .tree-caret.leaf{ visibility:hidden; }
+  .tree-node.expanded > .tree-children{ display:block; }
+  .tree-children{ display:none; padding-left:16px; }
+  .tree-emoji{ font-size:13px; width:16px; text-align:center; flex-shrink:0; }
+
+  .panel-title{ font-size:16px; font-weight:600; margin:0 0 4px; display:flex; align-items:center; gap:8px; }
+  .panel-sub{ color:#666; font-size:12px; margin-bottom:14px; }
+
+  table.dtable{ width:100%; border-collapse:collapse; font-size:12px; }
+  table.dtable th{ text-align:left; padding:7px 10px; background:#f4f4f5; color:#444; font-weight:600; border-bottom:1px solid #e2e2e2; position:sticky; top:0; cursor:default; }
+  table.dtable td{ padding:6px 10px; border-bottom:1px solid #eee; vertical-align:middle; }
+  table.dtable tr:hover td{ background:#f5f9fd; }
+  table.dtable tr.selected td{ background:#cfe4fb; }
+  .group-header td{ background:#eef1f4; font-weight:700; color:#555; font-size:11px; text-transform:uppercase; letter-spacing:.03em; }
+  .lvl{ display:inline-flex; align-items:center; gap:5px; }
+  .lvl-dot{ width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+  .lvl-info .lvl-dot{ background:#3a96dd; }
+  .lvl-warn .lvl-dot{ background:#e0954f; }
+  .lvl-err .lvl-dot, .lvl-crit .lvl-dot{ background:#d0362b; }
+  .lvl-audits .lvl-dot{ background:#4fbf8e; }
+  .lvl-auditf .lvl-dot{ background:#c9701f; }
+
+  .bar-track{ background:#e6e6e6; border-radius:3px; height:8px; overflow:hidden; width:100%; }
+  .bar-fill{ background:var(--accent); height:100%; border-radius:3px; transition:width .4s; }
+  .bar-fill.warn{ background:#e0954f; } .bar-fill.crit{ background:#d0362b; }
+
+  .toggle{ width:34px; height:18px; border-radius:12px; background:#c6c6c6; position:relative; cursor:pointer; flex-shrink:0; transition:background .15s; display:inline-block; }
+  .toggle.on{ background:var(--accent); }
+  .toggle .knob{ position:absolute; top:2px; left:2px; width:14px; height:14px; border-radius:50%; background:#fff; transition:left .15s; }
+  .toggle.on .knob{ left:18px; }
+
+  .banner{ display:flex; gap:10px; align-items:flex-start; background:#fff4e5; border:1px solid #f0c986; color:#7a4b00; padding:10px 12px; border-radius:6px; font-size:12px; margin-bottom:14px; }
+  .banner.danger{ background:#fdecea; border-color:#f0a9a2; color:#7a1c14; }
+  .card{ border:1px solid #e2e2e2; border-radius:8px; padding:14px; margin-bottom:12px; background:#fff; }
+  .kv{ display:grid; grid-template-columns:170px 1fr; gap:6px 14px; font-size:12.5px; }
+  .kv div:nth-child(odd){ color:#666; }
+  .field-row{ display:flex; align-items:center; gap:10px; margin-bottom:10px; font-size:12.5px; }
+  .field-row label{ width:170px; flex-shrink:0; }
+  .checklist-row{ display:flex; align-items:flex-start; gap:8px; padding:6px 0; border-bottom:1px solid #f0f0f0; font-size:12.5px; }
+  .checklist-row input{ margin-top:2px; }
+  .tabs{ display:flex; background:#eee; border-bottom:1px solid #d8d8d8; flex-shrink:0; overflow-x:auto; }
+  .tabs button{ border:none; background:transparent; padding:9px 16px; font-size:12.5px; cursor:pointer; color:#444; border-bottom:2px solid transparent; white-space:nowrap; }
+  .tabs button:hover{ background:#e2e2e2; }
+  .tabs button.active{ color:var(--accent); border-bottom-color:var(--accent); background:#fff; font-weight:600; }
+  .tabpage{ display:none; height:100%; overflow:auto; }
+  .tabpage.active{ display:block; }
+
+  .perf-body{ display:flex; height:100%; }
+  .perf-list{ width:190px; border-right:1px solid #e2e2e2; background:#fafafa; overflow-y:auto; flex-shrink:0; }
+  .perf-list .pl-item{ padding:10px 12px; cursor:pointer; border-bottom:1px solid #eee; }
+  .perf-list .pl-item:hover{ background:#eef4fb; }
+  .perf-list .pl-item.active{ background:#dceafb; }
+  .pl-name{ font-size:12.5px; font-weight:600; }
+  .pl-val{ font-size:15px; margin-top:2px; }
+  .spark{ width:100%; height:26px; display:block; margin-top:4px; }
+  .perf-main{ flex:1; padding:16px; overflow:auto; }
+  .chart-wrap{ border:1px solid #e2e2e2; border-radius:6px; background:#fff; padding:10px; }
+  .chart-big{ width:100%; height:220px; display:block; background:
+      repeating-linear-gradient(to right, #f0f0f0 0, #f0f0f0 1px, transparent 1px, transparent 10%),
+      repeating-linear-gradient(to bottom, #f0f0f0 0, #f0f0f0 1px, transparent 1px, transparent 20%); }
+
+  .modal-overlay{ position:absolute; inset:0; background:rgba(0,0,0,0.35); display:flex; align-items:center; justify-content:center; z-index:50; }
+  .modal-box{ width:420px; max-width:90%; background:#fff; border-radius:8px; box-shadow:0 20px 50px rgba(0,0,0,0.4); overflow:hidden; }
+  .modal-head{ padding:12px 16px; border-bottom:1px solid #eee; font-weight:600; font-size:13px; display:flex; justify-content:space-between; align-items:center; }
+  .modal-body{ padding:14px 16px; font-size:12.5px; max-height:340px; overflow-y:auto; }
+  .modal-foot{ padding:10px 16px; border-top:1px solid #eee; display:flex; justify-content:flex-end; gap:8px; }
+  .snapin-row{ display:flex; align-items:center; gap:8px; padding:7px 4px; border-bottom:1px solid #f2f2f2; }
+
+  /* Start menu */
+  .start-menu{
+    position:absolute; bottom:56px; left:50%; transform:translateX(-50%) translateY(10px);
+    width:560px; max-width:92%; height:520px; max-height:75%;
+    background:rgba(243,243,243,0.92); backdrop-filter:blur(20px);
+    border-radius:10px; box-shadow:0 25px 60px rgba(0,0,0,0.5);
+    display:none; flex-direction:column; padding:22px 26px; z-index:9000; opacity:0;
+    transition:opacity .15s, transform .15s;
+  }
+  .start-menu.open{ display:flex; opacity:1; transform:translateX(-50%) translateY(0); }
+  .sm-search{ background:#fff; border:1px solid #ddd; border-radius:6px; padding:9px 12px; font-size:12.5px; margin-bottom:18px; color:#333; }
+  .sm-heading{ font-size:12.5px; font-weight:600; color:#333; margin-bottom:10px; }
+  .sm-grid{ display:grid; grid-template-columns:repeat(6,1fr); gap:6px; overflow-y:auto; }
+  .sm-tile{ display:flex; flex-direction:column; align-items:center; gap:6px; padding:10px 4px; border-radius:6px; cursor:pointer; }
+  .sm-tile:hover{ background:rgba(0,0,0,0.06); }
+  .sm-tile .tile-label{ font-size:10.5px; text-align:center; color:#222; line-height:1.2; }
+  .sm-user{ margin-top:auto; padding-top:14px; border-top:1px solid rgba(0,0,0,0.08); display:flex; align-items:center; gap:10px; font-size:12.5px; color:#222; }
+  .sm-avatar{ width:30px; height:30px; border-radius:50%; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px; }
+
+  /* Taskbar */
+  .taskbar{
+    position:absolute; left:0; right:0; bottom:0; height:48px;
+    background:var(--taskbar-bg); backdrop-filter:blur(20px);
+    display:flex; align-items:center; z-index:8000; padding:0 10px; gap:4px;
+  }
+  .tb-start{ width:40px; height:40px; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:18px; cursor:pointer; }
+  .tb-start:hover, .tb-start.open{ background:rgba(255,255,255,0.12); }
+  .tb-search{ height:32px; background:rgba(255,255,255,0.10); border-radius:16px; display:flex; align-items:center; gap:8px; padding:0 14px; color:#e6e6e6; font-size:12px; cursor:text; width:220px; flex-shrink:0; }
+  .tb-search:hover{ background:rgba(255,255,255,0.16); }
+  .tb-apps{ display:flex; align-items:center; gap:2px; margin:0 auto; }
+  .tb-app{ width:40px; height:40px; border-radius:6px; display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; }
+  .tb-app:hover{ background:rgba(255,255,255,0.12); }
+  .tb-app.active{ background:rgba(255,255,255,0.18); }
+  .tb-app .app-icon{ width:22px; height:22px; font-size:12px; border-radius:5px; }
+  .tb-app .ind{ position:absolute; bottom:2px; left:50%; transform:translateX(-50%); width:6px; height:3px; border-radius:2px; background:#fff; }
+  .tb-tray{ display:flex; align-items:center; gap:14px; color:#e6e6e6; font-size:11.5px; padding:0 10px; flex-shrink:0; }
+  .tb-clock{ text-align:right; line-height:1.3; cursor:pointer; padding:4px 8px; border-radius:4px; }
+  .tb-clock:hover{ background:rgba(255,255,255,0.1); }
+
+  /* Toasts */
+  .toast-wrap{ position:absolute; bottom:60px; right:16px; z-index:9500; display:flex; flex-direction:column; gap:8px; align-items:flex-end; }
+  .toast{ background:rgba(32,32,32,0.95); color:#fff; padding:10px 16px; border-radius:8px; font-size:12.5px; max-width:300px; box-shadow:0 10px 25px rgba(0,0,0,0.35); animation:toastIn .18s ease; }
+  @keyframes toastIn{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+  /* Reference panel */
+  .reference{
+    width:400px; max-width:100%; height:100%;
+    background:#181818; border-radius:14px; box-shadow:0 25px 70px rgba(0,0,0,0.5);
+    display:flex; flex-direction:column; overflow:hidden; flex-shrink:0; color:#ddd;
+    font-family:"Segoe UI",Arial,sans-serif;
+  }
+  .ref-titlebar{ background:#242424; padding:10px 14px; font-size:13px; border-bottom:1px solid #333; display:flex; align-items:center; gap:8px; }
+  .ref-titlebar .dot{ width:8px; height:8px; border-radius:50%; background:#0067c0; }
+  .ref-search{ padding:10px 12px; border-bottom:1px solid #2e2e2e; background:#151515; }
+  .ref-search input{ width:100%; box-sizing:border-box; background:#0f0f0f; border:1px solid #333; color:#eee; font-size:12.5px; padding:8px 10px; border-radius:6px; outline:none; }
+  .ref-search input:focus{ border-color:#0067c0; }
+  .ref-list{ flex:1; overflow-y:auto; padding:4px 0 12px; }
+  .ref-item{ padding:11px 14px; border-bottom:1px solid #232323; cursor:pointer; display:flex; gap:10px; }
+  .ref-item:hover{ background:#212121; }
+  .ref-item .ref-name{ font-size:13.5px; color:#5ac8fa; font-weight:700; }
+  .ref-item .ref-cmd{ font-size:11px; color:#f4c95d; margin-top:2px; font-family:var(--mono); }
+  .ref-item .ref-desc{ font-size:12px; color:#aaa; margin-top:5px; line-height:1.45; }
+  .ref-empty{ padding:24px 14px; color:#777; font-size:12.5px; text-align:center; }
+
+  @media (max-width:1100px){
+    .layout{ flex-direction:column; height:auto; }
+    .screen-frame, .reference{ width:100%; max-width:100%; height:640px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <div class="screen-frame">
+    <div class="win-root" id="winRoot">
+      <div class="desktop">
+        <div class="desktop-icons" id="desktopIcons"></div>
+      </div>
+
+      <div id="windowLayer"></div>
+
+      <div class="start-menu" id="startMenu">
+        <input class="sm-search" id="smSearch" placeholder="Type here to search">
+        <div class="sm-heading">Pinned</div>
+        <div class="sm-grid" id="smGrid"></div>
+        <div class="sm-user"><div class="sm-avatar">A</div> Administrator</div>
+      </div>
+
+      <div class="taskbar" id="taskbar">
+        <div class="tb-start" id="tbStart">⊞</div>
+        <div class="tb-search" id="tbSearchBtn">🔍&nbsp; Type here to search</div>
+        <div class="tb-apps" id="tbApps"></div>
+        <div class="tb-tray">
+          <span>🔊 📶 🔋</span>
+          <span class="tb-clock" id="tbClock"></span>
+        </div>
+      </div>
+
+      <div class="toast-wrap" id="toastWrap"></div>
+    </div>
+  </div>
+
+  <div class="reference">
+    <div class="ref-titlebar"><span class="dot"></span><span>Windows Admin Tools Index</span></div>
+    <div class="ref-search"><input type="text" id="refSearchInput" placeholder="Filter tools..."></div>
+    <div class="ref-list" id="refList"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ============================================================
+     Small helpers
+  ============================================================ */
+  function el(html){ const t=document.createElement('template'); t.innerHTML=html.trim(); return t.content.firstChild; }
+  function icon(glyph, cIdx, size){ return `<span class="app-icon ${size||''} ic-${cIdx}">${glyph}</span>`; }
+  function esc(s){ return String(s).replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+  function rand(min,max){ return Math.random()*(max-min)+min; }
+  function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
+  function fmtTime(d){ return d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}); }
+  function fmtDate(d){ return d.toLocaleDateString([], {month:'2-digit',day:'2-digit',year:'numeric'}) + ' ' + fmtTime(d); }
+
+  function toast(msg){
+    const wrap = document.getElementById('toastWrap');
+    const t = el(`<div class="toast">${esc(msg)}</div>`);
+    wrap.appendChild(t);
+    setTimeout(()=>{ t.style.opacity='0'; t.style.transition='opacity .3s'; setTimeout(()=>t.remove(),300); }, 3200);
+  }
+
+  function sparkline(values, w, h, color){
+    const max = Math.max(...values, 1);
+    const step = w/(values.length-1);
+    const pts = values.map((v,i)=> `${(i*step).toFixed(1)},${(h-(v/max)*h*0.92-2).toFixed(1)}`).join(' ');
+    return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+      <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.6"/>
+    </svg>`;
+  }
+  function bigChart(seriesArr, colors, w, h){
+    const max = 100;
+    const step = w/(seriesArr[0].length-1);
+    const lines = seriesArr.map((values,si)=>{
+      const pts = values.map((v,i)=> `${(i*step).toFixed(1)},${(h-(v/max)*h).toFixed(1)}`).join(' ');
+      return `<polyline points="${pts}" fill="none" stroke="${colors[si]}" stroke-width="2"/>`;
+    }).join('');
+    return `<svg class="chart-big" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">${lines}</svg>`;
+  }
+
+  function table(columns, rows){
+    let html = `<table class="dtable"><thead><tr>${columns.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>`;
+    rows.forEach(r=>{ html += r; });
+    html += `</tbody></table>`;
+    return html;
+  }
+
+  /* ============================================================
+     Live counters (shared fake "system" state)
+  ============================================================ */
+  const hist = { cpu:[], mem:[], disk:[], net:[] };
+  for(let i=0;i<30;i++){ hist.cpu.push(rand(8,22)); hist.mem.push(rand(35,45)); hist.disk.push(rand(2,10)); hist.net.push(rand(1,8)); }
+  function stepHist(){
+    hist.cpu.push(clamp(hist.cpu[hist.cpu.length-1] + rand(-6,6), 3, 96)); hist.cpu.shift();
+    hist.mem.push(clamp(hist.mem[hist.mem.length-1] + rand(-2,2), 30, 80)); hist.mem.shift();
+    hist.disk.push(clamp(hist.disk[hist.disk.length-1] + rand(-4,6), 0, 90)); hist.disk.shift();
+    hist.net.push(clamp(hist.net[hist.net.length-1] + rand(-3,4), 0, 70)); hist.net.shift();
+  }
+  const liveSubscribers = [];
+  setInterval(()=>{ stepHist(); liveSubscribers.forEach(fn=>{ try{ fn(); }catch(e){} }); }, 1200);
+  function onLive(fn){ liveSubscribers.push(fn); return ()=>{ const i=liveSubscribers.indexOf(fn); if(i>=0) liveSubscribers.splice(i,1); }; }
+
+  /* ============================================================
+     Fake data sets
+  ============================================================ */
+  const processesApps = [
+    {name:'Microsoft Edge', cpu:4.2, mem:312, disk:0.1, net:0.2},
+    {name:'Microsoft Word', cpu:1.1, mem:158, disk:0.0, net:0.0},
+    {name:'Slack', cpu:2.6, mem:210, disk:0.0, net:0.4},
+    {name:'Windows Terminal', cpu:0.3, mem:44, disk:0.0, net:0.0},
+    {name:'Settings', cpu:0.1, mem:38, disk:0.0, net:0.0},
+  ];
+  const processesBg = [
+    {name:'Windows Explorer', cpu:0.8, mem:64}, {name:'OneDrive', cpu:0.4, mem:52},
+    {name:'Antimalware Service Executable', cpu:3.1, mem:180}, {name:'Print Spooler', cpu:0.0, mem:6},
+    {name:'Search Indexer', cpu:1.9, mem:96}, {name:'Widgets', cpu:0.2, mem:40},
+    {name:'Runtime Broker', cpu:0.1, mem:22}, {name:'Background Task Host', cpu:0.1, mem:18},
+    {name:'Cortana', cpu:0.0, mem:12}, {name:'NVIDIA Container', cpu:0.3, mem:64},
+  ];
+  const processesSys = [
+    {name:'System', cpu:0.5, mem:4}, {name:'System interrupts', cpu:0.2, mem:0},
+    {name:'Registry', cpu:0.0, mem:6}, {name:'Local Security Authority Process', cpu:0.1, mem:14},
+    {name:'Service Host: Local System', cpu:0.6, mem:28}, {name:'Client Server Runtime Process', cpu:0.0, mem:4},
+  ];
+
+  const servicesData = [
+    {name:'Windows Update', desc:'Enables detection, download, and installation of Windows updates.', status:'Running', startup:'Automatic'},
+    {name:'Print Spooler', desc:'Loads files to memory for later printing.', status:'Running', startup:'Automatic'},
+    {name:'Windows Search', desc:'Provides content indexing and search results.', status:'Running', startup:'Automatic'},
+    {name:'Remote Desktop Services', desc:'Allows users to connect interactively to a remote computer.', status:'Stopped', startup:'Manual'},
+    {name:'Background Intelligent Transfer Service', desc:'Transfers files in the background using idle network bandwidth.', status:'Running', startup:'Automatic (Delayed)'},
+    {name:'Windows Defender Antivirus Service', desc:'Helps protect users from malware and other threats.', status:'Running', startup:'Automatic'},
+    {name:'DHCP Client', desc:'Registers and updates IP addresses for this computer.', status:'Running', startup:'Automatic'},
+    {name:'Task Scheduler', desc:'Enables a user to configure and schedule automated tasks.', status:'Running', startup:'Automatic'},
+    {name:'Bluetooth Support Service', desc:'Supports discovery and association of remote Bluetooth devices.', status:'Stopped', startup:'Manual'},
+    {name:'Fax', desc:'Enables you to send and receive faxes.', status:'Stopped', startup:'Manual'},
+    {name:'Server', desc:'Supports file, print, and named-pipe sharing over the network.', status:'Running', startup:'Automatic'},
+    {name:'Superfetch', desc:'Maintains and improves system performance over time.', status:'Running', startup:'Automatic'},
+  ];
+
+  const startupData = [
+    {name:'OneDrive', publisher:'Microsoft Corporation', status:'Enabled', impact:'Medium'},
+    {name:'Slack', publisher:'Slack Technologies, Inc.', status:'Enabled', impact:'High'},
+    {name:'Spotify', publisher:'Spotify AB', status:'Enabled', impact:'Low'},
+    {name:'Steam Client Bootstrapper', publisher:'Valve Corporation', status:'Disabled', impact:'High'},
+    {name:'Adobe Creative Cloud', publisher:'Adobe Inc.', status:'Enabled', impact:'High'},
+    {name:'Realtek Audio Console', publisher:'Realtek Semiconductor', status:'Disabled', impact:'Low'},
+    {name:'Cortana', publisher:'Microsoft Corporation', status:'Disabled', impact:'Not measured'},
+  ];
+
+  const usersData = [
+    {name:'Administrator (Active)', status:'Active', cpu:8, mem:1100},
+    {name:'jsmith', status:'Active', cpu:3, mem:640},
+    {name:'guest', status:'Disconnected', cpu:0, mem:0},
+  ];
+
+  const eventLogs = {
+    Application: [
+      {level:'info', src:'MsiInstaller', id:1040, task:'Installation started', desc:'Beginning a Windows Installer transaction.'},
+      {level:'warn', src:'ESENT', id:642, task:'General', desc:'Database engine slow I/O detected on a database file.'},
+      {level:'err', src:'.NET Runtime', id:1026, task:'None', desc:'Application: notepad.exe. Unhandled exception.'},
+      {level:'info', src:'Windows Error Reporting', id:1001, task:'None', desc:'Fault bucket, type 0, reported to Microsoft.'},
+      {level:'crit', src:'SideBySide', id:33, task:'None', desc:'Activation context generation failed for a shared component.'},
+    ],
+    Security: [
+      {level:'audits', src:'Microsoft Windows security auditing', id:4624, task:'Logon', desc:'An account was successfully logged on.'},
+      {level:'auditf', src:'Microsoft Windows security auditing', id:4625, task:'Logon', desc:'An account failed to log on.'},
+      {level:'audits', src:'Microsoft Windows security auditing', id:4672, task:'Special Logon', desc:'Special privileges assigned to new logon.'},
+      {level:'audits', src:'Microsoft Windows security auditing', id:4720, task:'User Account Management', desc:'A user account was created.'},
+    ],
+    Setup: [
+      {level:'info', src:'CBS', id:11, task:'None', desc:'Package installation completed successfully.'},
+      {level:'info', src:'DISM', id:1, task:'None', desc:'Feature update service session started.'},
+      {level:'warn', src:'Windows Setup', id:24, task:'None', desc:'Migration of driver settings partially completed.'},
+    ],
+    System: [
+      {level:'info', src:'Service Control Manager', id:7036, task:'None', desc:'The Windows Update service entered the running state.'},
+      {level:'err', src:'Disk', id:7, task:'None', desc:'The device has a bad block.'},
+      {level:'warn', src:'Kernel-Power', id:41, task:'None', desc:'The system rebooted without cleanly shutting down first.'},
+      {level:'crit', src:'BugCheck', id:1001, task:'None', desc:'The computer has rebooted from a bugcheck.'},
+      {level:'info', src:'EventLog', id:6005, task:'None', desc:'The Event log service was started.'},
+    ],
+  };
+  const levelMeta = {
+    info:{cls:'lvl-info', label:'Information'}, warn:{cls:'lvl-warn', label:'Warning'},
+    err:{cls:'lvl-err', label:'Error'}, crit:{cls:'lvl-crit', label:'Critical'},
+    audits:{cls:'lvl-audits', label:'Audit Success'}, auditf:{cls:'lvl-auditf', label:'Audit Failure'},
+  };
+
+  const volumes = [
+    {drive:'C:', label:'Windows', fs:'NTFS', cap:512, free:187, status:'Healthy (Boot, Page File, Primary)', color:'#3a96dd'},
+    {drive:'D:', label:'Data', fs:'NTFS', cap:1024, free:640, status:'Healthy (Primary)', color:'#4fbf8e'},
+    {drive:'E:', label:'Recovery', fs:'NTFS', cap:1, free:0.4, status:'Healthy (Recovery Partition)', color:'#c9701f'},
+    {drive:'F:', label:'', fs:'—', cap:200, free:200, status:'Unallocated', color:'#999'},
+  ];
+
+  const scheduledTasks = [
+    {name:'GoogleUpdateTaskMachineCore', folder:'\\', status:'Ready', trigger:'Daily 3:00 AM', next:'Tomorrow 3:00 AM'},
+    {name:'Adobe Acrobat Update Task', folder:'\\', status:'Ready', trigger:'At log on', next:'At next log on'},
+    {name:'ServerManager', folder:'\\Microsoft\\Windows\\Server Manager', status:'Disabled', trigger:'At startup', next:'N/A'},
+    {name:'Scheduled Defrag', folder:'\\Microsoft\\Windows\\Defrag', status:'Ready', trigger:'Weekly Wed 1:00 AM', next:'Wed 1:00 AM'},
+    {name:'SystemRestore', folder:'\\Microsoft\\Windows\\SystemRestore', status:'Ready', trigger:'Daily 12:00 AM', next:'Today 12:00 AM'},
+    {name:'Disk Cleanup', folder:'\\', status:'Ready', trigger:'Monthly 1st 2:00 AM', next:'Next month'},
+  ];
+  const taskTemplates = ['Weekly backup', 'Daily report export', 'Monthly log cleanup', 'On idle maintenance'];
+
+  const deviceTree = {
+    'Display adapters': ['Intel(R) UHD Graphics', 'NVIDIA GeForce RTX 4060'],
+    'Disk drives': ['Samsung SSD 980 PRO 1TB', 'WD Blue HDD 2TB'],
+    'Network adapters': ['Intel(R) Wi-Fi 6 AX201', 'Realtek USB GbE Ethernet Adapter', 'Bluetooth Device (Personal Area Network)'],
+    'Universal Serial Bus controllers': ['USB Root Hub (USB 3.0)', 'Generic USB Hub', 'USB Composite Device'],
+    'Sound, video and game controllers': ['Realtek(R) Audio', 'NVIDIA High Definition Audio'],
+    'Human Interface Devices': ['HID Keyboard Device', 'HID-compliant mouse'],
+    'Print queues': ['Microsoft Print to PDF', 'HP LaserJet Pro MFP'],
+    'System devices': ['ACPI Fixed Feature Button', 'High precision event timer', 'Numeric data processor'],
+  };
+
+  const certStores = {
+    'Personal': [
+      {to:'jsmith@corp.local', by:'Corp Issuing CA', exp:'2027-03-14', purpose:'Client Authentication'},
+    ],
+    'Trusted Root Certification Authorities': [
+      {to:'DigiCert Global Root G2', by:'DigiCert Global Root G2', exp:'2038-01-15', purpose:'All'},
+      {to:'Microsoft Root Certificate Authority 2011', by:'Microsoft Root Certificate Authority 2011', exp:'2036-03-22', purpose:'All'},
+    ],
+    'Intermediate Certification Authorities': [
+      {to:'Corp Issuing CA', by:'Corp Root CA', exp:'2030-06-01', purpose:'All'},
+    ],
+    'Trusted Publishers': [
+      {to:'Adobe Inc.', by:'DigiCert SHA2 Assured ID Code Signing CA', exp:'2026-11-02', purpose:'Code Signing'},
+    ],
+  };
+
+  const localUsers = [
+    {name:'Administrator', full:'', desc:'Built-in account for administering the computer/domain', disabled:true},
+    {name:'jsmith', full:'John Smith', desc:'Standard user account', disabled:false},
+    {name:'Guest', full:'', desc:'Built-in account for guest access to the computer/domain', disabled:true},
+    {name:'DefaultAccount', full:'', desc:'A user account managed by the system.', disabled:true},
+  ];
+  const localGroups = [
+    {name:'Administrators', desc:'Administrators have complete and unrestricted access to the computer/domain', members:'Administrator, jsmith'},
+    {name:'Users', desc:'Users are prevented from making accidental or intentional system-wide changes', members:'jsmith, Guest'},
+    {name:'Backup Operators', desc:'Backup Operators can override security restrictions for the sole purpose of backing up or restoring files', members:'(none)'},
+    {name:'Power Users', desc:'Power Users are included for backwards compatibility and possess limited administrative powers', members:'(none)'},
+    {name:'Remote Desktop Users', desc:'Members in this group are granted the right to logon remotely', members:'jsmith'},
+  ];
+
+  const gpoTree = {
+    'Computer Configuration > Administrative Templates > Windows Components > Windows Update': [
+      {name:'Configure Automatic Updates', state:'Enabled'},
+      {name:'No auto-restart with logged on users for scheduled updates', state:'Not Configured'},
+    ],
+    'Computer Configuration > Administrative Templates > System > Logon': [
+      {name:'Do not display the Getting Started welcome screen', state:'Enabled'},
+      {name:'Turn off app notifications on the lock screen', state:'Not Configured'},
+    ],
+    'Computer Configuration > Windows Settings > Security Settings > Password Policy': [
+      {name:'Minimum password length', state:'14 characters'},
+      {name:'Maximum password age', state:'90 days'},
+    ],
+    'User Configuration > Administrative Templates > Desktop': [
+      {name:'Remove Recycle Bin icon from desktop', state:'Not Configured'},
+      {name:'Hide and disable all items on the desktop', state:'Disabled'},
+    ],
+    'User Configuration > Administrative Templates > Start Menu and Taskbar': [
+      {name:'Remove access to the context menus for the taskbar', state:'Not Configured'},
+      {name:'Lock all taskbar settings', state:'Enabled'},
+    ],
+  };
+
+  const sysInfoData = {
+    'System Summary': [
+      ['OS Name','Microsoft Windows 11 Pro'],['Version','23H2 (Build 22631)'],['System Manufacturer','Dell Inc.'],
+      ['System Model','OptiPlex 7010'],['Processor','Intel(R) Core(TM) i7-13700 @ 2.10GHz'],
+      ['Installed Physical Memory (RAM)','32.0 GB'],['System Type','x64-based PC'],['BIOS Version/Date','Dell 2.14.0, 6/12/2025'],
+    ],
+    'Hardware Resources > Conflicts/Sharing': [['IRQ 16','Shared: NVIDIA GPU, USB Controller'],['IRQ 19','Shared: Ethernet Controller']],
+    'Hardware Resources > DMA': [['DMA 4','Direct memory access controller']],
+    'Hardware Resources > IRQs': [['IRQ 0','System timer'],['IRQ 8','High precision event timer'],['IRQ 16','NVIDIA GeForce RTX 4060']],
+    'Hardware Resources > Memory': [['Base Memory','32,589,824 KB'],['Available Memory','18,204,112 KB']],
+    'Components > Multimedia': [['Audio Codec','Realtek ALC3204'],['Playback Device','Speakers (Realtek Audio)']],
+    'Components > Display': [['Name','NVIDIA GeForce RTX 4060'],['Resolution','2560 x 1440'],['Driver Version','32.0.15.6636']],
+    'Components > Input': [['Device','HID Keyboard Device'],['Device','HID-compliant mouse']],
+    'Components > Network': [['Adapter','Intel(R) Wi-Fi 6 AX201'],['Adapter','Realtek USB GbE Ethernet']],
+    'Software Environment > System Drivers': [['ACPI','Running'],['NTFS','Running'],['Ntfs','Running'],['Tcpip','Running']],
+    'Software Environment > Print Jobs': [['(no active print jobs)','']],
+    'Software Environment > Running Tasks': [['explorer.exe','Running'],['taskmgr.exe','Running']],
+  };
+
+  const registryTree = {
+    'HKEY_CLASSES_ROOT': {'.txt':null, '.docx':null, 'Applications':null, 'CLSID':null},
+    'HKEY_CURRENT_USER': {
+      'Control Panel': {'Desktop':null, 'Mouse':null, 'Colors':null},
+      'Software': {'Microsoft':null, 'Classes':null},
+      'System': null,
+    },
+    'HKEY_LOCAL_MACHINE': {
+      'SAM': null,
+      'SECURITY': null,
+      'SOFTWARE': {'Microsoft':{'Windows':null, 'Windows NT':null}, 'Policies':null},
+      'SYSTEM': {'CurrentControlSet':{'Services':null, 'Control':null}},
+    },
+    'HKEY_USERS': {'.DEFAULT':null, 'S-1-5-21-...-1001':null},
+    'HKEY_CURRENT_CONFIG': {'Software':null, 'System':null},
+  };
+  const regValues = {
+    'HKEY_CURRENT_USER > Control Panel > Desktop': [
+      ['(Default)','REG_SZ','(value not set)'], ['Wallpaper','REG_SZ','C:\\Windows\\Web\\Wallpaper\\Windows\\img0.jpg'],
+      ['ScreenSaveActive','REG_SZ','1'], ['ScreenSaveTimeOut','REG_SZ','600'],
+    ],
+    'HKEY_LOCAL_MACHINE > SYSTEM > CurrentControlSet > Services': [
+      ['(Default)','REG_SZ','(value not set)'], ['Start','REG_DWORD','0x00000002 (2)'], ['Type','REG_DWORD','0x00000010 (16)'],
+    ],
+    'HKEY_LOCAL_MACHINE > SOFTWARE > Microsoft > Windows': [
+      ['CurrentVersion','REG_SZ','10.0'], ['ProgramFilesDir','REG_SZ','C:\\Program Files'],
+    ],
+  };
+
+  /* ============================================================
+     Tree component
+  ============================================================ */
+  function renderTree(nodes, path){
+    return nodes.map((n,i)=>{
+      const key = (path?path+'>>':'') + n.label + '#' + i;
+      const hasKids = n.children && n.children.length;
+      let html = `<div class="tree-node" data-key="${esc(key)}">
+        <div class="tree-row" data-key="${esc(key)}">
+          <span class="tree-caret ${hasKids?'':'leaf'}">▸</span>
+          <span class="tree-emoji">${n.emoji||'📁'}</span>
+          <span>${esc(n.label)}</span>
+        </div>`;
+      if(hasKids) html += `<div class="tree-children">${renderTree(n.children, key)}</div>`;
+      html += `</div>`;
+      n._key = key;
+      return html;
+    }).join('');
+  }
+  function flattenTree(nodes, map){
+    map = map || {};
+    nodes.forEach(n=>{ map[n._key] = n; if(n.children) flattenTree(n.children, map); });
+    return map;
+  }
+  function wireTree(container, nodes, onSelect){
+    const map = flattenTree(nodes);
+    container.querySelectorAll('.tree-row').forEach(row=>{
+      row.addEventListener('click', ()=>{
+        const key = row.getAttribute('data-key');
+        const node = map[key];
+        const nodeEl = row.closest('.tree-node');
+        if(node.children && node.children.length){
+          nodeEl.classList.toggle('expanded');
+          row.querySelector('.tree-caret').textContent = nodeEl.classList.contains('expanded') ? '▾' : '▸';
+        }
+        container.querySelectorAll('.tree-row.selected').forEach(r=>r.classList.remove('selected'));
+        row.classList.add('selected');
+        if(onSelect) onSelect(node);
+      });
+    });
+  }
+
+  /* ============================================================
+     Window Manager
+  ============================================================ */
+  const layer = document.getElementById('windowLayer');
+  const tbApps = document.getElementById('tbApps');
+  const openWindows = {};
+  let zTop = 100;
+  let cascade = 0;
+
+  function bringToFront(id){
+    zTop += 1;
+    openWindows[id].el.style.zIndex = zTop;
+    document.querySelectorAll('.tb-app').forEach(b=>b.classList.remove('active'));
+    const btn = openWindows[id].tbBtn;
+    if(btn) btn.classList.add('active');
+  }
+
+  function closeWindow(id){
+    const w = openWindows[id];
+    if(!w) return;
+    (w.cleanups||[]).forEach(fn=>{ try{fn();}catch(e){} });
+    w.el.remove();
+    if(w.tbBtn) w.tbBtn.remove();
+    delete openWindows[id];
+  }
+
+  function minimizeWindow(id){
+    const w = openWindows[id];
+    w.el.style.display='none';
+    w.tbBtn.classList.remove('active');
+  }
+
+  function toggleMaximize(id){
+    const w = openWindows[id];
+    const win = w.el;
+    if(!win.classList.contains('maximized')){
+      w.prevRect = {left:win.style.left, top:win.style.top, width:win.style.width, height:win.style.height};
+      win.style.left='0'; win.style.top='0'; win.style.width='100%'; win.style.height='calc(100% - 48px)';
+      win.classList.add('maximized');
+    } else {
+      Object.assign(win.style, w.prevRect);
+      win.classList.remove('maximized');
+    }
+  }
+
+  function openApp(app){
+    if(openWindows[app.id]){
+      const w = openWindows[app.id];
+      w.el.style.display='flex';
+      bringToFront(app.id);
+      return;
+    }
+    const w = app.width||880, h = app.height||560;
+    const offset = (cascade++ % 6) * 26;
+    const win = el(`<div class="win-window" style="left:${40+offset}px; top:${24+offset}px; width:${w}px; height:${h}px;">
+      <div class="win-titlebar">
+        ${icon(app.emoji, app.color, '')}
+        <div class="win-title">${esc(app.name)}</div>
+        <div class="win-controls">
+          <button class="wc-min" title="Minimize">—</button>
+          <button class="wc-max" title="Maximize">▢</button>
+          <button class="wc-close" title="Close">✕</button>
+        </div>
+      </div>
+      <div class="win-content"></div>
+    </div>`);
+    layer.appendChild(win);
+    const content = win.querySelector('.win-content');
+    content.innerHTML = app.render();
+
+    const cleanups = [];
+    const api = {
+      el: win, content,
+      onCleanup:(fn)=>cleanups.push(fn),
+      close:()=>closeWindow(app.id),
+      toast,
+    };
+    if(app.init) app.init(content, api);
+
+    openWindows[app.id] = { el:win, cleanups, tbBtn:null };
+
+    // taskbar button
+    const btn = el(`<div class="tb-app active" title="${esc(app.name)}">${icon(app.emoji, app.color, '')}<span class="ind"></span></div>`);
+    btn.addEventListener('click', ()=>{
+      if(win.style.display==='none'){ win.style.display='flex'; bringToFront(app.id); }
+      else if(parseInt(win.style.zIndex||0) === zTop){ minimizeWindow(app.id); }
+      else { bringToFront(app.id); }
+    });
+    tbApps.appendChild(btn);
+    openWindows[app.id].tbBtn = btn;
+
+    // dragging
+    const titlebar = win.querySelector('.win-titlebar');
+    let dragging=false, sx=0, sy=0, ox=0, oy=0;
+    titlebar.addEventListener('mousedown', (e)=>{
+      if(e.target.closest('.win-controls')) return;
+      if(win.classList.contains('maximized')) return;
+      dragging=true; sx=e.clientX; sy=e.clientY;
+      ox=win.offsetLeft; oy=win.offsetTop;
+      bringToFront(app.id);
+      e.preventDefault();
+    });
+    window.addEventListener('mousemove', (e)=>{
+      if(!dragging) return;
+      win.style.left = Math.max(0, ox + (e.clientX-sx)) + 'px';
+      win.style.top = Math.max(0, oy + (e.clientY-sy)) + 'px';
+    });
+    window.addEventListener('mouseup', ()=> dragging=false);
+    win.addEventListener('mousedown', ()=> bringToFront(app.id));
+
+    win.querySelector('.wc-close').addEventListener('click', ()=> closeWindow(app.id));
+    win.querySelector('.wc-min').addEventListener('click', ()=> minimizeWindow(app.id));
+    win.querySelector('.wc-max').addEventListener('click', ()=> toggleMaximize(app.id));
+
+    bringToFront(app.id);
+  }
+
+  /* ============================================================
+     App content builders
+  ============================================================ */
+
+  // ---------- Task Manager ----------
+  function taskManagerRender(){
+    return `
+    <div style="display:flex; flex-direction:column; height:100%;">
+      <div class="tabs" id="tmTabs">
+        <button class="active" data-tab="processes">Processes</button>
+        <button data-tab="performance">Performance</button>
+        <button data-tab="startup">Startup</button>
+        <button data-tab="users">Users</button>
+        <button data-tab="services">Services</button>
+      </div>
+      <div style="flex:1; overflow:hidden; position:relative;">
+        <div class="tabpage active" data-page="processes"></div>
+        <div class="tabpage" data-page="performance"></div>
+        <div class="tabpage" data-page="startup"></div>
+        <div class="tabpage" data-page="users"></div>
+        <div class="tabpage" data-page="services"></div>
+      </div>
+    </div>`;
+  }
+  function tmProcessesHTML(){
+    function rows(list, group){
+      let out = `<tr class="group-header"><td colspan="5">${group}</td></tr>`;
+      list.forEach(p=>{
+        out += `<tr data-name="${esc(p.name)}">
+          <td>${esc(p.name)}</td>
+          <td>${p.cpu.toFixed(1)}%</td>
+          <td>${p.mem} MB</td>
+          <td>${(p.disk||0).toFixed(1)} MB/s</td>
+          <td>${(p.net||0).toFixed(1)} Mbps</td>
+        </tr>`;
+      });
+      return out;
+    }
+    return `<div style="padding:0; height:100%; display:flex; flex-direction:column;">
+      <div class="toolbar">
+        <button class="btn danger" id="tmEndTask" disabled>End task</button>
+        <span style="color:#888; font-size:11.5px; margin-left:6px;">Select a process, then End task</span>
+      </div>
+      <div style="flex:1; overflow:auto;">
+        ${table(['Name','CPU','Memory','Disk','Network'],
+          [rows(processesApps,'Apps'), rows(processesBg,'Background processes'), rows(processesSys,'Windows processes')])}
+      </div>
+    </div>`;
+  }
+  function tmPerformanceHTML(){
+    return `<div class="perf-body">
+      <div class="perf-list">
+        <div class="pl-item active" data-res="cpu"><div class="pl-name">CPU</div><div class="pl-val" id="pv-cpu">--%</div><div id="sp-cpu"></div></div>
+        <div class="pl-item" data-res="mem"><div class="pl-name">Memory</div><div class="pl-val" id="pv-mem">--%</div><div id="sp-mem"></div></div>
+        <div class="pl-item" data-res="disk"><div class="pl-name">Disk 0 (C:)</div><div class="pl-val" id="pv-disk">--%</div><div id="sp-disk"></div></div>
+        <div class="pl-item" data-res="net"><div class="pl-name">Ethernet</div><div class="pl-val" id="pv-net">-- Mbps</div><div id="sp-net"></div></div>
+      </div>
+      <div class="perf-main">
+        <h3 id="perfTitle" style="margin-top:0;">CPU</h3>
+        <div class="chart-wrap"><div id="perfChart"></div></div>
+        <div class="kv" style="margin-top:14px;" id="perfKv"></div>
+      </div>
+    </div>`;
+  }
+  function tmStartupHTML(){
+    let rows = startupData.map((s,i)=>`<tr data-i="${i}">
+      <td>${esc(s.name)}</td><td>${esc(s.publisher)}</td>
+      <td class="su-status">${s.status}</td><td>${s.impact}</td>
+      <td><button class="btn small su-toggle">${s.status==='Enabled'?'Disable':'Enable'}</button></td>
+    </tr>`).join('');
+    return `<div style="display:flex; flex-direction:column; height:100%;">
+      <div class="toolbar"><span style="color:#888; font-size:11.5px;">Programs that start automatically when you sign in to Windows.</span></div>
+      <div style="flex:1; overflow:auto;">${table(['Name','Publisher','Status','Startup impact',''], [rows])}</div>
+    </div>`;
+  }
+  function tmUsersHTML(){
+    let rows = usersData.map((u,i)=>`<tr data-i="${i}">
+      <td>${esc(u.name)}</td><td>${u.status}</td><td>${u.cpu}%</td><td>${u.mem} MB</td>
+      <td>${u.status==='Active' && u.name!=='Administrator (Active)' ? `<button class="btn small us-disc">Disconnect</button>` : ''}</td>
+    </tr>`).join('');
+    return `<div style="display:flex; flex-direction:column; height:100%;">
+      <div class="toolbar"><button class="btn small" id="us-manage">Manage user accounts…</button></div>
+      <div style="flex:1; overflow:auto;">${table(['User','Status','CPU','Memory',''], [rows])}</div>
+    </div>`;
+  }
+  function tmServicesHTML(){
+    let rows = servicesData.map((s,i)=>`<tr data-i="${i}">
+      <td>${esc(s.name)}</td><td style="color:#666;">${esc(s.desc)}</td>
+      <td class="svc-status">${s.status==='Running'?'<span class="lvl lvl-audits"><span class="lvl-dot"></span>Running</span>':'<span style="color:#999;">Stopped</span>'}</td>
+      <td>${s.startup}</td>
+      <td>
+        <button class="btn small svc-start" ${s.status==='Running'?'disabled':''}>Start</button>
+        <button class="btn small svc-stop" ${s.status!=='Running'?'disabled':''}>Stop</button>
+        <button class="btn small svc-restart" ${s.status!=='Running'?'disabled':''}>Restart</button>
+      </td>
+    </tr>`).join('');
+    return `<div style="display:flex; flex-direction:column; height:100%;">
+      <div class="toolbar"><span style="color:#888; font-size:11.5px;">Manage background services. Start, stop, or restart individual services.</span></div>
+      <div style="flex:1; overflow:auto;">${table(['Name','Description','Status','Startup type','Actions'], [rows])}</div>
+    </div>`;
+  }
+  function taskManagerInit(content, api){
+    const pages = {
+      processes: tmProcessesHTML, performance: tmPerformanceHTML,
+      startup: tmStartupHTML, users: tmUsersHTML, services: tmServicesHTML,
+    };
+    Object.keys(pages).forEach(key=>{
+      content.querySelector(`.tabpage[data-page="${key}"]`).innerHTML = pages[key]();
+    });
+    // tabs
+    content.querySelectorAll('#tmTabs button').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        content.querySelectorAll('#tmTabs button').forEach(b=>b.classList.remove('active'));
+        content.querySelectorAll('.tabpage').forEach(p=>p.classList.remove('active'));
+        btn.classList.add('active');
+        content.querySelector(`.tabpage[data-page="${btn.dataset.tab}"]`).classList.add('active');
+      });
+    });
+    // processes select + end task
+    const procPage = content.querySelector('.tabpage[data-page="processes"]');
+    const endBtn = procPage.querySelector('#tmEndTask');
+    procPage.querySelectorAll('tbody tr[data-name]').forEach(row=>{
+      row.addEventListener('click', ()=>{
+        procPage.querySelectorAll('tr.selected').forEach(r=>r.classList.remove('selected'));
+        row.classList.add('selected'); endBtn.disabled=false;
+      });
+    });
+    endBtn.addEventListener('click', ()=>{
+      const sel = procPage.querySelector('tr.selected');
+      if(sel){ const name = sel.dataset.name; sel.remove(); api.toast(`"${name}" was ended.`); endBtn.disabled=true; }
+    });
+    // performance live
+    const perfPage = content.querySelector('.tabpage[data-page="performance"]');
+    let currentRes = 'cpu';
+    const resMeta = {
+      cpu:{title:'CPU', color:'#3a96dd', fmt:v=>v.toFixed(0)+'%', kv:()=>[['Utilization',hist.cpu[hist.cpu.length-1].toFixed(0)+'%'],['Speed','2.10 GHz'],['Processes',(processesApps.length+processesBg.length+processesSys.length)],['Threads','1,842'],['Handles','58,204'],['Up time','3:14:07:22']]},
+      mem:{title:'Memory', color:'#8e6bd1', fmt:v=>v.toFixed(0)+'%', kv:()=>[['In use',(hist.mem[hist.mem.length-1]/100*32).toFixed(1)+' GB'],['Available',(32-(hist.mem[hist.mem.length-1]/100*32)).toFixed(1)+' GB'],['Total','32.0 GB'],['Speed','5600 MHz'],['Slots used','2 of 4']]},
+      disk:{title:'Disk 0 (C:)', color:'#4fbf8e', fmt:v=>v.toFixed(0)+'%', kv:()=>[['Active time',hist.disk[hist.disk.length-1].toFixed(0)+'%'],['Type','SSD (NVMe)'],['Capacity','512 GB'],['Formatted','512 GB']]},
+      net:{title:'Ethernet', color:'#e0954f', fmt:v=>v.toFixed(0)+' Mbps', kv:()=>[['Send',(hist.net[hist.net.length-1]*0.3).toFixed(1)+' Mbps'],['Receive',(hist.net[hist.net.length-1]*0.7).toFixed(1)+' Mbps'],['Connection type','Ethernet']]},
+    };
+    function paintPerf(){
+      const m = resMeta[currentRes];
+      perfPage.querySelector('#perfTitle').textContent = m.title;
+      perfPage.querySelector('#perfChart').innerHTML = bigChart([hist[currentRes]], [m.color], 600, 220);
+      const kv = perfPage.querySelector('#perfKv');
+      kv.innerHTML = m.kv().map(([k,v])=>`<div>${k}</div><div>${v}</div>`).join('');
+      ['cpu','mem','disk','net'].forEach(r=>{
+        perfPage.querySelector('#pv-'+r).textContent = resMeta[r].fmt(hist[r][hist[r].length-1]);
+        perfPage.querySelector('#sp-'+r).innerHTML = sparkline(hist[r], 160, 26, resMeta[r].color);
+      });
+    }
+    perfPage.querySelectorAll('.pl-item').forEach(item=>{
+      item.addEventListener('click', ()=>{
+        perfPage.querySelectorAll('.pl-item').forEach(i=>i.classList.remove('active'));
+        item.classList.add('active'); currentRes = item.dataset.res; paintPerf();
+      });
+    });
+    paintPerf();
+    api.onCleanup(onLive(()=>{ if(content.querySelector('.tabpage[data-page="performance"]').classList.contains('active')) paintPerf(); }));
+
+    // startup toggles
+    content.querySelectorAll('.su-toggle').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const row = btn.closest('tr'); const i = row.dataset.i; const rec = startupData[i];
+        rec.status = rec.status==='Enabled' ? 'Disabled' : 'Enabled';
+        row.querySelector('.su-status').textContent = rec.status;
+        btn.textContent = rec.status==='Enabled' ? 'Disable' : 'Enable';
+        api.toast(`${rec.name} startup ${rec.status.toLowerCase()}.`);
+      });
+    });
+    // users
+    content.querySelectorAll('.us-disc').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const row = btn.closest('tr'); const i = row.dataset.i; usersData[i].status='Disconnected';
+        row.children[1].textContent='Disconnected'; btn.remove(); api.toast(`${usersData[i].name} was disconnected.`);
+      });
+    });
+    const manageBtn = content.querySelector('#us-manage');
+    if(manageBtn) manageBtn.addEventListener('click', ()=> openApp(APP_BY_ID.lusrmgr));
+    // services
+    content.querySelectorAll('.svc-start,.svc-stop,.svc-restart').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const row = btn.closest('tr'); const i = row.dataset.i; const rec = servicesData[i];
+        if(btn.classList.contains('svc-start')) rec.status='Running';
+        if(btn.classList.contains('svc-stop')) rec.status='Stopped';
+        if(btn.classList.contains('svc-restart')) api.toast(`${rec.name} restarted.`);
+        row.querySelector('.svc-status').innerHTML = rec.status==='Running' ? '<span class="lvl lvl-audits"><span class="lvl-dot"></span>Running</span>' : '<span style="color:#999;">Stopped</span>';
+        row.querySelector('.svc-start').disabled = rec.status==='Running';
+        row.querySelector('.svc-stop').disabled = rec.status!=='Running';
+        row.querySelector('.svc-restart').disabled = rec.status!=='Running';
+        if(btn.classList.contains('svc-start')||btn.classList.contains('svc-stop')) api.toast(`${rec.name} ${rec.status==='Running'?'started':'stopped'}.`);
+      });
+    });
+  }
+
+  // ---------- Generic console (tree + right panel) ----------
+  function consoleRender(){
+    return `<div class="console">
+      <div class="console-tree"></div>
+      <div class="console-panel">
+        <div class="toolbar" id="consoleToolbar"></div>
+        <div class="console-panel-body" id="consolePanel"><div class="panel-sub">Select an item on the left to view details.</div></div>
+        <div class="statusbar" id="consoleStatus"></div>
+      </div>
+    </div>`;
+  }
+  function mountConsole(content, api, {tree, toolbarButtons, statusText, autoSelectFirst}){
+    const treeEl = content.querySelector('.console-tree');
+    treeEl.innerHTML = renderTree(tree, '');
+    const panel = content.querySelector('#consolePanel');
+    const toolbar = content.querySelector('#consoleToolbar');
+    const status = content.querySelector('#consoleStatus');
+    status.textContent = statusText || '';
+    (toolbarButtons||[]).forEach(b=>{
+      const btn = el(`<button class="btn small">${esc(b.label)}</button>`);
+      btn.addEventListener('click', ()=> b.onClick(panel, api));
+      toolbar.appendChild(btn);
+    });
+    wireTree(treeEl, tree, (node)=>{
+      if(node.onSelect) panel.innerHTML = node.onSelect();
+      status.textContent = node.label;
+    });
+    if(autoSelectFirst){
+      const firstRow = treeEl.querySelector('.tree-row');
+      if(firstRow) firstRow.click();
+    }
+  }
+
+  function leafRow(label, emoji, onSelect){ return {label, emoji, onSelect}; }
+  function branch(label, emoji, children){ return {label, emoji, children}; }
+
+  // Event Viewer
+  function eventViewerTree(){
+    return Object.keys(eventLogs).map(logName=> leafRow(logName, '📄', ()=> eventPanelHTML(logName)));
+  }
+  function eventPanelHTML(logName){
+    const events = eventLogs[logName];
+    const rows = events.map(ev=>{
+      const lm = levelMeta[ev.level];
+      return `<tr><td><span class="lvl ${lm.cls}"><span class="lvl-dot"></span>${lm.label}</span></td>
+        <td>${fmtDate(new Date(Date.now()-rand(1,90000000)))}</td>
+        <td>${esc(ev.src)}</td><td>${ev.id}</td><td>${esc(ev.task)}</td></tr>`;
+    }).join('');
+    return `<div class="panel-title">📄 ${esc(logName)} Log</div>
+    <div class="panel-sub">${events.length} events. Levels shown: Information, Warning, Error, Critical, Audit Success, Audit Failure.</div>
+    ${table(['Level','Date and Time','Source','Event ID','Task Category'], [rows])}`;
+  }
+
+  // Disk Management
+  function diskManagementHTML(){
+    const rows = volumes.map(v=>`<tr><td>${esc(v.drive)}</td><td>${esc(v.label)||'—'}</td><td>${v.fs}</td>
+      <td>${v.cap} GB</td><td>${v.free.toFixed(1)} GB free</td><td>${esc(v.status)}</td>
+      <td><button class="btn small dm-menu" data-drive="${v.drive}">Actions ▾</button></td></tr>`).join('');
+    const bars = volumes.map(v=>`<div style="flex:${v.cap}; min-width:60px;">
+      <div style="height:52px; background:${v.color}; border:1px solid #fff; display:flex; align-items:center; justify-content:center; color:#fff; font-size:11px; font-weight:600;">${v.drive} ${v.label?('('+v.label+')'):''}</div>
+      <div style="font-size:10.5px; color:#666; text-align:center; margin-top:2px;">${v.cap} GB ${v.status.split(' ')[0]}</div>
+    </div>`).join('');
+    return `<div style="padding:16px;">
+      <div class="banner danger">⚠️ You can shrink, extend, format, or delete volumes here. Deleting or formatting a volume erases its data — always keep a backup before making changes.</div>
+      ${table(['Volume','Label','File System','Capacity','Free Space','Status',''], [rows])}
+      <h4 style="margin:20px 0 8px;">Graphical View</h4>
+      <div style="display:flex; gap:2px;">${bars}</div>
+    </div>`;
+  }
+  function diskManagementInit(content, api){
+    content.querySelectorAll('.dm-menu').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        showModal(content, {
+          title: `${btn.dataset.drive} — Volume actions`,
+          bodyHTML: `<div class="banner danger">Actions like Format or Delete Volume permanently erase data on this volume. Make sure you have a backup first.</div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <button class="btn">Open</button>
+              <button class="btn">Change Drive Letter and Paths…</button>
+              <button class="btn">Shrink Volume…</button>
+              <button class="btn">Extend Volume…</button>
+              <button class="btn danger">Format…</button>
+              <button class="btn danger">Delete Volume…</button>
+            </div>`,
+          buttons:[{label:'Close', primary:true, onClick:closeModal}],
+        });
+      });
+    });
+  }
+
+  // Task Scheduler
+  function taskSchedulerTree(){
+    return [ branch('Task Scheduler Library', '📁', [
+      leafRow('\\ (root)', '📁', ()=> taskListHTML(scheduledTasks.filter(t=>t.folder==='\\'))),
+      branch('Microsoft', '📁', [
+        branch('Windows', '📁', [
+          leafRow('Defrag', '⏰', ()=> taskListHTML(scheduledTasks.filter(t=>t.folder.includes('Defrag')))),
+          leafRow('SystemRestore', '⏰', ()=> taskListHTML(scheduledTasks.filter(t=>t.folder.includes('SystemRestore')))),
+          leafRow('Server Manager', '⏰', ()=> taskListHTML(scheduledTasks.filter(t=>t.folder.includes('Server Manager')))),
+        ]),
+      ]),
+    ])];
+  }
+  function taskListHTML(tasks){
+    if(!tasks.length) tasks = scheduledTasks;
+    const rows = tasks.map(t=>`<tr><td>${esc(t.name)}</td><td>${t.status==='Ready'?'✅ Ready':(t.status==='Disabled'?'⏸️ Disabled':t.status)}</td><td>${esc(t.trigger)}</td><td>${esc(t.next)}</td></tr>`).join('');
+    return `<div class="panel-title">⏰ Scheduled Tasks</div>
+      <div class="panel-sub">Plan your future. Predefined schedules — click and go.</div>
+      ${table(['Name','Status','Trigger','Next Run Time'], [rows])}`;
+  }
+
+  // Device Manager
+  function deviceManagerTree(){
+    return Object.keys(deviceTree).map(cat=> branch(cat, '🖧', deviceTree[cat].map(dev=> leafRow(dev, '🔌', ()=> devicePanelHTML(dev, cat)))));
+  }
+  function devicePanelHTML(dev, cat){
+    return `<div class="panel-title">🔌 ${esc(dev)}</div>
+      <div class="panel-sub">Category: ${esc(cat)}</div>
+      <div class="card">
+        <div class="kv">
+          <div>Device status</div><div>✅ This device is working properly.</div>
+          <div>Driver provider</div><div>Windows / OEM</div>
+          <div>Driver date</div><div>2025-11-0${Math.ceil(rand(1,9))}</div>
+          <div>Driver version</div><div>${Math.ceil(rand(10,32))}.0.${Math.ceil(rand(10,99))}.${Math.ceil(rand(1000,9999))}</div>
+        </div>
+      </div>
+      <button class="btn dm-update">Update driver…</button>
+      <p style="color:#666; margin-top:12px; font-size:12px;">Device drivers are hardware- and OS-specific — an older driver may not work correctly on a newer version of Windows.</p>`;
+  }
+  function deviceManagerInit(content, api){
+    content.querySelector('.console-panel-body').addEventListener('click', (e)=>{
+      if(e.target.classList.contains('dm-update')){
+        api.toast('Searching for updated drivers… Windows says the best driver is already installed.');
+      }
+    });
+  }
+
+  // Certificate Manager
+  function certTree(){
+    return Object.keys(certStores).map(store=> leafRow(store, '🔐', ()=> certPanelHTML(store)));
+  }
+  function certPanelHTML(store){
+    const rows = certStores[store].map(c=>`<tr><td>${esc(c.to)}</td><td>${esc(c.by)}</td><td>${c.exp}</td><td>${esc(c.purpose)}</td></tr>`).join('');
+    return `<div class="panel-title">🔐 ${esc(store)}</div>
+      <div class="panel-sub">View, add, and remove trusted certificates.</div>
+      ${table(['Issued To','Issued By','Expiration Date','Intended Purposes'], [rows])}`;
+  }
+
+  // Local Users and Groups
+  function lusrmgrTree(){
+    return [
+      leafRow('Users', '👤', ()=> `<div class="panel-title">👤 Users</div>
+        <div class="panel-sub">Administrator has full control. Guest is limited access. Others are "regular" users.</div>
+        ${table(['Name','Full Name','Description','Status'], localUsers.map(u=>`<tr><td>${esc(u.name)}</td><td>${esc(u.full)}</td><td>${esc(u.desc)}</td><td>${u.disabled?'Disabled':'Active'}</td></tr>`))}`),
+      leafRow('Groups', '👥', ()=> `<div class="panel-title">👥 Groups</div>
+        <div class="panel-sub">Administrators, Users, Backup Operators, Power Users, and more.</div>
+        ${table(['Group','Description','Members'], localGroups.map(g=>`<tr><td>${esc(g.name)}</td><td>${esc(g.desc)}</td><td>${esc(g.members)}</td></tr>`))}`),
+    ];
+  }
+
+  // Performance Monitor
+  function perfmonRender(){
+    return `<div style="display:flex; height:100%;">
+      <div class="console-tree" style="width:210px;"></div>
+      <div style="flex:1; display:flex; flex-direction:column;">
+        <div class="toolbar"><button class="btn small" id="pm-add">Add Counters…</button></div>
+        <div style="flex:1; padding:16px; overflow:auto;">
+          <div class="panel-title">📉 Performance Monitor — % Processor Time</div>
+          <div class="chart-wrap"><div id="pmChart"></div></div>
+          <div class="card" style="margin-top:14px;">
+            <div class="kv">
+              <div>Data Collector Set</div><div>System Performance</div>
+              <div>Status</div><div>Collecting…</div>
+              <div>Report retention</div><div>30 days, stored locally</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+  function perfmonInit(content, api){
+    const tree = [
+      branch('Monitoring Tools', '📁', [ leafRow('Performance Monitor', '📉', ()=>null) ]),
+      branch('Data Collector Sets', '📁', [ leafRow('System Performance', '🗂️', ()=>null), leafRow('System Diagnostics', '🗂️', ()=>null) ]),
+      branch('Reports', '📁', [ leafRow('System Performance — last run', '📊', ()=>null) ]),
+    ];
+    content.querySelector('.console-tree').innerHTML = renderTree(tree, '');
+    wireTree(content.querySelector('.console-tree'), tree, ()=>{});
+    function paint(){ content.querySelector('#pmChart').innerHTML = bigChart([hist.cpu], ['#0067c0'], 640, 220); }
+    paint();
+    api.onCleanup(onLive(paint));
+    content.querySelector('#pm-add').addEventListener('click', ()=>{
+      showModal(content, {
+        title:'Add Counters',
+        bodyHTML: ['% Processor Time','Available MBytes','Disk Reads/sec','Disk Writes/sec','Bytes Total/sec (Network)','Pages/sec'].map(c=>
+          `<label class="snapin-row"><input type="checkbox" ${c==='% Processor Time'?'checked':''}> ${c}</label>`).join(''),
+        buttons:[{label:'Cancel', onClick:closeModal},{label:'Add >>', primary:true, onClick:()=>{ closeModal(); api.toast('Counters added to the chart.'); }}],
+      });
+    });
+  }
+
+  // Group Policy Editor
+  function gpeditTree(){
+    return Object.keys(gpoTree).map(path=>{
+      const parts = path.split(' > ');
+      return leafRow(parts[parts.length-1] + '  (' + parts.slice(0,-1).join(' \u203a ') + ')', '🏛️', ()=> gpoPanelHTML(path));
+    });
+  }
+  function gpoPanelHTML(path){
+    const rows = gpoTree[path].map((p,i)=>`<tr data-path="${esc(path)}" data-i="${i}">
+      <td>${esc(p.name)}</td>
+      <td class="gpo-state">${esc(p.state)}</td>
+      <td><button class="btn small gpo-edit">Edit policy setting…</button></td>
+    </tr>`).join('');
+    return `<div class="panel-title">🏛️ ${esc(path.split(' > ').pop())}</div>
+      <div class="panel-sub">${esc(path)}</div>
+      ${table(['Setting','State',''], [rows])}`;
+  }
+  function gpeditInit(content, api){
+    content.querySelector('.console-panel-body').addEventListener('click', (e)=>{
+      if(e.target.classList.contains('gpo-edit')){
+        const row = e.target.closest('tr'); const path = row.dataset.path; const i = row.dataset.i;
+        showModal(content, {
+          title: gpoTree[path][i].name,
+          bodyHTML: `<div class="field-row"><label><input type="radio" name="gpostate" value="Not Configured" ${gpoTree[path][i].state==='Not Configured'?'checked':''}> Not Configured</label></div>
+            <div class="field-row"><label><input type="radio" name="gpostate" value="Enabled" ${gpoTree[path][i].state==='Enabled'?'checked':''}> Enabled</label></div>
+            <div class="field-row"><label><input type="radio" name="gpostate" value="Disabled" ${gpoTree[path][i].state==='Disabled'?'checked':''}> Disabled</label></div>`,
+          buttons:[{label:'Cancel', onClick:closeModal},{label:'OK', primary:true, onClick:()=>{
+            const checkedInput = content.querySelector('.modal-overlay input[name="gpostate"]:checked');
+            if(!checkedInput) return;
+            const val = checkedInput.value;
+            gpoTree[path][i].state = val; row.querySelector('.gpo-state').textContent = val;
+            closeModal(); api.toast('Policy setting updated.');
+          }}],
+        });
+      }
+    });
+  }
+
+  // System Information
+  function sysinfoTree(){
+    const groups = {};
+    Object.keys(sysInfoData).forEach(k=>{
+      const parts = k.split(' > ');
+      const top = parts[0];
+      groups[top] = groups[top] || [];
+      if(parts.length>1) groups[top].push({label:parts[1], full:k});
+    });
+    return Object.keys(groups).map(top=>{
+      if(groups[top].length===0) return leafRow(top, 'ℹ️', ()=> sysinfoPanel(top));
+      return branch(top, 'ℹ️', groups[top].map(g=> leafRow(g.label, '📄', ()=> sysinfoPanel(g.full))));
+    });
+  }
+  function sysinfoPanel(key){
+    const rows = sysInfoData[key].map(([k,v])=>`<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join('');
+    return `<div class="panel-title">ℹ️ ${esc(key)}</div>${table(['Item','Value'], [rows])}`;
+  }
+
+  // Resource Monitor
+  function resmonRender(){
+    return `<div style="display:flex; flex-direction:column; height:100%;">
+      <div class="tabs" id="rmTabs">
+        <button class="active" data-tab="overview">Overview</button>
+        <button data-tab="cpu">CPU</button>
+        <button data-tab="memory">Memory</button>
+        <button data-tab="disk">Disk</button>
+        <button data-tab="network">Network</button>
+      </div>
+      <div style="flex:1; overflow:hidden; position:relative; padding:14px;" id="rmBody"></div>
+    </div>`;
+  }
+  function resmonInit(content, api){
+    const body = content.querySelector('#rmBody');
+    let tab='overview';
+    function overviewPage(){
+      return `<div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+        ${['cpu','mem','disk','net'].map(r=>`<div class="chart-wrap"><b style="font-size:12px;">${({cpu:'CPU',mem:'Memory',disk:'Disk',net:'Network'})[r]}</b>${sparkline(hist[r],260,50,{cpu:'#3a96dd',mem:'#8e6bd1',disk:'#4fbf8e',net:'#e0954f'}[r])}</div>`).join('')}
+      </div>`;
+    }
+    function detailPage(res, color, label){
+      return `<div class="chart-wrap">${bigChart([hist[res]], [color], 700, 180)}</div>
+        <div class="panel-sub" style="margin-top:10px;">${label} — average over last samples: ${(hist[res].reduce((a,b)=>a+b,0)/hist[res].length).toFixed(1)}</div>`;
+    }
+    function paint(){
+      if(tab==='overview') body.innerHTML = overviewPage();
+      else if(tab==='cpu') body.innerHTML = detailPage('cpu','#3a96dd','CPU utilization');
+      else if(tab==='memory') body.innerHTML = detailPage('mem','#8e6bd1','Memory usage');
+      else if(tab==='disk') body.innerHTML = detailPage('disk','#4fbf8e','Disk activity');
+      else if(tab==='network') body.innerHTML = detailPage('net','#e0954f','Network throughput');
+    }
+    content.querySelectorAll('#rmTabs button').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        content.querySelectorAll('#rmTabs button').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active'); tab = btn.dataset.tab; paint();
+      });
+    });
+    paint();
+    api.onCleanup(onLive(paint));
+  }
+
+  // System Configuration (msconfig)
+  function msconfigRender(){
+    return `<div style="display:flex; flex-direction:column; height:100%;">
+      <div class="tabs" id="mcTabs">
+        <button class="active" data-tab="general">General</button>
+        <button data-tab="boot">Boot</button>
+        <button data-tab="services">Services</button>
+        <button data-tab="startup">Startup</button>
+        <button data-tab="tools">Tools</button>
+      </div>
+      <div style="flex:1; overflow:hidden; position:relative;">
+        <div class="tabpage active" data-page="general" style="padding:18px;">
+          <div class="field-row"><label><input type="radio" name="mcstart" checked> Normal startup</label></div>
+          <div class="field-row"><label><input type="radio" name="mcstart"> Diagnostic startup</label></div>
+          <div class="field-row"><label><input type="radio" name="mcstart"> Selective startup</label></div>
+          <div style="margin-left:28px;">
+            <label class="field-row"><input type="checkbox" checked> Load system services</label>
+            <label class="field-row"><input type="checkbox" checked> Load startup items</label>
+            <label class="field-row"><input type="checkbox" checked disabled> Use original boot configuration</label>
+          </div>
+        </div>
+        <div class="tabpage" data-page="boot" style="padding:18px;">
+          <div class="card">Windows 11 Pro (C:\\Windows) — current OS; default OS</div>
+          <label class="field-row"><input type="checkbox"> Safe boot</label>
+          <label class="field-row"><input type="checkbox"> No GUI boot</label>
+          <label class="field-row"><input type="checkbox"> Boot log</label>
+          <label class="field-row"><input type="checkbox"> Base video</label>
+          <label class="field-row"><input type="checkbox"> OS boot information</label>
+          <div class="field-row"><label>Timeout:</label><input type="number" value="30" style="width:60px;"> seconds</div>
+        </div>
+        <div class="tabpage" data-page="services" style="padding:0;"></div>
+        <div class="tabpage" data-page="startup" style="padding:18px;">
+          <p>To manage startup items, use Task Manager.</p>
+          <button class="btn" id="mc-open-tm">Open Task Manager</button>
+        </div>
+        <div class="tabpage" data-page="tools" style="padding:0;"></div>
+      </div>
+    </div>`;
+  }
+  function msconfigInit(content, api){
+    content.querySelectorAll('#mcTabs button').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        content.querySelectorAll('#mcTabs button').forEach(b=>b.classList.remove('active'));
+        content.querySelectorAll('.tabpage').forEach(p=>p.classList.remove('active'));
+        btn.classList.add('active');
+        content.querySelector(`.tabpage[data-page="${btn.dataset.tab}"]`).classList.add('active');
+      });
+    });
+    const svcPage = content.querySelector('.tabpage[data-page="services"]');
+    function paintSvc(){
+      const rows = servicesData.map((s,i)=>`<tr><td><input type="checkbox" ${s.status==='Running'?'checked':''} data-i="${i}" class="mc-svc-cb"></td><td>${esc(s.name)}</td><td>${esc(s.desc)}</td><td>${s.status}</td></tr>`).join('');
+      svcPage.innerHTML = `<div class="toolbar"><label style="font-size:12px;"><input type="checkbox" id="mc-hide-ms"> Hide all Microsoft services</label></div>
+      <div style="overflow:auto; max-height:360px;">${table(['','Service','Description','Status'], [rows])}</div>`;
+    }
+    paintSvc();
+    const toolsPage = content.querySelector('.tabpage[data-page="tools"]');
+    toolsPage.innerHTML = `<div style="overflow:auto;">${table(['Tool','Command',''], APPS.filter(a=>a.id!=='taskmgr'&&a.id!=='msconfig').map(a=>
+      `<tr><td>${icon(a.emoji,a.color,'sm')} ${esc(a.name)}</td><td style="font-family:${'var(--mono)'};color:#666;">${esc(a.cmd)}</td><td><button class="btn small mc-launch" data-id="${a.id}">Launch</button></td></tr>`))}</div>`;
+    toolsPage.querySelectorAll('.mc-launch').forEach(btn=> btn.addEventListener('click', ()=> openApp(APP_BY_ID[btn.dataset.id])));
+    content.querySelector('#mc-open-tm').addEventListener('click', ()=> openApp(APP_BY_ID.taskmgr));
+  }
+
+  // Disk Cleanup
+  const cleanupItems = [
+    {name:'Downloaded Program Files', size:0.4}, {name:'Temporary Internet Files', size:128},
+    {name:'Recycle Bin', size:612}, {name:'Temporary files', size:340}, {name:'Thumbnails', size:58},
+    {name:'Delivery Optimization Files', size:210},
+  ];
+  function diskCleanupRender(){
+    const rows = cleanupItems.map((c,i)=>`<div class="checklist-row"><input type="checkbox" checked class="dc-cb" data-size="${c.size}"><div style="flex:1;">${esc(c.name)}</div><div>${c.size} MB</div></div>`).join('');
+    return `<div style="padding:16px;">
+      <p>Disk Cleanup for (C:) can free up to <b><span id="dcTotal">0</span> MB</b> of disk space.</p>
+      <div class="card">${rows}</div>
+      <button class="btn small" id="dc-sysfiles">Clean up system files</button>
+      <div style="margin-top:16px; display:flex; gap:8px;">
+        <button class="btn primary" id="dc-ok">OK</button>
+      </div>
+      <div id="dc-progress" style="display:none; margin-top:14px;">
+        <div class="bar-track"><div class="bar-fill" id="dc-bar" style="width:0%;"></div></div>
+        <div style="font-size:11.5px; color:#666; margin-top:6px;">Cleaning up files…</div>
+      </div>
+    </div>`;
+  }
+  function diskCleanupInit(content, api){
+    function total(){
+      let t=0; content.querySelectorAll('.dc-cb:checked').forEach(cb=> t+=parseFloat(cb.dataset.size));
+      content.querySelector('#dcTotal').textContent = t.toFixed(0);
+    }
+    content.querySelectorAll('.dc-cb').forEach(cb=> cb.addEventListener('change', total));
+    total();
+    content.querySelector('#dc-sysfiles').addEventListener('click', ()=> api.toast('Scanning for system files to clean… (Windows Update Cleanup, Previous installations)'));
+    content.querySelector('#dc-ok').addEventListener('click', ()=>{
+      const bar = content.querySelector('#dc-bar'); const wrap = content.querySelector('#dc-progress');
+      wrap.style.display='block'; let p=0;
+      const t = setInterval(()=>{ p+=Math.random()*22; bar.style.width=Math.min(p,100)+'%'; if(p>=100){ clearInterval(t); api.toast('Disk Cleanup freed ' + content.querySelector('#dcTotal').textContent + ' MB.'); } }, 220);
+      api.onCleanup(()=>clearInterval(t));
+    });
+  }
+
+  // Disk Defragment
+  const defragDrives = [
+    {drive:'C:', type:'SSD (Solid state drive)', frag:0}, {drive:'D:', type:'HDD (Hard disk drive)', frag:18}, {drive:'E:', type:'HDD (Hard disk drive)', frag:4},
+  ];
+  function defragRender(){
+    const rows = defragDrives.map((d,i)=>`<tr data-i="${i}">
+      <td>${esc(d.drive)}</td><td>${esc(d.type)}</td>
+      <td class="dg-status">${d.type.startsWith('SSD') ? 'OK (0% fragmented — TRIM optimized)' : d.frag+'% fragmented'}</td>
+      <td>
+        <button class="btn small dg-analyze">Analyze</button>
+        <button class="btn small dg-run" ${d.type.startsWith('SSD')?'disabled title="Windows does not defragment solid state drives"':''}>${d.type.startsWith('SSD')?'Optimize (n/a)':'Optimize'}</button>
+      </td>
+    </tr>`).join('');
+    return `<div style="padding:16px;">
+      <p style="color:#666; font-size:12px;">Optimizing your drives can help your computer run more efficiently. Windows automatically skips optimization for solid-state drives since defragmenting is unnecessary and can reduce their lifespan.</p>
+      ${table(['Drive','Media type','Current status',''], [rows])}
+      <div id="dg-progress" style="display:none; margin-top:16px;">
+        <div class="bar-track"><div class="bar-fill" id="dg-bar" style="width:0%;"></div></div>
+        <div style="font-size:11.5px; color:#666; margin-top:6px;" id="dg-label"></div>
+      </div>
+    </div>`;
+  }
+  function defragInit(content, api){
+    content.querySelectorAll('.dg-analyze').forEach(btn=> btn.addEventListener('click', (e)=>{
+      const row = btn.closest('tr'); const i = row.dataset.i; runDefragProgress(content, api, `Analyzing ${defragDrives[i].drive}`, ()=> api.toast(`Analysis complete for ${defragDrives[i].drive}.`));
+    }));
+    content.querySelectorAll('.dg-run').forEach(btn=> btn.addEventListener('click', ()=>{
+      const row = btn.closest('tr'); const i = row.dataset.i; const d = defragDrives[i];
+      if(d.type.startsWith('SSD')) return;
+      runDefragProgress(content, api, `Optimizing ${d.drive}`, ()=>{
+        d.frag = 0; row.querySelector('.dg-status').textContent = '0% fragmented';
+        api.toast(`${d.drive} optimized successfully.`);
+      });
+    }));
+  }
+  function runDefragProgress(content, api, label, done){
+    const wrap = content.querySelector('#dg-progress'); const bar = content.querySelector('#dg-bar'); const lbl = content.querySelector('#dg-label');
+    wrap.style.display='block'; lbl.textContent = label + '…'; let p=0;
+    const t = setInterval(()=>{ p += Math.random()*16; bar.style.width = Math.min(p,100)+'%'; if(p>=100){ clearInterval(t); lbl.textContent = label + ' — complete.'; done(); } }, 250);
+    api.onCleanup(()=>clearInterval(t));
+  }
+
+  // Registry Editor
+  function buildRegTree(obj, prefix){
+    return Object.keys(obj).map(key=>{
+      const full = prefix ? prefix + ' > ' + key : key;
+      const val = obj[key];
+      if(val && typeof val === 'object'){
+        return branch(key, '🗂️', buildRegTree(val, full));
+      }
+      return leafRow(key, '🗂️', ()=> regPanel(full));
+    });
+  }
+  function regPanel(full){
+    const rows = (regValues[full] || [['(Default)','REG_SZ','(value not set)']]).map(([n,t,v])=>`<tr><td>${esc(n)}</td><td>${t}</td><td>${esc(v)}</td></tr>`).join('');
+    return `<div class="panel-title">🗝️ ${esc(full)}</div>
+      <div class="banner">Always back up your registry (File → Export) before making changes. Incorrect edits can affect system stability.</div>
+      ${table(['Name','Type','Data'], [rows])}`;
+  }
+
+  // MMC console
+  function mmcRender(){
+    return `<div class="console">
+      <div class="console-tree" id="mmcTree"></div>
+      <div class="console-panel">
+        <div class="toolbar"><button class="btn small" id="mmc-add">Add/Remove Snap-in…</button></div>
+        <div class="console-panel-body" id="mmcPanel"><div class="panel-sub">Console Root is empty. Use Add/Remove Snap-in to build your own management console.</div></div>
+        <div class="statusbar">mmc.exe — Console1</div>
+      </div>
+    </div>`;
+  }
+  const snapinOptions = [
+    {name:'Event Viewer', appId:'eventvwr'}, {name:'Disk Management', appId:'diskmgmt'},
+    {name:'Task Scheduler', appId:'taskschd'}, {name:'Device Manager', appId:'devmgmt'},
+    {name:'Certificates', appId:'certmgr'}, {name:'Local Users and Groups', appId:'lusrmgr'},
+    {name:'Performance Monitor', appId:'perfmon'}, {name:'Group Policy Object Editor', appId:'gpedit'},
+  ];
+  function mmcInit(content, api){
+    let mmcTree = [ branch('Console Root', '🖥️', []) ];
+    function paintTree(){
+      const treeEl = content.querySelector('#mmcTree');
+      treeEl.innerHTML = renderTree(mmcTree, '');
+      wireTree(treeEl, mmcTree, (node)=>{ if(node.onSelect) content.querySelector('#mmcPanel').innerHTML = node.onSelect(); });
+      const first = treeEl.querySelector('.tree-row'); if(first) first.click();
+    }
+    paintTree();
+    content.querySelector('#mmc-add').addEventListener('click', ()=>{
+      showModal(content, {
+        title:'Add or Remove Snap-ins',
+        bodyHTML: snapinOptions.map(s=>`<label class="snapin-row"><input type="checkbox" value="${s.appId}" class="mmc-cb"> ${esc(s.name)}</label>`).join(''),
+        buttons:[{label:'Cancel', onClick:closeModal},{label:'OK', primary:true, onClick:()=>{
+          const checked = Array.from(content.querySelectorAll('.modal-overlay .mmc-cb:checked') || []).map(cb=>cb.value);
+          checked.forEach(id=>{
+            const opt = snapinOptions.find(s=>s.appId===id);
+            mmcTree[0].children.push(leafRow(opt.name, '🧩', ()=> `<div class="panel-title">🧩 ${esc(opt.name)} snap-in</div>
+              <div class="panel-sub">This snap-in is embedded in your custom console.</div>
+              <button class="btn primary mmc-open-standalone" data-id="${id}">Open full ${esc(opt.name)} view</button>`));
+          });
+          closeModal(); paintTree();
+          if(checked.length) api.toast(`${checked.length} snap-in(s) added to Console Root.`);
+        }}],
+      });
+    });
+    content.querySelector('#mmcPanel').addEventListener('click', (e)=>{
+      if(e.target.classList.contains('mmc-open-standalone')) openApp(APP_BY_ID[e.target.dataset.id]);
+    });
+  }
+
+  /* ---------------- Modal helper ---------------- */
+  function showModal(content, {title, bodyHTML, buttons}){
+    closeModal(content);
+    const overlay = el(`<div class="modal-overlay">
+      <div class="modal-box">
+        <div class="modal-head"><span>${esc(title)}</span><span style="cursor:pointer;" class="modal-x">✕</span></div>
+        <div class="modal-body">${bodyHTML}</div>
+        <div class="modal-foot"></div>
+      </div>
+    </div>`);
+    const foot = overlay.querySelector('.modal-foot');
+    (buttons||[]).forEach(b=>{
+      const btn = el(`<button class="btn ${b.primary?'primary':''}">${esc(b.label)}</button>`);
+      btn.addEventListener('click', ()=> b.onClick());
+      foot.appendChild(btn);
+    });
+    overlay.querySelector('.modal-x').addEventListener('click', closeModal);
+    content.appendChild(overlay);
+  }
+  function closeModal(){
+    document.querySelectorAll('.modal-overlay').forEach(m=>m.remove());
+  }
+
+  /* ============================================================
+     App registry
+  ============================================================ */
+  const APPS = [
+    { id:'taskmgr', name:'Task Manager', emoji:'📊', color:0, cmd:'taskmgr.exe',
+      short:'Processes, Performance, Startup, Users, and Services in one place.',
+      long:'View all running processes (interactive apps, background tasks, and system processes from other accounts), monitor real-time and historical CPU/memory/disk/network performance, toggle which programs start with sign-in, see who is connected and disconnect them, and start/stop/restart background services.',
+      width:900, height:600, render:taskManagerRender, init:taskManagerInit },
+
+    { id:'mmc', name:'MMC (Custom Console)', emoji:'🧩', color:1, cmd:'mmc.exe',
+      short:'Build your own management console from snap-ins.',
+      long:'A handy starting point for building your own console: add snap-ins like Event Viewer, Local Users and Groups, Disk Management, Task Scheduler, and more.',
+      width:860, height:560, render:mmcRender, init:mmcInit },
+
+    { id:'eventvwr', name:'Event Viewer', emoji:'📋', color:2, cmd:'eventvwr.msc',
+      short:'Central event consolidation — what happened?',
+      long:'Browse Application, Security, Setup, and System logs. Events are categorized as Information, Warning, Error, Critical, Successful Audit, or Failure Audit.',
+      width:880, height:560, render:consoleRender,
+      init:(content, api)=> mountConsole(content, api, {tree:eventViewerTree(), statusText:'4 logs, 17 events', autoSelectFirst:true}) },
+
+    { id:'diskmgmt', name:'Disk Management', emoji:'💽', color:3, cmd:'diskmgmt.msc',
+      short:'Manage disks for individual computers and file servers.',
+      long:'View and manage volumes and partitions. Warning: actions here (format, delete volume) can erase data — always keep a backup.',
+      width:860, height:560, render:diskManagementHTML, init:diskManagementInit },
+
+    { id:'taskschd', name:'Task Scheduler', emoji:'⏰', color:4, cmd:'taskschd.msc',
+      short:'Schedule an application or script — plan your future.',
+      long:'Includes predefined schedules you can click and go. Organize tasks with folders and manage them centrally.',
+      width:860, height:560, render:consoleRender,
+      init:(content, api)=> mountConsole(content, api, {tree:taskSchedulerTree(), toolbarButtons:[{label:'Create Basic Task…', onClick:(panel,api)=>{
+          showModal(content, {title:'Create Basic Task Wizard', bodyHTML:`<p>Choose a predefined schedule:</p>${taskTemplates.map(t=>`<div class="snapin-row">📅 ${esc(t)}</div>`).join('')}`,
+            buttons:[{label:'Cancel', onClick:closeModal},{label:'Finish', primary:true, onClick:()=>{ closeModal(); api.toast('Task created and added to the library.'); }}]});
+        }}], statusText:'Task Scheduler Library', autoSelectFirst:true}) },
+
+    { id:'devmgmt', name:'Device Manager', emoji:'🖧', color:5, cmd:'devmgmt.msc',
+      short:'View and manage hardware devices and drivers.',
+      long:'The OS doesn\u2019t know how to talk directly to most hardware — device drivers are hardware- and OS-specific, and older drivers may not work on newer Windows versions.',
+      width:880, height:560, render:consoleRender,
+      init:(content, api)=>{ mountConsole(content, api, {tree:deviceManagerTree(), statusText:Object.keys(deviceTree).length + ' device categories'}); deviceManagerInit(content, api); } },
+
+    { id:'certmgr', name:'Certificate Manager', emoji:'🔐', color:6, cmd:'certmgr.msc',
+      short:'View user and trusted certificates — add and remove.',
+      long:'Browse certificate stores such as Personal and Trusted Root Certification Authorities.',
+      width:840, height:540, render:consoleRender,
+      init:(content, api)=> mountConsole(content, api, {tree:certTree(), statusText:Object.keys(certStores).length + ' certificate stores', autoSelectFirst:true}) },
+
+    { id:'lusrmgr', name:'Local Users and Groups', emoji:'👥', color:7, cmd:'lusrmgr.msc',
+      short:'Manage local users (Administrator, Guest, regular users) and groups.',
+      long:'Groups include Administrators, Users, Backup Operators, Power Users, and more.',
+      width:820, height:540, render:consoleRender,
+      init:(content, api)=> mountConsole(content, api, {tree:lusrmgrTree(), statusText:'Local Users and Groups', autoSelectFirst:true}) },
+
+    { id:'perfmon', name:'Performance Monitor', emoji:'📉', color:0, cmd:'perfmon.msc',
+      short:'Gather long-term statistics on OS metrics.',
+      long:'Set alerts and automated actions, store statistics, analyze long-term trends, and view built-in reports.',
+      width:860, height:560, render:perfmonRender, init:perfmonInit },
+
+    { id:'gpedit', name:'Group Policy Editor', emoji:'🏛️', color:1, cmd:'gpedit.msc',
+      short:'Centrally manage users and systems.',
+      long:'Local Group Policy Editor manages the local device (gpedit.msc). Group Policy Management Console integrates with Active Directory (gpmc.msc).',
+      width:880, height:560, render:consoleRender,
+      init:(content, api)=>{ mountConsole(content, api, {tree:gpeditTree(), statusText:Object.keys(gpoTree).length + ' policy categories'}); gpeditInit(content, api); } },
+
+    { id:'msinfo32', name:'System Information', emoji:'ℹ️', color:2, cmd:'msinfo32.exe',
+      short:'System overview: hardware resources, components, software environment.',
+      long:'Hardware Resources: memory, DMA, IRQs, conflicts. Components: multimedia, display, input, network. Software Environment: drivers, print jobs, running tasks.',
+      width:880, height:560, render:consoleRender,
+      init:(content, api)=> mountConsole(content, api, {tree:sysinfoTree(), statusText:'System Summary', autoSelectFirst:true}) },
+
+    { id:'resmon', name:'Resource Monitor', emoji:'🧭', color:3, cmd:'resmon.exe',
+      short:'Detailed real-time view of performance, separated by category.',
+      long:'Categories: Overview, CPU, Memory, Disk, and Network.',
+      width:840, height:540, render:resmonRender, init:resmonInit },
+
+    { id:'msconfig', name:'System Configuration', emoji:'🛠️', color:4, cmd:'msconfig.exe',
+      short:'Manage boot processes, startup, services, etc. — one-stop shop.',
+      long:'General, Boot, Services, Startup, and Tools tabs let you control how Windows starts.',
+      width:860, height:560, render:msconfigRender, init:msconfigInit },
+
+    { id:'cleanmgr', name:'Disk Cleanup', emoji:'🧹', color:5, cmd:'cleanmgr.exe',
+      short:'Find unused or unneeded files — a quick way to free up space.',
+      long:'Select categories, then click the button to reclaim disk space.',
+      width:520, height:520, render:diskCleanupRender, init:diskCleanupInit },
+
+    { id:'dfrgui', name:'Disk Defragment', emoji:'🗂️', color:6, cmd:'defrag / dfrgui.exe',
+      short:'Move file fragments so they are contiguous to improve read/write time.',
+      long:'Not necessary for solid-state drives — Windows won\u2019t defrag an SSD. Requires elevated permissions. Command line: defrag C:',
+      width:760, height:480, render:defragRender, init:defragInit },
+
+    { id:'regedit', name:'Registry Editor', emoji:'🗝️', color:7, cmd:'regedit.exe',
+      short:'The big, huge master database — hierarchical structure used by almost everything.',
+      long:'Used by the kernel, device drivers, services, SAM, the user interface, and applications. Always back up your registry before editing.',
+      width:900, height:580, render:consoleRender,
+      init:(content, api)=> mountConsole(content, api, {tree:buildRegTree(registryTree, ''), statusText:'5 root keys'}) },
+  ];
+  const APP_BY_ID = {};
+  APPS.forEach(a=> APP_BY_ID[a.id]=a);
+
+  /* ============================================================
+     Desktop icons, taskbar, start menu, reference panel
+  ============================================================ */
+  const desktopIconsEl = document.getElementById('desktopIcons');
+  APPS.forEach(app=>{
+    const di = el(`<div class="di">${icon(app.emoji, app.color, 'lg')}<div class="di-label">${esc(app.name)}</div></div>`);
+    di.addEventListener('click', ()=>{
+      document.querySelectorAll('.di.selected').forEach(d=>d.classList.remove('selected'));
+      di.classList.add('selected');
+    });
+    di.addEventListener('dblclick', ()=> openApp(app));
+    desktopIconsEl.appendChild(di);
+  });
+
+  const smGrid = document.getElementById('smGrid');
+  APPS.forEach(app=>{
+    const tile = el(`<div class="sm-tile">${icon(app.emoji, app.color, '')}<div class="tile-label">${esc(app.name)}</div></div>`);
+    tile.addEventListener('click', ()=>{ openApp(app); closeStart(); });
+    smGrid.appendChild(tile);
+  });
+
+  const startMenu = document.getElementById('startMenu');
+  const tbStart = document.getElementById('tbStart');
+  function openStart(){ startMenu.classList.add('open'); document.getElementById('smSearch').value=''; filterStart(''); tbStart.classList.add('open'); }
+  function closeStart(){ startMenu.classList.remove('open'); tbStart.classList.remove('open'); }
+  tbStart.addEventListener('click', (e)=>{ e.stopPropagation(); startMenu.classList.contains('open') ? closeStart() : openStart(); });
+  document.getElementById('tbSearchBtn').addEventListener('click', openStart);
+  document.addEventListener('click', (e)=>{ if(!startMenu.contains(e.target) && !tbStart.contains(e.target) && e.target.id!=='tbSearchBtn') closeStart(); });
+  function filterStart(q){
+    q=q.toLowerCase();
+    smGrid.querySelectorAll('.sm-tile').forEach((tile,i)=>{
+      tile.style.display = APPS[i].name.toLowerCase().includes(q) ? 'flex' : 'none';
+    });
+  }
+  document.getElementById('smSearch').addEventListener('input', e=> filterStart(e.target.value));
+
+  // clock
+  function tickClock(){
+    const d = new Date();
+    document.getElementById('tbClock').innerHTML = `${fmtTime(d)}<br>${d.toLocaleDateString([], {month:'numeric',day:'numeric',year:'numeric'})}`;
+  }
+  tickClock(); setInterval(tickClock, 15000);
+
+  // keyboard
+  document.addEventListener('keydown', (e)=>{
+    if(e.key==='Escape'){ closeStart(); closeModal(); }
+  });
+
+  /* ---------------- Reference panel ---------------- */
+  function renderReference(filter){
+    const list = document.getElementById('refList');
+    list.innerHTML='';
+    const f = (filter||'').trim().toLowerCase();
+    const items = APPS.filter(a=> !f || a.name.toLowerCase().includes(f) || a.short.toLowerCase().includes(f) || a.long.toLowerCase().includes(f) || a.cmd.toLowerCase().includes(f));
+    if(items.length===0){ list.innerHTML = '<div class="ref-empty">No matching tools.</div>'; return; }
+    items.forEach(a=>{
+      const item = el(`<div class="ref-item">
+        <div style="flex:1;">
+          <div class="ref-name">${esc(a.name)}</div>
+          <div class="ref-cmd">↳ ${esc(a.cmd)}</div>
+          <div class="ref-desc">${esc(a.short)} ${esc(a.long)}</div>
+        </div>
+      </div>`);
+      item.addEventListener('click', ()=> openApp(a));
+      list.appendChild(item);
+    });
+  }
+  document.getElementById('refSearchInput').addEventListener('input', e=> renderReference(e.target.value));
+  renderReference('');
+
+  // Boot: open Task Manager by default
+  openApp(APP_BY_ID.taskmgr);
+})();
+</script>
+</body>
+</html>

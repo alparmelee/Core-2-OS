@@ -1,0 +1,215 @@
+As we've mentioned a number of times in this course, it's important that you have a strategy
+for backing up all of your systems.
+This can really save the day when a document goes missing or a spreadsheet gets corrupted.
+And if you lose all of your data on a system, you can simply restore from your latest backup.
+There are a number of things to consider when you're deciding on a backup solution.
+One of them would be the total amount of data that you want to back up.
+It's very different backing up 100 megabytes versus 100 terabytes.
+What type of backup do you want to use?
+We'll go through a number of options in this video today.
+What backup media do you plan on using?
+Where will this information be stored?
+What type of software will be used for this backup?
+And perhaps more importantly, for the restoration of this data?
+And should you perform this backup every day of the week?
+Should it be once a week?
+We'll talk about different strategies for backups and more in this video.
+If you simply want to back up every bit of data on a system to one single backup set, then
+you're going to perform a full backup.
+As the name implies, this backs up everything on your computer.
+So if you lose all of your data, you can go back to your full backup and restore everything
+to your system.
+Since you are backing up every bit of data on that computer, including the operating system,
+your user documents, and your applications, this is one of the longest processes for backups.
+You have to be able to transfer all of that data off of your system and onto some type of
+backup media.
+Because of the long timeframes associated with a full backup, it's difficult to perform
+one of these every single day.
+Not only does it take a long time to perform this backup, it's also taking up a large amount
+of storage space every time you perform this full backup.
+Of course there are other ways to backup data instead of performing a full backup every day.
+One of these methods would be a differential backup.
+The first day of a differential backup looks identical to performing a full backup.
+On that first day, you take that full backup of the entire system.
+On the second day, however, you do not take a full backup.
+Every backup that occurs after that full backup contains only information that was changed
+since the full backup.
+This means on the second day, there will probably be a small amount of data that had changed
+in the last 24 hours.
+On the third day, you're backing up everything that has changed since your full backup.
+On the next day, you're also backing up everything that has changed since that full backup.
+So you'll notice each day, your differential backup gets a little bit larger as you begin
+to backup more and more changed information.
+If you need to restore from this differential backup, you will need two different backup sets.
+You will need the full backup that you originally did, and then you will need your last differential
+backup.
+That will contain everything that was there when you started the backup process and everything
+that had changed since that time frame.
+Let's say that we take a backup every single day, and if we'd like to implement a differential
+backup, we'll start our first backup day on Monday with a full backup.
+On Tuesday, we'll take a differential backup, which will only be the information that's changed
+since Monday.
+On Wednesday, we take another differential backup.
+This will obviously include some of the information that was changed from Tuesday, and will certainly
+contain everything that has changed since the original Monday full backup.
+On Thursday, another differential backup, which is everything that has changed since Monday.
+And then in the middle of the day on Thursday, we might decide that we need to restore everything
+on the system.
+To be able to restore using a differential backup, you will need the original full backup that
+we made on Monday and the last differential backup, which in this case was made on Thursday.
+Another popular backup type is an incremental backup.
+An incremental backup starts the same way that a full backup starts, and starts the same
+way that a differential backup starts, by taking a full backup on the first day.
+But that's where things change.
+With an incremental backup, we are backing up everything that changed since the first full
+backup, and things that have changed since the last incremental backup.
+This means every day the backup size will be a little bit different.
+It might be larger or smaller than the previous day, depending on what may have changed during
+that time frame.
+To restore all of the data on the system, you would need a full backup, and then you would
+need every incremental backup that was made since the full backup.
+Let's take this same scenario where we will perform a backup every day, but in this case
+we're going to do an incremental backup.
+On Monday, we start with our full backup.
+On Tuesday, we take a backup of everything that's changed since the full backup.
+On Wednesday, we backup all of the data that's changed since the last incremental backup.
+On Thursday, we also take a backup of everything that's changed since the last incremental backup.
+This will allow us to restore all of the most recent data to our system.
+Earlier in this video, we described a full backup as taking a great deal of time.
+But what if you could create a full backup without actually taking a full backup?
+That's the idea behind a synthetic backup.
+As we've already seen, our differential and incremental backups take a full backup on the
+first day, and then take a different amount of data on the subsequent days.
+A synthetic backup will take all of this information, combine it all together to create a full backup
+backup from everything that you already have.
+This means that you don't have to spend more time creating a brand new full backup on Monday.
+You can simply take the backups that you already have and create a full backup synthetically.
+Since we're not taking a complete full backup where we're transferring all of this information
+across the network, we are saving a lot of bandwidth and we're certainly saving a lot of time.
+This is a very easy way to create a full backup from all of the incremental or differential backups
+that you've already done.
+Let's now use our same scenario to create a synthetic backup.
+On Monday, the first day, we need to take a full backup.
+And let's assume in this case that this organization uses incremental backups.
+You could, of course, create a synthetic backup from differential backups as well.
+On Tuesday, we take an incremental backup of everything that's changed since the last
+full backup.
+On Wednesday, we take another incremental backup that takes everything that's changed since Tuesday.
+On Thursday, another incremental backup, which takes everything that has changed since Wednesday.
+And then on Friday, we put all of this information together.
+We only take the latest version of files that we've backed up to create this synthetic full
+backup by simply combining together all the backup sets that we already have.
+Here's a summary of these different backup types.
+We'll start with the full backup, which obviously takes a backup of all of the data.
+If you want to backup this data, it takes quite a bit of time.
+So we'll put that on the high category.
+But restoring everything means that we're simply copying over all of the data.
+So it has a relatively low restore time due to that single backup set.
+A differential backup is going to backup all data since the last full backup.
+Since each day is only backing up the information that was changed since last full backup, we
+can mark this as a moderate backup time and a moderate restore time.
+One of the advantages, of course, to differential is that restore time is kept very low because
+we only need two backup sets, the full backup and the last differential backup.
+An incremental backup copies all new files and files that have been modified since the last
+backup.
+This means that our backup time frames every day are relatively low, but when we need to
+restore, the backup time is relatively high.
+That's because we will need the full backup and all of the incremental backups to be able
+to perform a full restoration.
+And since a synthetic backup contains exactly the same information as a full backup, all data
+on that system is backed up with a synthetic backup process.
+Since a synthetic backup is creating a full backup from backup sets that are already existing,
+it has a relatively low backup time and a relatively low restore time because everything is in one
+single full synthetic backup.
+You may think that after performing your backups that your job is done, but in reality, your job
+is only half done.
+We know that we've backed up the data, but are we able to restore the data?
+That is an important step of any backup process.
+It might be a good idea to simulate some type of recovery testing.
+You can pick a particular document that is stored on a particular server and go through the process
+of restoring just that document to your recovery system.
+This will either confirm that our backup and restoration process is working, or it might discover
+that there is a problem with the restoration process that we need to resolve.
+Once we have our restored file, we can test it and make sure that everything in that document
+is exactly the same as the original document that was backed up.
+It's usually a good idea to perform audits of your backup process.
+You never know what documents may have changed or what part of the backup process may have
+been altered, so checking this on a regular basis should be part of your normal processes.
+Now that we've backed up our data and we've tested the restoration process, we need to
+think about how we're going to perform that restoration.
+There are different options that you can choose during the restoration process.
+One of these would be to restore everything exactly in the same location where it originated.
+This is an in-place restoration where you are overriding any data that might already be
+on that system with the information that's contained in the backup.
+For example, if you were performing a re-imaging of a system using those backup files, you are
+very often performing an in-place restoration.
+But you might also be concerned that your in-place restoration might overwrite important data
+that has been changed since the backup was made.
+In that case, you might choose to perform your restoration to an alternate location.
+This restoration option restores the files to a separate location instead of overriding anything
+that might already be on that original system.
+That way, you can maintain all of your existing files and then have the original backup stored
+in a different location that you can then copy over later if you need to.
+Many organizations will perform on-site backups.
+This means both the backup systems and the data are contained within the same facility.
+This gives you high bandwidths between the backup system and the data itself, and if you need
+to have access to those backup tapes for restoration, all of that information is locally available.
+Since all of your data and systems are already running at this location, you usually don't
+have to pay anything extra to maintain your backup systems at that same site.
+Some organizations will opt for an off-site backup where the information is stored somewhere
+different than your location.
+You're transferring data usually over an internet connection or high-speed wide-area network
+link.
+Since your data is located somewhere outside of your current location, you're now protected
+against any disaster that might occur to your existing building.
+If your building becomes a victim of a fire or a flood, you can simply move everything to
+a different site and restore all of that off-site backup data from anywhere in the world.
+There are obviously advantages and disadvantages to both on-site backups and off-site backups,
+and many organizations will often use both of these to some degree so that they can take
+advantage of those backups in either of those scenarios.
+We often think of backups as a single monolithic piece of data, and that piece of data has no
+relationship with any other data or other backups that you're doing.
+But in reality, you're often taking different backups that contain different data, and you're
+taking these backups on different days or different weeks.
+One common strategy for timing and layering these backups is called GFS.
+That stands for Grandfather, Father, Son.
+We start with creating the grandfather backup.
+This would be a single full backup that occurs once a month.
+This would be 12 monthly full backups in a single year.
+And these might be the backups that we send off to offline storage so that we can retrieve
+those if something happens to our building.
+Now we can focus on a weekly backup, and if you're doing weekly backups, you might need
+four or five of those in a single month.
+We refer to these backups as the father backup.
+So if our grandfather backups are once a month and our father backups are once a week, then
+obviously our son backups are going to occur every single day.
+So we might have 31 daily incremental or 31 daily differential backups that we refer to as
+the son backup.
+Here's an example of a month, and you can see where I've overlaid son backups, father
+backups, and grandfather backups.
+You can also change the timeframes associated with these rotations.
+Perhaps the son backup is taken every hour, your father backup is taken every day, and the
+grandfather backup is taken every week.
+On my calendar, though, I've created a different schedule where the grandfather is taken on the
+31st of each month.
+The father backup takes place every Monday, and in the son backups are taken every Monday
+through Friday.
+Regardless of the type or interval between these backups, we also need to think about where
+these backups will be stored.
+And one good strategy that many organizations will follow is the 3-2-1 backup rule.
+With this rule, three copies of your backup data should always be available.
+This means you could have one primary copy and two backups or any other combination so that
+we can get to three separate and unique copies of this backup data.
+The number two in the 3-2-1 backup rule is two different types of media.
+Your backup could be taken on a local storage drive, on tape backup, or NAS.
+So if your organization is following the 3-2-1 backup rule, they may be storing one copy of
+the backup data on a local drive and other copies of the backup data on tape.
+And the one in the 3-2-1 backup rule says that at least one copy of these backups should not
+be on-site.
+They should be stored somewhere else off-site.
+This means you could store the information in an off-site storage facility.
+You might store it as part of your cloud backup, but that information is stored outside of your
+local building so that if you ever need to access that data in a disaster, you know that
+it is stored somewhere safe.
+you
+You

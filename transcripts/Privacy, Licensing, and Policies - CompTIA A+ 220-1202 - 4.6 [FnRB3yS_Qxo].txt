@@ -1,0 +1,174 @@
+Any software you install onto your computer or server
+at your company usually includes some type of license.
+The terms of this license are usually
+presented during the installation process.
+It's that long contract that you always
+scroll all the way through and click OK at the bottom.
+Inside of that license includes terms and conditions
+that set the overall use of the software,
+how many copies of this software you can make,
+and what your backup options for the software might be.
+Many of these terms and conditions also
+include information about how the software is licensed.
+It might be a per seat license.
+So when you purchase one license, that one license
+is assigned to a seat.
+That's usually a person that's in your organization.
+If you have 20 people that need to use this software,
+then you'll need 20 per seat licenses.
+Some software is licensed as a concurrent license,
+which determines how many people can use this software
+concurrently.
+So if there's 20 people in your organization
+that need to use this license, but only 10 of those people
+will be using it at any particular time,
+then you only need 10 concurrent licenses.
+Some software is licensed by duration.
+This is an ongoing subscription that you might use based
+on an annual subscription, a three-year subscription,
+or some other time frame.
+In most of these cases, you are able to use the software up
+until that expiration date.
+And then past that point, you will
+need to re-license the software to continue to use it.
+If you're purchasing a license of software to use at home,
+this is usually a personal license.
+This is usually associated with the computer
+that you're using, although there is some software that
+allows you to install it on multiple devices
+within your own home.
+And in the home market, this software
+is often licensed on a perpetual basis.
+That means you pay one cost to be able to use the software,
+and you don't have to pay any additional costs
+in the future.
+In a corporate environment, we have many more people
+that need to use this software.
+So we might purchase per-seat licenses,
+or it might be a site license where we can install this software
+on all of our systems in the company.
+These types of licenses usually come with an annual renewal,
+so you have to make sure that you pay your renewal cost every year
+to keep using that software.
+The software might be available online,
+and you might have direct access to the source code.
+Very often, this is software that
+is licensed as free and open source software, or FOSS.
+This free and open source software
+comes with the source code.
+You can modify the source code and compile the source code
+yourself to run on your own computers.
+This is very different, for example,
+than purchasing software from a company like Microsoft.
+Microsoft does not provide you with the source code.
+They simply give you an executable that will run on the platforms
+that you're using.
+With closed source software, you don't have any access to the code,
+and you have no way to modify any part of that application.
+That long list of terms and conditions
+that you see during the installation process
+is known as an in-user licensing agreement, or a EULA.
+This is effectively an online contract
+that you must agree to before you're
+able to continue with that installation process.
+There may be times when one of your software vendors
+would like to stop by and demonstrate pre-release capabilities
+of software that may be coming in the future.
+But before they show you this pre-release software,
+they require you to sign a non-disclosure agreement,
+or an NDA.
+This is a confidentiality agreement.
+It ensures that one or more people involved in the contract
+will not disclose what they've seen to anyone else.
+This is very common when you're working with a third party,
+and you need some type of privacy or confidentiality
+between these parties.
+This might be to maintain trade secrets,
+or perhaps we just don't want any of these business activities
+to be known by anyone else.
+The example of a software company having a meeting with you
+to show you pre-release software may require a unilateral NDA.
+But if you're also sharing information with the software company,
+you might need a bilateral NDA, where both parties maintain
+the confidentiality of what's talked about during that meeting.
+These are formal contracts.
+They'll usually slide a piece of paper across the table
+that you'll need to sign to confirm
+that you agree with everything listed
+in that non-disclosure agreement.
+The credit card industry has created comprehensive rules
+regarding the processing and storage
+of credit card information.
+We refer to this as the Payment Card Industry Data Security Standard,
+or PCI DSS.
+You'll often hear people abbreviate this as simply PCI.
+A summary of just part of the PCI DSS
+revolves around six control objectives.
+So you need to make sure that you build and maintain a secure network
+and secure systems that are on that network.
+You have to protect cardholder data,
+especially if you are storing that information.
+You need to maintain a vulnerability management program.
+This ensures that the credit card company knows that you are performing
+constant audits to keep your network safe.
+You need to provide strong access control measures,
+so there might not only be a username and password,
+but also multi-factor authentication.
+There needs to be a regular monitoring and testing of all of your networks,
+and you should maintain an information security policy,
+which is really a good best practice,
+whether you're protecting credit card information or any other type of data.
+We also store a great deal of private information with our governments.
+Government information is used for social security purposes,
+there's personal information on your driver's license,
+and many governments have a great deal of health care information that they also store.
+There are most likely a number of restrictions
+associated with the collection and storage of government information,
+so you'll need to check with your local laws to see what you're able to do with government data
+and what information you're not allowed to collect.
+Unfortunately, this collection of information by the government can sometimes be a disadvantage.
+For example, in July of 2015, the OPM, or the Office of Personnel Management,
+was compromised and personal information was leaked onto the internet.
+This included names, social security numbers, date of birth, job assignments, and other private information.
+A total of 21.5 million people were affected by this government breach.
+Any data that you can use to identify an individual is referred to as PII.
+This is personally identifiable information.
+It's usually a good idea when you're writing security policies to document how your organization will handle PII.
+We often forget how valuable this personal information can be.
+We sometimes think of a name and an address as something that is easily available to anyone.
+But in reality, that combined with other pieces of information can create a privacy issue.
+So we have to think about how we use this PII as a normal part of our data processing and how we protect that information from others.
+We often use PII as a security tool and attackers love to get their hands on personal information because it might gain them access to bank account information or they may be able to perform a password reset because the password reset process is asking about personal details that are part of this PII.
+A similar type of personal information that focuses on healthcare information is PHI, protected health information.
+This might include your healthcare records, your health status, or anything else associated with your medical history.
+Of course, we use many different healthcare providers in our day-to-day life, and there are standard ways that these providers can transfer your PHI from one of the providers to another over a secure channel.
+In the United States, we have laws associated with protected health information known as HIPAA.
+This is the Health Insurance Portability and Accountability Act of 1996.
+Your organization may have a process in place to store information over a long period of time, and it may also include versioned information over that long period of time.
+So there might be a document that has changed today, that document may be different tomorrow, and it might be updated again the day after.
+Part of your job might be to retain all of these different versions and have a way that we can revert back to a previous version at any time.
+We might also have data retention requirements based around the recovery of data.
+For example, if our organization is infected with a virus or a worm, we might need a way to go back in time up to 30 days to be able to recover some of our company's data.
+And often data retention is built into the laws that we must follow as part of our normal business practices.
+For example, if you're in a legal firm or you work for the government, there might be laws that require email to be retained over a number of years.
+Or if you're a public corporation, there might be requirements to store tax information or financial details for a long period of time.
+You'll need to check with the laws in your area or the deal with your organization to see what the data retention requirements might be for you.
+When you start working for a company, they might ask you to sign a document known as an AUP.
+This is an acceptable use policy.
+This is a set of documentation that describes how the technology you've been given should be used as part of your normal job function.
+For example, your company might have specific rules associated with using the internet, telephones, computers, mobile devices, and any other type of technology.
+This documentation is often used by an organization to limit their legal liability.
+If somebody needs to be dismissed from the organization due to a misuse of the technology, they have documentation signed by you that says that you will agree with these rules and regulations.
+Another way to inform people of an expectation on a system is to provide that message when they're logging in.
+We often refer to this message as a splash screen.
+Sometimes the splash screen is simply informational and telling you what is expected of you when you're using this particular service.
+Or this might be a legal requirement and you're required to agree with this splash screen before you're able to use this service.
+For example, if I want to use the geographical information service from my local government,
+there is a splash screen that is presented during the login process.
+This splash screen says if you have any web accessibility issues with this site,
+here's an email contact or phone number during normal Orange County government business hours.
+And they give that as Monday through Friday 8 to 5.
+And then they show that the data is provided as is without any warranty, any representation of accuracy,
+and more legal information that's important to know as you're using this data from this government agency.
+for example,
+You

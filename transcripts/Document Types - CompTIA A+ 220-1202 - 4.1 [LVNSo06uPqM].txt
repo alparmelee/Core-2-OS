@@ -1,0 +1,79 @@
+We create quite a bit of documentation in the world of IT, and whenever there's an incident,
+we always need to create an incident report. Incident reports commonly provide information
+on what led up to the incident, the incident itself, and then how the organization reacted
+to the actual problem. These reports provide us with documentation that we can use to describe
+the incident itself and then what we did prior to and after the incident occurring.
+Most organizations will have a formal incident response plan, and this plan commonly describes
+exactly what process the organization should take whenever an incident occurs. This creates an
+ongoing database of these incidents so that we can understand exactly what led up to the incident,
+the incident itself, and then how the organization reacted once the incident was identified.
+This gives us a way to analyze what has occurred in the past so that we can apply that towards
+preventing these situations from occurring in the future.
+Every organization has a different way of working. There are usually a set of processes
+and procedures to follow depending on what needs to be done. Most organizations will document all
+of these processes and procedures into a single set of standard operating procedures. This way,
+there's documentation that can guide us for whatever situation we might find ourselves in.
+For example, if there's downtime, we need to know what the process is for handling that
+downtime situation. Who do we contact first to be able to address the downtime itself,
+and then who do we contact to inform them that the downtime has occurred?
+Or perhaps we're having a facilities problem. Perhaps we've lost power at a remote site.
+We need to understand who to contact internally, and we need to understand who we should contact
+at the power company to inform them of this outage. These standard procedures also impact our day-to-day
+processes. For example, we might need to install a software package, and there might be a custom
+installation process that is documented in the standard operating procedures. Or we might have
+broad procedures applied towards things like testing an application or providing a change control
+process. The key is to have all of this documentation already predefined and available for whoever needs
+access. This means if you're working on a help desk, you know exactly the process to be able to handle
+a particular problem. And if you're working at a remote site, you know all of the processes and
+procedures associated with that site. Most organizations will also have documentation regarding the
+onboarding of new employees. If somebody's new to the organization, there are a number of processes
+that need to take place internally so that that person is able to start working immediately on day one.
+This documentation might include IT agreements that need to be signed by the employee who's starting.
+This might be a very broad document where the incoming employee agrees to everything that's in
+the employee handbook, or it might be a very specific acceptable use policy, or AUP, that we want to have
+the user sign separately. These onboarding tasks would also include the process of creating a new account
+or series of accounts for this user. This also includes information about the rights and permissions
+required for this user, so we can make sure that this person's accounts are associated with the
+appropriate groups and the appropriate departments. And there may be equipment that needs to be acquired
+for this new user. We need to make sure that the new employee has a laptop, a tablet, a desktop computer,
+or any other technology that they need to accomplish their job.
+Just as we have a set of processes and procedures for bringing people into the organization, we also
+have a set of very standardized procedures when people are offboarding. This should obviously be a
+set of processes that have been defined well before someone leaves the organization, because we need to
+know exactly what to do the moment someone is no longer an employee of the company. For example, what are the
+procedures for the hardware that is used by this person? They probably have a laptop, a mobile device,
+maybe they have a desktop computer, and we need a set of processes and procedures on how those assets
+are to be managed. Perhaps even more importantly, we need to understand what to do with the data that
+this person was responsible for. Is this information backed up? Has it been handed off to a different
+person? Is there anything encrypted that we need to be sure we have decryption keys for? And anything else
+associated with that data needs to be documented in the offboarding processes and procedures.
+This prevents us from accidentally deleting information that may be important for later.
+Another important document used by an organization is an SLA. This is a service level agreement.
+This is usually a document that is created in conjunction with a service provider. For example,
+there might be a set of minimum terms that are associated with your internet service provider.
+A service level agreement with an ISP might require a certain uptime or response time associated with
+that service. These SLAs are commonly put into the contract you have with a third-party service
+provider, but you could also use SLAs internally within your organization to specify what the minimum
+requirements might be when working with the IT department or a different department in the organization.
+Here's an example of the SLA terms you might add to a contract with your internet service provider.
+You might have an SLA that says you may have no more than four hours of unscheduled downtime in an
+entire year. And if there's more than four hours of downtime during that year, there might be a credit or some
+type of penalty associated with that SLA. The SLA might also say that a technician will be dispatched if there is a long
+period of downtime. And there might be a requirement as part of that contract that the customer keeps
+spare equipment on site. So if there is a downtime, they can send a technician and that technician can use
+that equipment to get everything back up and running as quickly as possible.
+From a technical perspective, some of the most valuable documentation you can have is a knowledge base.
+This commonly provides detailed technical information on how to support hardware, software,
+or some other type of technology. This might be a knowledge base that is provided and supported by
+an external vendor. For example, Microsoft has an extensive knowledge base that provides you with
+detailed information about the inner workings of the Windows operating system. Or you might be able to
+find detailed technical information on a third-party internet website. There's also a great deal of
+information that is institutional within your own company. There are specialized applications and
+different ways of doing things that would be useful to document as part of a knowledge base.
+Very often, this is a feature built into helpdesk software that you may already be using.
+So it may be as easy as turning on that feature or adding additional articles to your helpdesk software.
+Knowledge bases provide us with a way to find detailed information in a sea of data. This is usually a
+searchable archive, and if you're integrating with your helpdesk software, you might see
+knowledge base articles appear as part of the helpdesk ticket itself. This means that things that we may
+have put into the knowledge base a year ago might appear in a new helpdesk ticket to help with the
+resolution process.

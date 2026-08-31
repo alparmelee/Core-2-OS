@@ -1,0 +1,218 @@
+Most organizations will have some type of ticketing system, especially if they have a
+lot of people that need support from the information technology team.
+These ticketing systems are useful because they allow you to document all of the issues
+that might be occurring.
+You can assign any issues to individuals in the organization, so network-related problems
+would be assigned to the network team, server-related problems to the server team, and so on.
+You can also use this ticketing system to help resolve problems.
+We'll talk in this video about how to make that happen, and if you'd like an overview
+of how your organization is handling these issues and how quickly they're able to resolve
+these problems, you can create reports based on the information stored in this ticketing
+system.
+The help desk is usually the group that manages and maintains all of the tickets for anyone
+who needs assistance with their technology requirements.
+This will be the group that will take the phone calls, that will sift through all of the
+emails, and might even take text messages in order to understand where problems might
+be occurring in your organization.
+The help desk is then responsible for triaging these issues, so they'll be able to determine
+which issues have priority over others, and which ones can be handled by the help desk,
+and which issues should be handed off to a different department.
+They'll use their information about the infrastructure and the resources available to determine the best
+next step to be able to resolve this issue.
+They'll ultimately assign a ticket to this problem and provide ongoing monitoring to make
+sure that this issue is handled in a timely form.
+There are many different kinds of ticketing systems out there, but they are all very similar
+in the way they work, the information that they are storing, and the overall process that's
+used on any particular ticketing system.
+In this video, we'll take some common support scenarios, and we'll use a ticketing system
+to understand how that might help us.
+The quantity and the quality of the information that you're taking during the initial ticket
+creation can have a dramatic impact on how quickly you can resolve these problems.
+The information gathering phase happens right at the beginning of the ticket creation process.
+We need to understand exactly which user is asking for this problem to be resolved, and what
+device this particular issue may be associated with.
+We then want a problem description, and ideally this will give us all of the information necessary
+to understand what the next steps might be.
+We'll then get a description of the problem, and we'll try to determine what the best next
+steps will be based on this description.
+The ticket will then be assigned a specific category.
+This problem may be associated with a network configuration, so we'll assign it into the networking
+category.
+Or it may be someone who's having a problem with the login process, so we'll assign that
+to the login name or authentication category.
+We'll also assign a severity to this problem.
+If this issue happens to affect many people with a very critical role in the organization,
+it might have a higher priority than someone who needs something that can be done over the
+next seven days.
+And many organizations will have an escalation policy, so they'll be able to determine if a
+particular problem should be provided a higher level severity than others.
+And based on all of the information we're gathering, we can understand if an escalation
+to a higher severity is required for this particular problem.
+One of the key fundamentals with really any help desk is making sure that all of this communication
+is clear and concise.
+You'll probably not be the only person looking at this ticket, so you need to make sure that
+you have a very good description of the problem, you have progress notes that you can reference
+and add to as the problem is proceeding, and you have resolution details at the end so
+that anyone else who runs into this problem can see exactly the process you took and what
+the final resolution was.
+During the very first interaction as this ticket is being created, it's important to assign the
+ticket to the correct user.
+And sometimes this is more than one person.
+You could have one person who's actually experiencing the problem and another person who's calling
+in on their behalf.
+It might be important to clarify who the contact person will be for this ticket so that all
+of the people that are involved in this process know exactly who they should be communicating
+with.
+Often you'll be pulling up a list of everyone in the organization from a central view.
+And very often this is integrated into an existing name service.
+So if your organization is using Microsoft Active Directory, all of the names in the
+helpdesk will be integrated to exactly the same names of all of your employees in your
+Active Directory database.
+Sometimes these names are added automatically.
+If someone is sending in a text message or an email, the contact information is pulled
+from the email address that's associated with the message or the phone number that's associated
+with the text message.
+And although most helpdesks strive to make sure that their list of employees is as accurate as
+possible, there are times when changes take place and perhaps the database is not completely
+up to date.
+It's always a good idea to confirm with the person calling about the issue that you really
+do have the right name and the right contact information to add to the ticket.
+I'm on the main screen of my ticketing system.
+You can see a number of tickets are open.
+You can see a summary of those tickets, who's been reporting this issue, and who the tickets
+have been assigned to.
+This person is calling in and saying that they're having problems logging into the intranet page.
+Their username and their password is not working properly.
+So based on that information, we can say that this is a traditional service request and
+not some type of system outage or post-incident review.
+Now we need to define what type of problem this is.
+We have a request type field that has a number of different types.
+We can fix an account problem, get a guest Wi-Fi account.
+There's a new mobile device option for this particular issue.
+We know when speaking with the customer that their problem is using the username and password
+to be able to log in to the intranet page.
+So we'll say that the problem is associated with fixing an account problem.
+We're going to then specify who this request is for.
+And in this particular case, this request is for the person who's calling in.
+His name is Daniel.
+So we'll type D-A-N and it fills in the rest and it has already found that user's name
+in our database.
+In the summary, we need to provide some type of view that will tell us what this ticket
+is about.
+And we can say that it's problems logging into intranet 01, which is the name of the intranet
+server.
+We also have a description box that provides us with a great deal of information that we
+can add into this ticket.
+This is where we can put specific details about this problem, what information they saw.
+We can attach different screenshots.
+And we can add additional details that will help the recipient of the ticket be able to
+troubleshoot this problem a little bit better without having to contact the end user.
+When we hit the Create button, it provides us with information that says that we have
+created a new work item.
+And we can even view that item to confirm that everything that we added into that ticket
+is correct.
+The information that we're gathering during this initial ticket creation can be important
+to understand the scope of the issue.
+For example, we might want to add device information.
+Is this problem with a laptop or is this problem with an external mouse?
+The resolution to this problem will be very different depending on what the device is.
+We've already seen the description field in the ticket and we can see that there is a lot
+of room to put information into the ticket itself.
+We want to provide as much information as we can to make this problem as clear and concise
+as possible.
+We're probably going to assign this ticket to someone else in the organization.
+So it'd be nice to have plenty of information in that description field that they can read
+through during their troubleshooting process.
+It's usually in this description field where we might put recommendations on what the next
+steps might be.
+There might be a note that we need to call the user back for additional information.
+Maybe we need to associate this problem with a larger event that might be occurring.
+Or perhaps we're assigning this ticket to another person in another department who's
+better equipped to solve this problem.
+It's also important to add a category to the ticket.
+This is a very broad description of what this particular issue is associated with.
+For example, this could be a change request.
+And change requests probably have their own category.
+Or this might be someone having a problem with their mouse.
+So this might be a hardware request.
+Or perhaps we received a ticket from HR saying that they have hired a new person.
+So this might be an onboarding request.
+Each of these would have their own category.
+And those categories might be assigned to a specific individual in the organization.
+Each ticket is also assigned a severity.
+This could be a low severity, a critical severity, or perhaps a medium or high that might be in the
+middle.
+The decision on what the severity might be could be based on a number of different predefined
+criteria.
+If someone's calling in with a hardware problem and they're a member of a specific department,
+they might have a critical severity.
+But if the same problem is reported by someone in a different department, it might be a medium
+severity.
+And often these tickets are being handed off to someone else to take care of.
+This is an escalation to a different group.
+This might be someone who is a specialist in this particular problem.
+Or it may be a group of people that handle these types of problems for the organization.
+For example, if it's a network problem, we can associate this with the network team.
+If the issue is related to a Linux server, then we can escalate this problem to the Linux
+administration team.
+Back in our ticketing system, let's see how these categories might help us.
+There is a request type pull down here, and we can see that a number of different categories
+are listed.
+For example, we can have one that is a generic get IT help category.
+Maybe we are fixing an account problem.
+We just created a ticket with that particular category, setting up a VPN to the office, onboarding
+new employees, and so on.
+We can also use these categories for filtering.
+So if we want to see get a guest Wi-Fi account, we can choose that as our filter, and we can list
+out all of the tickets associated with that category.
+In this case, we have one requesting Wi-Fi access for a vendor.
+You can see that this is a request that came in via the portal.
+There's the description, which is an on-site vendor, requires temporary guest access to
+Wi-Fi for a visit next week.
+And then you have details about the request type here.
+There's the get guest Wi-Fi account.
+And because this is something that is with an important vendor who's coming in to take care
+of a problem, and they're going to be here for a week, and we only have a short period
+of time to create this ticket, it has been assigned a priority of highest.
+And this ticket might even have additional details that tell us that this vendor is coming
+in to solve a problem that's been occurring over a long period of time.
+And since they are visiting next week, this has been assigned a priority of highest so
+that this ticket will be addressed before the vendor arrives.
+With some tickets, there will be multiple people who access this ticket, take action on the problem
+that's occurring, and continue with the troubleshooting process over a number of days or weeks.
+When that occurs, we need to make sure that we have progress notes that are constantly
+added to the ticket so we know everything that was done along the way and who happened
+to perform those functions.
+For really difficult problems, this can create a lot of documentation to read through.
+So it's important that the progress notes have important details included in the notes,
+but you keep that information concise that you're able to read through relatively quickly.
+As new information is found and other troubleshooting takes place, we will add that information to
+the existing progress notes for this ticket.
+We often think that solving the problem is the end of that particular issue.
+But in reality, we still have documentation to write up on what we did to resolve the problem.
+This is because we might run into this problem a year from now, and we might want to look
+through our notes to understand what we did to finally resolve the issue.
+Even if this ticket is assigned to someone else, they'll be able to look through the problem
+resolution of an earlier ticket to understand what you did to solve the problem.
+Here's an example of how documenting this information across many different people can help the overall
+troubleshooting process.
+Let's look at a problem that someone is having about logging in to the VPN.
+This ticket describes an issue where our team is unable to log in to the Sydney VPN.
+That certainly is a problem, so this ticket has been assigned the category of reporting
+a system problem, and it has been assigned a priority of medium.
+You'll also notice that in this ticket, our ticketing system has provided additional work items.
+There are other tickets that were previously created that are linked to this ticket, and
+if we read through them, we can see there is a duplicate.
+For example, someone else has reported a VPN outage, so this may not be just this user who's
+having this problem.
+You'll also notice there is a ticket in here describing an upgrade to the Sydney VPN, probably
+because of all of the issues that people are having connecting to the VPN.
+And if we look at additional linked items, we can see that all of this is related to recurring
+Sydney VPN access errors in the last 60 days.
+By compiling all of these tickets and linking these together, we can see a trend that has
+occurred over the last 60 days of VPN problems, and that trend justifies the cost associated
+with the ongoing VPN upgrade.
+All of these different departments working together using this single ticketing system can provide
+a much more efficient and better cost effective way of solving these very problematic issues.
+Thank you.
+Thank you.

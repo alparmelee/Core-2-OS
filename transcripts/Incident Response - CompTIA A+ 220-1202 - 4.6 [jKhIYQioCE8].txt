@@ -1,0 +1,114 @@
+When you're responding to a security incident, there is undoubtedly going to be physical
+and digital evidence that you'll need to collect.
+You protect the integrity of that evidence you're collecting by creating a chain of custody.
+This means that you document every person who contacts that evidence in any way.
+And if there are any changes to this evidence, we now have documentation that tells us everyone
+who might have made that change.
+If you're working with digital evidence, we often use hashes to have some type of integrity
+check that we can use along every step of the way.
+If you're collecting physical evidence, you can keep it in some type of sealed bag.
+And as you can see here, you can write details about what you have found and you have a chain
+of custody to determine exactly who came in contact with the contents of this bag.
+Digital evidence often uses digital signatures so you can tie back any access to this data
+to an individual.
+You might also find yourself being the first response to one of these incidents.
+When that's the case, you should identify what the issue happens to be.
+You can do this by checking logs.
+You can have in-person information that you can gather from other folks.
+And there may be monitoring data that you can collect as well.
+If you've determined that an actual incident has occurred, then you can report this incident
+to the proper channels.
+Most organizations have a list of individuals who should be directly contacted each time there's
+an incident.
+This is an important step, especially if this incident is one that deals with your local
+law enforcement group.
+We need to make sure that we get those folks involved as quickly as possible.
+Your objective should be to collect any data that you have associated with this incident
+and protect that information for other people in the organization.
+When we're dealing with digital evidence, we don't usually pick a single file or single
+folder and copy that off to a USB drive.
+Almost always, we are taking a copy of the entire drive and collecting every bit and every
+byte from that storage device.
+This copy process commonly collects what we call a bit-for-bit or a byte-for-byte copy of that
+drive.
+That means we're not only collecting the information that we can see in the files and folders stored
+in the file system, we're also collecting information that might have been deleted from
+the drive.
+Many operating systems will delete the pointer to a file, but the actual data of the file
+is still stored on the storage drive.
+That information only becomes inaccessible if something is written over that section of
+the drive later on.
+That means if we perform a byte-to-byte copy of the drive, we really do have an exact duplicate
+of that drive stored in an image file.
+This allows us to perform extensive analysis of that data later on without changing anything
+on the original storage drive.
+This copy is often done with a third-party piece of equipment that you would connect to
+the physical drive itself.
+That copy device often includes a hardware write blocker, so you can plug this in and you know
+that that device is not going to be able to remove any data from that piece of evidence.
+If you don't have a physical imaging device, you could use software imaging tools.
+So you might boot this system with a USB drive and then use software on that USB drive to copy
+all of your information from the internal drive of that system to a separate storage device
+or separate image file.
+And of course, since we are collecting digital evidence, we can use hashes and digital signatures
+to ensure the integrity of this information as our investigation continues.
+Something you'll be doing with every incident is documenting everything that you did and
+all of the information that you collected as evidence.
+This is not only important for internal use, so you know exactly what occurred during that
+incident.
+This might also be involved in a criminal proceeding, so you might need to use this in a court of law.
+This documentation might include a summary of this event itself.
+This way, you're able to document what occurred during that particular time frame while it's
+fresh in your mind.
+As you're acquiring data from a system, it's important to document exactly what you did to
+acquire that data, including a step-by-step of the process you use to be able to grab that
+image or grab that data.
+If your job is to analyze the data associated with this incident, then you'll need to document
+everything that you find associated with this data.
+This allows others to also analyze the data and compare it to your analysis to verify
+the information that you found is accurate.
+And based on all of the data that you've gathered, the analysis of the data itself, you should
+document what you feel are the conclusions based on the information and evidence that
+you've gathered.
+One of the challenges we have with computers is that there's a lot of different types of
+data inside of our computing systems.
+Some of this data sticks around for a very long time, whereas other types of data may
+be gone in an instant.
+If it's your responsibility to collect this data and evidence from a system, then you'll
+probably want to start with data types that would disappear quickly.
+For example, if you think about registers in a CPU, those registers might change thousands
+of times in a second.
+This makes it very difficult to collect data from CPU registers or a CPU cache.
+We refer to data that disappears quickly as more volatile.
+We refer to data that sticks around for longer periods of time as less volatile.
+For example, an ARP cache might stick around for 60 seconds or 5 minutes, but something like
+a network topology might rarely change.
+Therefore, we can say that an ARP cache has more volatility than a network topology.
+This chart contains just a sample of the different data types that you might find in a system.
+CPU registers are at the upper level of being the most volatile.
+And then we have router tables, process tables, kernel statistics, and memory information just
+under that level of volatility.
+We then can have temporary file systems, which tend to stick around a little bit longer.
+And then we have data that's stored on disk.
+Remote logging data and monitoring data tends to stick around longer than information we might
+store on a disk.
+And things like a physical configuration or the topology of your network itself
+might be something that rarely changes, putting it down at the lower levels of volatility.
+And if you're putting information on a backup tape, that information might stick around for years.
+That makes it one of the least volatile types of data that you might collect.
+You can probably think of other data types that are contained within your system, and you might
+want to consider where that would fit in this order of volatility.
+Good PM to be.
+Thanks for having me.
+Thank you.
+You.
+You.
+You.
+You.
+You.
+You.
+You.
+You.
+You.
+You.
+You.

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2.8 Mobile Device Hardening Techniques</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101820;
+    --muted:#4b5563;
+    --paper:#eef8f6;
+    --line:rgba(16,24,32,0.12);
+    --accent:#0d9488;
+    --accent-soft:#ccfbf1;
+    --good:#166534;
+    --warn:#9a3412;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(13,148,136,0.12), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.06), transparent 50%),
+      linear-gradient(180deg, #e4f0ee 0%, var(--paper) 40%, #e8f4f2 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#f0fdfa;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,28,28,0.3) 0%, rgba(8,28,28,0.72) 52%, rgba(8,28,28,0.94) 100%),
+      url("2.8/Device encryption.jpg") center/cover no-repeat;
+  }
+
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:36ch;
+    color:#ccfbf1;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:50ch;
+    color:#94a3b8;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#ccfbf1;
+    color:#134e4a;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#ccfbf1;
+    border:1px solid rgba(204,251,241,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(238,248,246,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+  .visual.emoji{ font-size:4.2rem; line-height:1; }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+  .visual.logo{ padding:1rem; background:#fff; }
+  .visual.logo img{ width:100%; height:140px; object-fit:contain; }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body ul{
+    margin:0.5rem 0 0.7rem;
+    padding-left:1.2rem;
+  }
+  .body li{ margin-bottom:0.35rem; }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(13,148,136,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+
+  .split{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0.7rem;
+    margin-top:0.8rem;
+  }
+  .pill{
+    border-radius:14px;
+    padding:0.85rem 1rem;
+    font-size:0.9rem;
+  }
+  .pill strong{
+    display:block;
+    margin-bottom:0.25rem;
+    font-size:0.74rem;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+  }
+  .pill.pro{ background:#e8f6ee; color:var(--good); }
+  .pill.con{ background:#fdece7; color:var(--warn); }
+  .pill p{ margin:0; color:inherit; }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .split{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">2.8</p>
+    <h1>Mobile Device Hardening Techniques</h1>
+    <p>Encryption, screen locks, patching, endpoint security, and MDM policies that protect smartphones and tablets.</p>
+    <div class="hero-cta">
+      <a href="#hardening">Hardening</a>
+      <a class="ghost" href="#policies">Policies</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#device-encryption">Encryption</a>
+    <a href="#screen-locks">Screen locks</a>
+    <a href="#config-profiles">Profiles</a>
+    <a href="#patching">Patching</a>
+    <a href="#endpoint-security">Endpoint</a>
+    <a href="#locator">Locator</a>
+    <a href="#failed-login">Failed login</a>
+    <a href="#mdm">MDM</a>
+    <a href="#byod">BYOD</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ===== PART A: Hardening techniques ===== -->
+  <section id="hardening">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Hardening techniques</h2>
+        <p>Core device protections — encryption, locks, and managed configuration.</p>
+      </div>
+
+      <article class="term" id="device-encryption">
+        <div class="visual photo">
+          <img src="2.8/Device encryption.jpg" alt="Device encryption" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Device encryption</h3>
+          <p>Encrypts all device data while the phone retains the decryption key.</p>
+          <ul>
+            <li><strong>iOS 8+</strong> — personal data is encrypted using the passcode.</li>
+            <li><strong>Android 5.0+</strong> — typically has encryption enabled by default.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="screen-locks">
+        <div class="visual photo">
+          <img src="2.8/Screen locks.jfif" alt="Screen locks" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Screen locks</h3>
+          <p>Restricts physical access to a device using various authenticators:</p>
+          <ul class="tags">
+            <li>Facial recognition</li>
+            <li>PIN codes</li>
+            <li>Fingerprint</li>
+            <li>Pattern / swipe</li>
+          </ul>
+          <ul>
+            <li><strong>Facial recognition</strong> — unlocks using facial scans.</li>
+            <li><strong>PIN codes</strong> — unlocks via a user-defined Personal Identification Number.</li>
+            <li><strong>Fingerprint</strong> — uses a built-in biometric fingerprint reader.</li>
+            <li><strong>Pattern / swipe</strong> — unlocks by drawing a specific pattern on the screen.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="config-profiles">
+        <div class="visual photo">
+          <img src="2.8/Configuration profiles.png" alt="Configuration profiles" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Configuration profiles</h3>
+          <p>Pre-defined system configurations pushed to devices via Mobile Device Management (MDM) platforms — such as Microsoft Intune or Apple Configurator — to streamline setup, corporate email deployment, and security settings like mandatory lock screens and encryption.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART B: Patch management ===== -->
+  <section id="patching">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Patch management</h2>
+        <p>Keeping the OS and apps current to close known vulnerabilities.</p>
+      </div>
+
+      <article class="term" id="os-updates">
+        <div class="visual photo">
+          <img src="2.8/OS updates.png" alt="OS updates" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>OS updates</h3>
+          <p>Regular operating system updates that deliver new features, stability fixes, and critical security patches to prevent vulnerabilities.</p>
+        </div>
+      </article>
+
+      <article class="term" id="app-updates">
+        <div class="visual photo">
+          <img src="2.8/Application updates.jfif" alt="Application updates" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Application updates</h3>
+          <p>Ongoing updates for installed applications to maintain current feature sets and resolve security bugs.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART C: Endpoint security software ===== -->
+  <section id="endpoint-security">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Endpoint security software</h2>
+        <p>Mobile-specific protections against malware, unsafe content, and network threats.</p>
+      </div>
+
+      <article class="term" id="antivirus-mobile">
+        <div class="visual photo">
+          <img src="2.8/Antivirus &amp; anti-malware.png" alt="Antivirus and anti-malware" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Antivirus &amp; anti-malware</h3>
+          <p>Protects against malicious software.</p>
+          <div class="split">
+            <div class="pill pro">
+              <strong>iOS</strong>
+              <p>Closed, tightly regulated ecosystem. Malware must exploit system vulnerabilities to infect a device.</p>
+            </div>
+            <div class="pill con">
+              <strong>Android</strong>
+              <p>Open platform — apps can be installed from external sources, increasing malware risk. Third-party protection available.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="term" id="content-filtering">
+        <div class="visual photo">
+          <img src="2.8/Content filtering.jpg" alt="Content filtering" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Content filtering</h3>
+          <p>Restricts device access to unauthorized or hazardous websites and applications.</p>
+        </div>
+      </article>
+
+      <article class="term" id="firewalls-mobile">
+        <div class="visual photo">
+          <img src="2.8/firewall.gif" alt="Mobile firewalls" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Firewalls</h3>
+          <p>Mobile operating systems generally do not include native firewalls, as most network traffic is outbound. Third-party mobile firewall apps exist (primarily for Android), while enterprise network firewalls regulate application traffic centrally.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART D: Locator & remote wipe ===== -->
+  <section id="locator">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part D</span>
+        <h2>Locator applications &amp; remote wipes</h2>
+        <p>Find lost devices or erase them when recovery isn’t possible.</p>
+      </div>
+
+      <article class="term" id="locator-apps">
+        <div class="visual photo">
+          <img src="2.8/Locator applications.png" alt="Locator applications" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Locator applications</h3>
+          <p>Utilizes built-in GPS and location features to locate lost or stolen devices on a map, sound alerts, or display contact messages remotely.</p>
+          <ul class="tags">
+            <li>Find My (iOS)</li>
+            <li>Find My Device (Android)</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="remote-wipe">
+        <div class="visual photo">
+          <img src="2.8/Remote wipes.jpg" alt="Remote wipes" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Remote wipes</h3>
+          <p>Allows administrators or owners to wipe all data remotely if a lost device cannot be recovered.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART E: Failed log-in restrictions ===== -->
+  <section id="failed-login">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part E</span>
+        <h2>Failed log-in attempt restrictions</h2>
+        <p>Platform-specific responses to repeated wrong passcodes.</p>
+      </div>
+
+      <article class="term" id="ios-lockout">
+        <div class="visual logo">
+          <img src="2.8/iOS.avif" alt="iOS" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>iOS</h3>
+          <p>Automatically erases all local data after <strong>10 consecutive failed passcode attempts</strong>.</p>
+        </div>
+      </article>
+
+      <article class="term" id="android-lockout">
+        <div class="visual logo">
+          <img src="2.8/Android.png" alt="Android" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Android</h3>
+          <p>Locks the device following repeated failed attempts, requiring a Google login or triggering a full device wipe.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART F: Policies and procedures ===== -->
+  <section id="policies">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part F</span>
+        <h2>Policies and procedures</h2>
+        <p>Enterprise frameworks for managing and securing mobile endpoints.</p>
+      </div>
+
+      <article class="term" id="mdm">
+        <div class="visual photo">
+          <img src="2.8/MDM (Mobile Device Management).jpg" alt="Mobile Device Management" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>MDM (Mobile Device Management)</h3>
+          <p>Provides centralized administration for mobile endpoints, enabling remote control over the whole device or an enterprise partition, enforcing access controls, and setting policies for apps, cameras, and data.</p>
+        </div>
+      </article>
+
+      <article class="term" id="byod">
+        <div class="visual photo">
+          <img src="2.8/BYOD vs. corporate-owned.webp" alt="BYOD vs corporate-owned" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>BYOD vs. corporate-owned</h3>
+          <span class="aka">Bring Your Own Device</span>
+          <p>Policies to manage employee-owned (BYOD) and company-owned endpoints under uniform organizational security rules.</p>
+        </div>
+      </article>
+
+      <article class="term" id="profile-security">
+        <div class="visual photo">
+          <img src="2.8/Profile security requirements.png" alt="Profile security requirements" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Profile security requirements</h3>
+          <p>Mandates access control standards across deployment profiles, such as forcing minimum screen lock criteria and PIN complexity.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Study notes for Core 2 objective 2.8 — Mobile Device Hardening Techniques. Images from the <code>2.8</code> folder.
+  </div>
+</footer>
+
+  <script src="study-lightbox.js"></script>
+</body>
+</html>

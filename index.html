@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CompTIA A+ Core 2 Study Guides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101820;
+    --muted:#4b5563;
+    --paper:#eef2f8;
+    --line:rgba(16,24,32,0.12);
+    --accent:#1d4ed8;
+    --accent-soft:#dbeafe;
+    --good:#166534;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(29,78,216,0.12), transparent 55%),
+      linear-gradient(180deg, #e6edf8 0%, var(--paper) 40%, #ecf1f8 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); text-decoration:none; }
+  a:hover{ text-decoration:underline; }
+  .wrap{ width:min(920px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  header{
+    padding:3.5rem 0 2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(2.4rem, 7vw, 4rem);
+    font-weight:700;
+    letter-spacing:-0.03em;
+    margin:0 0 0.5rem;
+    line-height:1;
+  }
+  header p{
+    margin:0;
+    color:var(--muted);
+    max-width:42ch;
+  }
+
+  section{ margin-bottom:2.5rem; }
+  .section-head{
+    margin-bottom:1rem;
+    padding-bottom:0.6rem;
+    border-bottom:1px solid var(--line);
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:1.5rem;
+    margin:0;
+    letter-spacing:-0.02em;
+  }
+  .section-head p{
+    margin:0.35rem 0 0;
+    color:var(--muted);
+    font-size:0.92rem;
+  }
+
+  .guide-list{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:grid;
+    gap:0.65rem;
+  }
+  .guide-row{
+    display:flex;
+    gap:0.5rem;
+    align-items:stretch;
+  }
+  .guide-link{
+    flex:1;
+    display:grid;
+    grid-template-columns:4.5rem 1fr auto;
+    gap:1rem;
+    align-items:center;
+    padding:1rem 1.1rem;
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:#fff;
+    color:inherit;
+    text-decoration:none;
+    transition:transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+  .guide-link:hover{
+    transform:translateY(-1px);
+    border-color:rgba(29,78,216,0.35);
+    box-shadow:0 10px 30px rgba(29,78,216,0.08);
+    text-decoration:none;
+  }
+  .guide-quiz{
+    flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-width:4.4rem;
+    padding:0 1rem;
+    border:1px solid rgba(91,33,182,0.25);
+    border-radius:16px;
+    background:#f5f3ff;
+    color:#5b21b6;
+    font-weight:700;
+    font-size:0.78rem;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    text-decoration:none;
+    transition:transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .guide-quiz:hover{
+    background:#ede9fe;
+    border-color:rgba(91,33,182,0.45);
+    text-decoration:none;
+    transform:translateY(-1px);
+  }
+  .guide-quiz.all{
+    min-width:5.5rem;
+    background:#ede9fe;
+  }
+  .guide-id{
+    font-family:"Fraunces",serif;
+    font-size:1.35rem;
+    font-weight:700;
+    color:var(--accent);
+  }
+  .guide-title{
+    font-weight:600;
+    font-size:0.98rem;
+  }
+  .guide-type{
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--muted);
+    white-space:nowrap;
+  }
+  .guide-type.sim{
+    color:var(--good);
+  }
+  .guide-type.quiz{
+    color:#5b21b6;
+  }
+
+  footer{
+    padding:2rem 0 3rem;
+    color:var(--muted);
+    font-size:0.84rem;
+    border-top:1px solid var(--line);
+  }
+
+  @media (max-width:640px){
+    .guide-link{
+      grid-template-columns:3.5rem 1fr;
+    }
+    .guide-type{
+      grid-column:2;
+      justify-self:start;
+      margin-top:-0.35rem;
+    }
+    .guide-quiz{
+      min-width:3.6rem;
+      padding:0 0.75rem;
+      font-size:0.72rem;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <p class="brand">CompTIA A+ Core 2</p>
+      <p>Study guides and interactive references for objectives 1.1 through 2.11.</p>
+    </header>
+
+    <section>
+      <div class="section-head">
+        <h2>Chapter 1 — Operating Systems</h2>
+        <p>Operating systems, Windows, macOS, Linux, applications, and cloud productivity tools.</p>
+      </div>
+      <ul class="guide-list">
+        <li class="guide-row">
+          <a class="guide-link" href="Chapter 1 Practice Quiz.html">
+            <span class="guide-id">Quiz</span>
+            <span class="guide-title">Chapter 1 Practice Quiz — all 264 terms</span>
+            <span class="guide-type quiz">Practice quiz</span>
+          </a>
+          <a class="guide-quiz all" href="Chapter 1 Practice Quiz.html?start=1" title="Start full chapter quiz">Start</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="1.1 Operating Systems and File Systems.html">
+            <span class="guide-id">1.1</span>
+            <span class="guide-title">Operating Systems and File Systems</span>
+            <span class="guide-type">Study guide</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 1 Practice Quiz.html?section=1.1&amp;start=1" title="Quiz for 1.1">Quiz</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="1.2 OS Installation and Boot Methods.html">
+            <span class="guide-id">1.2</span>
+            <span class="guide-title">OS Installation and Boot Methods</span>
+            <span class="guide-type">Study guide</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 1 Practice Quiz.html?section=1.2&amp;start=1" title="Quiz for 1.2">Quiz</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="1.3 Microsoft Windows Editions.html">
+            <span class="guide-id">1.3</span>
+            <span class="guide-title">Microsoft Windows Editions</span>
+            <span class="guide-type">Study guide</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 1 Practice Quiz.html?section=1.3&amp;start=1" title="Quiz for 1.3">Quiz</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="1.4 Microsoft Windows Operating System Features and Tools.html">
+            <span class="guide-id">1.4</span>
+            <span class="guide-title">Microsoft Windows Operating System Features and Tools</span>
+            <span class="guide-type sim">Interactive</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 1 Practice Quiz.html?section=1.4&amp;start=1" title="Quiz for 1.4">Quiz</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="1.5 Microsoft Command-Line Tools.html">
+            <span class="guide-id">1.5</span>
+            <span class="guide-title">Microsoft Command-Line Tools</span>
+            <span class="guide-type sim">Interactive</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 1 Practice Quiz.html?section=1.5&amp;start=1" title="Quiz for 1.5">Quiz</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="1.6 Configure Microsoft Windows Settings.html">
+            <span class="guide-id">1.6</span>
+            <span class="guide-title">Configure Microsoft Windows Settings</span>
+            <span class="guide-type sim">Interactive</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 1 Practice Quiz.html?section=1.6&amp;start=1" title="Quiz for 1.6">Quiz</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="1.7 Configure Microsoft Windows Networking.html">
+            <span class="guide-id">1.7</span>
+            <span class="guide-title">Configure Microsoft Windows Networking</span>
+            <span class="guide-type sim">Interactive</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 1 Practice Quiz.html?section=1.7&amp;start=1" title="Quiz for 1.7">Quiz</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">
+            <span class="guide-id">1.8</span>
+            <span class="guide-title">Common Features and Tools of the macOS Desktop Operating System</span>
+            <span class="guide-type sim">Interactive</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 1 Practice Quiz.html?section=1.8&amp;start=1" title="Quiz for 1.8">Quiz</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="1.9 Linux Features and Tools.html">
+            <span class="guide-id">1.9</span>
+            <span class="guide-title">Linux Features and Tools</span>
+            <span class="guide-type sim">Interactive</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 1 Practice Quiz.html?section=1.9&amp;start=1" title="Quiz for 1.9">Quiz</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="1.10 Installing Applications.html">
+            <span class="guide-id">1.10</span>
+            <span class="guide-title">Installing Applications</span>
+            <span class="guide-type sim">Interactive</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 1 Practice Quiz.html?section=1.10&amp;start=1" title="Quiz for 1.10">Quiz</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="1.11 Configure Cloud-Based Productivity Tools.html">
+            <span class="guide-id">1.11</span>
+            <span class="guide-title">Configure Cloud-Based Productivity Tools</span>
+            <span class="guide-type sim">Interactive</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 1 Practice Quiz.html?section=1.11&amp;start=1" title="Quiz for 1.11">Quiz</a>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>Chapter 2 — Security</h2>
+        <p>Threats, hardening, encryption, mobile, destruction, networking, and browsers.</p>
+      </div>
+      <ul class="guide-list">
+        <li class="guide-row">
+          <a class="guide-link" href="Chapter 2 Practice Quiz.html">
+            <span class="guide-id">Quiz</span>
+            <span class="guide-title">Chapter 2 Practice Quiz — all 230 terms</span>
+            <span class="guide-type quiz">Practice quiz</span>
+          </a>
+          <a class="guide-quiz all" href="Chapter 2 Practice Quiz.html?start=1" title="Start full chapter quiz">Start</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="2.1 Security Measures and Their Purposes.html">
+            <span class="guide-id">2.1</span>
+            <span class="guide-title">Security Measures and Their Purposes</span>
+            <span class="guide-type">Study guide</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 2 Practice Quiz.html?section=2.1&amp;start=1" title="Quiz for 2.1">Quiz</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">
+            <span class="guide-id">2.2</span>
+            <span class="guide-title">Configure and Apply Basic Microsoft Windows OS Security Settings</span>
+            <span class="guide-type sim">Interactive</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 2 Practice Quiz.html?section=2.2&amp;start=1" title="Quiz for 2.2">Quiz</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="2.3 Wireless Security Protocols and Authentication Methods.html">
+            <span class="guide-id">2.3</span>
+            <span class="guide-title">Wireless Security Protocols and Authentication Methods</span>
+            <span class="guide-type">Study guide</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 2 Practice Quiz.html?section=2.3&amp;start=1" title="Quiz for 2.3">Quiz</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="2.4 Malware and Adware Types.html">
+            <span class="guide-id">2.4</span>
+            <span class="guide-title">Malware and Adware Types</span>
+            <span class="guide-type">Study guide</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 2 Practice Quiz.html?section=2.4&amp;start=1" title="Quiz for 2.4">Quiz</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="2.5 Social Engineering Attacks, Threats, and Vulnerabilities.html">
+            <span class="guide-id">2.5</span>
+            <span class="guide-title">Social Engineering Attacks, Threats, and Vulnerabilities</span>
+            <span class="guide-type">Study guide</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 2 Practice Quiz.html?section=2.5&amp;start=1" title="Quiz for 2.5">Quiz</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="2.6 Malware Investigation and Remediation.html">
+            <span class="guide-id">2.6</span>
+            <span class="guide-title">Malware Investigation and Remediation</span>
+            <span class="guide-type">Study guide</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 2 Practice Quiz.html?section=2.6&amp;start=1" title="Quiz for 2.6">Quiz</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="2.7 Data-at-Rest Encryption and Security Best Practices.html">
+            <span class="guide-id">2.7</span>
+            <span class="guide-title">Data-at-Rest Encryption and Security Best Practices</span>
+            <span class="guide-type">Study guide</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 2 Practice Quiz.html?section=2.7&amp;start=1" title="Quiz for 2.7">Quiz</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="2.8 Mobile Device Hardening Techniques.html">
+            <span class="guide-id">2.8</span>
+            <span class="guide-title">Mobile Device Hardening Techniques</span>
+            <span class="guide-type">Study guide</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 2 Practice Quiz.html?section=2.8&amp;start=1" title="Quiz for 2.8">Quiz</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="2.9 Data Destruction and Sanitization.html">
+            <span class="guide-id">2.9</span>
+            <span class="guide-title">Data Destruction and Sanitization</span>
+            <span class="guide-type">Study guide</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 2 Practice Quiz.html?section=2.9&amp;start=1" title="Quiz for 2.9">Quiz</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="2.10 Router, Wireless, and Firewall Settings.html">
+            <span class="guide-id">2.10</span>
+            <span class="guide-title">Router, Wireless, and Firewall Settings</span>
+            <span class="guide-type">Study guide</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 2 Practice Quiz.html?section=2.10&amp;start=1" title="Quiz for 2.10">Quiz</a>
+        </li>
+        <li class="guide-row">
+          <a class="guide-link" href="2.11 Browser Security and Configuration.html">
+            <span class="guide-id">2.11</span>
+            <span class="guide-title">Browser Security and Configuration</span>
+            <span class="guide-type">Study guide</span>
+          </a>
+          <a class="guide-quiz" href="Chapter 2 Practice Quiz.html?section=2.11&amp;start=1" title="Quiz for 2.11">Quiz</a>
+        </li>
+      </ul>
+    </section>
+
+    <footer>
+      Open <code>index.html</code> in your browser to jump between guides. Term images support click-to-enlarge on study guide pages.
+    </footer>
+  </div>
+</body>
+</html>

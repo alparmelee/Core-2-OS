@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2.10 Router, Wireless, and Firewall Settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101820;
+    --muted:#4b5563;
+    --paper:#eef3f8;
+    --line:rgba(16,24,32,0.12);
+    --accent:#1d4ed8;
+    --accent-soft:#dbeafe;
+    --good:#166534;
+    --warn:#9a3412;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(29,78,216,0.12), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.06), transparent 50%),
+      linear-gradient(180deg, #e4ebf3 0%, var(--paper) 40%, #e8f0f7 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#eff6ff;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,20,48,0.3) 0%, rgba(8,20,48,0.72) 52%, rgba(8,20,48,0.94) 100%),
+      url("2.10/Encryption%20settings.webp") center/cover no-repeat;
+  }
+
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:38ch;
+    color:#dbeafe;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:50ch;
+    color:#94a3b8;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#dbeafe;
+    color:#1e3a8a;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#dbeafe;
+    border:1px solid rgba(219,234,254,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(238,243,248,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+  .visual.emoji{ font-size:4.2rem; line-height:1; }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+  .visual.logo{ padding:1rem; background:#fff; }
+  .visual.logo img{ width:100%; height:140px; object-fit:contain; }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body ul{
+    margin:0.5rem 0 0.7rem;
+    padding-left:1.2rem;
+  }
+  .body li{ margin-bottom:0.35rem; }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(29,78,216,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+  .note.warn{
+    border-left-color:var(--danger);
+    background:rgba(180,35,24,0.08);
+    color:#7a271a;
+  }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">2.10</p>
+    <h1>Router, Wireless, and Firewall Settings</h1>
+    <p>SOHO router hardening, wireless security, and firewall configuration for home and small office networks.</p>
+    <div class="hero-cta">
+      <a href="#router-settings">Router settings</a>
+      <a class="ghost" href="#wireless">Wireless</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#default-passwords">Passwords</a>
+    <a href="#ip-filtering">IP filtering</a>
+    <a href="#firmware">Firmware</a>
+    <a href="#upnp">UPnP</a>
+    <a href="#dmz">DMZ</a>
+    <a href="#ssid">SSID</a>
+    <a href="#encryption">Encryption</a>
+    <a href="#guest">Guest</a>
+    <a href="#ports">Ports</a>
+    <a href="#port-forwarding">Port forwarding</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ===== PART A: Router settings ===== -->
+  <section id="router-settings">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Router settings</h2>
+        <p>Core SOHO router configuration for security, access control, and management.</p>
+      </div>
+
+      <article class="term" id="default-passwords">
+        <div class="visual photo">
+          <img src="2.10/Change%20default%20passwords.jpg" alt="Change default passwords" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Change default passwords</h3>
+          <p>Access points ship with publicly known default credentials. Change the default admin password immediately to prevent unauthorized users from taking full administrative control of the device.</p>
+        </div>
+      </article>
+
+      <article class="term" id="ip-filtering">
+        <div class="visual photo">
+          <img src="2.10/IP%20filtering.jfif" alt="IP filtering" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>IP filtering</h3>
+          <p>Restrict or grant network access by defining specific IP address ranges.</p>
+          <ul>
+            <li><strong>Allow list</strong> — block all traffic except approved IP addresses.</li>
+            <li><strong>Deny list</strong> — block specific bad IP addresses.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="firmware">
+        <div class="visual photo">
+          <img src="2.10/Firmware%20updates.jpg" alt="Firmware updates" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Firmware updates</h3>
+          <p>Maintain SOHO appliances by regularly applying manufacturer updates. Installing the latest firmware patches security vulnerabilities, fixes bugs, and adds missing features.</p>
+        </div>
+      </article>
+
+      <article class="term" id="content-filtering">
+        <div class="visual photo">
+          <img src="2.10/Content%20filtering.jpg" alt="Content filtering" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Content filtering</h3>
+          <p>Inspect network traffic by URL or website category. Use content filters to enforce corporate policies, manage parental controls/NSFW content, prevent sensitive data leaks, and stop malicious software via integrated anti-virus features.</p>
+        </div>
+      </article>
+
+      <article class="term" id="physical-placement">
+        <div class="visual photo">
+          <img src="2.10/Physical%20placement%20%20secure%20locations.jpg" alt="Physical placement and secure locations" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Physical placement / secure locations</h3>
+          <p>Lock physical routers, switches, and servers in a secure room to prevent physical tampering. Mount wireless access points high (such as above ceiling tiles) to maximize coverage — keeping in mind that hard-to-reach locations make power cycling more difficult.</p>
+        </div>
+      </article>
+
+      <article class="term" id="upnp">
+        <div class="visual photo">
+          <img src="2.10/Universal%20Plug%20and%20Play%20(UPnP).jfif" alt="Universal Plug and Play" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Universal Plug and Play (UPnP)</h3>
+          <p>UPnP permits devices and internal applications to open inbound firewall ports automatically without administrator approval.</p>
+          <div class="note warn"><strong>Disable UPnP</strong> as a best practice unless an application strictly requires it.</div>
+        </div>
+      </article>
+
+      <article class="term" id="dmz">
+        <div class="visual photo">
+          <img src="2.10/Screened%20subnet.webp" alt="Screened subnet" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Screened subnet</h3>
+          <span class="aka">Formerly DMZ — Demilitarized Zone</span>
+          <p>Place public-facing resources (like web servers) in a screened subnet between the internet and the internal network. Creates an isolated security layer so external access to public services doesn’t compromise private internal systems.</p>
+        </div>
+      </article>
+
+      <article class="term" id="secure-management">
+        <div class="visual photo">
+          <img src="2.10/Configure%20secure%20management%20access.jfif" alt="Configure secure management access" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Configure secure management access</h3>
+          <p>Enforce strong authentication credentials and multi-factor authentication for administrative logins. Restrict management connections to local LAN IPs only and <strong>disable remote WAN management access</strong> completely.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART B: Wireless specific ===== -->
+  <section id="wireless">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Wireless specific</h2>
+        <p>SSID, encryption, and guest network configuration.</p>
+      </div>
+
+      <article class="term" id="ssid">
+        <div class="visual photo">
+          <img src="2.10/Changing%20the%20service%20set%20identifier%20(SSID).jpg" alt="Changing the SSID" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Changing the service set identifier (SSID)</h3>
+          <p>Replace default factory network names (such as “NETGEAR” or “LINKSYS”) with a non-obvious identifier to avoid signaling your equipment type to outsiders.</p>
+        </div>
+      </article>
+
+      <article class="term" id="ssid-broadcast">
+        <div class="visual photo">
+          <img src="2.10/Disabling%20SSID%20broadcast.jpg" alt="Disabling SSID broadcast" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Disabling SSID broadcast</h3>
+          <p>Hiding an SSID stops the router from broadcasting its name publicly. However, this only relies on security through obscurity — wireless analysis tools easily discover hidden SSIDs.</p>
+          <div class="note warn"><strong>Not a real security control.</strong> Always use strong encryption instead of relying on a hidden SSID.</div>
+        </div>
+      </article>
+
+      <article class="term" id="encryption">
+        <div class="visual photo">
+          <img src="2.10/Encryption%20settings.webp" alt="Encryption settings" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Encryption settings</h3>
+          <p>Choose an appropriate wireless encryption standard:</p>
+          <ul>
+            <li><strong>Open system</strong> — unencrypted; no password required.</li>
+            <li><strong>WPA2/WPA3-Personal (PSK)</strong> — protects traffic using a shared 256-bit key among all users.</li>
+            <li><strong>WPA2/WPA3-Enterprise (802.1X)</strong> — authenticates each user individually through a backend server (e.g., RADIUS or LDAP).</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="guest">
+        <div class="visual photo">
+          <img src="2.10/Configuring%20guest%20access.jpg" alt="Configuring guest access" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Configuring guest access</h3>
+          <p>Enable isolated guest networks to keep visitors off the primary LAN, or use guest networks to segregate IoT devices and lab environments. Always protect guest networks using <strong>WPA2 or WPA3</strong> encryption.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART C: Firewall settings ===== -->
+  <section id="firewall">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Firewall settings</h2>
+        <p>Port control and inbound traffic management.</p>
+      </div>
+
+      <article class="term" id="unused-ports">
+        <div class="visual photo">
+          <img src="2.10/Disabling%20unused%20ports.jpg" alt="Disabling unused ports" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Disabling unused ports</h3>
+          <p>Administratively turn off unused physical switch ports in open areas (like conference rooms or break rooms) to stop unauthorized physical hookups. Alternatively, deploy <strong>Network Access Control (802.1X NAC)</strong> to block network traffic until a device authenticates.</p>
+        </div>
+      </article>
+
+      <article class="term" id="port-forwarding">
+        <div class="visual photo">
+          <img src="2.10/Port%20forwarding%20%20mapping.jfif" alt="Port forwarding and mapping" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Port forwarding / mapping</h3>
+          <span class="aka">Destination NAT — Static NAT</span>
+          <p>Configure Destination NAT (Static NAT) to permanently direct external inbound traffic from a public IP and port to an internal server’s private IP and port. Provides persistent 24/7 internet access to internally hosted applications like web servers, game servers, or security systems.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Study notes for Core 2 objective 2.10 — Router, Wireless, and Firewall Settings. Images from the <code>2.10</code> folder.
+  </div>
+</footer>
+
+  <script src="study-lightbox.js"></script>
+</body>
+</html>

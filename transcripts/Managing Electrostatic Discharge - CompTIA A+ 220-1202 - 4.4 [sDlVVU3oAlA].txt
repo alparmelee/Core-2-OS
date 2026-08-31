@@ -1,0 +1,121 @@
+Many of us are familiar with static electricity.
+It's that spark you feel when you scrape your feet
+across a carpeted floor and you touch a metal doorknob.
+The electrical potential between you and that doorknob
+is different.
+And when you touch the doorknob, that electricity
+moves to equalize that potential.
+Before you touch the doorknob, the electricity
+was simply sitting there and waiting.
+That's why we refer to this as static electricity.
+Everything has some type of electrical potential.
+And static electricity by itself is not harmful.
+It's when that electrical energy is discharged
+that creates problems for computer components.
+The silicon that we use inside of these computers
+is very sensitive to static electricity.
+This image shows the damage that can be created
+by ESD, or electrostatic discharge.
+This is taken from a scanning electron microscope
+and it is 4,300 magnification.
+You can see the damage that's done by that discharge.
+And that's why we want to avoid having that happen
+to our computer components.
+When we touch our finger to that metal doorknob,
+that discharge is approximately 3,500 volts.
+If you were to look at how many volts would be required
+to damage your computer equipment, it's 100 volts or less.
+This is why we want to avoid having any instance
+of electrostatic discharge anywhere near our computer components.
+There are a number of things you can do to help minimize
+or even prevent electrostatic discharge.
+One is that you can keep the humidity over 60%.
+That much water in the air tends to prevent those types of discharges
+from occurring.
+But keeping a room at 60% humidity would be uncomfortable.
+And our air conditioning systems keep our temperatures low
+and remove all of that water from the air.
+So to protect our computer systems and components,
+we do something that we refer to as a self-ground.
+This is when we would touch some part of the metal chassis
+of the system that we're working on.
+This will equalize the electrical potential between ourself
+and the equipment that we're working on.
+And as we begin working with other components,
+we won't have that electrostatic discharge.
+Another important best practice when you're working inside
+of these systems is to always unplug the power connection.
+Having that power connected will not have any effect on your ability
+to prevent electrostatic discharge, and unplugging that power source
+means that we are preventing any case of electrical shock.
+And like me, you've probably seen diagrams
+that describe connecting your electrostatic straps directly
+to the electrical ground of a building.
+Since it is possible for that electrical ground
+to become energized, you should never connect any part of yourself
+to a building's electrical ground.
+One great way to avoid these types of electrostatic discharges
+is to wear an anti-static strap.
+You would put the strap around your wrist,
+and then you would connect the other end of the strap
+to some metal part of the device that you're working on.
+If you're working on a desk, you might
+want to put down an anti-static pad.
+You would then connect the pad to the metal part of the device
+that you're working on so that you don't always
+have to be connected with a strap around your wrist.
+And if you're standing and walking around
+while working on these systems,
+you might want to put down an anti-static mat
+to minimize the instances of electrostatic discharge.
+Once you take a component out of the system,
+or you're transporting these components from one place
+to the other, you might want to put them inside
+of an anti-static bag.
+The bag is specially designed to minimize cases
+of electrostatic discharge.
+And it's a very safe way to move components
+and not have to worry about any type
+of static electrical damage.
+Here's a technician that's working on an anti-static pad.
+You can see the pad is underneath the laptop that they're working on.
+And they've also connected an anti-static strap
+to their wrist, just to make sure
+that they minimize any instances of electrostatic discharge.
+Here's a better view of this strap.
+It has a breakaway snap that's connected to the strap.
+So if you need to walk away, you can easily disconnect it,
+walk away from your system, and when you come back,
+you simply reconnect the strap to your wrist.
+And once you take the equipment out of that system,
+you can put it inside one of these anti-static bags.
+These look like foil bags, but they're actually
+designed of a material that minimizes static electricity.
+Even with all these anti-static devices in place,
+occasionally you might still have a small electrostatic discharge.
+So it's always a good idea to never touch the components directly
+when you're working on them.
+It's always a good idea to handle these components
+by their edges to minimize any potential for damage.
+These components should also be stored
+in some type of heating, ventilation, and air conditioning
+regulated environment.
+So we would usually keep these somewhere between 50 and 80
+degrees Fahrenheit.
+Or if you're outside of the United States,
+it's between 10 and 27 degrees Celsius.
+And these components generally do not
+like a lot of water in the air.
+So you want to minimize the amount of humidity
+that they're subjected to.
+Very often, you might throw in one of these silica gel
+packs into the anti-static bag where
+you're storing these components just
+to remove any extra humidity from the air.
+And if you have the original box,
+that makes a perfect place to store these components.
+But if you don't have that box available,
+you could also wrap that anti-static bag and the components
+within some type of bubble wrap just
+to protect it from the elements.
+.

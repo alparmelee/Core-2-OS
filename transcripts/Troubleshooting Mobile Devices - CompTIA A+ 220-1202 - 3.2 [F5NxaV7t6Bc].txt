@@ -1,0 +1,163 @@
+Troubleshooting a mobile device can be problematic, so it's useful to break everything into smaller
+pieces and try to troubleshoot a little bit at a time.
+If you're having a problem with an application, especially applications that will not launch,
+or when you launch them they have very slow performance, there are a number of different
+things you can try.
+Unfortunately, most mobile devices don't give you access to the command line, so there's
+not a lot of resources available for doing detailed troubleshooting of apps.
+Unfortunately, the universal troubleshooting task of turn it off and back on again does
+apply in this particular situation.
+This way, you're able to clear out memory or any stored caches, and once the system is
+back up and running, you can try launching the application again and see if it starts.
+It may be that the application itself is having a problem or it's hung, and you may be able
+to close the app and simply restart it without having to restart the entire mobile phone.
+On some iPhone versions, you can double tap the home button and slide up the app, or
+you can simply slide halfway, list out the apps, and then slide the app completely off
+the screen to close it out.
+You then simply need to restart the app and see if it performs better once it's restarted.
+On Android, it's a similar process of going to the settings, apps, selecting the app, and
+then choosing the option to force stop.
+And it could be that the application you're using is a bit outdated.
+It might have a bug that's already been resolved, and the only way to fix that would be to update
+the application from the App Store or the central application management on that mobile device.
+It could be the application problem we're having causes the app itself to hang, or perhaps the
+app has an error message or something on the screen where it can give us some feedback about
+where the problem might be occurring.
+But sometimes your application simply disappears and is no longer available on your mobile device,
+and you'd have to restart it manually.
+This could be related to the inner workings of the operating system inside of that mobile
+device.
+So restarting the mobile device will clear the slate, and we can try running the app again.
+And again, this might be related to a bug that's in the app, so updating the application
+itself may end up solving the problem that you're having.
+And on many of these devices, you can delete the app, go back to your app store, and reinstall
+the app to make sure that everything in that app is installed properly.
+You might also run into cases where you're having a problem updating the app.
+If you look at the list of applications, it might show that the application has an update,
+but when you click the update button, it doesn't update the app.
+This is sometimes done automatically behind the scenes, but if it's not performing the update
+process on an automatic basis, you might have to go into this view and manually choose individual
+apps to update, or choose the option to update all.
+You might also find that your app store will require you to have a valid payment method that's
+on file and configured in the app store itself.
+And if your payment method is no longer valid or it expires, you may have to replace it with
+a newer version.
+And of course, you can always try turning off the mobile device and turning it back on again.
+This will clear out any pending updates, and it may allow other updates to continue with
+the update process.
+Of course, all of these updates commonly are downloaded directly from the internet.
+So if you're having a problem with local connectivity to your network or having a problem communicating
+to the internet at all, then you obviously won't be able to update any of these apps.
+You might also want to check the available storage space on your device and make sure that you
+have enough room to install a new application.
+Many of these apps are very large, and if you have very limited space available, you might
+have a problem during the update process.
+And even though some of these apps are free to download, you may still find that they will
+not install unless you have a valid payment method on file.
+So check your app store or Google Play account and make sure that all of your payment systems
+are up to date and working properly.
+If this is a mobile device that you're using for work, there might be a policy that prevents you
+from installing or updating that application.
+Normally, this is configured in your organization's mobile device manager or MDM.
+You can look at the list of policies that are in your MDM to see what options might be there
+for the applications.
+Are your users allowed to install applications from the iTunes store?
+Can you use the news app or the podcast app available to use?
+You can configure almost every aspect of usability for these mobile devices from your mobile device
+manager.
+And on rare occasions, you may find that the app store is not available or is currently
+under maintenance.
+In those scenarios, you'll have to wait for the app store to get back up and running before
+you can update any of your applications.
+Our mobile devices often receive updates.
+These might be new features added to the operating system of the device, or they might be bug fixes
+or security updates.
+If you're trying to install an update and it's not installing, you may find that your problem
+is related to the available storage space.
+Many of these operating system updates are much larger than applications, so you want
+to be sure that you have plenty of space available to install this latest operating system patch.
+Since they are so large, you're going to need enough bandwidth to be able to download
+these in a reasonable amount of time.
+So you want to check and make sure that you're on a high speed network and that you're able
+to connect and transfer information at a relatively decent rate.
+Some networks have filtering built in that might prevent you from visiting these app stores
+and updating the operating system or any applications.
+So you might want to move your mobile device to a different network and see if you're able
+to circumvent any filtering that might be in place.
+And of course, turn your device off and back on again and see if clearing that device out
+and starting from scratch will resolve any of these update problems.
+We rely on the batteries of these mobile devices to keep them up and running during our workday,
+but you may find that your battery life tends to decrease rapidly throughout the business day.
+It may be that your device is just outside of the range of your mobile network.
+If that's the case, it will keep retrying and retrying to try to obtain a signal even though
+you're not doing anything on that device.
+In that case, you might want to try turning on airplane mode even though you're on the ground.
+This will turn off the radio and keep it from eating away at that battery during the day.
+And if this is an older mobile device, it may be that the battery is simply old
+and not able to maintain the same charge that it once did.
+There's obviously no easy fix for this one.
+You would have to replace the battery to regain any type of long-term battery storage.
+There are things you can do without having to make any changes, though.
+We can try disabling anything that we're not currently using.
+So we can disable 802.11 wireless, Bluetooth, or GPS if we don't need those services.
+And most of our mobile devices these days provide you with a way to check the health of your battery.
+You can go into iOS or Android and choose the options under Settings and Battery.
+This will provide you information with how your battery has been performing.
+It will show you the charging history for your battery and how much you've been using that battery over time.
+I used to have a mobile phone that would simply reboot itself in the middle of a phone call.
+That was something very abrupt.
+It was unexpected.
+There was no message on the screen explaining why it rebooted.
+It would simply restart and then you'd have to make the call again.
+For troubleshooting this problem, you might want to start with the software.
+Make sure your operating system and all the apps that are running on your device are up to date with the latest versions.
+And, of course, this could be related to the hardware of the mobile device.
+So you might want to check the battery health and see if other diagnostic tools might be available on your mobile device.
+This is a difficult problem to troubleshoot.
+It often requires you to go into the detailed logs of this system to understand what occurred during that reboot process.
+Your technical support team should be able to look at the crash logs on your device to be able to determine why this may have occurred and things that might be able to help during the troubleshooting process.
+In my particular case, this was a hardware problem.
+We could see it in the logs and we simply replace the phone to resolve the issue.
+These mobile devices often rely on a solid network connection in order to operate properly.
+And if you're running into a problem with intermittent connectivity, especially if you're connected to a local wireless network,
+you may want to try getting a little bit closer to that access point and getting a little bit more signal strength.
+Or you might want to try connecting to a completely different access point to see if the original access point may have been your problem.
+If you're not getting any Wi-Fi connectivity, you want to be sure that you have enabled Wi-Fi and you haven't accidentally turned it off in the settings of your mobile device.
+There's also security key configurations and wireless settings that you want to be sure match the wireless network that you're connected to.
+And of course, restarting that system will restart everything, including the wireless connectivity, and allow you to start troubleshooting using a clean slate.
+If our issue is related to a Bluetooth connection, then we obviously don't have an access point that we need to worry about,
+but we do need to check to see if Bluetooth is enabled on that mobile device.
+If our problem is connecting to a previously paired Bluetooth component, then perhaps turning off Bluetooth and turning it back on might help you.
+And ultimately, restarting the entire system might be the best way to confirm that we're starting with a clean slate.
+If you're running into problems using near field communication or NFC, there are a number of things that you could check.
+You can, of course, enable or disable that NFC connectivity, and that might clear it out enough to get things started to work again.
+Resetting the device is always an option, and often we're using this NFC as a purchase method.
+So we may want to make sure that our payment systems and credit cards are up to date inside of our mobile device.
+We'll often use AirDrop to be able to transfer information between our mobile devices.
+And if you have a long distance between those devices, you may not be able to see the name of that device pop up in your list.
+Getting closer to that secondary device may allow you to then see the name and be able to select it for the file transfer.
+Features like AirDrop rely on wireless communication, and AirDrop uses both Wi-Fi and Bluetooth.
+If you have both of those turned on, you'll have the best experience when trying to perform these AirDrop functions.
+And if other devices can't see your mobile device, it may be that you've disabled AirDrop Discovery.
+On your device, you may be able to turn that off.
+You might want to set it to contacts only, or you might temporarily want to turn it on so that everyone can see your device.
+We often use our mobile phone in a portrait mode, but we might want to turn it landscape to use an app or to take pictures.
+But you might find a problem auto-rotating when you change your phone from a portrait mode into more of a landscape mode.
+Inside the phone is a G-sensor, or accelerometer, that recognizes when it's moving between these different modes.
+And if there is a problem with that process, you may find that it doesn't move whenever you change your phone's direction.
+Most of these phones also have a way to lock this process so that you don't accidentally have it auto-rotate.
+So you might want to check to see if that lock has been enabled, and that might solve your problem with auto-rotation.
+Sometimes an app might get confused as to what type of rotation it's currently using.
+So by closing out the app and restarting, you might be able to solve that problem.
+Of course, restarting the device might be an easy fix.
+But if that doesn't solve the problem, you'll want to contact device support
+and see if they have a sensor issue that they may be able to swap out.
+A little fun lines are all in the way to descon-to-ritage mechanic.
+Let's go to the next approach because of the information.
+The results in you will have a sensor.
+It will help you remove that target case or store-type.
+So may not get the contact device.
+So with that, I will have a sensor issue in which a têm your mind.
+Totally do not get the contact device to name your phone-to-look.
+So please don't necessarily use the communication 확인.
+So let me get to know if you need to know how to programme yourself.

@@ -1,0 +1,243 @@
+AI is an abbreviation for artificial intelligence,
+and the goal of AI is to meet or exceed human intelligence
+in the form of technology.
+This means that our computers would
+be able to learn, infer, and reason
+based on input that we provide.
+This is obviously not a new idea.
+We've been working on concepts of AI
+for a number of decades, and of course,
+you see AI mentioned in numerous science fiction stories.
+But now, of course, AI has become much more prevalent.
+We have new tools that allow us to create new content,
+such as text, audio, and video, by simply asking
+a computer to create it.
+And very quickly, we have seen AI become integrated
+into most applications that we use every day.
+For example, if you perform a search
+on a popular search engine, you may
+find not only your search results,
+but also a summary of those results
+that was created using artificial intelligence.
+The goal is to take information that normally you would need
+to find across multiple sites, and present all of that information
+to you as one single AI summary.
+We've also seen AI in our email clients
+and on our mobile devices.
+Instead of having to read through a long email,
+you can read an AI summary that explains the information
+that was contained in that message.
+And as you've probably seen in graphics editors,
+you can use generative AI to fill in or remove information
+from an image by simply highlighting it on the screen
+and asking the AI to remove it.
+We've also seen artificial intelligence engines
+that allow you to input a description
+of what you'd like an image to be,
+and the AI will create that image on the screen.
+We've seen a number of different uses of AI
+that we could put into the category of appropriate AI use.
+For example, there may be extremely large data repositories
+that we would like AI to be able to sift through
+and provide us with a summary of that information.
+For example, there's AI that can look through terabytes
+and terabytes of log files in an organization
+and find potential security issues
+that may be hidden in all of these different logs.
+This would certainly be time-consuming
+and difficult for a human to do,
+which makes it perfect for AI.
+We've also started integrating AI
+into our scripting and our automation
+so that AI can make decisions on what to do
+when a certain situation occurs.
+Being able to do this without human intervention
+means that we can spend our time doing something else.
+We're also seeing AI integrated more into healthcare.
+For example, AI can take the output from an MRI scanner
+and evaluate that to see if there may be something
+that would be concerning.
+We might also have AI go through healthcare records
+and determine if anyone is receiving multiple drugs
+that might have negative interactions.
+This means the healthcare professionals
+can work with us at a human level
+and have AI take care of everything at a digital level.
+And if you're watching this video on YouTube,
+you may be getting real-time language translation
+thanks to the AI that's built into our new communications apps.
+But of course, there are downsides to any technology,
+and AI has been used for things
+that may not be as appropriate.
+For example, we've seen AI used for fraud.
+AI can impersonate a real person
+and even create video of that person,
+something we refer to as a deepfake.
+We've also seen application code that's created with AI
+without any knowledge of what the application
+is actually doing.
+Or perhaps someone is using AI to create an image
+and taking credit for that image creation.
+And we've seen AI used in schools and colleges
+to plagiarize works.
+Students are using AI to summarize existing works,
+but they're not citing AI in that summary.
+One of the challenges we have when working with AI
+is that it can sometimes have a bias.
+The AI only knows the information that we're feeding into it,
+and it has a predefined set of algorithms
+on how to manage that data.
+And sometimes AI can make the wrong conclusions
+based on this combination of data and algorithms.
+For example, we may be feeding AI a very large data set
+associated with healthcare in the United States.
+But inside of that data set,
+we may have underrepresented statistics
+for a particular ethnic group
+or particular gender group.
+In this case, AI could potentially create conclusions
+that are biased one way or the other.
+We're obviously not trying to create bias
+as part of this AI analysis,
+so we have to make sure that we create an AI algorithm
+that doesn't build bias when we have these large data sets.
+A good example of this is what Amazon found
+when they took 10 years of submitted resumes
+and put them into an AI engine.
+This grouping of resumes had a number of terms
+such as executed and captured
+as part of the resume text.
+The artificial intelligence engine
+tended to pick resumes that had those terms
+as part of the resume itself.
+What we found is that those terms
+were more often used
+when it was a male submitting a resume
+versus a female,
+and therefore the AI created a bias
+towards male resumes.
+Obviously, Amazon chose not to use this AI algorithm
+for their resume research.
+There's also occasions where AI
+can completely misrepresent the data
+that it was provided.
+You can think of this as a confidently incorrect AI
+where it really knows the answer,
+but the answer is completely wrong.
+For example, let's say that we've told the AI
+that any picture containing a snout,
+a tail, and four legs is a dog.
+Then we provide the AI with a picture of a cloud,
+and the cloud appears to have a nose,
+a tail, and four legs.
+Therefore, the cloud is obviously a real dog.
+This is obviously a simplified way
+to describe an AI hallucination,
+but this is what tends to occur
+when we have this type of data misinterpretation.
+These are also not very unusual to find,
+and you may have seen an AI hallucination
+when performing your own tests with an AI engine.
+A practical example of an AI hallucination
+was when Google and Microsoft announced
+their new AI technologies.
+Google announced Google Bard,
+this is now Google Gemini,
+and Microsoft introduced Microsoft Bing Chat.
+Both of these engines provided a summary of some articles
+that had completely wrong information inside of them.
+Unfortunately, this hallucination
+was in the announcement that Google made
+regarding their new AI engine.
+This AI engine took an input that said,
+what new discoveries from the James Webb Space Telescope
+can I tell my nine-year-old about?
+And then it gave a number of bullets
+that you could use to help describe
+the James Webb Space Telescope and its findings.
+Unfortunately, one of these findings
+was that the James Webb Space Telescope
+took the very first picture of a planet
+outside of our own solar system.
+Bruce McIntosh replied to this and said,
+speaking as someone who imaged an exoplanet
+14 years before the JW Space Telescope was launched,
+it feels like you should find a better example.
+This points out that even the best AI engines
+can suffer from an AI hallucination.
+Behind the scenes, artificial intelligence
+is creating a conclusion using a model that is provided.
+And sometimes it makes the wrong conclusion
+based on the model that it was given.
+And researchers will often perform tests of an AI engine
+to see how accurate it might be.
+They will get predictions from the AI,
+and then they will compare those predictions
+to known test data.
+One of these accuracy tests was done by Originality.ai.
+They did an AI fact-checking accuracy study
+in August of 2024,
+and you can read through the study yourself
+at the URL that you see here.
+They evaluated their own AI
+and a number of other AIs that were currently available.
+The Originality.ai engine got a 72.3% accuracy,
+GPT-4 got a 64.9% accuracy rating,
+and GPT-3.5 got a 58.6% accuracy rating.
+As you can see, our current iterations of AI
+are far from perfect,
+and in some cases fall well under
+what most people think AI is able to do.
+There's been a lot of work made
+on both public AIs and private AIs.
+A public AI would be one that is publicly available
+on the internet.
+Things like ChatGPT or Google Gemini
+are good examples of a public AI.
+But some companies are creating their own AI engines,
+and these would be engines that are private
+to that organization.
+These would commonly have proprietary company data,
+and the organization has complete control
+over the modeling used
+for that artificial intelligence engine.
+The decision on whether you use a public AI
+or a private AI may be based on data security.
+Whenever you put information into an AI engine,
+there is a possibility that that data could be retrieved.
+And if that data is sensitive
+or contains private information,
+you could be putting that information available
+for anyone on the internet to see.
+We've also seen cases where an AI
+was able to provide passwords,
+encryption keys, certificate details,
+and other sensitive information.
+Of course, if you're running a private AI,
+only people within that organization
+have access to that proprietary data,
+and therefore it limits the scope of any type of breach.
+There's also quite a big difference
+between a public AI and a private AI
+when it comes to how much data they're able to evaluate.
+Obviously, a private AI is only going to have data
+from a single entity,
+but a public AI is collecting data
+from everybody who's on the internet.
+In those cases, it may be that your public AI
+is more accurate than the private AI
+because the public AI has access to so much more data.
+But it is that large amount of data
+that does create concerns about privacy.
+Some of that information that's being stored
+by a public AI is information about you.
+The AI knows where you live.
+It might even know your previous addresses,
+has information about your habits
+and things that you do on the internet,
+and it may have details about any memberships
+and groups that you belong to.
+Let's say you're applying for a job.
+What type of summary would the AI create of you,
+and what would be contained within your profile?
+And I'll see you.

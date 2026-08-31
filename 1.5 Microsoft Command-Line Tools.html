@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>1.5 Microsoft Command-Line Tools</title>
+<style>
+  :root{
+    --bg:#0c0c0c;
+    --fg:#cccccc;
+    --fg-bright:#ffffff;
+    --accent:#f2f2f2;
+    --err:#e05f5f;
+    --titlebar:#1e1e1e;
+    --border:#2b2b2b;
+  }
+  html,body{
+    height:100%;
+    margin:0;
+    background:#3a3a3a;
+    font-family:"Cascadia Mono","Consolas","Lucida Console",monospace;
+  }
+  .app{
+    min-height:100%;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    gap:16px;
+    padding:20px;
+    box-sizing:border-box;
+    flex-wrap:wrap;
+  }
+  .window{
+    width:800px;
+    max-width:100%;
+    height:640px;
+    max-height:92vh;
+    background:var(--bg);
+    border:1px solid #000;
+    box-shadow:0 20px 60px rgba(0,0,0,.5);
+    display:flex;
+    flex-direction:column;
+    border-radius:0;
+    overflow:hidden;
+    flex-shrink:0;
+  }
+  .titlebar{
+    background:var(--titlebar);
+    color:#ddd;
+    font-family:"Segoe UI",Tahoma,sans-serif;
+    font-size:12.5px;
+    padding:6px 8px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    user-select:none;
+    border-bottom:1px solid var(--border);
+  }
+  .titlebar .left{
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .titlebar .icon{
+    width:14px;height:14px;
+    background:#e8e8e8;
+    display:inline-block;
+    -webkit-mask-size:contain;
+    mask-size:contain;
+    border-radius:2px;
+    background:linear-gradient(135deg,#111 0 50%, #444 50% 100%);
+  }
+  .titlebar .btns{
+    display:flex;
+  }
+  .titlebar .btns span{
+    width:28px;
+    height:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    color:#ccc;
+  }
+  .titlebar .btns span:hover{
+    background:#333;
+  }
+  .titlebar .btns span.close:hover{
+    background:#c0392b;
+    color:#fff;
+  }
+  .screen{
+    flex:1;
+    padding:6px 8px;
+    overflow-y:auto;
+    font-size:14px;
+    line-height:1.35;
+    color:var(--fg);
+    white-space:pre-wrap;
+    word-break:break-word;
+    cursor:text;
+  }
+  .screen::-webkit-scrollbar{ width:10px; }
+  .screen::-webkit-scrollbar-track{ background:#111; }
+  .screen::-webkit-scrollbar-thumb{ background:#3a3a3a; }
+  .line{ min-height:1.35em; }
+  .prompt-line{
+    display:flex;
+    flex-wrap:wrap;
+  }
+  .prompt-prefix{
+    color:var(--fg);
+    white-space:pre;
+  }
+  .cur-input{
+    outline:none;
+    color:var(--fg-bright);
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+  .cursor{
+    display:inline-block;
+    width:8px;
+    height:15px;
+    background:var(--fg-bright);
+    vertical-align:text-bottom;
+    animation:blink 1s step-end infinite;
+    margin-left:1px;
+  }
+  @keyframes blink{
+    0%,50%{opacity:1;}
+    51%,100%{opacity:0;}
+  }
+  .err{ color:var(--fg); }
+  .dim{ color:#999; }
+  .hidden-input{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+    width:1px;height:1px;
+  }
+  a.fake{ color:#9cdcfe; text-decoration:none; }
+
+  /* ---- Reference panel ---- */
+  .reference{
+    width:420px;
+    max-width:100%;
+    height:640px;
+    max-height:92vh;
+    background:#181818;
+    border:1px solid #000;
+    box-shadow:0 20px 60px rgba(0,0,0,.5);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    flex-shrink:0;
+    color:#ddd;
+  }
+  .reference .ref-titlebar{
+    background:var(--titlebar);
+    color:#ddd;
+    font-family:"Segoe UI",Tahoma,sans-serif;
+    font-size:12.5px;
+    padding:8px 10px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .reference .ref-titlebar .dot{
+    width:8px;height:8px;border-radius:50%;background:#4ec9b0;
+  }
+  .ref-search{
+    padding:8px 10px;
+    border-bottom:1px solid var(--border);
+    background:#151515;
+  }
+  .ref-search input{
+    width:100%;
+    box-sizing:border-box;
+    background:#0c0c0c;
+    border:1px solid #333;
+    color:#eee;
+    font-family:"Segoe UI",Tahoma,sans-serif;
+    font-size:12.5px;
+    padding:7px 9px;
+    outline:none;
+  }
+  .ref-search input:focus{
+    border-color:#4ec9b0;
+  }
+  .ref-list{
+    flex:1;
+    overflow-y:auto;
+    padding:4px 0 12px;
+  }
+  .ref-list::-webkit-scrollbar{ width:10px; }
+  .ref-list::-webkit-scrollbar-track{ background:#111; }
+  .ref-list::-webkit-scrollbar-thumb{ background:#333; }
+  .ref-item{
+    padding:10px 14px;
+    border-bottom:1px solid #232323;
+    cursor:pointer;
+  }
+  .ref-item:hover{
+    background:#212121;
+  }
+  .ref-item .ref-name{
+    font-family:"Cascadia Mono","Consolas",monospace;
+    font-size:13.5px;
+    color:#4ec9b0;
+    font-weight:600;
+    letter-spacing:.3px;
+  }
+  .ref-item .ref-example{
+    font-family:"Cascadia Mono","Consolas",monospace;
+    font-size:12px;
+    color:#dcdcaa;
+    margin-top:4px;
+  }
+  .ref-item .ref-example::before{
+    content:"› ";
+    color:#666;
+  }
+  .ref-item .ref-desc{
+    font-family:"Segoe UI",Tahoma,sans-serif;
+    font-size:12px;
+    color:#aaa;
+    margin-top:5px;
+    line-height:1.45;
+  }
+  .ref-empty{
+    padding:24px 14px;
+    color:#777;
+    font-family:"Segoe UI",Tahoma,sans-serif;
+    font-size:12.5px;
+    text-align:center;
+  }
+  @media (max-width:900px){
+    .window, .reference{ width:100%; height:70vh; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="window" id="window">
+    <div class="titlebar">
+      <div class="left">
+        <span class="icon"></span>
+        <span>Command Prompt</span>
+      </div>
+      <div class="btns">
+        <span title="Minimize">&#x2013;</span>
+        <span title="Maximize">&#x25a1;</span>
+        <span class="close" title="Close">&times;</span>
+      </div>
+    </div>
+    <div class="screen" id="screen" tabindex="0"></div>
+  </div>
+
+  <div class="reference" id="reference">
+    <div class="ref-titlebar">
+      <span class="dot"></span>
+      <span>Command Index</span>
+    </div>
+    <div class="ref-search">
+      <input type="text" id="ref-search-input" placeholder="Filter commands...">
+    </div>
+    <div class="ref-list" id="ref-list"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const screen = document.getElementById('screen');
+  const HOSTNAME = "DESKTOP-7QK2P41";
+  const USERNAME = "jsmith";
+  const DOMAIN = HOSTNAME;
+
+  // ---------- Virtual filesystem ----------
+  // Represented as nested objects. Folders map name -> {type:'dir', children:{...}} or {type:'file', size:n}
+  function dir(children){ return {type:'dir', children: children||{}}; }
+  function file(size){ return {type:'file', size:size||0}; }
+
+  const fsRoot = {
+    "C:": dir({
+      "Users": dir({
+        "jsmith": dir({
+          "Desktop": dir({
+            "Notes.txt": file(1240),
+          }),
+          "Documents": dir({
+            "Report.docx": file(35840),
+            "Budget.xlsx": file(20480),
+          }),
+          "Downloads": dir({
+            "installer.exe": file(15728640),
+          }),
+          "Pictures": dir({}),
+        }),
+        "Public": dir({}),
+      }),
+      "Windows": dir({
+        "System32": dir({
+          "drivers": dir({}),
+          "cmd.exe": file(289792),
+          "notepad.exe": file(196608),
+        }),
+      }),
+      "Program Files": dir({}),
+      "Program Files (x86)": dir({}),
+    })
+  };
+
+  let cwd = ["C:", "Users", "jsmith"]; // path array
+
+  function getNode(path){
+    let node = fsRoot[path[0]];
+    for(let i=1;i<path.length;i++){
+      if(!node || node.type!=='dir' || !node.children[path[i]]) return null;
+      node = node.children[path[i]];
+    }
+    return node;
+  }
+
+  function pathStr(path){
+    if(path.length===1) return path[0] + "\\";
+    return path.join("\\");
+  }
+
+  // ---------- Output helpers ----------
+  function printLine(text, cls){
+    const div = document.createElement('div');
+    div.className = 'line' + (cls ? ' '+cls : '');
+    div.textContent = text === undefined ? "" : text;
+    screen.appendChild(div);
+  }
+  function printRaw(html, cls){
+    const div = document.createElement('div');
+    div.className = 'line' + (cls ? ' '+cls : '');
+    div.innerHTML = html;
+    screen.appendChild(div);
+  }
+  function printBlock(text){
+    text.split("\n").forEach(l=>printLine(l));
+  }
+  function scrollDown(){
+    screen.scrollTop = screen.scrollHeight;
+  }
+
+  function getPrompt(){
+    return pathStr(cwd) + ">";
+  }
+
+  // ---------- Command history ----------
+  let history = [];
+  let histIndex = -1;
+
+  // ---------- Command implementations ----------
+  function randInt(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+  function randIp(){ return `192.168.1.${randInt(2,254)}`; }
+
+  const commands = {};
+
+  commands['help'] = function(args){
+    printBlock(
+`For a list of supported commands in this simulator, try one of:
+  CD, CHDIR, DIR, IPCONFIG, PING, NETSTAT, NSLOOKUP, NET USE, NET USER,
+  TRACERT, PATHPING, CHKDSK, FORMAT, DISKPART, MD, RMDIR, ROBOCOPY,
+  HOSTNAME, WINVER, WHOAMI, GPUPDATE, GPRESULT, SFC, CLS, EXIT
+Type "[command] /?" for command-specific help.`);
+  };
+
+  commands['cls'] = function(){
+    screen.innerHTML = "";
+  };
+
+  commands['exit'] = function(){
+    printLine("(This simulated session cannot be closed. Type another command to continue.)", 'dim');
+  };
+
+  commands['hostname'] = function(){
+    printLine(HOSTNAME);
+  };
+
+  commands['winver'] = function(){
+    printBlock(
+`Microsoft Windows
+Version 23H2 (OS Build 22631.4460)
+
+Simulated for training/demo purposes only.`);
+  };
+
+  commands['whoami'] = function(args){
+    if(args.includes('/all')){
+      printBlock(
+`USER INFORMATION
+------------------
+
+User Name          SID
+=================== ==============================================
+${DOMAIN.toLowerCase()}\\${USERNAME}   S-1-5-21-1801674531-2000478354-682003330-1001
+
+GROUP INFORMATION
+------------------
+
+Group Name                                Type             SID
+========================================== ================ ===============
+Everyone                                   Well-known group S-1-1-0
+BUILTIN\\Administrators                     Alias            S-1-5-32-544
+BUILTIN\\Users                              Alias            S-1-5-32-545
+NT AUTHORITY\\INTERACTIVE                   Well-known group S-1-5-4
+NT AUTHORITY\\Authenticated Users           Well-known group S-1-5-11
+
+PRIVILEGES INFORMATION
+----------------------
+
+Privilege Name                Description                               State
+============================== ========================================= ========
+SeShutdownPrivilege            Shut down the system                     Disabled
+SeChangeNotifyPrivilege        Bypass traverse checking                 Enabled
+SeUndockPrivilege               Remove computer from docking station     Disabled`);
+    } else if(args.includes('/upn')){
+      printLine(`${USERNAME}@${DOMAIN.toLowerCase()}.local`);
+    } else {
+      printLine(`${DOMAIN.toLowerCase()}\\${USERNAME}`);
+    }
+  };
+
+  commands['ipconfig'] = function(args){
+    if(args.includes('/all')){
+      printBlock(
+`Windows IP Configuration
+
+   Host Name . . . . . . . . . . . : ${HOSTNAME}
+   Primary Dns Suffix  . . . . . . :
+   Node Type . . . . . . . . . . . : Hybrid
+   IP Routing Enabled. . . . . . . : No
+   WINS Proxy Enabled . . . . . . . : No
+
+Wireless LAN adapter Wi-Fi:
+
+   Connection-specific DNS Suffix  . :
+   Description . . . . . . . . . . . : Intel(R) Wi-Fi 6 AX201 160MHz
+   Physical Address. . . . . . . . . : 3C-52-82-1A-9F-6B
+   DHCP Enabled. . . . . . . . . . . : Yes
+   Autoconfiguration Enabled . . . . : Yes
+   IPv4 Address. . . . . . . . . . . : 192.168.1.42(Preferred)
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Lease Obtained. . . . . . . . . . : Monday, August 24, 2026 7:12:03 AM
+   Lease Expires . . . . . . . . . . : Tuesday, August 25, 2026 7:12:03 AM
+   Default Gateway . . . . . . . . . : 192.168.1.1
+   DHCP Server . . . . . . . . . . . : 192.168.1.1
+   DNS Servers . . . . . . . . . . . : 1.1.1.1
+                                       8.8.8.8
+   NetBIOS over Tcpip. . . . . . . . : Enabled
+
+Ethernet adapter Ethernet:
+
+   Media State . . . . . . . . . . . : Media disconnected
+   Connection-specific DNS Suffix  . :`);
+    } else {
+      printBlock(
+`Windows IP Configuration
+
+Wireless LAN adapter Wi-Fi:
+
+   Connection-specific DNS Suffix  . :
+   IPv4 Address. . . . . . . . . . . : 192.168.1.42
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . : 192.168.1.1
+
+Ethernet adapter Ethernet:
+
+   Media State . . . . . . . . . . . : Media disconnected
+   Connection-specific DNS Suffix  . :`);
+    }
+  };
+
+  function doPing(target, count){
+    return new Promise(resolve=>{
+      printLine(`Pinging ${target} [${target.match(/^\d/) ? target : randIp()}] with 32 bytes of data:`);
+      let sent=0, received=0, lost=0, times=[];
+      let i=0;
+      function step(){
+        if(i>=count){
+          const min = Math.min(...times), max=Math.max(...times);
+          const avg = Math.round(times.reduce((a,b)=>a+b,0)/times.length);
+          printLine("");
+          printLine(`Ping statistics for ${target}:`);
+          printLine(`    Packets: Sent = ${sent}, Received = ${received}, Lost = ${lost} (${lost>0?Math.round(lost/sent*100):0}% loss),`);
+          printLine(`Approximate round trip times in milli-seconds:`);
+          printLine(`    Minimum = ${min}ms, Maximum = ${max}ms, Average = ${avg}ms`);
+          resolve();
+          return;
+        }
+        sent++;
+        const dropped = Math.random() < 0.05;
+        if(dropped){
+          lost++;
+          printLine("Request timed out.");
+        } else {
+          received++;
+          const t = randInt(1,45);
+          times.push(t);
+          printLine(`Reply from ${target.match(/^\d/) ? target : randIp()}: bytes=32 time=${t}ms TTL=64`);
+        }
+        i++;
+        setTimeout(step, 220);
+      }
+      step();
+    });
+  }
+
+  commands['ping'] = async function(args){
+    if(args.includes('/?')){
+      printBlock(
+`Usage: ping [-t] [-n count] target_name
+
+Options:
+    -t             Ping the specified host until stopped.
+    -n count       Number of echo requests to send. (default 4)`);
+      return;
+    }
+    let target = args.find(a=>!a.startsWith('-'));
+    if(!target){ printLine("PING: bad argument."); return; }
+    let count = 4;
+    const nIdx = args.indexOf('-n');
+    if(nIdx>=0 && args[nIdx+1]) count = parseInt(args[nIdx+1])||4;
+    await doPing(target, count);
+  };
+
+  commands['tracert'] = async function(args){
+    if(args.includes('/?')){
+      printBlock(`Usage: tracert [-d] [-h maximum_hops] target_name`);
+      return;
+    }
+    const target = args.find(a=>!a.startsWith('-'));
+    if(!target){ printLine("Usage: tracert target_name"); return; }
+    printLine(`Tracing route to ${target} over a maximum of 30 hops:`);
+    printLine("");
+    const hops = randInt(4,9);
+    for(let h=1; h<=hops; h++){
+      await new Promise(r=>setTimeout(r,150));
+      const isLast = h===hops;
+      const ip = isLast ? (target.match(/^\d/) ? target : randIp()) : randIp();
+      const t1=randInt(1,40), t2=randInt(1,40), t3=randInt(1,40);
+      printLine(`  ${h}    ${t1} ms    ${t2} ms    ${t3} ms  ${ip}`);
+    }
+    printLine("");
+    printLine("Trace complete.");
+  };
+
+  commands['pathping'] = async function(args){
+    const target = args.find(a=>!a.startsWith('-'));
+    if(!target){ printLine("Usage: pathping target_name"); return; }
+    printLine(`Tracing route to ${target} over a maximum of 30 hops:`);
+    const hops = randInt(3,6);
+    let ips=[];
+    for(let h=0; h<hops; h++){
+      await new Promise(r=>setTimeout(r,100));
+      const ip = (h===hops-1) ? (target.match(/^\d/) ? target : randIp()) : randIp();
+      ips.push(ip);
+      printLine(`  ${h}  ${ip}`);
+    }
+    printLine("Computing statistics for " + (randInt(50,300)) + " seconds...");
+    await new Promise(r=>setTimeout(r,500));
+    printLine("            Source to Here   This Node/Link");
+    printLine("Hop  RTT    Lost/Sent = Pct  Lost/Sent = Pct  Address");
+    ips.forEach((ip,idx)=>{
+      const rtt = randInt(1,40);
+      const lost = randInt(0,1);
+      printLine(`  ${idx}                                           ${ip}`);
+      printLine(`                    ${rtt}ms    ${lost}/ 100 =  ${lost}%     ${lost}/ 100 =  ${lost}%   `);
+    });
+  };
+
+  commands['netstat'] = function(args){
+    if(args.includes('/?')){
+      printBlock(
+`Displays protocol statistics and current TCP/IP network connections.
+
+  -a  Displays all connections and listening ports.
+  -b  Displays the executable involved in creating each connection.
+  -n  Displays addresses and port numbers in numerical form.`);
+      return;
+    }
+    const conns = [
+      ["TCP","192.168.1.42:52104","142.250.72.14:443","ESTABLISHED","chrome.exe"],
+      ["TCP","192.168.1.42:52107","20.190.159.4:443","ESTABLISHED","msedge.exe"],
+      ["TCP","192.168.1.42:139","0.0.0.0:0","LISTENING","System"],
+      ["TCP","127.0.0.1:5354","0.0.0.0:0","LISTENING","svchost.exe"],
+      ["TCP","192.168.1.42:52130","104.18.32.47:443","TIME_WAIT","-"],
+      ["UDP","192.168.1.42:68","*:*","-","svchost.exe"],
+    ];
+    printLine("");
+    printLine("Active Connections");
+    printLine("");
+    const showB = args.includes('-b');
+    const header = "  Proto  Local Address          Foreign Address        State" + (showB ? "" : "");
+    printLine(header);
+    conns.forEach(c=>{
+      let [proto, local, foreign, state, exe] = c;
+      let stateStr = proto==='UDP' ? "" : state;
+      printLine(`  ${proto.padEnd(6)} ${local.padEnd(22)} ${foreign.padEnd(22)} ${stateStr}`);
+      if(showB) printLine(`  [${exe}]`);
+    });
+  };
+
+  commands['nslookup'] = async function(args){
+    const target = args.find(a=>!a.startsWith('-'));
+    if(!target){
+      printLine("Default Server:  one.one.one.one");
+      printLine("Address:  1.1.1.1");
+      printLine("");
+      return;
+    }
+    await new Promise(r=>setTimeout(r,300));
+    printLine("Server:  one.one.one.one");
+    printLine("Address:  1.1.1.1");
+    printLine("");
+    printLine("Non-authoritative answer:");
+    printLine(`Name:    ${target}`);
+    printLine(`Address: ${randIp().replace('192.168.1', randInt(10,220)+'.'+randInt(0,255))}`);
+  };
+
+  commands['net'] = function(args){
+    const sub = (args[0]||'').toLowerCase();
+    if(sub === 'use'){
+      if(args.includes('/?')){
+        printBlock(`Connects/disconnects a computer to a shared resource. Syntax: net use [drive:] \\\\computer\\share`);
+        return;
+      }
+      if(args.length<=1){
+        printBlock(
+`New connections will be remembered.
+
+Status       Local     Remote                    Network
+
+-------------------------------------------------------------------------
+OK           Z:        \\\\FILESERVER\\Shared        Microsoft Windows Network
+OK           Y:        \\\\NAS01\\Backups            Microsoft Windows Network
+The command completed successfully.`);
+      } else {
+        printLine("The command completed successfully.");
+      }
+      return;
+    }
+    if(sub === 'user'){
+      if(args.includes('/?')){
+        printBlock(`Adds/modifies/views user accounts. Syntax: net user [username [password]] [/add] [/delete]`);
+        return;
+      }
+      if(args.length<=1){
+        printBlock(
+`User accounts for \\\\${HOSTNAME}
+
+-------------------------------------------------------------------------
+Administrator            DefaultAccount           Guest
+${USERNAME}                   WDAGUtilityAccount
+The command completed successfully.`);
+      } else {
+        printBlock(
+`User name                    ${args[1]||USERNAME}
+Full Name
+Comment
+User's comment
+Country/region code           000 (System Default)
+Account active                Yes
+Account expires               Never
+
+Password last set             8/1/2026 9:14:02 AM
+Password expires              Never
+Password changeable           8/1/2026 9:14:02 AM
+Password required             Yes
+Local Group Memberships       *Users
+The command completed successfully.`);
+      }
+      return;
+    }
+    printLine("The syntax of this command is incorrect.");
+  };
+
+  commands['chkdsk'] = function(args){
+    if(args.includes('/?')){
+      printBlock(
+`Checks a disk and displays a status report.
+
+  /F   Fixes errors on the disk.
+  /R   Locates bad sectors and recovers readable information. (implies /F)`);
+      return;
+    }
+    const fix = args.includes('/f') || args.includes('/F');
+    const recover = args.includes('/r') || args.includes('/R');
+    printBlock(
+`The type of the file system is NTFS.
+Volume label is Windows.
+
+Stage 1: Examining basic file system structure ...
+  256000 file records processed.
+File verification completed.
+
+Stage 2: Examining file name linkage ...
+  312480 index entries processed.
+Index verification completed.
+
+Stage 3: Examining security descriptors ...
+Security descriptor verification completed.
+${recover ? "\nStage 4: Looking for bad clusters in user file data ...\n  256000 files processed.\n\nStage 5: Looking for bad, free clusters ...\n  8912345 free clusters processed." : ""}
+
+Windows has ${fix ? "scanned the file system and repaired 0 issues" : "checked the file system and found no problems"}.
+
+  488386047 KB total disk space.
+  102345678 KB in 184213 files.
+     102400 KB in 45219 indexes.
+          0 KB in bad sectors.
+     356214 KB in use by the system.
+  385577756 KB available on disk.
+
+      4096 bytes in each allocation unit.
+  122096511 total allocation units on disk.
+  96394439 allocation units available on disk.`);
+  };
+
+  commands['format'] = function(args){
+    if(args.includes('/?')){
+      printBlock(`Formats a disk for use with Windows. Usage: format volume [/FS:file-system] [/Q]`);
+      return;
+    }
+    const vol = args.find(a=>!a.startsWith('/'));
+    printBlock(
+`WARNING, ALL DATA ON NON-REMOVABLE DISK
+DRIVE ${vol ? vol.toUpperCase() : 'C:'} WILL BE LOST!
+Proceed with Format (Y/N)?`);
+    printLine("");
+    printLine("(This is a simulator — format has been safely blocked. No data was affected.)", 'dim');
+  };
+
+  commands['diskpart'] = function(args){
+    printBlock(
+`Microsoft DiskPart version 10.0.22631
+
+Copyright (C) Microsoft Corporation.
+On computer: ${HOSTNAME}
+
+(This is a simulator — interactive DISKPART sessions are not supported.
+ Use "list disk" / "list volume" style commands are unavailable here.)
+
+DISKPART>`);
+  };
+
+  commands['robocopy'] = function(args){
+    if(args.includes('/?')){
+      printBlock(`Usage: robocopy source destination [file[ ...]] [options]`);
+      return;
+    }
+    const src = args[0] || "C:\\Source";
+    const dst = args[1] || "D:\\Destination";
+    printBlock(
+`-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Robust File Copy for Windows
+-------------------------------------------------------------------------------
+
+  Started : ${new Date().toDateString()} ${new Date().toLocaleTimeString()}
+   Source : ${src}\\
+     Dest : ${dst}\\
+
+    Files : *.*
+
+  Options : *.* /DCOPY:DA /COPY:DAT /R:1000000 /W:30
+
+------------------------------------------------------------------------------
+
+	                       ${randInt(3,40)}	${src}\\
+	100%        New File  		    ${randInt(1000,900000)}	document1.docx
+	100%        New File  		    ${randInt(1000,900000)}	report.pdf
+	100%        New File  		    ${randInt(1000,900000)}	notes.txt
+
+------------------------------------------------------------------------------
+
+               Total    Copied   Skipped  Mismatch    FAILED    Extras
+    Dirs :         1         1         0         0         0         0
+   Files :         3         3         0         0         0         0
+   Bytes :   4.2 m    4.2 m         0         0         0         0
+   Times :   0:00:01   0:00:01                       0:00:00   0:00:00
+
+   Speed :           4200000 Bytes/sec.
+   Speed :             240.317 MegaBytes/min.
+
+   Ended : ${new Date().toDateString()} ${new Date().toLocaleTimeString()}`);
+  };
+
+  commands['gpupdate'] = function(args){
+    printBlock(
+`Updating policy...
+
+Computer Policy update has completed successfully.
+User Policy update has completed successfully.`);
+  };
+
+  commands['gpresult'] = function(args){
+    if(args.includes('/r')){
+      printBlock(
+`Microsoft (R) Windows (R) Operating System Group Policy Result tool v10.0.22631
+
+Created on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}
+
+RSOP data for ${DOMAIN}\\${USERNAME} on ${HOSTNAME} : Logging Mode
+-------------------------------------------------------------
+
+OS Configuration:            Standalone Workstation
+OS Version:                  10.0.22631
+Site Name:                   N/A
+Roaming Profile:             N/A
+Local Profile:                C:\\Users\\${USERNAME}
+Connected over a slow link?: No
+
+COMPUTER SETTINGS
+------------------
+    CN=${HOSTNAME}
+    Last time Group Policy was applied: Today at ${new Date().toLocaleTimeString()}
+    Group Policy was applied from:      N/A (local)
+    Applied Group Policy Objects
+        -----------------------------
+        Local Group Policy
+
+USER SETTINGS
+------------------
+    CN=${USERNAME}
+    Last time Group Policy was applied: Today at ${new Date().toLocaleTimeString()}
+    Applied Group Policy Objects
+        -----------------------------
+        Local Group Policy`);
+    } else {
+      printBlock(`Usage: gpresult [/r] [/h <filename>]  — run "gpresult /r" for a summary report.`);
+    }
+  };
+
+  commands['sfc'] = async function(args){
+    if(!args.includes('/scannow')){
+      printBlock(
+`Usage: sfc [/scannow] [/verifyonly]
+
+/SCANNOW  Scans integrity of all protected system files and repairs
+          files with problems when possible.`);
+      return;
+    }
+    printLine("Beginning system scan.  This process will take some time.");
+    await new Promise(r=>setTimeout(r,900));
+    for(let p of [10,34,58,79,100]){
+      printLine(`Verification ${p}% complete.`);
+      await new Promise(r=>setTimeout(r,350));
+      // overwrite previous line for realism is complex in this simple renderer; just print progress lines
+    }
+    printLine("");
+    printLine("Windows Resource Protection did not find any integrity violations.");
+  };
+
+  // --- Filesystem-aware commands ---
+  commands['dir'] = function(args){
+    const node = getNode(cwd);
+    printLine(" Volume in drive C is Windows");
+    printLine(" Volume Serial Number is 4E2C-8F1A");
+    printLine("");
+    printLine(` Directory of ${pathStr(cwd)}`);
+    printLine("");
+    const now = new Date();
+    const dstr = now.toLocaleDateString('en-US', {month:'2-digit', day:'2-digit', year:'numeric'});
+    const tstr = now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:true});
+    let dirCount=0, fileCount=0, totalSize=0;
+    printLine(`${dstr}  ${tstr}    <DIR>          .`);
+    printLine(`${dstr}  ${tstr}    <DIR>          ..`);
+    const entries = Object.entries(node.children).sort((a,b)=>{
+      if((a[1].type==='dir') !== (b[1].type==='dir')) return a[1].type==='dir' ? -1 : 1;
+      return a[0].localeCompare(b[0]);
+    });
+    if(entries.length===0){
+      // nothing
+    }
+    entries.forEach(([name,n])=>{
+      if(n.type==='dir'){
+        dirCount++;
+        printLine(`${dstr}  ${tstr}    <DIR>          ${name}`);
+      } else {
+        fileCount++;
+        totalSize += n.size;
+        printLine(`${dstr}  ${tstr}    ${String(n.size).padStart(14,' ')} ${name}`);
+      }
+    });
+    printLine(`               ${fileCount} File(s)     ${totalSize.toLocaleString()} bytes`);
+    printLine(`               ${dirCount+2} Dir(s)  385,577,756,672 bytes free`);
+  };
+
+  function resolvePath(argPath){
+    // returns new path array or null if invalid
+    let path = cwd.slice();
+    if(!argPath || argPath==='.') return path;
+    let parts = argPath.replace(/\//g,'\\').split('\\').filter(p=>p!=='');
+    // handle drive letter start
+    if(/^[A-Za-z]:$/.test(parts[0])){
+      const drive = parts[0].toUpperCase();
+      if(!fsRoot[drive]) return {error:`The system cannot find the drive specified.`};
+      path = [drive];
+      parts = parts.slice(1);
+    }
+    for(const part of parts){
+      if(part==='.') continue;
+      if(part==='..'){
+        if(path.length>1) path.pop();
+        continue;
+      }
+      const node = getNode(path);
+      if(!node || node.type!=='dir' || !node.children[part] ){
+        // try case-insensitive match
+        let match = null;
+        if(node && node.type==='dir'){
+          match = Object.keys(node.children).find(k=>k.toLowerCase()===part.toLowerCase());
+        }
+        if(match){
+          path.push(match);
+          continue;
+        }
+        return {error:`The system cannot find the path specified.`};
+      }
+      if(node.children[part].type!=='dir'){
+        return {error:`The directory name is invalid.`};
+      }
+      path.push(part);
+    }
+    return path;
+  }
+
+  commands['cd'] = commands['chdir'] = function(args){
+    if(args.includes('/?')){
+      printBlock(
+`Displays or changes the current directory.
+
+  CD [drive:][path]
+  CD ..     Moves to the directory that is one level up.
+
+  Type CD drive: to display the current directory in the specified drive.
+  Type CD without parameters to display current drive and directory.`);
+      return;
+    }
+    if(args.length===0){
+      printLine(pathStr(cwd));
+      return;
+    }
+    const target = args.join(' ');
+    const result = resolvePath(target);
+    if(Array.isArray(result)){
+      cwd = result;
+    } else {
+      printLine(`The system cannot find the path specified.`);
+    }
+  };
+
+  commands['md'] = commands['mkdir'] = function(args){
+    if(args.includes('/?')){
+      printBlock(`Creates a directory. Usage: MD [drive:]path`);
+      return;
+    }
+    if(args.length===0){ printLine("The syntax of the command is incorrect."); return; }
+    const target = args.join(' ');
+    let parts = target.replace(/\//g,'\\').split('\\').filter(p=>p!=='');
+    let path = cwd.slice();
+    if(/^[A-Za-z]:$/.test(parts[0])){
+      const drive = parts[0].toUpperCase();
+      if(!fsRoot[drive]){ printLine("The system cannot find the path specified."); return; }
+      path=[drive]; parts=parts.slice(1);
+    }
+    for(let i=0;i<parts.length;i++){
+      const part = parts[i];
+      const node = getNode(path);
+      if(!node || node.type!=='dir'){ printLine("The system cannot find the path specified."); return; }
+      if(i===parts.length-1){
+        if(node.children[part]){
+          printLine(`A subdirectory or file ${target} already exists.`);
+          return;
+        }
+        node.children[part] = dir({});
+        path.push(part);
+      } else {
+        if(!node.children[part] || node.children[part].type!=='dir'){
+          printLine("The system cannot find the path specified.");
+          return;
+        }
+        path.push(part);
+      }
+    }
+  };
+
+  commands['rmdir'] = commands['rd'] = function(args){
+    if(args.includes('/?')){
+      printBlock(`Removes (deletes) a directory. Usage: RMDIR [drive:]path`);
+      return;
+    }
+    const positional = args.filter(a=>!a.startsWith('/'));
+    if(positional.length===0){ printLine("The syntax of the command is incorrect."); return; }
+    const target = positional.join(' ');
+    const result = resolvePath(target);
+    if(!Array.isArray(result)){
+      printLine("The system cannot find the file specified.");
+      return;
+    }
+    if(result.length<=1){ printLine("Access is denied."); return; }
+    const node = getNode(result);
+    if(!node || node.type!=='dir'){ printLine("The directory name is invalid."); return; }
+    if(Object.keys(node.children).length>0 && !args.includes('/s')){
+      printLine("The directory is not empty.");
+      return;
+    }
+    const parentPath = result.slice(0,-1);
+    const name = result[result.length-1];
+    const parent = getNode(parentPath);
+    delete parent.children[name];
+  };
+
+  // ---------- Command dispatch ----------
+  function tokenize(input){
+    // simple tokenizer respecting quotes
+    const tokens = [];
+    let cur = '';
+    let inQuotes = false;
+    for(let i=0;i<input.length;i++){
+      const c = input[i];
+      if(c === '"'){ inQuotes = !inQuotes; continue; }
+      if(c === ' ' && !inQuotes){
+        if(cur){ tokens.push(cur); cur=''; }
+      } else {
+        cur += c;
+      }
+    }
+    if(cur) tokens.push(cur);
+    return tokens;
+  }
+
+  async function runCommand(raw){
+    const trimmed = raw.trim();
+    if(trimmed==='') return;
+    const tokens = tokenize(trimmed);
+    let cmdName = tokens[0].toLowerCase();
+    let args = tokens.slice(1);
+
+    // handle "command /?" generic help forwarding is done inside each command
+    if(commands[cmdName]){
+      try{
+        await commands[cmdName](args);
+      } catch(e){
+        printLine("An unexpected error occurred in the simulator: " + e.message);
+      }
+    } else {
+      printLine(`'${tokens[0]}' is not recognized as an internal or external command,`);
+      printLine(`operable program or batch file.`);
+    }
+  }
+
+  // ---------- Input line rendering ----------
+  let currentInputText = '';
+
+  function renderPromptLine(){
+    const lineDiv = document.createElement('div');
+    lineDiv.className = 'line prompt-line';
+    lineDiv.id = 'active-line';
+    const prefix = document.createElement('span');
+    prefix.className = 'prompt-prefix';
+    prefix.textContent = getPrompt() + ' ';
+    const inputSpan = document.createElement('span');
+    inputSpan.className = 'cur-input';
+    inputSpan.id = 'cur-input-span';
+    const cursor = document.createElement('span');
+    cursor.className = 'cursor';
+    lineDiv.appendChild(prefix);
+    lineDiv.appendChild(inputSpan);
+    lineDiv.appendChild(cursor);
+    screen.appendChild(lineDiv);
+    scrollDown();
+  }
+
+  function updateInputSpan(){
+    const span = document.getElementById('cur-input-span');
+    if(span) span.textContent = currentInputText;
+    scrollDown();
+  }
+
+  function removeActiveLine(){
+    const el = document.getElementById('active-line');
+    if(el) el.remove();
+  }
+
+  function finalizeInputLine(){
+    // convert active prompt line into static text (already fine as-is), then remove id & cursor
+    const el = document.getElementById('active-line');
+    if(el){
+      const cursor = el.querySelector('.cursor');
+      if(cursor) cursor.remove();
+      el.removeAttribute('id');
+      const span = el.querySelector('#cur-input-span');
+      if(span) span.removeAttribute('id');
+    }
+  }
+
+  async function handleSubmit(){
+    const text = currentInputText;
+    finalizeInputLine();
+    if(text.trim()!==''){
+      history.push(text);
+    }
+    histIndex = history.length;
+    currentInputText = '';
+    await runCommand(text);
+    renderPromptLine();
+  }
+
+  // ---------- Hidden input to capture keystrokes (mobile + accessibility friendly) ----------
+  const hiddenInput = document.createElement('textarea');
+  hiddenInput.className = 'hidden-input';
+  hiddenInput.autocomplete = 'off';
+  hiddenInput.autocapitalize = 'off';
+  hiddenInput.spellcheck = false;
+  document.body.appendChild(hiddenInput);
+
+  function focusInput(){
+    hiddenInput.focus();
+  }
+
+  screen.addEventListener('click', focusInput);
+  window.addEventListener('click', focusInput);
+
+  hiddenInput.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){
+      e.preventDefault();
+      handleSubmit();
+      hiddenInput.value = '';
+      return;
+    }
+    if(e.key === 'ArrowUp'){
+      e.preventDefault();
+      if(history.length===0) return;
+      histIndex = Math.max(0, histIndex-1);
+      currentInputText = history[histIndex] || '';
+      updateInputSpan();
+      return;
+    }
+    if(e.key === 'ArrowDown'){
+      e.preventDefault();
+      if(history.length===0) return;
+      histIndex = Math.min(history.length, histIndex+1);
+      currentInputText = history[histIndex] || '';
+      updateInputSpan();
+      return;
+    }
+    if(e.key === 'Backspace'){
+      e.preventDefault();
+      currentInputText = currentInputText.slice(0,-1);
+      updateInputSpan();
+      return;
+    }
+    if(e.key === 'Tab'){
+      e.preventDefault();
+      return;
+    }
+  });
+
+  hiddenInput.addEventListener('input', function(e){
+    // handles typed characters (covers IME/mobile); we derive delta from value
+    const val = hiddenInput.value;
+    if(val.length>0){
+      currentInputText += val;
+      hiddenInput.value = '';
+      updateInputSpan();
+    }
+  });
+
+  // ---------- Reference / command index panel ----------
+  const reference = [
+    { name:"cd / chdir", example:"cd Documents", desc:"Change the working directory. Use \\ to separate folders, cd .. to go up one level, and a drive letter (e.g. D:) to switch volumes." },
+    { name:"dir", example:"dir", desc:"List the files and subfolders in the current directory, along with sizes and free space on the drive." },
+    { name:"ipconfig", example:"ipconfig /all", desc:"Show TCP/IP adapter info — IP address, subnet mask, default gateway. Add /all for full details like DNS and DHCP servers." },
+    { name:"ping", example:"ping 8.8.8.8", desc:"Test whether a host is reachable and measure round-trip time using ICMP. One of the first tools to reach for when troubleshooting connectivity." },
+    { name:"netstat", example:"netstat -a", desc:"Show active network connections and listening ports. -a shows all connections, -b shows the owning program (needs elevation), -n skips name resolution." },
+    { name:"nslookup", example:"nslookup example.com", desc:"Query DNS servers for name-to-IP (or IP-to-name) records — useful for checking DNS resolution and server responses." },
+    { name:"net use", example:"net use", desc:"View, connect, or disconnect mapped network drives and shared folders/printers. Run with no arguments to list current connections." },
+    { name:"net user", example:"net user jsmith", desc:"View, create, or modify local user accounts. Run with no arguments to list all accounts on the machine." },
+    { name:"tracert", example:"tracert google.com", desc:"Map the full route a packet takes to a destination, hop by hop, using ICMP TTL-exceeded replies. Some hops may not respond if they filter ICMP." },
+    { name:"pathping", example:"pathping 192.168.1.1", desc:"Combines ping and tracert: first maps the route, then measures round-trip time and packet loss at each hop over time." },
+    { name:"chkdsk", example:"chkdsk /f", desc:"Check a disk for logical file system errors. /f fixes errors found; /r also locates bad sectors and recovers readable data (implies /f)." },
+    { name:"format", example:"format D: /FS:NTFS", desc:"Formats a disk for use with Windows. Destructive — erases all data on the target volume. Be careful." },
+    { name:"diskpart", example:"diskpart", desc:"Opens an interactive disk-partitioning console for managing disks, partitions, and volumes. Destructive if used carelessly." },
+    { name:"md", example:"md NewFolder", desc:"(make directory) Creates a new folder at the specified path." },
+    { name:"rmdir", example:"rmdir OldFolder", desc:"(remove directory) Deletes an existing folder. The folder must be empty unless /s is used." },
+    { name:"robocopy", example:"robocopy C:\\Src D:\\Dst /E", desc:"Robust file/folder copy tool built into Windows — faster and more reliable than copy/paste for large jobs, with retry and logging built in." },
+    { name:"hostname", example:"hostname", desc:"Prints the computer's network name. Handy for telling identical-looking terminal tabs apart." },
+    { name:"winver", example:"winver", desc:"Opens the About Windows dialog showing the OS edition and build number — a quick way to confirm you're on the latest version." },
+    { name:"whoami", example:"whoami /all", desc:"Shows the currently logged-in user, and with /all, their group memberships, SID, and privileges. Useful when several accounts are in play." },
+    { name:"[command] /?", example:"robocopy /?", desc:"Shows built-in help, syntax, and available parameters for almost any command-line tool." },
+    { name:"gpupdate", example:"gpupdate /force", desc:"Refreshes Group Policy settings on a domain-joined computer without waiting for the normal update cycle." },
+    { name:"gpresult", example:"gpresult /r", desc:"Displays a summary of Group Policy settings that currently apply to the computer and the logged-in user." },
+    { name:"sfc", example:"sfc /scannow", desc:"System File Checker — scans the integrity of protected Windows system files and repairs corrupted ones when possible." },
+  ];
+
+  function renderReference(filter){
+    const list = document.getElementById('ref-list');
+    list.innerHTML = '';
+    const f = (filter||'').trim().toLowerCase();
+    const items = reference.filter(r =>
+      !f || r.name.toLowerCase().includes(f) || r.desc.toLowerCase().includes(f) || r.example.toLowerCase().includes(f)
+    );
+    if(items.length===0){
+      const empty = document.createElement('div');
+      empty.className = 'ref-empty';
+      empty.textContent = 'No matching commands.';
+      list.appendChild(empty);
+      return;
+    }
+    items.forEach(r=>{
+      const item = document.createElement('div');
+      item.className = 'ref-item';
+      item.title = 'Click to load this example into the prompt';
+      const name = document.createElement('div');
+      name.className = 'ref-name';
+      name.textContent = r.name;
+      const ex = document.createElement('div');
+      ex.className = 'ref-example';
+      ex.textContent = r.example;
+      const desc = document.createElement('div');
+      desc.className = 'ref-desc';
+      desc.textContent = r.desc;
+      item.appendChild(name);
+      item.appendChild(ex);
+      item.appendChild(desc);
+      item.addEventListener('click', ()=>{
+        currentInputText = r.example;
+        updateInputSpan();
+        focusInput();
+      });
+      list.appendChild(item);
+    });
+  }
+
+  document.getElementById('ref-search-input').addEventListener('input', function(e){
+    renderReference(e.target.value);
+  });
+
+  renderReference('');
+
+  // ---------- Boot sequence ----------
+  function boot(){
+    printLine("Microsoft Windows [Version 10.0.22631.4460]");
+    printLine("(c) Microsoft Corporation. All rights reserved.");
+    printLine("");
+    printLine("This is a browser-based simulation for practicing common Windows");
+    printLine("command-line tools (cd, dir, ipconfig, ping, netstat, tracert, etc).");
+    printLine("Nothing here touches your real computer. Type HELP for a command list.");
+    printLine("");
+    renderPromptLine();
+    focusInput();
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>

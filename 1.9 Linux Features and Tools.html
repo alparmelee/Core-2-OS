@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>1.9 Linux Features and Tools</title>
+<style>
+  :root{
+    --bg:#1b1b1b;
+    --fg:#d8d8d8;
+    --fg-bright:#ffffff;
+    --green:#3fd68c;
+    --blue:#6cb6ff;
+    --yellow:#e5c07b;
+    --red:#e06c75;
+    --titlebar:#2a2a2a;
+    --border:#3a3a3a;
+  }
+  html,body{
+    height:100%;
+    margin:0;
+    background:#3a3a3a;
+    font-family:"Cascadia Mono","Consolas","DejaVu Sans Mono","Ubuntu Mono",monospace;
+  }
+  .app{
+    min-height:100%;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    gap:16px;
+    padding:20px;
+    box-sizing:border-box;
+    flex-wrap:wrap;
+  }
+  .window{
+    width:800px;
+    max-width:100%;
+    height:640px;
+    max-height:92vh;
+    background:var(--bg);
+    border:1px solid #000;
+    box-shadow:0 20px 60px rgba(0,0,0,.5);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    flex-shrink:0;
+  }
+  .titlebar{
+    background:var(--titlebar);
+    color:#ddd;
+    font-family:"Segoe UI",Tahoma,sans-serif;
+    font-size:12.5px;
+    padding:6px 8px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    user-select:none;
+    border-bottom:1px solid var(--border);
+  }
+  .titlebar .left{ display:flex; align-items:center; gap:7px; }
+  .titlebar .dots{ display:flex; gap:6px; }
+  .titlebar .dots span{ width:11px;height:11px;border-radius:50%; display:inline-block; }
+  .titlebar .dots .r{ background:#ff5f57; }
+  .titlebar .dots .y{ background:#febc2e; }
+  .titlebar .dots .g{ background:#28c840; }
+  .screen{
+    flex:1;
+    padding:8px 10px;
+    overflow-y:auto;
+    font-size:14px;
+    line-height:1.4;
+    color:var(--fg);
+    white-space:pre-wrap;
+    word-break:break-word;
+    cursor:text;
+  }
+  .screen::-webkit-scrollbar{ width:10px; }
+  .screen::-webkit-scrollbar-track{ background:#151515; }
+  .screen::-webkit-scrollbar-thumb{ background:#444; }
+  .line{ min-height:1.4em; }
+  .prompt-line{ display:flex; flex-wrap:wrap; align-items:baseline; }
+  .p-user{ color:var(--green); font-weight:600; }
+  .p-root{ color:var(--red); font-weight:600; }
+  .p-path{ color:var(--blue); font-weight:600; }
+  .p-sym{ color:var(--fg-bright); }
+  .p-plain{ color:var(--fg); white-space:pre; }
+  .cur-input{ outline:none; color:var(--fg-bright); white-space:pre-wrap; word-break:break-word; }
+  .cursor{
+    display:inline-block;
+    width:8px; height:15px;
+    background:var(--fg-bright);
+    vertical-align:text-bottom;
+    animation:blink 1s step-end infinite;
+    margin-left:1px;
+  }
+  @keyframes blink{ 0%,50%{opacity:1;} 51%,100%{opacity:0;} }
+  .dim{ color:#8a8a8a; }
+  .err{ color:var(--red); }
+  .warn{ color:var(--yellow); }
+  .dirname{ color:var(--blue); font-weight:600; }
+  .hidden-input{ position:absolute; opacity:0; pointer-events:none; width:1px; height:1px; }
+
+  /* ---- Reference panel ---- */
+  .reference{
+    width:440px;
+    max-width:100%;
+    height:640px;
+    max-height:92vh;
+    background:#181818;
+    border:1px solid #000;
+    box-shadow:0 20px 60px rgba(0,0,0,.5);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    flex-shrink:0;
+    color:#ddd;
+  }
+  .reference .ref-titlebar{
+    background:var(--titlebar);
+    color:#ddd;
+    font-family:"Segoe UI",Tahoma,sans-serif;
+    font-size:12.5px;
+    padding:8px 10px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .reference .ref-titlebar .dot{ width:8px;height:8px;border-radius:50%;background:var(--green); }
+  .ref-note{
+    padding:8px 10px;
+    font-family:"Segoe UI",Tahoma,sans-serif;
+    font-size:11.5px;
+    color:#8a8a8a;
+    border-bottom:1px solid var(--border);
+    background:#151515;
+  }
+  .ref-search{ padding:8px 10px; border-bottom:1px solid var(--border); background:#151515; }
+  .ref-search input{
+    width:100%; box-sizing:border-box;
+    background:#0f0f0f; border:1px solid #333; color:#eee;
+    font-family:"Segoe UI",Tahoma,sans-serif; font-size:12.5px;
+    padding:7px 9px; outline:none;
+  }
+  .ref-search input:focus{ border-color:var(--green); }
+  .ref-list{ flex:1; overflow-y:auto; padding:4px 0 12px; }
+  .ref-list::-webkit-scrollbar{ width:10px; }
+  .ref-list::-webkit-scrollbar-track{ background:#111; }
+  .ref-list::-webkit-scrollbar-thumb{ background:#333; }
+  .ref-item{ padding:10px 14px; border-bottom:1px solid #232323; cursor:pointer; }
+  .ref-item:hover{ background:#212121; }
+  .ref-item .ref-name{
+    font-family:"Cascadia Mono","Consolas",monospace;
+    font-size:13.5px; color:var(--green); font-weight:600; letter-spacing:.3px;
+  }
+  .ref-item .ref-example{
+    font-family:"Cascadia Mono","Consolas",monospace;
+    font-size:12px; color:var(--yellow); margin-top:4px;
+  }
+  .ref-item .ref-example::before{ content:"$ "; color:#666; }
+  .ref-item .ref-desc{
+    font-family:"Segoe UI",Tahoma,sans-serif;
+    font-size:12px; color:#aaa; margin-top:5px; line-height:1.45;
+  }
+  .ref-empty{
+    padding:24px 14px; color:#777;
+    font-family:"Segoe UI",Tahoma,sans-serif; font-size:12.5px; text-align:center;
+  }
+  @media (max-width:920px){
+    .window, .reference{ width:100%; height:70vh; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="window" id="window">
+    <div class="titlebar">
+      <div class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+      <div class="left" style="margin-left:auto;margin-right:auto;">jsmith@ubuntu-server: ~</div>
+    </div>
+    <div class="screen" id="screen" tabindex="0"></div>
+  </div>
+
+  <div class="reference" id="reference">
+    <div class="ref-titlebar">
+      <span class="dot"></span>
+      <span>Linux Command Index</span>
+    </div>
+    <div class="ref-note">Also available for navigation: <b>cd</b>, <b>clear</b>, <b>whoami</b>, <b>id</b>, <b>uname</b>, <b>exit</b></div>
+    <div class="ref-search">
+      <input type="text" id="ref-search-input" placeholder="Filter commands...">
+    </div>
+    <div class="ref-list" id="ref-list"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const screen = document.getElementById('screen');
+  const HOSTNAME = "ubuntu-server";
+
+  // ---------- Virtual filesystem ----------
+  function dirNode(owner, group, perms, children){
+    return {type:'dir', owner:owner||'root', group:group||'root', perms:perms||'drwxr-xr-x', children: children||{}};
+  }
+  function fileNode(owner, group, perms, content){
+    return {type:'file', owner:owner||'root', group:group||'root', perms:perms||'-rw-r--r--', content: content||''};
+  }
+
+  const fsRoot = dirNode('root','root','drwxr-xr-x', {
+    "bin": dirNode('root','root','drwxr-xr-x', {
+      "bash": fileNode('root','root','-rwxr-xr-x',''),
+      "ls": fileNode('root','root','-rwxr-xr-x',''),
+      "cat": fileNode('root','root','-rwxr-xr-x',''),
+    }),
+    "etc": dirNode('root','root','drwxr-xr-x', {
+      "passwd": fileNode('root','root','-rw-r--r--',
+`root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+jsmith:x:1000:1000:J Smith,,,:/home/jsmith:/bin/bash`),
+      "shadow": fileNode('root','root','-rw-r-----',
+`root:!:19943:0:99999:7:::
+jsmith:$6$rZ92kQ1p$8mQe4h1nD9x7Vb2k0c3o5v9a1u8s7e6r3f2i9l0e4hSimExample:19943:0:99999:7:::`),
+      "hosts": fileNode('root','root','-rw-r--r--',
+`127.0.0.1   localhost
+127.0.1.1   ubuntu-server
+::1         localhost ip6-localhost ip6-loopback`),
+      "fstab": fileNode('root','root','-rw-r--r--',
+`# <file system>                         <mount point>  <type>  <options>          <dump> <pass>
+UUID=8f14e45f-ceea-4e0c-9c11-3d2f5a7b90aa  /              ext4    errors=remount-ro  0      1
+UUID=1a2b3c4d-5e6f-7081-92a3-b4c5d6e7f809  /boot          ext4    defaults           0      2
+UUID=5e6f7081-92a3-b4c5-d6e7-f809a1b2c3d4  none           swap    sw                 0      0`),
+      "resolv.conf": fileNode('root','root','-rw-r--r--',
+`# Generated by NetworkManager
+nameserver 1.1.1.1
+nameserver 8.8.8.8
+search local`),
+      "hostname": fileNode('root','root','-rw-r--r--', "ubuntu-server"),
+    }),
+    "home": dirNode('root','root','drwxr-xr-x', {
+      "jsmith": dirNode('jsmith','jsmith','drwxr-xr-x', {
+        ".bashrc": fileNode('jsmith','jsmith','-rw-r--r--', "# ~/.bashrc: executed by bash for non-login shells\nalias ll='ls -la'\nexport PATH=$PATH:/usr/local/bin"),
+        "Documents": dirNode('jsmith','jsmith','drwxr-xr-x', {
+          "notes.txt": fileNode('jsmith','jsmith','-rw-r--r--', "Reminder: rotate SSH keys before end of quarter."),
+        }),
+        "Downloads": dirNode('jsmith','jsmith','drwxr-xr-x', {}),
+        "project": dirNode('jsmith','jsmith','drwxr-xr-x', {
+          "app.py": fileNode('jsmith','jsmith','-rw-r--r--', "print('hello from the simulated project')\n"),
+          "README.md": fileNode('jsmith','jsmith','-rw-r--r--', "# Project\n\nThis is a sample file for practicing find/grep/cp/mv.\n"),
+        }),
+      }),
+    }),
+    "root": dirNode('root','root','drwx------', {
+      ".bashrc": fileNode('root','root','-rw-------', "# root's bashrc"),
+    }),
+    "usr": dirNode('root','root','drwxr-xr-x', {
+      "bin": dirNode('root','root','drwxr-xr-x', {}),
+      "local": dirNode('root','root','drwxr-xr-x', {}),
+    }),
+    "var": dirNode('root','root','drwxr-xr-x', {
+      "log": dirNode('root','root','drwxr-xr-x', {
+        "syslog": fileNode('root','root','-rw-r-----',
+`Aug 24 07:01:12 ubuntu-server systemd[1]: Started Daily apt download activities.
+Aug 24 07:02:44 ubuntu-server sshd[1123]: Accepted publickey for jsmith from 192.168.1.14 port 51422
+Aug 24 07:14:09 ubuntu-server kernel: [12042.881] eth0: link becomes ready
+Aug 24 07:20:31 ubuntu-server sudo:   jsmith : TTY=pts/0 ; PWD=/home/jsmith ; USER=root ; COMMAND=/usr/bin/apt update
+Aug 24 08:03:55 ubuntu-server sshd[1401]: Failed password for invalid user admin from 203.0.113.9 port 41982
+Aug 24 08:12:02 ubuntu-server systemd[1]: Reloading system manager configuration.`),
+      }),
+    }),
+  });
+
+  // ---------- Session state ----------
+  const state = {
+    user: 'jsmith',
+    isRoot: false,
+    cwd: ['home','jsmith'],
+    prevCwd: ['home','jsmith'],
+    sudoAuthenticated: false,
+  };
+  let elevatedOnce = false; // set true while a sudo'd command executes
+
+  function effectiveRoot(){ return state.isRoot || elevatedOnce; }
+
+  function getNode(pathArr){
+    let node = fsRoot;
+    for(const seg of pathArr){
+      if(!node || node.type!=='dir' || !node.children[seg]) return null;
+      node = node.children[seg];
+    }
+    return node;
+  }
+  function homeOf(user){ return user==='root' ? ['root'] : ['home', user]; }
+
+  function pathToStr(pathArr){
+    return '/' + pathArr.join('/');
+  }
+  function displayPath(pathArr){
+    const home = homeOf(state.user);
+    const full = pathToStr(pathArr);
+    const homeStr = pathToStr(home);
+    if(full===homeStr) return '~';
+    if(full.startsWith(homeStr+'/')) return '~' + full.slice(homeStr.length);
+    return full || '/';
+  }
+
+  function canRead(node){
+    if(effectiveRoot()) return true;
+    if(!node) return false;
+    if(node.owner===state.user) return node.perms[1]==='r';
+    // simulator doesn't model secondary group membership beyond owner
+    return node.perms[7]==='r';
+  }
+  function canWrite(node){
+    if(effectiveRoot()) return true;
+    if(!node) return false;
+    if(node.owner===state.user) return node.perms[2]==='w';
+    return node.perms[8]==='w';
+  }
+  function canExecuteDir(node){
+    if(effectiveRoot()) return true;
+    if(!node) return false;
+    if(node.owner===state.user) return node.perms[3]==='x';
+    return node.perms[9]==='x';
+  }
+
+  // ---------- Output helpers ----------
+  function printLine(text, cls){
+    const div = document.createElement('div');
+    div.className = 'line' + (cls ? ' '+cls : '');
+    div.textContent = text===undefined ? '' : text;
+    screen.appendChild(div);
+  }
+  function printRaw(html, cls){
+    const div = document.createElement('div');
+    div.className = 'line' + (cls ? ' '+cls : '');
+    div.innerHTML = html;
+    screen.appendChild(div);
+  }
+  function printBlock(text){ text.split('\n').forEach(l=>printLine(l)); }
+  function scrollDown(){ screen.scrollTop = screen.scrollHeight; }
+  function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  // ---------- Resolve helper ----------
+  function resolvePath(input){
+    if(!input || input==='.') return state.cwd.slice();
+    let p = input;
+    if(p==='~') p = pathToStr(homeOf(state.user));
+    else if(p.startsWith('~/')) p = pathToStr(homeOf(state.user)) + p.slice(1);
+    let segs;
+    let path;
+    if(p.startsWith('/')){
+      path = [];
+      segs = p.split('/').filter(s=>s!=='');
+    } else {
+      path = state.cwd.slice();
+      segs = p.split('/').filter(s=>s!=='');
+    }
+    for(const seg of segs){
+      if(seg==='.') continue;
+      if(seg==='..'){ if(path.length>0) path.pop(); continue; }
+      path.push(seg);
+    }
+    return path;
+  }
+
+  function randInt(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+  function randIp(){ return `${randInt(10,220)}.${randInt(0,255)}.${randInt(0,255)}.${randInt(1,254)}`; }
+
+  // ---------- man pages ----------
+  const manPages = {
+    ls: {name:"ls - list directory contents", syn:"ls [-l] [-a] [path]", desc:"List information about files in the current directory (default), or the given path. -l uses long listing format; -a shows hidden entries."},
+    pwd: {name:"pwd - print name of current working directory", syn:"pwd", desc:"Print the full absolute pathname of the current working directory."},
+    mv: {name:"mv - move (rename) files", syn:"mv source dest", desc:"Move or rename files and directories."},
+    cp: {name:"cp - copy files and directories", syn:"cp [-r] source dest", desc:"Copy files. Use -r to copy directories recursively."},
+    rm: {name:"rm - remove files or directories", syn:"rm [-r] [-f] file", desc:"Remove (delete) files. -r removes directories recursively; -f ignores nonexistent files and never prompts."},
+    chmod: {name:"chmod - change file mode bits", syn:"chmod MODE file", desc:"Change the read/write/execute permissions of a file or directory, e.g. chmod 755 script.sh."},
+    chown: {name:"chown - change file owner and group", syn:"chown owner[:group] file", desc:"Change the user and/or group ownership of a file or directory."},
+    grep: {name:"grep - print lines matching a pattern", syn:"grep [-i] [-n] [-r] pattern [file...]", desc:"Search for PATTERN in each FILE. -i ignores case, -n shows line numbers, -r searches recursively."},
+    find: {name:"find - search for files in a directory hierarchy", syn:"find [path] -name pattern", desc:"Recursively search PATH for files/directories matching criteria such as -name."},
+    fsck: {name:"fsck - check and repair a Linux filesystem", syn:"fsck [-f] device", desc:"Check a filesystem for consistency and optionally repair it."},
+    mount: {name:"mount - mount a filesystem", syn:"mount [device] [mountpoint]", desc:"Attach a filesystem (device, partition, or network share) to the directory tree. Run with no arguments to list current mounts."},
+    su: {name:"su - change user ID", syn:"su [-] [username]", desc:"Switch the session to another user account, root by default. Requires that user's password unless you are already root."},
+    sudo: {name:"sudo - execute a command as another user", syn:"sudo command", desc:"Run a single command with elevated (root) privileges, after authenticating with your own password."},
+    apt: {name:"apt - Advanced Package Tool (Debian/Ubuntu)", syn:"apt update|upgrade|install|remove [package]", desc:"Install, update, upgrade, and remove software packages on Debian-based distributions."},
+    dnf: {name:"dnf - Dandified YUM (Fedora/RHEL)", syn:"dnf update|install|remove [package]", desc:"Install, update, and remove software packages on Red Hat-based distributions."},
+    ip: {name:"ip - show / manipulate routing, devices, addresses", syn:"ip addr | ip route", desc:"Modern replacement for ifconfig/route. Manage network interfaces, IP addresses, and routing tables."},
+    ping: {name:"ping - send ICMP ECHO_REQUEST to a host", syn:"ping [-c count] host", desc:"Test basic reachability and measure round-trip latency to a host using ICMP."},
+    curl: {name:"curl - transfer a URL", syn:"curl [-I] [-O] url", desc:"Transfer data to or from a server using HTTP, HTTPS, FTP, and other protocols."},
+    dig: {name:"dig - DNS lookup utility", syn:"dig domain", desc:"Query DNS name servers for domain name resolution and record information."},
+    traceroute: {name:"traceroute - print the route packets trace to a host", syn:"traceroute host", desc:"Show the hop-by-hop path packets take to reach a destination."},
+    man: {name:"man - an interface to the reference manuals", syn:"man command", desc:"Display the manual page for a command, including its syntax and description."},
+    cat: {name:"cat - concatenate and print files", syn:"cat file...", desc:"Print the contents of one or more files to the terminal."},
+    top: {name:"top - display system tasks", syn:"top", desc:"Show a real-time (here: snapshot) view of running processes and system resource usage."},
+    ps: {name:"ps - report a snapshot of current processes", syn:"ps [aux]", desc:"Report information on active processes. 'ps aux' shows all processes for all users."},
+    du: {name:"du - estimate file space usage", syn:"du [-sh] [path]", desc:"Show disk space used by files and directories. -s summarizes, -h uses human-readable sizes."},
+    df: {name:"df - report file system disk space usage", syn:"df [-h]", desc:"Show total, used, and available space on mounted filesystems. -h uses human-readable sizes."},
+    nano: {name:"nano - Nano's ANOther editor", syn:"nano file", desc:"A simple, beginner-friendly terminal text editor."},
+    cd: {name:"cd - change the shell working directory", syn:"cd [path]", desc:"Change the current directory. cd alone or cd ~ goes home, cd .. goes up one level, cd - returns to the previous directory."},
+  };
+
+  // ---------- Input mode state machine ----------
+  // mode: {type:'shell'} | {type:'password', prompt, resolve} | {type:'keypress', resolve}
+  let mode = {type:'shell'};
+
+  // ---------- Commands ----------
+  const commands = {};
+
+  commands['clear'] = function(){ screen.innerHTML = ''; };
+  commands['exit'] = function(){ printLine('(This simulated session cannot be closed. Type another command to continue.)', 'dim'); };
+  commands['whoami'] = function(){ printLine(effectiveRoot() ? 'root' : state.user); };
+  commands['id'] = function(){
+    if(effectiveRoot() && state.isRoot) printLine('uid=0(root) gid=0(root) groups=0(root)');
+    else printLine('uid=1000(jsmith) gid=1000(jsmith) groups=1000(jsmith),27(sudo)');
+  };
+  commands['uname'] = function(args){
+    if(args.includes('-r')) printLine('6.8.0-45-generic');
+    else if(args.includes('-a')) printLine(`Linux ${HOSTNAME} 6.8.0-45-generic #45-Ubuntu SMP x86_64 GNU/Linux`);
+    else printLine('Linux');
+  };
+  commands['man'] = function(args){
+    const cmd = args[0];
+    if(!cmd){ printLine('What manual page do you want?'); return; }
+    const page = manPages[cmd.toLowerCase()];
+    if(!page){ printLine(`No manual entry for ${cmd}`); return; }
+    printLine(`${cmd.toUpperCase()}(1)`.padEnd(24) + 'User Commands'.padEnd(48) + `${cmd.toUpperCase()}(1)`, 'dim');
+    printLine('');
+    printLine('NAME');
+    printLine('       ' + page.name);
+    printLine('');
+    printLine('SYNOPSIS');
+    printLine('       ' + page.syn);
+    printLine('');
+    printLine('DESCRIPTION');
+    printLine('       ' + page.desc);
+  };
+
+  commands['pwd'] = function(){ printLine(pathToStr(state.cwd) || '/'); };
+
+  commands['cd'] = function(args){
+    let target = args[0];
+    if(!target || target==='~'){
+      state.prevCwd = state.cwd; state.cwd = homeOf(state.user); return;
+    }
+    if(target==='-'){
+      const tmp = state.cwd; state.cwd = state.prevCwd; state.prevCwd = tmp;
+      printLine(pathToStr(state.cwd));
+      return;
+    }
+    const resolved = resolvePath(target);
+    const node = getNode(resolved);
+    if(!node){ printLine(`bash: cd: ${target}: No such file or directory`, 'err'); return; }
+    if(node.type!=='dir'){ printLine(`bash: cd: ${target}: Not a directory`, 'err'); return; }
+    if(!canExecuteDir(node)){ printLine(`bash: cd: ${target}: Permission denied`, 'err'); return; }
+    state.prevCwd = state.cwd;
+    state.cwd = resolved;
+  };
+
+  commands['ls'] = function(args){
+    const flags = args.filter(a=>a.startsWith('-')).join('');
+    const showAll = flags.includes('a');
+    const longFmt = flags.includes('l');
+    const targetArg = args.find(a=>!a.startsWith('-'));
+    const targetPath = targetArg ? resolvePath(targetArg) : state.cwd;
+    const node = getNode(targetPath);
+    if(!node){ printLine(`ls: cannot access '${targetArg}': No such file or directory`, 'err'); return; }
+    if(node.type!=='dir'){ printLine(targetArg || pathToStr(targetPath)); return; }
+    if(!canExecuteDir(node)){ printLine(`ls: cannot open directory '${targetArg||pathToStr(targetPath)}': Permission denied`, 'err'); return; }
+    let entries = Object.entries(node.children).filter(([name])=> showAll || !name.startsWith('.'));
+    entries.sort((a,b)=>a[0].localeCompare(b[0]));
+    if(!longFmt){
+      if(entries.length===0) return;
+      const names = entries.map(([name,n])=> n.type==='dir' ? name+'/' : name);
+      printLine(names.join('  '));
+      return;
+    }
+    printLine(`total ${entries.length}`);
+    entries.forEach(([name,n])=>{
+      const size = n.type==='dir' ? 4096 : (n.content? n.content.length : 0);
+      const dateStr = 'Aug 24 09:1' + randInt(0,9);
+      const display = n.type==='dir' ? name : name;
+      printLine(`${n.perms} 1 ${n.owner.padEnd(7)} ${n.group.padEnd(7)} ${String(size).padStart(6)} ${dateStr} ${display}`);
+    });
+  };
+
+  commands['cat'] = function(args){
+    if(args.length===0){ printLine('cat: missing file operand', 'err'); return; }
+    args.forEach(a=>{
+      const p = resolvePath(a);
+      const node = getNode(p);
+      if(!node){ printLine(`cat: ${a}: No such file or directory`, 'err'); return; }
+      if(node.type==='dir'){ printLine(`cat: ${a}: Is a directory`, 'err'); return; }
+      if(!canRead(node)){ printLine(`cat: ${a}: Permission denied`, 'err'); return; }
+      printBlock(node.content || '');
+    });
+  };
+
+  function findParent(pathArr){
+    if(pathArr.length===0) return null;
+    const parentPath = pathArr.slice(0,-1);
+    const parent = getNode(parentPath);
+    return parent && parent.type==='dir' ? {parent, name: pathArr[pathArr.length-1], parentPath} : null;
+  }
+
+  commands['mv'] = function(args){
+    if(args.length<2){ printLine('mv: missing file operand', 'err'); return; }
+    const src = args[0], dst = args[1];
+    const srcPath = resolvePath(src);
+    const srcNode = getNode(srcPath);
+    if(!srcNode){ printLine(`mv: cannot stat '${src}': No such file or directory`, 'err'); return; }
+    let dstPath = resolvePath(dst);
+    let dstNode = getNode(dstPath);
+    let finalPath, finalName;
+    if(dstNode && dstNode.type==='dir'){
+      finalPath = dstPath.concat([srcPath[srcPath.length-1]]);
+      finalName = srcPath[srcPath.length-1];
+    } else {
+      finalPath = dstPath;
+      finalName = dstPath[dstPath.length-1];
+    }
+    const srcInfo = findParent(srcPath);
+    const dstParentNode = getNode(finalPath.slice(0,-1));
+    if(!dstParentNode || dstParentNode.type!=='dir'){ printLine(`mv: cannot move to '${dst}': No such file or directory`, 'err'); return; }
+    if(!canWrite(srcInfo.parent) && !effectiveRoot()){ printLine(`mv: cannot move '${src}': Permission denied`, 'err'); return; }
+    dstParentNode.children[finalName] = srcNode;
+    delete srcInfo.parent.children[srcInfo.name];
+  };
+
+  function deepCopy(node){
+    if(node.type==='file') return fileNode(node.owner, node.group, node.perms, node.content);
+    const nd = dirNode(node.owner, node.group, node.perms, {});
+    for(const [k,v] of Object.entries(node.children)) nd.children[k] = deepCopy(v);
+    return nd;
+  }
+
+  commands['cp'] = function(args){
+    const recursive = args.includes('-r') || args.includes('-R');
+    const positional = args.filter(a=>!a.startsWith('-'));
+    if(positional.length<2){ printLine('cp: missing file operand', 'err'); return; }
+    const [src, dst] = positional;
+    const srcPath = resolvePath(src);
+    const srcNode = getNode(srcPath);
+    if(!srcNode){ printLine(`cp: cannot stat '${src}': No such file or directory`, 'err'); return; }
+    if(srcNode.type==='dir' && !recursive){ printLine(`cp: -r not specified; omitting directory '${src}'`, 'err'); return; }
+    let dstPath = resolvePath(dst);
+    let dstNode = getNode(dstPath);
+    let finalPath, finalName;
+    if(dstNode && dstNode.type==='dir'){
+      finalName = srcPath[srcPath.length-1];
+      finalPath = dstPath.concat([finalName]);
+    } else {
+      finalPath = dstPath;
+      finalName = dstPath[dstPath.length-1];
+    }
+    const parentNode = getNode(finalPath.slice(0,-1));
+    if(!parentNode || parentNode.type!=='dir'){ printLine(`cp: cannot create '${dst}': No such file or directory`, 'err'); return; }
+    parentNode.children[finalName] = deepCopy(srcNode);
+  };
+
+  commands['rm'] = function(args){
+    const recursive = args.includes('-r') || args.includes('-R') || args.includes('-rf') || args.includes('-fr');
+    const force = args.includes('-f') || args.includes('-rf') || args.includes('-fr');
+    const positional = args.filter(a=>!a.startsWith('-'));
+    if(positional.length===0){ printLine('rm: missing operand', 'err'); return; }
+    positional.forEach(a=>{
+      const p = resolvePath(a);
+      const node = getNode(p);
+      if(!node){ if(!force) printLine(`rm: cannot remove '${a}': No such file or directory`, 'err'); return; }
+      if(node.type==='dir' && !recursive){ printLine(`rm: cannot remove '${a}': Is a directory`, 'err'); return; }
+      const info = findParent(p);
+      if(!info){ printLine(`rm: cannot remove '${a}': No such file or directory`, 'err'); return; }
+      if(!canWrite(info.parent) && !effectiveRoot()){ printLine(`rm: cannot remove '${a}': Permission denied`, 'err'); return; }
+      delete info.parent.children[info.name];
+    });
+  };
+
+  function octalToPerms(octal, isDir){
+    if(!/^[0-7]{3}$/.test(octal)) return null;
+    const map = d => {
+      d = parseInt(d,10);
+      return (d&4?'r':'-') + (d&2?'w':'-') + (d&1?'x':'-');
+    };
+    return (isDir?'d':'-') + map(octal[0]) + map(octal[1]) + map(octal[2]);
+  }
+
+  commands['chmod'] = function(args){
+    if(args.length<2){ printLine('chmod: missing operand', 'err'); return; }
+    const [mode_, ...files] = args;
+    files.forEach(f=>{
+      const p = resolvePath(f);
+      const node = getNode(p);
+      if(!node){ printLine(`chmod: cannot access '${f}': No such file or directory`, 'err'); return; }
+      if(node.owner!==state.user && !effectiveRoot()){ printLine(`chmod: changing permissions of '${f}': Operation not permitted`, 'err'); return; }
+      const newPerms = octalToPerms(mode_, node.type==='dir');
+      if(!newPerms){ printLine(`chmod: invalid mode: '${mode_}' (this simulator supports numeric modes like 755)`, 'err'); return; }
+      node.perms = newPerms;
+    });
+  };
+
+  commands['chown'] = function(args){
+    if(args.length<2){ printLine('chown: missing operand', 'err'); return; }
+    const [spec, ...files] = args;
+    const [owner, group] = spec.split(':');
+    if(!effectiveRoot()){ printLine(`chown: changing ownership of '${files[0]}': Operation not permitted`, 'err'); return; }
+    files.forEach(f=>{
+      const p = resolvePath(f);
+      const node = getNode(p);
+      if(!node){ printLine(`chown: cannot access '${f}': No such file or directory`, 'err'); return; }
+      node.owner = owner;
+      if(group) node.group = group;
+    });
+  };
+
+  function walk(pathArr, node, cb){
+    cb(pathArr, node);
+    if(node.type==='dir'){
+      for(const [name, child] of Object.entries(node.children)){
+        walk(pathArr.concat([name]), child, cb);
+      }
+    }
+  }
+
+  commands['find'] = function(args){
+    const positional = args.filter((a,i)=> !a.startsWith('-') && args[i-1]!=='-name');
+    const startArg = positional[0] || '.';
+    const nameIdx = args.indexOf('-name');
+    const pattern = nameIdx>=0 ? args[nameIdx+1] : null;
+    const startPath = resolvePath(startArg);
+    const startNode = getNode(startPath);
+    if(!startNode){ printLine(`find: '${startArg}': No such file or directory`, 'err'); return; }
+    const regex = pattern ? new RegExp('^'+pattern.split('*').map(s=>s.replace(/[.+?^${}()|[\]\\]/g,'\\$&')).join('.*')+'$') : null;
+    walk(startPath, startNode, (p, n)=>{
+      const name = p[p.length-1] || '/';
+      if(!regex || regex.test(name)) printLine(pathToStr(p) || '/');
+    });
+  };
+
+  commands['grep'] = function(args){
+    const ignoreCase = args.includes('-i');
+    const showLine = args.includes('-n');
+    const recursive = args.includes('-r') || args.includes('-R');
+    const positional = args.filter(a=>!a.startsWith('-'));
+    if(positional.length<1){ printLine('Usage: grep [-i] [-n] [-r] pattern [file...]', 'err'); return; }
+    const pattern = positional[0];
+    const files = positional.slice(1);
+    const testLine = (line) => ignoreCase ? line.toLowerCase().includes(pattern.toLowerCase()) : line.includes(pattern);
+
+    function grepFile(label, node){
+      if(node.type!=='file'){ return; }
+      if(!canRead(node)){ printLine(`grep: ${label}: Permission denied`, 'err'); return; }
+      const lines = (node.content||'').split('\n');
+      lines.forEach((line, idx)=>{
+        if(testLine(line)){
+          const prefix = (files.length>1 || recursive ? label+':' : '') + (showLine? (idx+1)+':' : '');
+          printLine(prefix + line);
+        }
+      });
+    }
+
+    if(files.length===0){ printLine('grep: no input files specified in this simulator', 'err'); return; }
+    files.forEach(f=>{
+      const p = resolvePath(f);
+      const node = getNode(p);
+      if(!node){ printLine(`grep: ${f}: No such file or directory`, 'err'); return; }
+      if(node.type==='dir'){
+        if(!recursive){ printLine(`grep: ${f}: Is a directory`, 'err'); return; }
+        walk(p, node, (wp, wn)=>{ if(wn.type==='file') grepFile(pathToStr(wp), wn); });
+      } else {
+        grepFile(f, node);
+      }
+    });
+  };
+
+  commands['du'] = function(args){
+    const summarize = args.includes('-s') || args.includes('-sh');
+    const targetArg = args.find(a=>!a.startsWith('-'));
+    const p = targetArg ? resolvePath(targetArg) : state.cwd;
+    const node = getNode(p);
+    if(!node){ printLine(`du: cannot access '${targetArg}': No such file or directory`, 'err'); return; }
+    function sizeOf(n){
+      if(n.type==='file') return Math.max(4, n.content ? n.content.length : 0);
+      let total = 4096;
+      for(const c of Object.values(n.children)) total += sizeOf(c);
+      return total;
+    }
+    function human(n){
+      if(n>1048576) return (n/1048576).toFixed(1)+'M';
+      if(n>1024) return (n/1024).toFixed(1)+'K';
+      return n+'B';
+    }
+    if(summarize){
+      printLine(`${human(sizeOf(node))}\t${targetArg || '.'}`);
+      return;
+    }
+    if(node.type==='dir'){
+      Object.entries(node.children).forEach(([name,n])=>{
+        printLine(`${human(sizeOf(n))}\t${(targetArg?targetArg+'/':'./')}${name}`);
+      });
+    }
+    printLine(`${human(sizeOf(node))}\t${targetArg || '.'}`);
+  };
+
+  commands['df'] = function(args){
+    printBlock(
+`Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1        58G   14G   41G  26% /
+tmpfs           2.0G  4.0K  2.0G   1% /dev/shm
+/dev/sda15      105M  6.1M   99M   6% /boot/efi
+/dev/sdb1       930G  212G  671G  24% /mnt/data`);
+  };
+
+  commands['ps'] = function(args){
+    if(args[0]==='aux'){
+      printBlock(
+`USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.1 168420 11244 ?        Ss   07:00   0:02 /sbin/init
+root       412  0.0  0.2 108208  9832 ?        Ss   07:00   0:00 /usr/sbin/sshd -D
+root       901  0.0  0.3  45200 12100 ?        Ss   07:01   0:03 /lib/systemd/systemd-journald
+jsmith    2210  0.1  0.4  25412 15920 pts/0    Ss   09:02   0:01 -bash
+jsmith    2299  0.0  0.1  20112  6340 pts/0    R+   09:14   0:00 ps aux`);
+    } else {
+      printBlock(
+`  PID TTY          TIME CMD
+ 2210 pts/0    00:00:01 bash
+ 2300 pts/0    00:00:00 ps`);
+    }
+  };
+
+  commands['top'] = function(){
+    printBlock(
+`top - ${new Date().toLocaleTimeString()} up 3 days,  4:12,  1 user,  load average: 0.08, 0.12, 0.09
+Tasks:  118 total,   1 running, 117 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  2.3 us,  1.1 sy,  0.0 ni, 96.2 id,  0.4 wa
+MiB Mem :   3928.4 total,   2011.2 free,    712.6 used,   1204.6 buff/cache
+
+  PID USER      PR  NI    VIRT    RES  %CPU  %MEM  TIME+   COMMAND
+    1 root      20   0  168420  11244   0.0   0.3  0:02.11 systemd
+  412 root      20   0  108208   9832   0.0   0.2  0:00.44 sshd
+ 2210 jsmith    20   0   25412  15920   0.3   0.4  0:01.02 bash
+ 2301 jsmith    20   0   19864   4210   0.1   0.1  0:00.05 top`);
+    printLine('(simulated static snapshot — press q to return in a real terminal)', 'dim');
+  };
+
+  commands['mount'] = function(args){
+    if(args.length===0){
+      printBlock(
+`/dev/sda1 on / type ext4 (rw,relatime)
+tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev)
+/dev/sda15 on /boot/efi type vfat (rw,relatime)
+/dev/sdb1 on /mnt/data type ext4 (rw,relatime)`);
+      return;
+    }
+    if(!effectiveRoot()){ printLine(`mount: only root can do that`, 'err'); return; }
+    printLine(`mount: ${args[0]} mounted successfully on ${args[1]||'/mnt'}`);
+  };
+
+  commands['fsck'] = async function(args){
+    const force = args.includes('-f');
+    const device = args.find(a=>!a.startsWith('-')) || '/dev/sda1';
+    if(!effectiveRoot()){ printLine(`fsck: ${device}: Permission denied (are you root?)`, 'err'); return; }
+    printLine(`fsck from util-linux 2.39.3`);
+    if(!force){
+      printLine(`${device} is mounted.`);
+      printLine(`e2fsck: Cannot continue, aborting.\n`);
+      printLine(`(re-run with -f to force a check anyway, e.g. "fsck -f ${device}")`, 'dim');
+      return;
+    }
+    await new Promise(r=>setTimeout(r,300));
+    printLine(`Pass 1: Checking inodes, blocks, and sizes`);
+    await new Promise(r=>setTimeout(r,200));
+    printLine(`Pass 2: Checking directory structure`);
+    await new Promise(r=>setTimeout(r,200));
+    printLine(`Pass 3: Checking directory connectivity`);
+    await new Promise(r=>setTimeout(r,200));
+    printLine(`Pass 4: Checking reference counts`);
+    printLine(`Pass 5: Checking group summary information`);
+    printLine(`${device}: 48213/3815424 files (0.1% non-contiguous), 5217043/15258560 blocks`);
+    printLine(`${device}: clean`);
+  };
+
+  async function doPing(host, count){
+    const ip = /^\d/.test(host) ? host : randIp();
+    printLine(`PING ${host} (${ip}) 56(84) bytes of data.`);
+    let sent=0, received=0, times=[];
+    for(let i=1;i<=count;i++){
+      await new Promise(r=>setTimeout(r,200));
+      sent++;
+      if(Math.random()<0.05){
+        continue; // dropped, no line (like real ping just delays)
+      }
+      const t = (Math.random()*40+1).toFixed(1);
+      times.push(parseFloat(t));
+      received++;
+      printLine(`64 bytes from ${ip}: icmp_seq=${i} ttl=64 time=${t} ms`);
+    }
+    printLine('');
+    printLine(`--- ${host} ping statistics ---`);
+    const loss = Math.round((sent-received)/sent*100);
+    printLine(`${sent} packets transmitted, ${received} received, ${loss}% packet loss, time ${sent*200}ms`);
+    if(times.length){
+      const min=Math.min(...times), max=Math.max(...times), avg=(times.reduce((a,b)=>a+b,0)/times.length).toFixed(1);
+      printLine(`rtt min/avg/max/mdev = ${min.toFixed(1)}/${avg}/${max.toFixed(1)}/2.1 ms`);
+    }
+  }
+
+  commands['ping'] = async function(args){
+    const host = args.find(a=>!a.startsWith('-'));
+    if(!host){ printLine('Usage: ping [-c count] host', 'err'); return; }
+    let count = 4;
+    const cIdx = args.indexOf('-c');
+    if(cIdx>=0 && args[cIdx+1]) count = parseInt(args[cIdx+1])||4;
+    await doPing(host, count);
+  };
+
+  commands['traceroute'] = async function(args){
+    const host = args.find(a=>!a.startsWith('-'));
+    if(!host){ printLine('Usage: traceroute host', 'err'); return; }
+    const ip = /^\d/.test(host) ? host : randIp();
+    printLine(`traceroute to ${host} (${ip}), 30 hops max, 60 byte packets`);
+    const hops = randInt(4,9);
+    for(let h=1;h<=hops;h++){
+      await new Promise(r=>setTimeout(r,150));
+      const isLast = h===hops;
+      const hip = isLast ? ip : randIp();
+      const t1=(Math.random()*40+1).toFixed(2), t2=(Math.random()*40+1).toFixed(2), t3=(Math.random()*40+1).toFixed(2);
+      printLine(` ${h}  ${hip} (${hip})  ${t1} ms  ${t2} ms  ${t3} ms`);
+    }
+  };
+
+  commands['dig'] = async function(args){
+    const domain = args.find(a=>!a.startsWith('-'));
+    if(!domain){ printLine('Usage: dig domain', 'err'); return; }
+    await new Promise(r=>setTimeout(r,250));
+    const ip = randIp();
+    printLine(`; <<>> DiG 9.18.24-ubuntu <<>> ${domain}`);
+    printLine(`;; global options: +cmd`);
+    printLine(`;; Got answer:`);
+    printLine(`;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: ${randInt(10000,60000)}`);
+    printLine(`;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1`);
+    printLine('');
+    printLine(`;; QUESTION SECTION:`);
+    printLine(`;${domain}.\t\t\tIN\tA`);
+    printLine('');
+    printLine(`;; ANSWER SECTION:`);
+    printLine(`${domain}.\t\t${randInt(60,3600)}\tIN\tA\t${ip}`);
+    printLine('');
+    printLine(`;; Query time: ${randInt(5,80)} msec`);
+    printLine(`;; SERVER: 1.1.1.1#53(1.1.1.1)`);
+    printLine(`;; WHEN: ${new Date().toString()}`);
+  };
+
+  commands['curl'] = async function(args){
+    const headOnly = args.includes('-I');
+    const url = args.find(a=>!a.startsWith('-'));
+    if(!url){ printLine('curl: try \'curl --help\' for more information', 'err'); return; }
+    await new Promise(r=>setTimeout(r,300));
+    if(headOnly){
+      printBlock(
+`HTTP/2 200
+date: ${new Date().toUTCString()}
+content-type: text/html; charset=UTF-8
+server: nginx/1.25.3
+content-length: 1256`);
+      return;
+    }
+    printBlock(
+`<!doctype html>
+<html>
+<head><title>Example Domain</title></head>
+<body>
+<h1>Example Domain</h1>
+<p>This is simulated response content for ${url}.</p>
+</body>
+</html>`);
+  };
+
+  commands['ip'] = function(args){
+    const sub = (args[0]||'').toLowerCase();
+    if(sub==='addr' || sub==='a'){
+      printBlock(
+`1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN
+    inet 127.0.0.1/8 scope host lo
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP
+    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.42/24 brd 192.168.1.255 scope global eth0`);
+      return;
+    }
+    if(sub==='route' || sub==='r'){
+      printBlock(
+`default via 192.168.1.1 dev eth0 proto dhcp metric 100
+192.168.1.0/24 dev eth0 proto kernel scope link src 192.168.1.42`);
+      return;
+    }
+    printLine('Usage: ip addr | ip route');
+  };
+
+  async function apptStyleInstall(pkgManagerName, elevatedRequired, args){
+    if(elevatedRequired && !effectiveRoot()){
+      if(pkgManagerName==='apt'){
+        printBlock(
+`E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+E: Unable to acquire the dpkg frontend lock, are you root?`);
+      } else {
+        printLine(`Error: This command has to be run with superuser privileges (under the root user on most systems).`);
+      }
+      return;
+    }
+    const sub = (args[0]||'').toLowerCase();
+    const pkg = args[1];
+    if(sub==='update'){
+      printLine('Hit:1 http://archive.ubuntu.com/ubuntu noble InRelease');
+      await new Promise(r=>setTimeout(r,300));
+      printLine('Reading package lists... Done');
+      printLine('Building dependency tree... Done');
+      printLine('All packages are up to date.');
+      return;
+    }
+    if(sub==='upgrade'){
+      printLine('Reading package lists... Done');
+      await new Promise(r=>setTimeout(r,300));
+      printLine('Calculating upgrade... Done');
+      printLine(`${randInt(0,6)} upgraded, 0 newly installed, 0 to remove and 0 not upgraded.`);
+      return;
+    }
+    if(sub==='install'){
+      if(!pkg){ printLine(`${pkgManagerName}: missing package name`, 'err'); return; }
+      printLine('Reading package lists... Done');
+      await new Promise(r=>setTimeout(r,250));
+      printLine('Building dependency tree... Done');
+      printLine(`The following NEW packages will be installed:`);
+      printLine(`  ${pkg}`);
+      await new Promise(r=>setTimeout(r,300));
+      printLine(`Setting up ${pkg} ...`);
+      printLine(`${pkg} installed successfully.`);
+      return;
+    }
+    if(sub==='remove'){
+      if(!pkg){ printLine(`${pkgManagerName}: missing package name`, 'err'); return; }
+      printLine(`Removing ${pkg} ...`);
+      await new Promise(r=>setTimeout(r,250));
+      printLine(`${pkg} removed successfully.`);
+      return;
+    }
+    printLine(`Usage: ${pkgManagerName} update|upgrade|install|remove [package]`);
+  }
+
+  commands['apt'] = async function(args){ await apptStyleInstall('apt', true, args); };
+  commands['dnf'] = async function(args){ await apptStyleInstall('dnf', true, args); };
+
+  commands['nano'] = function(args){
+    const fname = args[0];
+    let content = '';
+    if(fname){
+      const p = resolvePath(fname);
+      const node = getNode(p);
+      if(node && node.type==='file') content = node.content || '';
+    }
+    printLine(`  GNU nano 7.2                    ${fname||'New Buffer'}`, 'dim');
+    printLine('');
+    (content || '[ New File ]').split('\n').forEach(l=>printLine(l));
+    printLine('');
+    printLine('^G Help   ^O Write Out  ^W Where Is   ^X Exit', 'dim');
+    printLine('(This simulator shows a read-only nano view. Press Enter to exit the editor.)', 'dim');
+    return new Promise(resolve=>{
+      mode = {type:'keypress', resolve: ()=>{ mode={type:'shell'}; resolve(); }};
+      renderInputLine('', false, true);
+    });
+  };
+
+  // ---------- su / sudo with password mode ----------
+  function promptPassword(promptText){
+    return new Promise(resolve=>{
+      mode = {type:'password', resolve: (val)=>{ mode={type:'shell'}; resolve(val); }};
+      renderInputLine(promptText, true, false);
+    });
+  }
+
+  commands['su'] = async function(args){
+    const target = args.find(a=>a!=='-') || 'root';
+    if(target!=='root' && target!=='jsmith'){
+      printLine(`su: user ${target} does not exist`, 'err');
+      return;
+    }
+    if(target==='jsmith'){
+      if(state.isRoot){
+        state.isRoot = false; state.user = 'jsmith';
+        if(args.includes('-')) state.cwd = homeOf('jsmith');
+        return;
+      }
+      printLine(`su: Authentication failure`, 'err');
+      return;
+    }
+    // target root
+    if(state.isRoot){ return; }
+    await promptPassword('Password: ');
+    printLine('');
+    state.isRoot = true; state.user = 'root';
+    if(args.includes('-')) state.cwd = homeOf('root');
+  };
+
+  commands['sudo'] = async function(args){
+    if(args.length===0){ printLine('usage: sudo command', 'err'); return; }
+    if(args[0]==='-i'){
+      if(!state.sudoAuthenticated){
+        await promptPassword('[sudo] password for jsmith: ');
+        printLine('');
+        state.sudoAuthenticated = true;
+      }
+      state.isRoot = true; state.user = 'root'; state.cwd = homeOf('root');
+      return;
+    }
+    if(!state.sudoAuthenticated){
+      await promptPassword('[sudo] password for jsmith: ');
+      printLine('');
+      state.sudoAuthenticated = true;
+    }
+    const cmdName = args[0].toLowerCase();
+    const cmdArgs = args.slice(1);
+    if(!commands[cmdName]){
+      printLine(`sudo: ${args[0]}: command not found`, 'err');
+      return;
+    }
+    elevatedOnce = true;
+    try{
+      await commands[cmdName](cmdArgs);
+    } finally {
+      elevatedOnce = false;
+    }
+  };
+
+  // ---------- Dispatch ----------
+  function tokenize(input){
+    const tokens = [];
+    let cur = ''; let inQuotes = false;
+    for(let i=0;i<input.length;i++){
+      const c = input[i];
+      if(c==='"'){ inQuotes = !inQuotes; continue; }
+      if(c===' ' && !inQuotes){ if(cur){ tokens.push(cur); cur=''; } }
+      else cur += c;
+    }
+    if(cur) tokens.push(cur);
+    return tokens;
+  }
+
+  async function runCommand(raw){
+    const trimmed = raw.trim();
+    if(trimmed==='') return;
+    const tokens = tokenize(trimmed);
+    const cmdName = tokens[0].toLowerCase();
+    const args = tokens.slice(1);
+    if(commands[cmdName]){
+      try{
+        await commands[cmdName](args);
+      } catch(e){
+        printLine('An unexpected error occurred in the simulator: ' + e.message, 'err');
+      }
+    } else {
+      printLine(`${tokens[0]}: command not found`, 'err');
+    }
+  }
+
+  // ---------- Prompt / input rendering ----------
+  let currentInputText = '';
+  let masked = false;
+  let plainPromptText = null; // used for password/keypress prefixes
+
+  function buildPromptPrefixHTML(){
+    const userCls = effectiveRoot() ? 'p-root' : 'p-user';
+    const userLabel = effectiveRoot() ? 'root' : state.user;
+    const sym = effectiveRoot() ? '#' : '$';
+    return `<span class="${userCls}">${userLabel}@${HOSTNAME}</span><span class="p-sym">:</span><span class="p-path">${esc(displayPath(state.cwd))}</span><span class="p-sym">${sym} </span>`;
+  }
+
+  function renderInputLine(customPrefix, isMasked, hideCursorPrompt){
+    masked = !!isMasked;
+    plainPromptText = customPrefix===undefined ? null : customPrefix;
+    const lineDiv = document.createElement('div');
+    lineDiv.className = 'line prompt-line';
+    lineDiv.id = 'active-line';
+    if(plainPromptText!==null){
+      if(plainPromptText){
+        const prefix = document.createElement('span');
+        prefix.className = 'p-plain';
+        prefix.textContent = plainPromptText;
+        lineDiv.appendChild(prefix);
+      }
+    } else {
+      const prefixSpan = document.createElement('span');
+      prefixSpan.innerHTML = buildPromptPrefixHTML();
+      lineDiv.appendChild(prefixSpan);
+    }
+    const inputSpan = document.createElement('span');
+    inputSpan.className = 'cur-input';
+    inputSpan.id = 'cur-input-span';
+    const cursor = document.createElement('span');
+    cursor.className = 'cursor';
+    lineDiv.appendChild(inputSpan);
+    lineDiv.appendChild(cursor);
+    screen.appendChild(lineDiv);
+    scrollDown();
+  }
+
+  function updateInputSpan(){
+    const span = document.getElementById('cur-input-span');
+    if(span) span.textContent = masked ? '*'.repeat(currentInputText.length) : currentInputText;
+    scrollDown();
+  }
+
+  function finalizeInputLine(){
+    const el = document.getElementById('active-line');
+    if(el){
+      const cursor = el.querySelector('.cursor');
+      if(cursor) cursor.remove();
+      el.removeAttribute('id');
+      const span = el.querySelector('#cur-input-span');
+      if(span){
+        span.removeAttribute('id');
+        if(masked) span.textContent = '';
+      }
+    }
+  }
+
+  async function handleSubmit(){
+    const text = currentInputText;
+    finalizeInputLine();
+    currentInputText = '';
+
+    if(mode.type==='password'){
+      mode.resolve(text);
+      return;
+    }
+    if(mode.type==='keypress'){
+      mode.resolve();
+      return;
+    }
+    if(text.trim()!==''){ history.push(text); }
+    histIndex = history.length;
+    await runCommand(text);
+    if(mode.type==='shell'){
+      renderInputLine();
+    }
+  }
+
+  let history = [];
+  let histIndex = -1;
+
+  // ---------- Hidden input capture ----------
+  const hiddenInput = document.createElement('textarea');
+  hiddenInput.className = 'hidden-input';
+  hiddenInput.autocomplete = 'off';
+  hiddenInput.autocapitalize = 'off';
+  hiddenInput.spellcheck = false;
+  document.body.appendChild(hiddenInput);
+
+  function focusInput(){ hiddenInput.focus(); }
+  screen.addEventListener('click', focusInput);
+  window.addEventListener('click', focusInput);
+
+  hiddenInput.addEventListener('keydown', function(e){
+    if(e.key==='Enter'){
+      e.preventDefault();
+      handleSubmit();
+      hiddenInput.value = '';
+      return;
+    }
+    if(e.key==='ArrowUp'){
+      e.preventDefault();
+      if(mode.type!=='shell' || history.length===0) return;
+      histIndex = Math.max(0, histIndex-1);
+      currentInputText = history[histIndex] || '';
+      updateInputSpan();
+      return;
+    }
+    if(e.key==='ArrowDown'){
+      e.preventDefault();
+      if(mode.type!=='shell' || history.length===0) return;
+      histIndex = Math.min(history.length, histIndex+1);
+      currentInputText = history[histIndex] || '';
+      updateInputSpan();
+      return;
+    }
+    if(e.key==='Backspace'){
+      e.preventDefault();
+      currentInputText = currentInputText.slice(0,-1);
+      updateInputSpan();
+      return;
+    }
+    if(e.key==='Tab'){ e.preventDefault(); return; }
+  });
+
+  hiddenInput.addEventListener('input', function(){
+    const val = hiddenInput.value;
+    if(val.length>0){
+      currentInputText += val;
+      hiddenInput.value = '';
+      updateInputSpan();
+    }
+  });
+
+  // ---------- Reference / command index panel ----------
+  const reference = [
+    { name:"ls", example:"ls -la", desc:"Command used to list files and directory contents within the current or specified path." },
+    { name:"pwd", example:"pwd", desc:"Print Working Directory command that outputs the full absolute path of the current directory." },
+    { name:"mv", example:"mv notes.txt Documents/", desc:"Command used to move files or directories, as well as rename them." },
+    { name:"cp", example:"cp -r Documents Documents_backup", desc:"Command used to copy files and directories from a source location to a destination." },
+    { name:"rm", example:"rm -r Downloads", desc:"Command used to remove or delete files and directories permanently from the filesystem." },
+    { name:"chmod", example:"chmod 755 project/app.py", desc:"Change Mode command used to modify file and directory read, write, and execute permissions." },
+    { name:"chown", example:"sudo chown jsmith:jsmith notes.txt", desc:"Change Owner command used to modify the user and/or group ownership of files and directories." },
+    { name:"grep", example:"grep -in error /var/log/syslog", desc:"Global Regular Expression Print command used to search for specific text or patterns within files or command output." },
+    { name:"find", example:"find /home/jsmith -name \"*.txt\"", desc:"Search utility used to locate files and directories within a directory hierarchy based on criteria like name, size, or permissions." },
+    { name:"fsck", example:"sudo fsck -f /dev/sda1", desc:"File System Check utility used to inspect, repair, and report errors on Linux filesystems." },
+    { name:"mount", example:"mount", desc:"Command used to attach external storage devices, partitions, or network shares to a designated point in the directory tree." },
+    { name:"su", example:"su -", desc:"Switch User utility used to change the current terminal session identity to another user account or the root account." },
+    { name:"sudo", example:"sudo apt update", desc:"Superuser Do command allowing authorized users to execute specific commands with elevated security permissions." },
+    { name:"apt", example:"sudo apt install htop", desc:"Advanced Package Tool used on Debian-based distributions (like Ubuntu) to install, update, upgrade, and remove software packages." },
+    { name:"dnf", example:"sudo dnf install htop", desc:"Dandified YUM package manager used on Red Hat-based distributions (like Fedora and RHEL) to manage software installations and dependencies." },
+    { name:"ip", example:"ip addr", desc:"Modern network configuration utility used to manage network interfaces, routing tables, and IP addresses." },
+    { name:"ping", example:"ping -c 4 8.8.8.8", desc:"Network utility that sends ICMP Echo Request packets to a destination to test basic reachability and latency." },
+    { name:"curl", example:"curl -I https://example.com", desc:"Command-line tool used to transfer data to or from a server using protocols like HTTP, HTTPS, FTP, and SFTP." },
+    { name:"dig", example:"dig example.com", desc:"Domain Information Groper utility used to query DNS name servers for troubleshooting domain resolution and record lookups." },
+    { name:"traceroute", example:"traceroute example.com", desc:"Network diagnostic tool that tracks and displays the path (hops) packets take to reach a destination address." },
+    { name:"man", example:"man grep", desc:"System manual page viewer providing detailed documentation, usage flags, and syntax examples for Linux commands." },
+    { name:"cat", example:"cat /etc/hosts", desc:"Concatenate command used to view file contents, combine multiple files, or create new files directly in the terminal." },
+    { name:"top", example:"top", desc:"Real-time process monitor that displays system resource usage, CPU load, memory consumption, and active processes." },
+    { name:"ps", example:"ps aux", desc:"Process Status command that snapshot-reports currently running processes, their Process IDs (PIDs), and resource usage." },
+    { name:"du", example:"du -sh Documents", desc:"Disk Usage command used to estimate and display disk space consumed by specific files or directories." },
+    { name:"df", example:"df -h", desc:"Disk Free command that displays total, used, and available space on mounted filesystems." },
+    { name:"nano", example:"nano Documents/notes.txt", desc:"User-friendly, terminal-based text editor commonly used for quick configuration edits without complex modal modes." },
+    { name:"/etc/passwd", example:"cat /etc/passwd", desc:"Local system file storing user account information, including user IDs (UID), group IDs (GID), home directories, and default shells." },
+    { name:"/etc/shadow", example:"sudo cat /etc/shadow", desc:"Secured system file accessible only by root that stores encrypted user account passwords and password aging policies." },
+    { name:"/etc/hosts", example:"cat /etc/hosts", desc:"Static lookup table used to map hostnames directly to IP addresses locally before querying DNS servers." },
+    { name:"/etc/fstab", example:"cat /etc/fstab", desc:"Filesystem table configuration file that defines static file system mounts, partitions, and options applied at system boot." },
+    { name:"/etc/resolv.conf", example:"cat /etc/resolv.conf", desc:"System configuration file containing local DNS server addresses and search domain preferences." },
+    { name:"systemd", example:"man systemd", desc:"Primary system and service manager for modern Linux OSs that initializes user space, boots the OS, and manages system processes." },
+    { name:"kernel", example:"uname -a", desc:"Core component of the Linux operating system that manages hardware resources, system memory, CPU cycles, and low-level device drivers." },
+    { name:"bootloader", example:"man man", desc:"Software program (such as GRUB) that loads the Linux kernel into system memory during the initial boot sequence." },
+    { name:"Root Account", example:"sudo -i", desc:"Superuser account on a Linux system possessing unrestricted system privileges and administrative authority." },
+  ];
+
+  function renderReference(filter){
+    const list = document.getElementById('ref-list');
+    list.innerHTML = '';
+    const f = (filter||'').trim().toLowerCase();
+    const items = reference.filter(r =>
+      !f || r.name.toLowerCase().includes(f) || r.desc.toLowerCase().includes(f) || r.example.toLowerCase().includes(f)
+    );
+    if(items.length===0){
+      const empty = document.createElement('div');
+      empty.className = 'ref-empty';
+      empty.textContent = 'No matching commands.';
+      list.appendChild(empty);
+      return;
+    }
+    items.forEach(r=>{
+      const item = document.createElement('div');
+      item.className = 'ref-item';
+      item.title = 'Click to load this example into the prompt';
+      const name = document.createElement('div');
+      name.className = 'ref-name';
+      name.textContent = r.name;
+      const ex = document.createElement('div');
+      ex.className = 'ref-example';
+      ex.textContent = r.example;
+      const desc = document.createElement('div');
+      desc.className = 'ref-desc';
+      desc.textContent = r.desc;
+      item.appendChild(name);
+      item.appendChild(ex);
+      item.appendChild(desc);
+      item.addEventListener('click', ()=>{
+        if(mode.type!=='shell') return;
+        currentInputText = r.example;
+        updateInputSpan();
+        focusInput();
+      });
+      list.appendChild(item);
+    });
+  }
+
+  document.getElementById('ref-search-input').addEventListener('input', function(e){
+    renderReference(e.target.value);
+  });
+  renderReference('');
+
+  // ---------- Boot ----------
+  function boot(){
+    printLine('Welcome to Ubuntu 24.04.1 LTS (GNU/Linux 6.8.0-45-generic x86_64)');
+    printLine('');
+    printLine('This is a browser-based simulation for practicing common Linux');
+    printLine('command-line tools (ls, cd, cat, grep, sudo, ping, etc). Nothing here');
+    printLine('touches a real machine. Try "man ls" or click any item in the index.');
+    printLine('');
+    renderInputLine();
+    focusInput();
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>

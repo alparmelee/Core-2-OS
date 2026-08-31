@@ -1,0 +1,115 @@
+We often think that a knowledge of operating systems, security, networking, and other technologies
+is our most important skills when trying to troubleshoot a problem.
+But in reality, communication tends to be the issue where people tend to run into problems.
+And in a way, this does make sense.
+We do spend a lot of time trying to understand the nuances of the latest operating system
+or the internals of a particular application.
+But how often do we spend time really understanding how to communicate with other people?
+One of the things that I have realized during my career in IT
+is that the communication skills that you have are extremely marketable.
+And the better you are at communicating with other people,
+the higher you'll move up within the IT ranks.
+In technology, we love to abbreviate.
+Our acronyms tend to be littered in all of our documentation.
+And we tend to use shortcuts and abbreviations when describing technology topics.
+When you're communicating with other technologists,
+those abbreviations are perfectly reasonable.
+But when you're discussing problems with a third party or with your customer,
+it might be better to use a different set of terms.
+Your goal is to be the translator between the technical world and the world that they work in.
+And very often, this means that you're avoiding any use of acronyms or any technological slang.
+The people in charge of the organization have not spent their entire career in the world of information technology,
+but they are very good at taking all of the information in and making a business decision.
+Your goal should be to present the information in a very easy-to-follow form
+that anyone would be able to understand.
+Thankfully, this is a problem that's relatively easy to avoid.
+You just have to put yourself in the shoes of the other person
+and explain it as if you were someone who was not involved in the world of technology.
+The attitude that you have during your normal workday is infectious.
+If you have a positive attitude,
+you'll find that the people around you also have a positive attitude.
+When you're communicating with other people,
+you should be partnering with them and talking with them as an equal.
+This is something that will provide confidence
+and show people that you are willing to do the work.
+This can also help when you run into those rare technology problems
+that simply can't be resolved.
+If someone has stored all of their personal information on a storage drive
+and that storage drive has failed with no ability to recover any of that information,
+it becomes a difficult conversation.
+But it always helps if you maintain a positive attitude
+and give people different options for moving forward from this issue.
+We're very often working with these customers many times a day
+over a number of weeks or even months.
+So it's important to keep in mind that your attitude has a direct impact
+on the overall customer experience.
+As humans, we have a desire to be the smartest one in the room
+and to make sure that people understand that we know this technology that we're working with.
+But what we don't want to do is interrupt people
+when they're in the middle of describing the problems that they're having
+or the issues associated with a particular ticket.
+So we should work on getting into a habit where we spend much more time asking questions
+and listening than we do talking and interrupting.
+There have been many times where customers try to explain a particular problem
+and the technologist interrupts before they even get to the key point of the issue.
+We sometimes assume we know what the issue happens to be,
+but until we've heard the entire story, we can never know for sure.
+This is not only important when you're face-to-face with an individual,
+but it's especially important when you're on a conference call or a phone call.
+You want to be sure that the person you're talking to knows that they've been heard,
+and you want to be sure that you collect all of the important details
+that will help you solve this problem.
+I found this to be a very difficult skill to perfect,
+not only for myself, but for other people that I've worked with.
+But if you spend your time understanding when would be the appropriate time to listen
+and when the appropriate time would be to talk,
+you'll find that the entire troubleshooting process moves along much smoother.
+Another thing that we don't tend to spend enough time doing
+is asking questions about what the customer has seen.
+They are the way that we drill down into the details of the problem.
+And very often we assume or make a judgment call on what we think the problem might be,
+but in reality we should have asked more probing questions
+to understand details about the issue.
+I also find a useful task is to listen to everything the customer is telling me about the issue,
+make notes on exactly what they're saying,
+and then repeat back to them the information that I heard.
+Often this matches exactly what they've said,
+but sometimes they will clarify a point that I may have gotten wrong.
+This is not only an important part of building good teamwork,
+but it's also an important part of solving the problem.
+Even after the customer spent their time talking about the issue,
+and you might even have a very good feeling of what might solve this problem,
+it's often good to ask clarifying questions
+to see if perhaps it's not exactly what you were thinking at first.
+You might often find that what you believe the problem to be originally
+is very different in reality.
+It's often said that expectation is reality,
+and there's no better truth than when you're working on a technical problem.
+It's always good to give people options
+and have them understand what the potential might be in almost any scenario.
+For example, there may be an option to repair a system,
+or it might be an option to replace.
+You should explain both sides of this situation
+and have them understand what the advantages and disadvantages might be of either decision.
+I also find it useful to follow up with a technical conversation over the phone using email.
+This way, the problem itself is well documented,
+and both parties are on the same page because everything has been documented in an email.
+Sometimes these issues may drag on for weeks or even months,
+especially if you're waiting on parts to be delivered by a manufacturer.
+One thing you might want to do is set a reminder in your calendar
+to have this customer contacted once a week.
+Even if we've not heard anything from the manufacturer,
+we can still let the customer know that we are still involved with troubleshooting this issue
+and we haven't forgotten about them.
+This is a very simple thing to do,
+but it can be very important for making people understand that you are on top of the problem
+and you're going to take care of resolving their issue.
+And after you close a ticket,
+it's always a good idea to check in with the customer
+and see if their problem really was resolved to their satisfaction.
+Very often they'll say there's nothing else to do
+and you can continue to the next ticket.
+But occasionally they'll mention that there is one extra thing
+that needs to be resolved to get this to 100% resolution.
+And that might have been a minor issue that could have been easily resolved
+that would have otherwise slipped through the cracks.

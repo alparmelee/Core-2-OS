@@ -1,0 +1,1685 @@
+{
+  "chapter": 2,
+  "title": "Chapter 2 — Security",
+  "sections": [
+    {
+      "id": "2.1",
+      "title": "Security Measures and Their Purposes",
+      "file": "2.1 Security Measures and Their Purposes.html",
+      "count": 40
+    },
+    {
+      "id": "2.2",
+      "title": "Windows OS Security Settings",
+      "file": "2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html",
+      "count": 36
+    },
+    {
+      "id": "2.3",
+      "title": "Wireless Security Protocols",
+      "file": "2.3 Wireless Security Protocols and Authentication Methods.html",
+      "count": 8
+    },
+    {
+      "id": "2.4",
+      "title": "Malware and Adware Types",
+      "file": "2.4 Malware and Adware Types.html",
+      "count": 22
+    },
+    {
+      "id": "2.5",
+      "title": "Social Engineering and Threats",
+      "file": "2.5 Social Engineering Attacks, Threats, and Vulnerabilities.html",
+      "count": 28
+    },
+    {
+      "id": "2.6",
+      "title": "Malware Investigation and Remediation",
+      "file": "2.6 Malware Investigation and Remediation.html",
+      "count": 10
+    },
+    {
+      "id": "2.7",
+      "title": "Encryption and Security Best Practices",
+      "file": "2.7 Data-at-Rest Encryption and Security Best Practices.html",
+      "count": 26
+    },
+    {
+      "id": "2.8",
+      "title": "Mobile Device Hardening",
+      "file": "2.8 Mobile Device Hardening Techniques.html",
+      "count": 15
+    },
+    {
+      "id": "2.9",
+      "title": "Data Destruction and Sanitization",
+      "file": "2.9 Data Destruction and Sanitization.html",
+      "count": 13
+    },
+    {
+      "id": "2.10",
+      "title": "Router and Firewall Settings",
+      "file": "2.10 Router, Wireless, and Firewall Settings.html",
+      "count": 14
+    },
+    {
+      "id": "2.11",
+      "title": "Browser Security and Configuration",
+      "file": "2.11 Browser Security and Configuration.html",
+      "count": 18
+    }
+  ],
+  "terms": [
+    {
+      "id": "2.1-0",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Bollards",
+      "definition": "Prevent access — with limits. Channel people through a specific access point while keeping out other things. Allow people; prevent cars and trucks. Identify safety concerns and prevent injuries. Can be used to an extreme: concrete barriers, bollards, even moats."
+    },
+    {
+      "id": "2.1-1",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Access control vestibule",
+      "definition": "A two-door entry system that controls traffic one person or group at a time."
+    },
+    {
+      "id": "2.1-2",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Badge reader",
+      "definition": "Magnetic swipe, RFID, or NFC — many different identification methods for different applications."
+    },
+    {
+      "id": "2.1-3",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Video surveillance",
+      "definition": "Can replace physical guards. Camera features are important — object detection can identify a license plate or a person’s face. Often many different cameras networked together and recorded over time."
+    },
+    {
+      "id": "2.1-4",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Alarm systems",
+      "definition": "Circuit-based. A circuit is opened or closed — door, window, fence. Useful on the perimeter."
+    },
+    {
+      "id": "2.1-5",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Motion sensors",
+      "definition": "Motion detection that identifies movement without a camera."
+    },
+    {
+      "id": "2.1-6",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Equipment locks",
+      "definition": "Data center hardware is usually managed by different groups. Responsibility lies with the owner. Racks can be installed side-to-side. Enclosed cabinets with locks — ventilation on front, back, top, and bottom."
+    },
+    {
+      "id": "2.1-7",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Security guards and access lists",
+      "definition": "Physical protection at the reception area of a facility. Validates identification of existing employees. Provides guest access."
+    },
+    {
+      "id": "2.1-8",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Fences",
+      "definition": "Build a perimeter — usually very obvious. May not be what you’re looking for."
+    },
+    {
+      "id": "2.1-9",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Key fobs",
+      "definition": "Small RFID key added to a physical keychain. Replaces a physical key. Commonly used for door locks — proximity operation and contactless."
+    },
+    {
+      "id": "2.1-10",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Smart cards",
+      "definition": "Certificate-based authentication. Usually requires additional factors. Integrated card reader built into the laptop, or an external USB-connected reader."
+    },
+    {
+      "id": "2.1-11",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Mobile digital key",
+      "definition": "Replaces physical keys with your phone. Many different apps — automobile unlocking and starting, hotel or office door locks, doors at home. Better authentication than a physical key. Must have access to the phone; unlock for verification."
+    },
+    {
+      "id": "2.1-12",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Keys",
+      "definition": "Some doors may not have an electronic lock — rarely used. Standalone locks: safe, storage bin, cabinet. Use a key cabinet with formal check-in/check-out and a well-defined storage location. Allows for auditing and timestamps."
+    },
+    {
+      "id": "2.1-13",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Biometrics",
+      "definition": "Biometric authentication usually stores a mathematical representation of your biometric — your actual fingerprint isn’t usually saved."
+    },
+    {
+      "id": "2.1-14",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Retina scanner",
+      "definition": "Reads the unique capillary structure in the back of the eye."
+    },
+    {
+      "id": "2.1-15",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Fingerprint scanner",
+      "definition": "Common on phones, laptops, and door access systems."
+    },
+    {
+      "id": "2.1-16",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Palm print scanner",
+      "definition": "Measures the shape of the hand and fingers."
+    },
+    {
+      "id": "2.1-17",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Facial recognition technology (FRT)",
+      "definition": "Authenticate using a common biometric feature — your face. Creates a digital “key” from your facial features using a laser dot projector, infrared camera, and 3D facial map."
+    },
+    {
+      "id": "2.1-18",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Voice recognition technology",
+      "definition": "Uses an individual’s voice as a key. The system is “trained” by speaking phrases; results are evaluated and stored. Verify yourself with a different phrase — voice recognition software listens for the original speaker."
+    },
+    {
+      "id": "2.1-19",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Lighting",
+      "definition": "More light means more security. Attacks avoid the light. Easier to see when lit. Non-IR cameras can see better."
+    },
+    {
+      "id": "2.1-20",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Magnetometers",
+      "definition": "Passive scanning that detects metal objects. Not useful for non-metal objects — won’t identify ceramic or plastic."
+    },
+    {
+      "id": "2.1-21",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Principle of least privilege",
+      "definition": "Rights and permissions should be set to the bare minimum — you only get what’s needed to complete your objective."
+    },
+    {
+      "id": "2.1-22",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Zero Trust model",
+      "definition": "Many networks are relatively open on the inside — once you’re through the firewall, there are few security controls. Zero Trust is a holistic approach to network security covering every device, every process, and every person."
+    },
+    {
+      "id": "2.1-23",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Access control lists (ACLs)",
+      "definition": "Used to allow or deny traffic. Also used for NAT, QoS, etc. Commonly applied on the ingress or egress of a router interface."
+    },
+    {
+      "id": "2.1-24",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Multifactor authentication (MFA)",
+      "definition": "Prove who you are using different methods — a memorized password, a mobile app, your GPS location."
+    },
+    {
+      "id": "2.1-25",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Email auth",
+      "definition": "Associate a person with an email address. Validate a person at that email — useful during registration. Verify a user’s email address. Use instead of a password (username is your email)."
+    },
+    {
+      "id": "2.1-26",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Hardware token",
+      "definition": "A physical security device that generates or stores authentication codes to verify a user’s identity when logging into an account or system."
+    },
+    {
+      "id": "2.1-27",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Authenticator application",
+      "definition": "Pseudo-random token generators — a useful authentication factor. Carry a physical hardware token generator, or use a software-based token generator on your phone. Powerful and convenient."
+    },
+    {
+      "id": "2.1-28",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Short Message Service (SMS)",
+      "definition": "Text messaging — includes more than text these days. A login factor can be sent via SMS to a predefined phone number: provide username and password, phone receives an SMS, input the code into the login form."
+    },
+    {
+      "id": "2.1-29",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Voice call",
+      "definition": "A phone call provides the token — the computer is talking to you. Similar disadvantages to SMS: phone can be intercepted or forwarded, phone number can be added to another phone."
+    },
+    {
+      "id": "2.1-30",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Time-based one-time password (TOTP)",
+      "definition": "Uses a secret key and the time of day — no incremental counter. Secret key is configured ahead of time. Timestamps are synchronized via NTP and usually increment every 30 seconds."
+    },
+    {
+      "id": "2.1-31",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "One-time password / passcode (OTP)",
+      "definition": "Use them once and never again — once per session, once per authentication attempt. Keys are based on a secret key and a counter. Token-based authentication: the hash is different every time. Hardware and software tokens available."
+    },
+    {
+      "id": "2.1-32",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Security Assertions Markup Language (SAML)",
+      "definition": "An open standard that lets security systems securely share your identity details so you don’t have to re-enter credentials across different websites."
+    },
+    {
+      "id": "2.1-33",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Single sign-on (SSO)",
+      "definition": "An authentication feature that lets you log in just once to access all your connected apps and services seamlessly."
+    },
+    {
+      "id": "2.1-34",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Just-in-time access",
+      "definition": "A security practice that grants elevated user permissions only for the exact amount of time needed to complete a task, then revokes them automatically."
+    },
+    {
+      "id": "2.1-35",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Privileged access management (PAM)",
+      "definition": "Tools and policies designed to lock down, monitor, and audit superuser or admin accounts with high-level access."
+    },
+    {
+      "id": "2.1-36",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Mobile device management (MDM)",
+      "definition": "IT software that allows administrators to remotely configure, monitor, and secure smartphones and laptops used within an organization."
+    },
+    {
+      "id": "2.1-37",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Data loss prevention (DLP)",
+      "definition": "Security software that detects and blocks sensitive or confidential information from leaving the organization’s network."
+    },
+    {
+      "id": "2.1-38",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Identity access management (IAM)",
+      "definition": "The overarching framework of policies and technologies that controls who has access to which digital resources."
+    },
+    {
+      "id": "2.1-39",
+      "section": "2.1",
+      "sectionTitle": "Security Measures and Their Purposes",
+      "name": "Directory services",
+      "definition": "A centralized network database that stores, organizes, and manages user accounts, devices, and permissions across an entire organization."
+    },
+    {
+      "id": "2.2-0",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Defender Antivirus",
+      "definition": "Windows Defender Antivirus: The built-in antivirus for Windows — no additional third-party product is required. It lives inside the Windows Security app under Virus & threat protection. The exact label may not read \"Defender Antivirus\"; the name has changed over time (Windows Defender → Windows Defender Antivirus → Microsoft Defender Antivirus)."
+    },
+    {
+      "id": "2.2-1",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Activate/deactivate",
+      "definition": "Windows Defender Antivirus: Don't disable your security protection except for temporary troubleshooting — it increases risk, so make sure you know what you're doing. Defender Antivirus operates in real time. Path: Windows Security app → Virus & threat protection settings → Manage settings → Real-time protection."
+    },
+    {
+      "id": "2.2-2",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Update definitions",
+      "definition": "Windows Defender Antivirus: Antivirus is only as good as its latest signatures, so staying up to date matters. Go to Virus & threat protection → Protection updates, and click \"Check for updates.\" Automatic updates are normally configured by default."
+    },
+    {
+      "id": "2.2-3",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Firewall",
+      "definition": "Windows Firewall: Windows Firewall monitors inbound and outbound network traffic and blocks anything that doesn't match an allowed rule, forming the first line of defense between this PC and the network."
+    },
+    {
+      "id": "2.2-4",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Activate/deactivate",
+      "definition": "Windows Firewall: Activating or deactivating a firewall toggles its ability to monitor traffic — turning it off removes protection and leaves the system vulnerable to unauthorized network connections."
+    },
+    {
+      "id": "2.2-5",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Port security",
+      "definition": "Windows Firewall: Port security controls network traffic by selectively opening or closing specific communication ports, to block unauthorized entry and restrict unnecessary network protocols."
+    },
+    {
+      "id": "2.2-6",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Application security",
+      "definition": "Windows Firewall: Application security allows or blocks specific programs from sending or receiving data across the network — regardless of which port they use."
+    },
+    {
+      "id": "2.2-7",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "User and groups",
+      "definition": "Users & Groups: Windows controls what a person can do through their account type and group memberships — from a fully locked-down Guest to an unrestricted Administrator."
+    },
+    {
+      "id": "2.2-8",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Local vs. Microsoft account",
+      "definition": "Users & Groups: A local account stores credentials offline on a single PC and only grants access to that device. A Microsoft account connects your sign-in to cloud services, syncing settings, files, and credentials across multiple devices."
+    },
+    {
+      "id": "2.2-9",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Standard account",
+      "definition": "Users & Groups: A Standard account can run applications and change personal settings, but is blocked from installing system-wide software or modifying critical security settings without administrator approval."
+    },
+    {
+      "id": "2.2-10",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Administrator",
+      "definition": "Users & Groups: An Administrator account has full, unrestricted control over the operating system — installing software, changing system configuration, and managing permissions for every other user."
+    },
+    {
+      "id": "2.2-11",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Guest user",
+      "definition": "Users & Groups: A Guest account is a restricted, temporary account for casual access. It prevents installing software, changing system settings, or accessing other users' private files."
+    },
+    {
+      "id": "2.2-12",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Power user",
+      "definition": "Users & Groups: Power User is a legacy Windows group with elevated permissions — such as installing legacy applications and running some administrative tools — without full administrator control over the system."
+    },
+    {
+      "id": "2.2-13",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Log-in OS options",
+      "definition": "Sign-in Options: Windows supports several ways to prove who you are before letting you in — from a classic password to biometrics and passwordless hardware-backed sign-in."
+    },
+    {
+      "id": "2.2-14",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Username and password",
+      "definition": "Sign-in Options: The traditional authentication method: type a secret string of characters associated with your account name to verify your identity."
+    },
+    {
+      "id": "2.2-15",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Personal identification number (PIN)",
+      "definition": "Sign-in Options: A short, device-bound numerical code tied specifically to your physical machine — it allows fast login without ever transmitting your main account password over the network."
+    },
+    {
+      "id": "2.2-16",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Fingerprint",
+      "definition": "Sign-in Options: A biometric authentication feature that scans the unique ridges of your finger to quickly verify your identity and unlock your device."
+    },
+    {
+      "id": "2.2-17",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Facial recognition",
+      "definition": "Sign-in Options: A biometric security system that scans your face using specialized infrared or 3D cameras to instantly confirm your identity and grant access."
+    },
+    {
+      "id": "2.2-18",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "SSO",
+      "definition": "Sign-in Options: Single sign-on lets you log in once with a single set of credentials and automatically gain access to multiple related applications and websites — no need to type your password again for each one."
+    },
+    {
+      "id": "2.2-19",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Passwordless/Windows Hello",
+      "definition": "Sign-in Options: Windows Hello enables passwordless sign-in by replacing text passwords with secure biometrics (facial recognition or fingerprint) or a device-bound PIN, backed by the computer's hardware security chip."
+    },
+    {
+      "id": "2.2-20",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "NTFS vs. share permissions",
+      "definition": "File & Folder Permissions: Share permissions act like a guard at the front gate, controlling who gets in through the network. NTFS permissions act like individual lockboxes inside the house, controlling access to specific files and subfolders. If either one denies you, you can't get in."
+    },
+    {
+      "id": "2.2-21",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "File and folder attributes",
+      "definition": "File & Folder Permissions: File and folder attributes are metadata flags stored by the file system that define specific operating behaviors and access characteristics — such as read-only, hidden, archived, or encrypted."
+    },
+    {
+      "id": "2.2-22",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Inheritance",
+      "definition": "File & Folder Permissions: Permission inheritance is a mechanism where files and subfolders automatically receive (inherit) the access permissions of their parent folder."
+    },
+    {
+      "id": "2.2-23",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Run as administrator vs. standard user",
+      "definition": "File & Folder Permissions: Running as an administrator grants full, unrestricted access to modify system files and settings. A standard user account operates with restricted permissions to prevent unauthorized system-wide changes and protect against malware."
+    },
+    {
+      "id": "2.2-24",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "User Account Control (UAC)",
+      "definition": "File & Folder Permissions: A Windows security feature that prevents unauthorized system changes by asking for your permission — or an administrator password — before running programs or making settings changes."
+    },
+    {
+      "id": "2.2-25",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "BitLocker",
+      "definition": "Encryption: BitLocker encrypts an entire volume, protecting all of your data including the OS. It's supported on all Windows editions except Home. If you lose your laptop, it doesn't matter without the password — data stays protected even if the physical drive is moved to another computer."
+    },
+    {
+      "id": "2.2-26",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "BitLocker-To-Go",
+      "definition": "Encryption: The same BitLocker protection, applied to encrypt removable USB flash drives."
+    },
+    {
+      "id": "2.2-27",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Encrypting File System (EFS)",
+      "definition": "Encryption: EFS encrypts at the file-system level and requires NTFS. It's supported on all Windows editions except Home. It uses your username and password to derive the encryption key — so an administrator password reset will make EFS-encrypted files inaccessible."
+    },
+    {
+      "id": "2.2-28",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Active Directory",
+      "definition": "Active Directory: Active Directory is a central directory service that lets an organization manage user accounts, computers, and policy from one place, instead of configuring every machine by hand."
+    },
+    {
+      "id": "2.2-29",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Joining domain",
+      "definition": "Active Directory: Registering a local computer with a central Active Directory domain controller so it can be managed globally and allow users to sign in with domain credentials."
+    },
+    {
+      "id": "2.2-30",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Assigning log-in script",
+      "definition": "Active Directory: Specifying an executable file or script that runs automatically whenever a user signs into the domain, to automate tasks like mapping drives or setting environment variables."
+    },
+    {
+      "id": "2.2-31",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Moving objects within organizational units",
+      "definition": "Active Directory: Relocating user accounts, computers, or groups between organizational units (OUs) to reorganize administrative structure — and change which group policies automatically apply to them."
+    },
+    {
+      "id": "2.2-32",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Assigning home folders",
+      "definition": "Active Directory: Configuring a dedicated private network storage path in a user's account properties, which automatically mounts as a personal drive on logon."
+    },
+    {
+      "id": "2.2-33",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Applying Group Policy",
+      "definition": "Active Directory: Enforcing centralized security settings, software deployments, and system configurations across domain users and computers using Group Policy Objects (GPOs)."
+    },
+    {
+      "id": "2.2-34",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Selecting security groups",
+      "definition": "Active Directory: Adding user or computer objects to specific Active Directory security groups, to streamline granting permissions to network resources like shared folders and printers."
+    },
+    {
+      "id": "2.2-35",
+      "section": "2.2",
+      "sectionTitle": "Windows OS Security Settings",
+      "name": "Configuring folder redirection",
+      "definition": "Active Directory: Diverting standard local user-profile folders (such as Documents or Desktop) to a central network share, so user files are automatically backed up and accessible from any domain machine."
+    },
+    {
+      "id": "2.3-0",
+      "section": "2.3",
+      "sectionTitle": "Wireless Security Protocols",
+      "name": "Wi-Fi Protected Access 2 (WPA2)",
+      "definition": "WPA2 is a legacy wireless security protocol introduced in 2004 that uses AES encryption to secure Wi-Fi networks."
+    },
+    {
+      "id": "2.3-1",
+      "section": "2.3",
+      "sectionTitle": "Wireless Security Protocols",
+      "name": "WPA3",
+      "definition": "WPA3 is the modern wireless security standard that provides stronger AES encryption options, improved key exchange security, and individual encryption even on open networks."
+    },
+    {
+      "id": "2.3-2",
+      "section": "2.3",
+      "sectionTitle": "Wireless Security Protocols",
+      "name": "Temporal Key Integrity Protocol (TKIP)",
+      "definition": "TKIP is an older encryption protocol designed for WPA as a temporary bridge to replace WEP without requiring new hardware."
+    },
+    {
+      "id": "2.3-3",
+      "section": "2.3",
+      "sectionTitle": "Wireless Security Protocols",
+      "name": "Advanced Encryption Standard (AES)",
+      "definition": "AES is a highly secure symmetric encryption algorithm used by WPA2 and WPA3 that offers significantly stronger protection than TKIP at the cost of higher CPU processing requirements."
+    },
+    {
+      "id": "2.3-4",
+      "section": "2.3",
+      "sectionTitle": "Wireless Security Protocols",
+      "name": "Remote Authentication Dial-in User Service (RADIUS)",
+      "definition": "RADIUS is a widely supported AAA protocol used in enterprise networks to centralize user authentication across 802.1X Wi-Fi, VPNs, and network infrastructure."
+    },
+    {
+      "id": "2.3-5",
+      "section": "2.3",
+      "sectionTitle": "Wireless Security Protocols",
+      "name": "Terminal Access Controller Access-Control System (TACACS+)",
+      "definition": "TACACS+ is an open-standard remote authentication protocol created as an upgraded alternative to TACACS for managing administrative access to network devices."
+    },
+    {
+      "id": "2.3-6",
+      "section": "2.3",
+      "sectionTitle": "Wireless Security Protocols",
+      "name": "Kerberos",
+      "definition": "Kerberos is a ticket-based network authentication protocol that enables single sign-on (SSO) and mutual authentication between clients and servers to prevent replay attacks."
+    },
+    {
+      "id": "2.3-7",
+      "section": "2.3",
+      "sectionTitle": "Wireless Security Protocols",
+      "name": "Multifactor authentication",
+      "definition": "Multifactor authentication verifies user identity by requiring two or more distinct verification credentials, such as passwords and security tokens, before granting wireless network access."
+    },
+    {
+      "id": "2.4-0",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "Trojan",
+      "definition": "Disguises itself as legitimate software to trick users into executing malicious code."
+    },
+    {
+      "id": "2.4-1",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "Rootkit",
+      "definition": "Gains privileged system-level access while hiding its presence, processes, and files from detection tools."
+    },
+    {
+      "id": "2.4-2",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "Virus",
+      "definition": "Attaches malicious code to clean files and spreads across systems when host programs execute."
+    },
+    {
+      "id": "2.4-3",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "Spyware",
+      "definition": "Secretly monitors user activity, gathering sensitive personal data and browser habits without consent."
+    },
+    {
+      "id": "2.4-4",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "Ransomware",
+      "definition": "Encrypts critical files or locks system access, demanding payment to restore data availability."
+    },
+    {
+      "id": "2.4-5",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "Keylogger",
+      "definition": "Captures every keystroke typed on a system to harvest credentials, passphrases, and private messaging data."
+    },
+    {
+      "id": "2.4-6",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "Boot sector virus",
+      "definition": "Infects the Master Boot Record (MBR) or partition boot sector to load before the operating system boots."
+    },
+    {
+      "id": "2.4-7",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "Cryptominer",
+      "definition": "Hijacks target system CPU/GPU processing power in the background to mine cryptocurrency without authorization."
+    },
+    {
+      "id": "2.4-8",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "Stalkerware",
+      "definition": "Intrusive software installed secretly to track real-time location, messages, and calls of a specific individual."
+    },
+    {
+      "id": "2.4-9",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "Fileless malware",
+      "definition": "Operates entirely within system RAM and native administrative utilities (e.g., PowerShell) without writing files to disk."
+    },
+    {
+      "id": "2.4-10",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "Adware",
+      "definition": "Generates unwanted pop-up advertisements on the screen, often bundling with software installations."
+    },
+    {
+      "id": "2.4-11",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "Potentially Unwanted Program (PUP)",
+      "definition": "Unintended software installed alongside desired apps that degrades performance or changes browser settings."
+    },
+    {
+      "id": "2.4-12",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "Recovery Console",
+      "definition": "Command-line environment used to repair system files, fix boot configurations, and remove persistent malware offline."
+    },
+    {
+      "id": "2.4-13",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "Endpoint Detection & Response (EDR)",
+      "definition": "Monitors individual host devices continuously for suspicious behavior, providing real-time alerts and remediation options."
+    },
+    {
+      "id": "2.4-14",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "Managed Detection & Response (MDR)",
+      "definition": "Outsourced 24/7 security service providing threat hunting, monitoring, and incident response via dedicated analysts."
+    },
+    {
+      "id": "2.4-15",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "Extended Detection & Response (XDR)",
+      "definition": "Integrates security data across endpoints, networks, cloud environments, and email systems for unified threat analysis."
+    },
+    {
+      "id": "2.4-16",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "Antivirus",
+      "definition": "Scans and protects systems using known file signatures to block legacy malware threats like viruses and worms."
+    },
+    {
+      "id": "2.4-17",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "Anti-malware",
+      "definition": "Detects and remediates complex, modern threats including spyware, Trojans, PUPs, and zero-day variants."
+    },
+    {
+      "id": "2.4-18",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "Email security gateway",
+      "definition": "Filters inbound and outbound email traffic to block spam, malicious attachments, and phishing links before they reach inboxes."
+    },
+    {
+      "id": "2.4-19",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "Software firewalls",
+      "definition": "Filters incoming and outgoing network traffic at the local OS level using defined security rules to block unauthorized connections."
+    },
+    {
+      "id": "2.4-20",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "User education & antiphishing training",
+      "definition": "Teaches users how to identify social engineering traps, suspicious URLs, and malicious file downloads to prevent initial infection."
+    },
+    {
+      "id": "2.4-21",
+      "section": "2.4",
+      "sectionTitle": "Malware and Adware Types",
+      "name": "OS reinstallation",
+      "definition": "Erases the primary drive completely and installs a fresh operating system to eliminate deeply persistent infections like rootkits."
+    },
+    {
+      "id": "2.5-0",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Phishing",
+      "definition": "Generic fraudulent emails sent to mass audiences attempting to trick victims into revealing sensitive credentials or clicking malicious links."
+    },
+    {
+      "id": "2.5-1",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Vishing",
+      "definition": "Voice-based phishing attacks where scammers use phone calls to manipulate victims into providing confidential information."
+    },
+    {
+      "id": "2.5-2",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Smishing",
+      "definition": "Phishing attacks delivered via SMS text messages containing malicious links or urgent requests for personal data."
+    },
+    {
+      "id": "2.5-3",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "QR code phishing (quishing)",
+      "definition": "Malicious QR codes placed in physical or digital locations that direct users to credential-harvesting websites when scanned."
+    },
+    {
+      "id": "2.5-4",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Spear phishing",
+      "definition": "Highly targeted phishing campaigns tailored to a specific individual or organization using gathered personal details."
+    },
+    {
+      "id": "2.5-5",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Whaling",
+      "definition": "A specialized form of spear phishing that specifically targets high-profile executives, business owners, or senior leadership."
+    },
+    {
+      "id": "2.5-6",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Shoulder surfing",
+      "definition": "Observing a target’s screen or keyboard directly — either in person or through cameras — to steal sensitive data or passwords."
+    },
+    {
+      "id": "2.5-7",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Tailgating",
+      "definition": "Following an authorized person through a restricted physical door or entryway without validating credentials."
+    },
+    {
+      "id": "2.5-8",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Impersonation",
+      "definition": "Pretending to be a trusted figure, such as an IT technician or executive, to trick employees into granting access or resetting passwords."
+    },
+    {
+      "id": "2.5-9",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Dumpster diving",
+      "definition": "Searching through discarded trash, recycling bins, or paper shredder waste to recover sensitive documents or configuration details."
+    },
+    {
+      "id": "2.5-10",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Denial of Service (DoS)",
+      "definition": "Overwhelms a target system or service with traffic from a single source to disrupt availability."
+    },
+    {
+      "id": "2.5-11",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Distributed Denial of Service (DDoS)",
+      "definition": "Floods a target system using multiple compromised systems (botnets) from distributed locations to crash services."
+    },
+    {
+      "id": "2.5-12",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Evil twin",
+      "definition": "A rogue Wi-Fi access point set up to mimic a legitimate network to intercept user traffic and credentials."
+    },
+    {
+      "id": "2.5-13",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Zero-day attack",
+      "definition": "An exploit targeting a previously unknown software vulnerability before the vendor releases a patch."
+    },
+    {
+      "id": "2.5-14",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Spoofing",
+      "definition": "Falsifying network headers, IP addresses, or sender identities to disguise the origin of malicious traffic or communications."
+    },
+    {
+      "id": "2.5-15",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "On-path attack",
+      "definition": "Secretly relaying and altering communications between two parties who believe they are directly communicating with each other."
+    },
+    {
+      "id": "2.5-16",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Brute-force attack",
+      "definition": "Systematically testing every possible character combination until the correct password or key is found."
+    },
+    {
+      "id": "2.5-17",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Dictionary attack",
+      "definition": "Automated password cracking using a predefined list of common words, phrases, and leaked passwords."
+    },
+    {
+      "id": "2.5-18",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Insider threat",
+      "definition": "Security risks originating from current or former employees, contractors, or business partners with authorized access."
+    },
+    {
+      "id": "2.5-19",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "SQL injection (SQLi)",
+      "definition": "Injecting malicious database queries into application entry fields to read or manipulate backend database contents."
+    },
+    {
+      "id": "2.5-20",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Cross-site scripting (XSS)",
+      "definition": "Injecting malicious client-side scripts into trusted web applications to execute in victim browsers and steal session tokens."
+    },
+    {
+      "id": "2.5-21",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Business email compromise (BEC)",
+      "definition": "Hijacking or spoofing executive email accounts to trick finance teams or employees into executing unauthorized wire transfers."
+    },
+    {
+      "id": "2.5-22",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Supply chain attack",
+      "definition": "Compromising a third-party vendor, software dependency, or service provider to breach target organizations downstream."
+    },
+    {
+      "id": "2.5-23",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Non-compliant systems",
+      "definition": "Devices or systems that violate organizational security policies, baseline standards, or regulatory frameworks."
+    },
+    {
+      "id": "2.5-24",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Unpatched systems",
+      "definition": "Devices running software with known security flaws due to missing vendor updates and security fixes."
+    },
+    {
+      "id": "2.5-25",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Unprotected systems",
+      "definition": "Systems lacking basic baseline security controls, such as active antivirus software or properly configured local firewalls."
+    },
+    {
+      "id": "2.5-26",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "End-of-life (EOL)",
+      "definition": "Hardware or software no longer supported or patched by vendors, leaving newly discovered vulnerabilities permanently unaddressed."
+    },
+    {
+      "id": "2.5-27",
+      "section": "2.5",
+      "sectionTitle": "Social Engineering and Threats",
+      "name": "Bring Your Own Device (BYOD)",
+      "definition": "Unmanaged personal employee devices connected to enterprise resources without strict organizational security enforcement."
+    },
+    {
+      "id": "2.6-0",
+      "section": "2.6",
+      "sectionTitle": "Malware Investigation and Remediation",
+      "name": "Investigate and verify malware symptoms",
+      "definition": "Identify indicators: Look for security alerts, application crashes, unexpected pop-up windows, and system slowdowns or high resource usage."
+    },
+    {
+      "id": "2.6-1",
+      "section": "2.6",
+      "sectionTitle": "Malware Investigation and Remediation",
+      "name": "Quarantine infected system",
+      "definition": "Isolate network connectivity: Disconnect Ethernet cables and disable Wi-Fi/Bluetooth immediately to prevent lateral network movement."
+    },
+    {
+      "id": "2.6-2",
+      "section": "2.6",
+      "sectionTitle": "Malware Investigation and Remediation",
+      "name": "Disable System Restore in Windows Home",
+      "definition": "Prevent reinfection: Turn off System Protection in System Properties."
+    },
+    {
+      "id": "2.6-3",
+      "section": "2.6",
+      "sectionTitle": "Malware Investigation and Remediation",
+      "name": "Remediate infected systems",
+      "definition": "Quarantine or delete files: Isolate malicious binaries into protected quarantine folders so they cannot execute, or delete them outright."
+    },
+    {
+      "id": "2.6-4",
+      "section": "2.6",
+      "sectionTitle": "Malware Investigation and Remediation",
+      "name": "Update anti-malware software",
+      "definition": "Update engine and definitions: Ensure signature files and scanning engines are current so new variants can be recognized."
+    },
+    {
+      "id": "2.6-5",
+      "section": "2.6",
+      "sectionTitle": "Malware Investigation and Remediation",
+      "name": "Scan and removal techniques",
+      "definition": "Use Safe Mode: Boot into Safe Mode to load only minimal OS drivers and prevent non-essential startup items or malware processes from launching."
+    },
+    {
+      "id": "2.6-6",
+      "section": "2.6",
+      "sectionTitle": "Malware Investigation and Remediation",
+      "name": "Reimage / reinstall",
+      "definition": "Wipe and reinstall: Perform a clean OS installation or restore from a known-good system image if malware cannot be guaranteed 100% removed."
+    },
+    {
+      "id": "2.6-7",
+      "section": "2.6",
+      "sectionTitle": "Malware Investigation and Remediation",
+      "name": "Schedule scans and run updates",
+      "definition": "Automate defense: Set up scheduled antivirus scans and signature updates in the security software or via Windows Task Scheduler."
+    },
+    {
+      "id": "2.6-8",
+      "section": "2.6",
+      "sectionTitle": "Malware Investigation and Remediation",
+      "name": "Enable System Restore and create a restore point in Windows Home",
+      "definition": "Re-enable protection: Turn System Protection back on once the machine is fully verified clean."
+    },
+    {
+      "id": "2.6-9",
+      "section": "2.6",
+      "sectionTitle": "Malware Investigation and Remediation",
+      "name": "Educate the end user",
+      "definition": "Direct training: Conduct one-on-one user awareness sessions on safe browsing habits and phishing identification."
+    },
+    {
+      "id": "2.7-0",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Full-disk encryption",
+      "definition": "Encrypts the entire storage drive to protect data-at-rest from unauthorized physical extraction."
+    },
+    {
+      "id": "2.7-1",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "File system encryption",
+      "definition": "Encrypts specific individual files and folders for targeted data protection."
+    },
+    {
+      "id": "2.7-2",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Removable media security",
+      "definition": "Protects external media like USB flash drives from unauthorized access."
+    },
+    {
+      "id": "2.7-3",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Key backups",
+      "definition": "Secure key copies must be maintained (often integrated into Active Directory) to ensure data recovery options remain available."
+    },
+    {
+      "id": "2.7-4",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Length",
+      "definition": "Enforce strong passwords with a minimum of 8 characters — or use multi-word passphrases."
+    },
+    {
+      "id": "2.7-5",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Character types & complexity",
+      "definition": "Combine uppercase letters, lowercase letters, numbers, and special characters while avoiding single or obvious words to maximize entropy."
+    },
+    {
+      "id": "2.7-6",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Uniqueness",
+      "definition": "Enforce unique passwords across accounts and utilize password history settings to prevent reusing old credentials."
+    },
+    {
+      "id": "2.7-7",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Expiration",
+      "definition": "Set age and expiration policies (e.g., 30, 60, or 90 days; 15 days or weekly for critical systems) so passwords automatically invalidate after a set duration."
+    },
+    {
+      "id": "2.7-8",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Supervisor / administrator password",
+      "definition": "Prevents unauthorized users from modifying low-level system settings or BIOS/UEFI configurations."
+    },
+    {
+      "id": "2.7-9",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "User password",
+      "definition": "Requires a valid password before the operating system is permitted to boot."
+    },
+    {
+      "id": "2.7-10",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Use screensaver locks",
+      "definition": "Require passwords to unlock screensavers that automatically engage after defined idle timeouts."
+    },
+    {
+      "id": "2.7-11",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Log off / lock desktop",
+      "definition": "Secure workstations immediately when walking away to prevent unauthorized physical access."
+    },
+    {
+      "id": "2.7-12",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Secure critical hardware",
+      "definition": "Protect laptops and physical assets using cable locks and secure mounting."
+    },
+    {
+      "id": "2.7-13",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Secure PII & passwords",
+      "definition": "Position monitors away from hallways or windows, use privacy filters, remain aware of surroundings, and refrain from writing credentials on sticky notes."
+    },
+    {
+      "id": "2.7-14",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Use password managers",
+      "definition": "Encrypt and store unique credentials across all accounts in a single database, with support for multi-factor tokens and centralized enterprise recovery."
+    },
+    {
+      "id": "2.7-15",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Restrict user permissions",
+      "definition": "Follow the principle of least privilege, audit user rights, and assign permissions to groups rather than managing per-user rights directly."
+    },
+    {
+      "id": "2.7-16",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Restrict log-in times",
+      "definition": "Limit user authentication strictly to active working hours and block after-hours activity."
+    },
+    {
+      "id": "2.7-17",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Disable guest account",
+      "definition": "Remove or disable built-in Guest, root, or unnecessary default system accounts to reduce potential entry points."
+    },
+    {
+      "id": "2.7-18",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Use failed attempts lockout",
+      "definition": "Configure account lockout thresholds to lock accounts or reboot systems after repeated failed authentication attempts, blocking online brute-force attacks."
+    },
+    {
+      "id": "2.7-19",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Use timeout / screen lock",
+      "definition": "Enforce automatic desktop locking after designated periods of user inactivity."
+    },
+    {
+      "id": "2.7-20",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Apply account expiration dates",
+      "definition": "Automatically disable accounts assigned to temporary workers, vendors, or contractors on a predetermined date."
+    },
+    {
+      "id": "2.7-21",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Rename default usernames",
+      "definition": "Change stock administrator accounts (e.g., admin) to unique names."
+    },
+    {
+      "id": "2.7-22",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Update default passwords",
+      "definition": "Replace default credentials immediately across all OS installations and network devices to disrupt automated brute-force scripts."
+    },
+    {
+      "id": "2.7-23",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Registry controls",
+      "definition": "Disable autorun.inf execution via the system registry on supported Windows environments."
+    },
+    {
+      "id": "2.7-24",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "AutoPlay settings",
+      "definition": "Configure device behavior via Settings → Bluetooth & devices → AutoPlay (e.g., setting default actions to “Take no action”) to prevent automatic execution of media content."
+    },
+    {
+      "id": "2.7-25",
+      "section": "2.7",
+      "sectionTitle": "Encryption and Security Best Practices",
+      "name": "Attack surface reduction",
+      "definition": "Audit background services installed by the OS or third-party applications and disable any unneeded services to close open entry points and protect against external breaches."
+    },
+    {
+      "id": "2.8-0",
+      "section": "2.8",
+      "sectionTitle": "Mobile Device Hardening",
+      "name": "Device encryption",
+      "definition": "Encrypts all device data while the phone retains the decryption key."
+    },
+    {
+      "id": "2.8-1",
+      "section": "2.8",
+      "sectionTitle": "Mobile Device Hardening",
+      "name": "Screen locks",
+      "definition": "Restricts physical access to a device using various authenticators:"
+    },
+    {
+      "id": "2.8-2",
+      "section": "2.8",
+      "sectionTitle": "Mobile Device Hardening",
+      "name": "Configuration profiles",
+      "definition": "Pre-defined system configurations pushed to devices via Mobile Device Management (MDM) platforms — such as Microsoft Intune or Apple Configurator — to streamline setup, corporate email deployment, and security settings like mandatory lock screens and encryption."
+    },
+    {
+      "id": "2.8-3",
+      "section": "2.8",
+      "sectionTitle": "Mobile Device Hardening",
+      "name": "OS updates",
+      "definition": "Regular operating system updates that deliver new features, stability fixes, and critical security patches to prevent vulnerabilities."
+    },
+    {
+      "id": "2.8-4",
+      "section": "2.8",
+      "sectionTitle": "Mobile Device Hardening",
+      "name": "Application updates",
+      "definition": "Ongoing updates for installed applications to maintain current feature sets and resolve security bugs."
+    },
+    {
+      "id": "2.8-5",
+      "section": "2.8",
+      "sectionTitle": "Mobile Device Hardening",
+      "name": "Antivirus & anti-malware",
+      "definition": "Protects against malicious software."
+    },
+    {
+      "id": "2.8-6",
+      "section": "2.8",
+      "sectionTitle": "Mobile Device Hardening",
+      "name": "Content filtering",
+      "definition": "Restricts device access to unauthorized or hazardous websites and applications."
+    },
+    {
+      "id": "2.8-7",
+      "section": "2.8",
+      "sectionTitle": "Mobile Device Hardening",
+      "name": "Firewalls",
+      "definition": "Mobile operating systems generally do not include native firewalls, as most network traffic is outbound. Third-party mobile firewall apps exist (primarily for Android), while enterprise network firewalls regulate application traffic centrally."
+    },
+    {
+      "id": "2.8-8",
+      "section": "2.8",
+      "sectionTitle": "Mobile Device Hardening",
+      "name": "Locator applications",
+      "definition": "Utilizes built-in GPS and location features to locate lost or stolen devices on a map, sound alerts, or display contact messages remotely."
+    },
+    {
+      "id": "2.8-9",
+      "section": "2.8",
+      "sectionTitle": "Mobile Device Hardening",
+      "name": "Remote wipes",
+      "definition": "Allows administrators or owners to wipe all data remotely if a lost device cannot be recovered."
+    },
+    {
+      "id": "2.8-10",
+      "section": "2.8",
+      "sectionTitle": "Mobile Device Hardening",
+      "name": "iOS",
+      "definition": "Automatically erases all local data after 10 consecutive failed passcode attempts."
+    },
+    {
+      "id": "2.8-11",
+      "section": "2.8",
+      "sectionTitle": "Mobile Device Hardening",
+      "name": "Android",
+      "definition": "Locks the device following repeated failed attempts, requiring a Google login or triggering a full device wipe."
+    },
+    {
+      "id": "2.8-12",
+      "section": "2.8",
+      "sectionTitle": "Mobile Device Hardening",
+      "name": "MDM (Mobile Device Management)",
+      "definition": "Provides centralized administration for mobile endpoints, enabling remote control over the whole device or an enterprise partition, enforcing access controls, and setting policies for apps, cameras, and data."
+    },
+    {
+      "id": "2.8-13",
+      "section": "2.8",
+      "sectionTitle": "Mobile Device Hardening",
+      "name": "BYOD vs. corporate-owned",
+      "definition": "Policies to manage employee-owned (BYOD) and company-owned endpoints under uniform organizational security rules."
+    },
+    {
+      "id": "2.8-14",
+      "section": "2.8",
+      "sectionTitle": "Mobile Device Hardening",
+      "name": "Profile security requirements",
+      "definition": "Mandates access control standards across deployment profiles, such as forcing minimum screen lock criteria and PIN complexity."
+    },
+    {
+      "id": "2.9-0",
+      "section": "2.9",
+      "sectionTitle": "Data Destruction and Sanitization",
+      "name": "Drilling / hammering",
+      "definition": "Drilling holes straight through magnetic platters or physically breaking the drive. Offers a quick, simple way to render media unusable."
+    },
+    {
+      "id": "2.9-1",
+      "section": "2.9",
+      "sectionTitle": "Data Destruction and Sanitization",
+      "name": "Shredding",
+      "definition": "Uses heavy industrial machinery to grind drives into tiny fragments for complete destruction."
+    },
+    {
+      "id": "2.9-2",
+      "section": "2.9",
+      "sectionTitle": "Data Destruction and Sanitization",
+      "name": "Degaussing",
+      "definition": "Applies high-power electromagnetic fields to remove magnetic domains. Completely erases data and destroys hard drive functionality."
+    },
+    {
+      "id": "2.9-3",
+      "section": "2.9",
+      "sectionTitle": "Data Destruction and Sanitization",
+      "name": "Incineration",
+      "definition": "Subjects drive hardware to extreme heat to burn and destroy storage components."
+    },
+    {
+      "id": "2.9-4",
+      "section": "2.9",
+      "sectionTitle": "Data Destruction and Sanitization",
+      "name": "File-level overwriting",
+      "definition": "Deletes specific files using tools like Windows Sysinternals Sdelete, though remaining unallocated data remains untouched."
+    },
+    {
+      "id": "2.9-5",
+      "section": "2.9",
+      "sectionTitle": "Data Destruction and Sanitization",
+      "name": "Whole-drive wiping",
+      "definition": "Software utilities like DBAN (Darik’s Boot and Nuke) overwrite all storage sectors, securely wiping data so the drive can safely be repurposed."
+    },
+    {
+      "id": "2.9-6",
+      "section": "2.9",
+      "sectionTitle": "Data Destruction and Sanitization",
+      "name": "Low-level formatting",
+      "definition": "Performed at the factory by the manufacturer. Generally not recommended or performed by end users."
+    },
+    {
+      "id": "2.9-7",
+      "section": "2.9",
+      "sectionTitle": "Data Destruction and Sanitization",
+      "name": "Standard formatting — quick format",
+      "definition": "Clears the Master File Table (MFT) and sets up a new file system, but leaves the underlying data intact where software recovery tools can still retrieve it."
+    },
+    {
+      "id": "2.9-8",
+      "section": "2.9",
+      "sectionTitle": "Data Destruction and Sanitization",
+      "name": "Standard formatting — regular format",
+      "definition": "Overwrites every drive sector with zeros, preventing data recovery. This process has been the default behavior since Windows Vista."
+    },
+    {
+      "id": "2.9-9",
+      "section": "2.9",
+      "sectionTitle": "Data Destruction and Sanitization",
+      "name": "Third-party vendors",
+      "definition": "Organizations frequently contract specialized third-party vendors equipped with industrial destroyers, drills, and degaussers to manage high-volume disposal."
+    },
+    {
+      "id": "2.9-10",
+      "section": "2.9",
+      "sectionTitle": "Data Destruction and Sanitization",
+      "name": "Certificate of destruction",
+      "definition": "Service providers supply an official certificate to provide a verified paper trail confirming how and when specific hardware serial numbers were destroyed."
+    },
+    {
+      "id": "2.9-11",
+      "section": "2.9",
+      "sectionTitle": "Data Destruction and Sanitization",
+      "name": "Legal compliance",
+      "definition": "Highly regulated sectors — including healthcare, financial services, and research organizations — are bound by legal mandates and local policies requiring complete physical destruction of retired storage media."
+    },
+    {
+      "id": "2.9-12",
+      "section": "2.9",
+      "sectionTitle": "Data Destruction and Sanitization",
+      "name": "Data leakage risks",
+      "definition": "Inadequate sanitization leaves residual PII (Personally Identifiable Information), corporate emails, and confidential files on secondary markets (e.g., eBay), exposing organizations to regulatory fines and privacy breaches."
+    },
+    {
+      "id": "2.10-0",
+      "section": "2.10",
+      "sectionTitle": "Router and Firewall Settings",
+      "name": "Change default passwords",
+      "definition": "Access points ship with publicly known default credentials. Change the default admin password immediately to prevent unauthorized users from taking full administrative control of the device."
+    },
+    {
+      "id": "2.10-1",
+      "section": "2.10",
+      "sectionTitle": "Router and Firewall Settings",
+      "name": "IP filtering",
+      "definition": "Restrict or grant network access by defining specific IP address ranges."
+    },
+    {
+      "id": "2.10-2",
+      "section": "2.10",
+      "sectionTitle": "Router and Firewall Settings",
+      "name": "Firmware updates",
+      "definition": "Maintain SOHO appliances by regularly applying manufacturer updates. Installing the latest firmware patches security vulnerabilities, fixes bugs, and adds missing features."
+    },
+    {
+      "id": "2.10-3",
+      "section": "2.10",
+      "sectionTitle": "Router and Firewall Settings",
+      "name": "Content filtering",
+      "definition": "Inspect network traffic by URL or website category. Use content filters to enforce corporate policies, manage parental controls/NSFW content, prevent sensitive data leaks, and stop malicious software via integrated anti-virus features."
+    },
+    {
+      "id": "2.10-4",
+      "section": "2.10",
+      "sectionTitle": "Router and Firewall Settings",
+      "name": "Physical placement / secure locations",
+      "definition": "Lock physical routers, switches, and servers in a secure room to prevent physical tampering. Mount wireless access points high (such as above ceiling tiles) to maximize coverage — keeping in mind that hard-to-reach locations make power cycling more difficult."
+    },
+    {
+      "id": "2.10-5",
+      "section": "2.10",
+      "sectionTitle": "Router and Firewall Settings",
+      "name": "Universal Plug and Play (UPnP)",
+      "definition": "UPnP permits devices and internal applications to open inbound firewall ports automatically without administrator approval."
+    },
+    {
+      "id": "2.10-6",
+      "section": "2.10",
+      "sectionTitle": "Router and Firewall Settings",
+      "name": "Screened subnet",
+      "definition": "Place public-facing resources (like web servers) in a screened subnet between the internet and the internal network. Creates an isolated security layer so external access to public services doesn’t compromise private internal systems."
+    },
+    {
+      "id": "2.10-7",
+      "section": "2.10",
+      "sectionTitle": "Router and Firewall Settings",
+      "name": "Configure secure management access",
+      "definition": "Enforce strong authentication credentials and multi-factor authentication for administrative logins. Restrict management connections to local LAN IPs only and disable remote WAN management access completely."
+    },
+    {
+      "id": "2.10-8",
+      "section": "2.10",
+      "sectionTitle": "Router and Firewall Settings",
+      "name": "Changing the service set identifier (SSID)",
+      "definition": "Replace default factory network names (such as “NETGEAR” or “LINKSYS”) with a non-obvious identifier to avoid signaling your equipment type to outsiders."
+    },
+    {
+      "id": "2.10-9",
+      "section": "2.10",
+      "sectionTitle": "Router and Firewall Settings",
+      "name": "Disabling SSID broadcast",
+      "definition": "Hiding an SSID stops the router from broadcasting its name publicly. However, this only relies on security through obscurity — wireless analysis tools easily discover hidden SSIDs."
+    },
+    {
+      "id": "2.10-10",
+      "section": "2.10",
+      "sectionTitle": "Router and Firewall Settings",
+      "name": "Encryption settings",
+      "definition": "Choose an appropriate wireless encryption standard:"
+    },
+    {
+      "id": "2.10-11",
+      "section": "2.10",
+      "sectionTitle": "Router and Firewall Settings",
+      "name": "Configuring guest access",
+      "definition": "Enable isolated guest networks to keep visitors off the primary LAN, or use guest networks to segregate IoT devices and lab environments. Always protect guest networks using WPA2 or WPA3 encryption."
+    },
+    {
+      "id": "2.10-12",
+      "section": "2.10",
+      "sectionTitle": "Router and Firewall Settings",
+      "name": "Disabling unused ports",
+      "definition": "Administratively turn off unused physical switch ports in open areas (like conference rooms or break rooms) to stop unauthorized physical hookups. Alternatively, deploy Network Access Control (802.1X NAC) to block network traffic until a device authenticates."
+    },
+    {
+      "id": "2.10-13",
+      "section": "2.10",
+      "sectionTitle": "Router and Firewall Settings",
+      "name": "Port forwarding / mapping",
+      "definition": "Configure Destination NAT (Static NAT) to permanently direct external inbound traffic from a public IP and port to an internal server’s private IP and port. Provides persistent 24/7 internet access to internally hosted applications like web servers, game servers, or security systems."
+    },
+    {
+      "id": "2.11-0",
+      "section": "2.11",
+      "sectionTitle": "Browser Security and Configuration",
+      "name": "Trusted sources",
+      "definition": "Obtain software exclusively from official vendor sites to prevent downloading malware embedded in third-party installers. Avoid clicking links in emails or external pages — type the URL directly into the address bar."
+    },
+    {
+      "id": "2.11-1",
+      "section": "2.11",
+      "sectionTitle": "Browser Security and Configuration",
+      "name": "Untrusted sources",
+      "definition": "Avoid downloading applications from random websites, file-sharing platforms, or links embedded in unsolicited emails."
+    },
+    {
+      "id": "2.11-2",
+      "section": "2.11",
+      "sectionTitle": "Browser Security and Configuration",
+      "name": "Hashing",
+      "definition": "Install a hash-checking application (CLI or GUI) to calculate the file’s hash value (e.g., SHA-256). Compare the calculated hash against the official value published on the vendor’s download site to verify file integrity."
+    },
+    {
+      "id": "2.11-3",
+      "section": "2.11",
+      "sectionTitle": "Browser Security and Configuration",
+      "name": "Updating",
+      "definition": "Keep browsers updated to apply critical security patches. Updates are frequently integrated directly into the OS update manager or automatically installed within the browser."
+    },
+    {
+      "id": "2.11-4",
+      "section": "2.11",
+      "sectionTitle": "Browser Security and Configuration",
+      "name": "Trusted sources",
+      "definition": "Install add-ons exclusively from official repositories like the Chrome Web Store or Microsoft Store."
+    },
+    {
+      "id": "2.11-5",
+      "section": "2.11",
+      "sectionTitle": "Browser Security and Configuration",
+      "name": "Untrusted sources",
+      "definition": "Avoid third-party sites or unverified software installers, which represent a significant attack vector capable of credential theft, keylogging, and data exfiltration."
+    },
+    {
+      "id": "2.11-6",
+      "section": "2.11",
+      "sectionTitle": "Browser Security and Configuration",
+      "name": "Password vaults",
+      "definition": "Store credentials inside encrypted vaults rather than plain browser stores."
+    },
+    {
+      "id": "2.11-7",
+      "section": "2.11",
+      "sectionTitle": "Browser Security and Configuration",
+      "name": "Unique passwords",
+      "definition": "Use password managers to generate unique, complex passwords per site to eliminate credential reuse risks."
+    },
+    {
+      "id": "2.11-8",
+      "section": "2.11",
+      "sectionTitle": "Browser Security and Configuration",
+      "name": "Certificate inspection",
+      "definition": "Inspect security alerts regarding untrusted root authorities, expired certificates, or domain mismatches. Verify certificate details, including issuer and subject common names. Ensure local system date and time settings are correct to prevent false certificate invalidation."
+    },
+    {
+      "id": "2.11-9",
+      "section": "2.11",
+      "sectionTitle": "Browser Security and Configuration",
+      "name": "Pop-up blocker",
+      "definition": "Keep pop-up blockers enabled by default to block unwanted notifications and malicious windows. Disable temporarily only for specific troubleshooting, or add site-specific allow/block rules."
+    },
+    {
+      "id": "2.11-10",
+      "section": "2.11",
+      "sectionTitle": "Browser Security and Configuration",
+      "name": "Clearing browsing data",
+      "definition": "Manually or automatically remove stored browsing history, saved passwords, and downloaded file lists from browser settings."
+    },
+    {
+      "id": "2.11-11",
+      "section": "2.11",
+      "sectionTitle": "Browser Security and Configuration",
+      "name": "Clearing cache",
+      "definition": "Delete locally stored web assets, images, and cookies to free space and clear stale or sensitive site data."
+    },
+    {
+      "id": "2.11-12",
+      "section": "2.11",
+      "sectionTitle": "Browser Security and Configuration",
+      "name": "Private-browsing mode",
+      "definition": "Launch private windows to prevent session data, history, download lists, and caches from being retained locally once closed."
+    },
+    {
+      "id": "2.11-13",
+      "section": "2.11",
+      "sectionTitle": "Browser Security and Configuration",
+      "name": "Sign-in / browser data synchronization",
+      "definition": "Sign into the browser profile to synchronize history, favorites, settings, and extensions across multiple devices."
+    },
+    {
+      "id": "2.11-14",
+      "section": "2.11",
+      "sectionTitle": "Browser Security and Configuration",
+      "name": "Ad blockers",
+      "definition": "Configure tracking prevention and ad-blocking levels (Basic, Balanced, Strict) within privacy settings to restrict site tracking across visits."
+    },
+    {
+      "id": "2.11-15",
+      "section": "2.11",
+      "sectionTitle": "Browser Security and Configuration",
+      "name": "Proxy",
+      "definition": "Configure explicit proxy IP addresses and port numbers under OS or browser network settings to route traffic through intermediary servers for caching, URL filtering, and content scanning. Transparent proxies function inline without client-side setup."
+    },
+    {
+      "id": "2.11-16",
+      "section": "2.11",
+      "sectionTitle": "Browser Security and Configuration",
+      "name": "Secure DNS",
+      "definition": "Enable DNS over HTTPS (DoH) in browser advanced settings to encrypt plaintext DNS queries, preventing external observers from monitoring requested FQDNs."
+    },
+    {
+      "id": "2.11-17",
+      "section": "2.11",
+      "sectionTitle": "Browser Security and Configuration",
+      "name": "Enable / disable",
+      "definition": "Access browser management interfaces (e.g., chrome://extensions or browser settings) to manually enable, disable, or remove specific plug-ins, extensions, or native browser capabilities to minimize exposure to security risks."
+    }
+  ],
+  "total": 230
+}

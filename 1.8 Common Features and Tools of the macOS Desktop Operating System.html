@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>1.8 Common Features and Tools of the macOS Desktop Operating System</title>
+<style>
+  :root{
+    --menubar-bg: rgba(30,30,32,0.55);
+    --window-bg: #2b2b2e;
+    --window-bg-light: #ececec;
+    --sidebar-bg: #d9dadd;
+    --accent: #0a84ff;
+    --text-dark:#1c1c1e;
+    --text-light:#f2f2f2;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; margin:0; font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif; overflow:hidden; }
+  body{ background:#3a3a3a; }
+
+  .app-root{ position:relative; width:100%; height:100%; overflow:hidden; user-select:none; }
+
+  /* ---------------- Desktop ---------------- */
+  .desktop{
+    position:absolute; inset:0;
+    background: linear-gradient(160deg,#3a6bd6 0%, #7f5bd6 45%, #d65b9a 100%);
+  }
+
+  /* ---------------- Menu bar ---------------- */
+  .menubar{
+    position:absolute; top:0; left:0; right:0; height:26px;
+    background: var(--menubar-bg);
+    backdrop-filter: blur(12px);
+    color:#f2f2f2;
+    display:flex; align-items:center;
+    font-size:13px;
+    padding:0 12px;
+    z-index:5000;
+    gap:16px;
+  }
+  .menubar .mb-item{ cursor:pointer; padding:2px 6px; border-radius:4px; }
+  .menubar .mb-item:hover{ background:rgba(255,255,255,0.15); }
+  .menubar .mb-bold{ font-weight:600; }
+  .menubar .mb-right{ margin-left:auto; display:flex; align-items:center; gap:14px; }
+  .apple-menu-dd{
+    position:absolute; top:26px; left:8px; width:220px;
+    background:rgba(40,40,42,0.9); backdrop-filter:blur(14px);
+    border-radius:8px; box-shadow:0 12px 30px rgba(0,0,0,0.4);
+    padding:6px 0; z-index:6000; color:#f2f2f2; font-size:13px; display:none;
+  }
+  .apple-menu-dd.open{ display:block; }
+  .apple-menu-dd div{ padding:6px 14px; cursor:pointer; }
+  .apple-menu-dd div:hover{ background:var(--accent); }
+  .apple-menu-dd hr{ border:none; border-top:1px solid rgba(255,255,255,0.15); margin:4px 0; }
+
+  /* ---------------- Dock ---------------- */
+  .dock{
+    position:absolute; bottom:12px; left:50%; transform:translateX(-50%);
+    display:flex; align-items:flex-end; flex-wrap:nowrap; justify-content:center;
+    gap:6px;
+    max-width:calc(100% - 24px);
+    background:rgba(255,255,255,0.18);
+    backdrop-filter: blur(16px);
+    padding:8px 10px 10px;
+    border-radius:16px;
+    z-index:5000;
+    box-shadow:0 10px 30px rgba(0,0,0,0.3);
+    box-sizing:border-box;
+  }
+  .dock-icon{
+    width:42px; height:42px; border-radius:11px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; position:relative;
+    transition: transform .12s ease;
+    flex-shrink:0;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25));
+  }
+  .dock-icon img{ width:42px; height:42px; border-radius:11px; display:block; pointer-events:none; }
+  .dock-icon:hover{ transform:translateY(-8px) scale(1.08); }
+  .dock-icon .badge{
+    position:absolute; top:-4px; right:-4px; background:#ff3b30; color:#fff;
+    font-size:10px; font-weight:700; border-radius:50%; min-width:16px; height:16px;
+    display:flex; align-items:center; justify-content:center; padding:0 3px;
+  }
+  .dock-icon .dot{ position:absolute; bottom:-6px; width:4px; height:4px; border-radius:50%; background:#fff; }
+  .dock-sep{ width:1px; align-self:stretch; background:rgba(255,255,255,0.35); margin:4px 2px; }
+  .mac-icon{ width:1em; height:1em; vertical-align:-0.15em; border-radius:22%; display:inline-block; }
+  .fi-icon .mac-icon, .fi-icon img{ width:48px; height:48px; border-radius:10px; display:block; }
+  .ss-item .mac-icon{ width:18px; height:18px; border-radius:4px; margin-right:2px; }
+
+  /* ---------------- Windows ---------------- */
+  .mac-window{
+    position:absolute;
+    background:var(--window-bg-light);
+    border-radius:10px;
+    box-shadow:0 25px 60px rgba(0,0,0,0.45);
+    overflow:hidden;
+    display:flex; flex-direction:column;
+    min-width:300px; min-height:200px;
+  }
+  .mac-window.dark{ background:#1e1e1e; color:#eee; }
+  .mac-titlebar{
+    height:32px; background:linear-gradient(#f0f0f0,#e2e2e2);
+    display:flex; align-items:center; padding:0 10px; cursor:move;
+    border-bottom:1px solid #cfcfcf; flex-shrink:0;
+  }
+  .mac-window.dark .mac-titlebar{ background:#2b2b2b; border-bottom:1px solid #3a3a3a; }
+  .mac-traffic{ display:flex; gap:7px; margin-right:10px; }
+  .mac-traffic span{ width:12px; height:12px; border-radius:50%; display:inline-block; cursor:pointer; }
+  .mac-traffic .tc-close{ background:#ff5f57; }
+  .mac-traffic .tc-min{ background:#febc2e; }
+  .mac-traffic .tc-zoom{ background:#28c840; }
+  .mac-title{ flex:1; text-align:center; font-size:12.5px; font-weight:600; color:#333; margin-right:52px; }
+  .mac-window.dark .mac-title{ color:#eee; }
+  .mac-content{ flex:1; overflow:auto; font-size:13px; }
+
+  /* Finder */
+  .finder-body{ display:flex; height:100%; }
+  .finder-sidebar{ width:170px; background:var(--sidebar-bg); border-right:1px solid #c3c3c5; padding:10px 0; overflow-y:auto; flex-shrink:0; }
+  .finder-sidebar .sb-heading{ font-size:11px; color:#6b6b6f; padding:8px 14px 3px; font-weight:600; }
+  .finder-sidebar .sb-item{ padding:5px 14px; font-size:12.5px; color:#222; cursor:pointer; display:flex; align-items:center; gap:6px; }
+  .finder-sidebar .sb-item:hover{ background:#c9cace; }
+  .finder-sidebar .sb-item.active{ background:var(--accent); color:#fff; }
+  .finder-main{ flex:1; display:flex; flex-direction:column; }
+  .finder-toolbar{ height:38px; background:#f6f6f7; border-bottom:1px solid #d8d8da; display:flex; align-items:center; gap:8px; padding:0 10px; font-size:12px; }
+  .finder-toolbar button{ border:none; background:#e6e6e8; border-radius:5px; padding:4px 9px; font-size:12px; cursor:pointer; }
+  .finder-toolbar button:hover{ background:#dcdcde; }
+  .finder-path{ color:#555; }
+  .finder-grid{ flex:1; padding:16px; display:grid; grid-template-columns:repeat(auto-fill,minmax(84px,1fr)); gap:14px; align-content:start; background:#fff; }
+  .finder-item{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; padding:6px; border-radius:6px; text-align:center; }
+  .finder-item:hover{ background:#eef4ff; }
+  .finder-item.selected{ background:#cfe4ff; }
+  .finder-item .fi-icon{ width:48px; height:48px; display:flex; align-items:center; justify-content:center; }
+  .finder-item .fi-name{ font-size:11.5px; color:#222; word-break:break-word; }
+  .sb-item .mac-icon{ width:16px; height:16px; border-radius:3px; vertical-align:-3px; margin-right:4px; }
+  .du-item .mac-icon{ width:18px; height:18px; border-radius:4px; vertical-align:-4px; margin-right:6px; }
+
+  /* System settings */
+  .settings-body{ display:flex; height:100%; }
+  .settings-sidebar{ width:190px; background:var(--sidebar-bg); border-right:1px solid #c3c3c5; padding:10px 0; overflow-y:auto; }
+  .settings-sidebar .ss-item{ padding:7px 14px; font-size:12.5px; cursor:pointer; display:flex; gap:8px; align-items:center; }
+  .settings-sidebar .ss-item:hover{ background:#c9cace; }
+  .settings-sidebar .ss-item.active{ background:var(--accent); color:#fff; }
+  .settings-pane{ flex:1; padding:22px 26px; overflow-y:auto; background:#fff; }
+  .settings-pane h2{ margin:0 0 14px; font-size:19px; }
+  .settings-row{ display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid #ececec; font-size:13px; }
+  .settings-row:last-child{ border-bottom:none; }
+  .toggle{ width:36px; height:20px; border-radius:12px; background:#ccc; position:relative; cursor:pointer; transition:background .15s; flex-shrink:0; }
+  .toggle.on{ background:var(--accent); }
+  .toggle .knob{ position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:#fff; transition:left .15s; }
+  .toggle.on .knob{ left:18px; }
+  .settings-desc{ color:#666; font-size:12.5px; line-height:1.5; margin-top:14px; padding:12px; background:#f5f6f8; border-radius:8px; }
+
+  /* Terminal */
+  .term-body{ padding:8px 10px; font-family:"Cascadia Mono","Consolas",monospace; font-size:13px; height:100%; overflow-y:auto; white-space:pre-wrap; }
+  .term-line{ min-height:1.4em; }
+  .term-prompt{ color:#7ee787; }
+  .term-input-line{ display:flex; }
+  .term-cursor{ display:inline-block; width:7px; height:14px; background:#eee; margin-left:2px; animation:blink 1s step-end infinite; }
+  @keyframes blink{ 0%,50%{opacity:1;} 51%,100%{opacity:0;} }
+
+  /* Disk utility */
+  .du-body{ display:flex; height:100%; }
+  .du-sidebar{ width:190px; background:#efefef; border-right:1px solid #d8d8d8; padding:10px 0; }
+  .du-sidebar .du-item{ padding:8px 14px; font-size:12.5px; cursor:pointer; display:flex; gap:8px; align-items:center; }
+  .du-sidebar .du-item:hover{ background:#e0e0e0; }
+  .du-sidebar .du-item.active{ background:var(--accent); color:#fff; }
+  .du-main{ flex:1; padding:20px; background:#fff; overflow-y:auto; }
+  .du-toolbar{ display:flex; gap:8px; margin-bottom:16px; }
+  .du-toolbar button{ padding:6px 12px; border-radius:6px; border:1px solid #ccc; background:#f5f5f5; cursor:pointer; font-size:12.5px; }
+  .du-toolbar button:hover{ background:#eaeaea; }
+  .du-log{ background:#111; color:#9fef00; font-family:"Cascadia Mono",monospace; font-size:12px; padding:12px; border-radius:6px; min-height:80px; white-space:pre-wrap; }
+
+  /* Time machine */
+  .tm-body{ padding:26px; text-align:center; }
+  .tm-dial{ width:200px; height:200px; border-radius:50%; border:10px solid #3a3a3a; margin:0 auto 18px; display:flex; align-items:center; justify-content:center; background:radial-gradient(circle,#4a4a4a,#1c1c1c); color:#9fef00; font-size:14px; }
+  .tm-list{ text-align:left; max-width:420px; margin:0 auto; font-size:12.5px; }
+  .tm-list .tm-row{ display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #eee; }
+
+  /* Keychain */
+  .kc-tabs{ display:flex; gap:6px; padding:10px; border-bottom:1px solid #ddd; }
+  .kc-tabs button{ border:none; background:#eee; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:12px; }
+  .kc-tabs button.active{ background:var(--accent); color:#fff; }
+  table.kc-table{ width:100%; border-collapse:collapse; font-size:12.5px; }
+  table.kc-table th, table.kc-table td{ text-align:left; padding:8px 12px; border-bottom:1px solid #eee; }
+  table.kc-table th{ background:#f4f4f5; color:#555; font-weight:600; }
+
+  /* App store */
+  .as-list{ padding:16px; display:flex; flex-direction:column; gap:10px; }
+  .as-row{ display:flex; align-items:center; gap:12px; padding:10px; border:1px solid #eee; border-radius:10px; }
+  .as-icon{ font-size:30px; width:44px; text-align:center; }
+  .as-info{ flex:1; }
+  .as-info .as-name{ font-weight:600; font-size:13px; }
+  .as-info .as-desc{ font-size:11.5px; color:#777; }
+  .as-row button{ border:none; background:var(--accent); color:#fff; padding:6px 14px; border-radius:20px; font-size:12px; cursor:pointer; font-weight:600; }
+
+  /* Force Quit */
+  .fq-list{ padding:16px; }
+  .fq-row{ display:flex; justify-content:space-between; align-items:center; padding:8px 4px; border-bottom:1px solid #eee; font-size:13px; }
+  .fq-row button{ border:none; background:#ff3b30; color:#fff; padding:5px 12px; border-radius:6px; font-size:11.5px; cursor:pointer; }
+
+  /* Spotlight */
+  .spotlight-overlay{
+    position:absolute; inset:0; background:rgba(0,0,0,0.25); display:none;
+    align-items:flex-start; justify-content:center; padding-top:120px; z-index:9000;
+  }
+  .spotlight-overlay.open{ display:flex; }
+  .spotlight-box{
+    width:560px; max-width:90%; background:rgba(40,40,42,0.85); backdrop-filter:blur(20px);
+    border-radius:12px; box-shadow:0 25px 70px rgba(0,0,0,0.5); overflow:hidden;
+  }
+  .spotlight-input{
+    width:100%; border:none; background:transparent; color:#fff; font-size:22px;
+    padding:16px 20px; outline:none; box-sizing:border-box;
+  }
+  .spotlight-results{ max-height:340px; overflow-y:auto; border-top:1px solid rgba(255,255,255,0.15); }
+  .spotlight-result{ padding:10px 20px; color:#eee; cursor:pointer; font-size:13px; }
+  .spotlight-result:hover, .spotlight-result.hi{ background:var(--accent); }
+  .spotlight-result .sr-name{ font-weight:600; }
+  .spotlight-result .sr-desc{ font-size:11.5px; color:#cfcfcf; margin-top:2px; }
+
+  /* Mission control */
+  .mc-overlay{
+    position:absolute; inset:0; background:rgba(20,20,24,0.75); backdrop-filter:blur(10px);
+    display:none; align-items:center; justify-content:center; z-index:8500; flex-wrap:wrap; gap:26px; padding:60px;
+  }
+  .mc-overlay.open{ display:flex; }
+  .mc-thumb{
+    width:220px; height:150px; background:#eee; border-radius:10px; overflow:hidden; cursor:pointer;
+    box-shadow:0 12px 30px rgba(0,0,0,0.4); display:flex; flex-direction:column; border:2px solid transparent;
+  }
+  .mc-thumb:hover{ border-color:var(--accent); }
+  .mc-thumb .mc-thumb-bar{ height:18px; background:#ddd; display:flex; align-items:center; padding:0 6px; font-size:9px; color:#555; }
+  .mc-thumb .mc-thumb-body{ flex:1; display:flex; align-items:center; justify-content:center; font-size:34px; color:#999; }
+  .mc-empty{ color:#eee; font-size:14px; }
+
+  /* Toasts */
+  .toast-wrap{ position:absolute; bottom:90px; right:20px; z-index:9500; display:flex; flex-direction:column; gap:8px; align-items:flex-end; }
+  .toast{
+    background:rgba(30,30,32,0.9); color:#fff; padding:10px 16px; border-radius:8px; font-size:12.5px;
+    max-width:300px; box-shadow:0 10px 25px rgba(0,0,0,0.35); animation:toastIn .18s ease;
+  }
+  @keyframes toastIn{ from{ opacity:0; transform:translateY(8px);} to{ opacity:1; transform:translateY(0);} }
+
+  /* ---------------- Reference panel (right side, outside the "monitor") ---------------- */
+  .layout{ display:flex; gap:16px; align-items:flex-start; justify-content:center; padding:20px; box-sizing:border-box; height:100vh; background:#2c2c2c; }
+  .screen-frame{ width:1000px; max-width:70%; min-width:640px; height:100%; border-radius:14px; overflow:hidden; box-shadow:0 25px 70px rgba(0,0,0,0.5); flex-shrink:0; position:relative; }
+  .reference{
+    width:400px; max-width:100%; height:100%;
+    background:#181818; border-radius:14px; box-shadow:0 25px 70px rgba(0,0,0,0.5);
+    display:flex; flex-direction:column; overflow:hidden; flex-shrink:0; color:#ddd;
+    font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  }
+  .ref-titlebar{ background:#242424; padding:10px 14px; font-size:13px; border-bottom:1px solid #333; display:flex; align-items:center; gap:8px; }
+  .ref-titlebar .dot{ width:8px; height:8px; border-radius:50%; background:#0a84ff; }
+  .ref-search{ padding:10px 12px; border-bottom:1px solid #2e2e2e; background:#151515; }
+  .ref-search input{ width:100%; box-sizing:border-box; background:#0f0f0f; border:1px solid #333; color:#eee; font-size:12.5px; padding:8px 10px; border-radius:6px; outline:none; }
+  .ref-search input:focus{ border-color:#0a84ff; }
+  .ref-list{ flex:1; overflow-y:auto; padding:4px 0 12px; }
+  .ref-item{ padding:11px 14px; border-bottom:1px solid #232323; cursor:pointer; }
+  .ref-item:hover{ background:#212121; }
+  .ref-item .ref-name{ font-size:13.5px; color:#5ac8fa; font-weight:700; }
+  .ref-item .ref-action{ font-size:11.5px; color:#f4c95d; margin-top:3px; }
+  .ref-item .ref-action::before{ content:"↳ "; color:#666; }
+  .ref-item .ref-desc{ font-size:12px; color:#aaa; margin-top:5px; line-height:1.45; }
+  .ref-empty{ padding:24px 14px; color:#777; font-size:12.5px; text-align:center; }
+  @media (max-width:1100px){
+    .layout{ flex-direction:column; height:auto; }
+    .screen-frame, .reference{ width:100%; max-width:100%; height:640px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <div class="screen-frame">
+    <div class="app-root" id="appRoot">
+      <div class="desktop"></div>
+
+      <div class="menubar">
+        <div class="mb-item mb-bold" id="appleMenuBtn">&#63743;</div>
+        <div class="mb-item mb-bold">Finder</div>
+        <div class="mb-item">File</div>
+        <div class="mb-item">Edit</div>
+        <div class="mb-item">View</div>
+        <div class="mb-item">Go</div>
+        <div class="mb-item">Window</div>
+        <div class="mb-item">Help</div>
+        <div class="mb-right">
+          <div class="mb-item" id="spotlightBtn">&#128269;</div>
+          <div class="mb-item" id="clock"></div>
+        </div>
+      </div>
+
+      <div class="apple-menu-dd" id="appleMenuDD">
+        <div onclick="Mac.toast('About This Mac: macOS Sonoma-style simulation, 8GB RAM, Apple M-series (fictional).')">About This Mac</div>
+        <hr>
+        <div onclick="Mac.open('settings')">System Settings…</div>
+        <hr>
+        <div onclick="Mac.forceQuitOpen()">Force Quit…</div>
+        <hr>
+        <div onclick="Mac.toast('Sleep is not simulated here.')">Sleep</div>
+        <div onclick="Mac.toast('Restart is not simulated here.')">Restart…</div>
+        <div onclick="Mac.toast('Shut Down is not simulated here.')">Shut Down…</div>
+      </div>
+
+      <div class="dock" id="dock"></div>
+
+      <div id="windowLayer"></div>
+
+      <div class="spotlight-overlay" id="spotlightOverlay">
+        <div class="spotlight-box">
+          <input class="spotlight-input" id="spotlightInput" placeholder="Spotlight Search">
+          <div class="spotlight-results" id="spotlightResults"></div>
+        </div>
+      </div>
+
+      <div class="mc-overlay" id="mcOverlay"></div>
+
+      <div class="toast-wrap" id="toastWrap"></div>
+    </div>
+  </div>
+
+  <div class="reference">
+    <div class="ref-titlebar"><span class="dot"></span><span>macOS Concept Index</span></div>
+    <div class="ref-search"><input type="text" id="refSearchInput" placeholder="Filter concepts..."></div>
+    <div class="ref-list" id="refList"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // ============== Filesystem ==============
+  function d(children){ return {type:'dir', children: children||{}}; }
+  function app(){ return {type:'app'}; }
+  function dmg(){ return {type:'dmg'}; }
+  function pkg(){ return {type:'pkg'}; }
+  function doc(){ return {type:'doc'}; }
+
+  const trashItems = [];
+
+  const fsRoots = {
+    "Macintosh HD": d({
+      "Applications": d({
+        "Safari.app": app(), "Mail.app": app(), "Notes.app": app(), "TextEdit.app": app(), "Preview.app": app(),
+        "Terminal.app": app(), "Disk Utility.app": app(), "Keychain Access.app": app(), "App Store.app": app(),
+      }),
+      "Users": d({ "jsmith": d({
+          "Desktop": d({}),
+          "Documents": d({ "Report.pages": doc() }),
+          "Downloads": d({ "Installer.dmg": dmg(), "Sample.pkg": pkg() }),
+          "Library": d({ "Application Support": d({}), "Preferences": d({}), "Caches": d({}) }),
+        }) }),
+      "Library": d({ "Application Support": d({}), "Preferences": d({}), "Extensions": d({}) }),
+      "System": d({ "Library": d({ "CoreServices": d({}), "Kernels": d({ "kernel": doc() }) }) }),
+    }),
+    "iCloud Drive": d({
+      "Documents": d({ "Budget.numbers": doc() }),
+      "Desktop": d({}),
+      "Photos": d({}),
+    }),
+  };
+
+  const ICONS = 'icons/';
+  function iconImg(file, cls='', size){
+    const style = size ? ` style="width:${size}px;height:${size}px;"` : '';
+    return `<img class="mac-icon ${cls}"${style} src="${ICONS}${file}" alt="" draggable="false">`;
+  }
+
+  const icons = {
+    dir: iconImg('folder.svg'),
+    app: iconImg('app.svg'),
+    dmg: iconImg('dmg.svg'),
+    pkg: iconImg('pkg.svg'),
+    doc: iconImg('document.svg'),
+  };
+  const appIconMap = {
+    'Terminal.app': 'terminal.svg',
+    'Disk Utility.app': 'disk-utility.svg',
+    'Keychain Access.app': 'keychain.svg',
+    'App Store.app': 'app-store.svg',
+    'Finder.app': 'finder.svg',
+    'System Settings.app': 'settings.svg',
+    'Time Machine.app': 'time-machine.svg',
+  };
+  function appIconFor(name){
+    return iconImg(appIconMap[name] || 'app.svg');
+  }
+
+  // ============== Window manager ==============
+  const layer = document.getElementById('windowLayer');
+  const openWindows = {}; // id -> {el, title}
+  let zTop = 100;
+
+  function focusWindow(id){
+    const w = openWindows[id];
+    if(!w) return;
+    zTop += 1;
+    w.el.style.zIndex = zTop;
+  }
+
+  function closeWindow(id){
+    const w = openWindows[id];
+    if(!w) return;
+    w.el.remove();
+    delete openWindows[id];
+  }
+
+  function makeDraggable(winEl, handleEl){
+    let dragging=false, sx=0, sy=0, ox=0, oy=0;
+    handleEl.addEventListener('mousedown', e=>{
+      dragging=true; sx=e.clientX; sy=e.clientY;
+      const rect = winEl.getBoundingClientRect();
+      const parentRect = winEl.parentElement.getBoundingClientRect();
+      ox = rect.left - parentRect.left; oy = rect.top - parentRect.top;
+      zTop+=1; winEl.style.zIndex = zTop;
+      e.preventDefault();
+    });
+    window.addEventListener('mousemove', e=>{
+      if(!dragging) return;
+      winEl.style.left = (ox + (e.clientX-sx)) + 'px';
+      winEl.style.top = (oy + (e.clientY-sy)) + 'px';
+    });
+    window.addEventListener('mouseup', ()=>{ dragging=false; });
+  }
+
+  function createWindow(id, opts){
+    if(openWindows[id]){ focusWindow(id); if(opts.onFocus) opts.onFocus(); return openWindows[id].el; }
+    const el = document.createElement('div');
+    el.className = 'mac-window' + (opts.dark ? ' dark' : '');
+    el.style.width = (opts.width||520) + 'px';
+    el.style.height = (opts.height||380) + 'px';
+    el.style.left = (opts.x!==undefined ? opts.x : (40+Object.keys(openWindows).length*24)) + 'px';
+    el.style.top = (opts.y!==undefined ? opts.y : (40+Object.keys(openWindows).length*24)) + 'px';
+    zTop += 1; el.style.zIndex = zTop;
+
+    const titlebar = document.createElement('div');
+    titlebar.className = 'mac-titlebar';
+    titlebar.innerHTML = `
+      <div class="mac-traffic">
+        <span class="tc-close" title="Close"></span>
+        <span class="tc-min" title="Minimize"></span>
+        <span class="tc-zoom" title="Zoom"></span>
+      </div>
+      <div class="mac-title">${opts.title||''}</div>
+    `;
+    titlebar.querySelector('.tc-close').addEventListener('click', ()=>closeWindow(id));
+    titlebar.querySelector('.tc-min').addEventListener('click', ()=>{ el.style.display='none'; });
+    titlebar.querySelector('.tc-zoom').addEventListener('click', ()=>{
+      el.style.width = el.style.width==='90%' ? (opts.width||520)+'px' : '90%';
+      el.style.height = el.style.height==='85%' ? (opts.height||380)+'px' : '85%';
+    });
+
+    const content = document.createElement('div');
+    content.className = 'mac-content';
+    content.id = id + '-content';
+
+    el.appendChild(titlebar);
+    el.appendChild(content);
+    el.addEventListener('mousedown', ()=>focusWindow(id));
+    layer.appendChild(el);
+    makeDraggable(el, titlebar);
+
+    openWindows[id] = { el, title: opts.title, icon: opts.icon||iconImg('mission-control.svg') };
+    if(opts.render) opts.render(content);
+    return el;
+  }
+
+  // ============== Toasts ==============
+  function toast(msg, ms){
+    const wrap = document.getElementById('toastWrap');
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    wrap.appendChild(t);
+    setTimeout(()=>{ t.style.opacity='0'; t.style.transition='opacity .3s'; setTimeout(()=>t.remove(),300); }, ms||3200);
+  }
+
+  // ============== Finder ==============
+  const finderState = { path: ["Macintosh HD"], selected: null };
+
+  function getNode(rootName, pathSegs){
+    let node = fsRoots[rootName];
+    for(const s of pathSegs) { if(!node || node.type!=='dir' || !node.children[s]) return null; node = node.children[s]; }
+    return node;
+  }
+  function nodeAtPath(pathArr){ return getNode(pathArr[0], pathArr.slice(1)); }
+
+  function finderNavigate(pathArr){
+    finderState.path = pathArr;
+    finderState.selected = null;
+    renderFinder();
+  }
+
+  function renderFinder(container){
+    const target = container || document.getElementById('finder-content');
+    if(!target) return;
+    const node = nodeAtPath(finderState.path);
+    const pathLabel = finderState.path.join(' / ');
+    const entries = node && node.type==='dir' ? Object.entries(node.children) : [];
+    entries.sort((a,b)=>{
+      const ad = a[1].type==='dir', bd = b[1].type==='dir';
+      if(ad!==bd) return ad?-1:1;
+      return a[0].localeCompare(b[0]);
+    });
+
+    const sidebarLocations = [
+      {label:'Applications', path:['Macintosh HD','Applications']},
+      {label:'Desktop', path:['Macintosh HD','Users','jsmith','Desktop']},
+      {label:'Documents', path:['Macintosh HD','Users','jsmith','Documents']},
+      {label:'Downloads', path:['Macintosh HD','Users','jsmith','Downloads']},
+    ];
+    const sidebarDevices = [
+      {label:'Macintosh HD', path:['Macintosh HD']},
+      {label:'iCloud Drive', path:['iCloud Drive']},
+    ];
+    function sbItem(loc){
+      const active = finderState.path.join('/') === loc.path.join('/');
+      return `<div class="sb-item ${active?'active':''}" onclick='Mac.finderNav(${JSON.stringify(loc.path)})'>${iconImg(active?'folder-open.svg':'folder.svg')} ${loc.label}</div>`;
+    }
+
+    target.innerHTML = `
+      <div class="finder-body">
+        <div class="finder-sidebar">
+          <div class="sb-heading">Favorites</div>
+          ${sidebarLocations.map(sbItem).join('')}
+          <div class="sb-heading">Locations</div>
+          ${sidebarDevices.map(sbItem).join('')}
+        </div>
+        <div class="finder-main">
+          <div class="finder-toolbar">
+            <button onclick="Mac.finderUp()">◀ Back</button>
+            <span class="finder-path">${pathLabel}</span>
+            <span style="margin-left:auto;" id="finder-action-slot"></span>
+          </div>
+          <div class="finder-grid" id="finder-grid"></div>
+        </div>
+      </div>
+    `;
+    const grid = target.querySelector('#finder-grid');
+    if(!node || node.type!=='dir'){
+      grid.innerHTML = '<div style="grid-column:1/-1;color:#888;padding:20px;">This item cannot be browsed.</div>';
+      return;
+    }
+    if(entries.length===0){
+      grid.innerHTML = '<div style="grid-column:1/-1;color:#888;padding:20px;">This folder is empty.</div>';
+    }
+    entries.forEach(([name, n])=>{
+      const icon = n.type==='dir' ? icons.dir : (n.type==='app' ? appIconFor(name) : icons[n.type]);
+      const div = document.createElement('div');
+      div.className = 'finder-item';
+      div.innerHTML = `<div class="fi-icon">${icon}</div><div class="fi-name">${name}</div>`;
+      div.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        finderState.selected = name;
+        target.querySelectorAll('.finder-item').forEach(el=>el.classList.remove('selected'));
+        div.classList.add('selected');
+        updateFinderActionSlot(target, name, n);
+      });
+      div.addEventListener('dblclick', ()=>{
+        if(n.type==='dir'){ finderNavigate(finderState.path.concat([name])); }
+        else if(n.type==='app'){ handleAppDoubleClick(name); }
+        else if(n.type==='dmg'){ mountDmg(); }
+        else if(n.type==='pkg'){ runPkgInstaller(name); }
+        else { toast(`${name} would open in its default application.`); }
+      });
+      grid.appendChild(div);
+    });
+  }
+
+  function updateFinderActionSlot(container, name, n){
+    const slot = container.querySelector('#finder-action-slot');
+    if(!slot) return;
+    if(n.type==='app'){
+      slot.innerHTML = `<button onclick="Mac.trashApp('${name}')">🗑 Move to Trash</button>`;
+    } else {
+      slot.innerHTML = '';
+    }
+  }
+
+  function handleAppDoubleClick(name){
+    if(name==='Terminal.app') return openTerminal();
+    if(name==='Disk Utility.app') return openDiskUtility();
+    if(name==='Keychain Access.app') return openKeychain();
+    if(name==='App Store.app') return openAppStore();
+    toast(`${name} would launch — in macOS every app is a single .app bundle even though it contains many internal files.`);
+  }
+
+  function trashApp(name){
+    const node = getNode('Macintosh HD', ['Applications']);
+    if(node && node.children[name]){
+      delete node.children[name];
+      trashItems.push(name);
+      updateTrashBadge();
+      toast(`${name} moved to Trash. This is the standard way to uninstall a macOS app.`);
+      renderFinder(document.getElementById('finder-content'));
+    }
+  }
+
+  function mountDmg(){
+    if(!fsRoots['Installer']){
+      fsRoots['Installer'] = d({ "MyApp.app": app(), "Applications": d({}) });
+      toast('Installer.dmg mounted as a virtual volume "Installer" — drag MyApp.app onto the Applications shortcut to install it.');
+    }
+    finderNavigate(['Installer']);
+  }
+
+  function runPkgInstaller(name){
+    createWindow('pkg-installer', {
+      title: 'Install Sample', width:420, height:260,
+      render(c){
+        c.innerHTML = `
+          <div style="padding:24px;text-align:center;">
+            <div style="display:flex;justify-content:center;">${iconImg('pkg.svg','',64)}</div>
+            <h3 style="margin:10px 0 4px;">Welcome to the Sample Installer</h3>
+            <p style="font-size:12.5px;color:#555;">This wizard will guide you through installing this software. It will run scripts and copy payload files into system directories.</p>
+            <button style="margin-top:14px;padding:8px 18px;border:none;background:#0a84ff;color:#fff;border-radius:6px;cursor:pointer;" onclick="Mac.finishPkg()">Continue → Install</button>
+          </div>`;
+      }
+    });
+  }
+  function finishPkg(){
+    closeWindow('pkg-installer');
+    toast('Installation complete. .pkg installers can place files anywhere on the system, not just in /Applications.');
+  }
+
+  function openFinder(){
+    createWindow('finder', {
+      title:'Finder', width:640, height:420, x:60, y:50,
+      render(c){ renderFinder(c); },
+      onFocus(){ renderFinder(document.getElementById('finder-content')); }
+    });
+  }
+  function finderUp(){
+    if(finderState.path.length>1) finderNavigate(finderState.path.slice(0,-1));
+  }
+
+  // ============== System Settings ==============
+  const settingsState = { pane: 'general' };
+  const settingsPanes = {
+    general: {
+      icon: iconImg('settings-general.svg'), label:'General',
+      render(){ return `
+        <h2>General — Software Update</h2>
+        <div class="settings-row"><span>macOS Sonoma 14.5</span><button style="padding:6px 12px;border-radius:6px;border:1px solid #ccc;background:#f2f2f2;cursor:pointer;" onclick="Mac.toast('Checking for updates… Your Mac is up to date.')">Check Now</button></div>
+        <div class="settings-row"><span>Rapid Security Responses</span><div class="toggle on" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+        <div class="settings-desc">Routine OS and app updates are deployed via System Settings to resolve vulnerabilities, fix bugs, and improve performance. Rapid Security Response (RSR) delivers critical, targeted security fixes between full updates — often without a full restart.</div>` ; }
+    },
+    displays: {
+      icon: iconImg('settings-displays.svg'), label:'Displays',
+      render(){ return `
+        <h2>Displays</h2>
+        <div class="settings-row"><span>Resolution</span><span>Default (1728 × 1117)</span></div>
+        <div class="settings-row"><span>Brightness</span><input type="range" min="0" max="100" value="72"></div>
+        <div class="settings-row"><span>Night Shift</span><div class="toggle" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+        <div class="settings-desc">Adjust screen resolution, arrangement, orientation, color profiles, and relative placement of displays in a multi-monitor setup.</div>`; }
+    },
+    network: {
+      icon: iconImg('settings-network.svg'), label:'Network',
+      render(){ return `
+        <h2>Network</h2>
+        <div class="settings-row"><span>Wi-Fi — Home-5G</span><span style="color:#2fa84f;">Connected</span></div>
+        <div class="settings-row"><span>IPv4 Address</span><span>192.168.1.42</span></div>
+        <div class="settings-row"><span>DNS Servers</span><span>1.1.1.1, 8.8.8.8</span></div>
+        <div class="settings-desc">Manage network adapters, Wi-Fi and Ethernet interfaces, IPv4/IPv6 settings, DNS configuration, and proxies.</div>`; }
+    },
+    printers: {
+      icon: iconImg('settings-printers.svg'), label:'Printers & Scanners',
+      render(){ return `
+        <h2>Printers &amp; Scanners</h2>
+        <div class="settings-row"><span>Office LaserJet (Network)</span><span style="color:#2fa84f;">Idle</span></div>
+        <div class="settings-row"><span>Home ScanJet (USB)</span><span style="color:#888;">Offline</span></div>
+        <div class="settings-desc">Add, configure, share, and troubleshoot printing and scanning hardware over a local or network connection.</div>`; }
+    },
+    privacy: {
+      icon: iconImg('settings-privacy.svg'), label:'Privacy & Security',
+      render(){ return `
+        <h2>Privacy &amp; Security</h2>
+        <div class="settings-row"><span>Location Services</span><div class="toggle on" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+        <div class="settings-row"><span>Camera access — 4 apps</span><span>Manage…</span></div>
+        <div class="settings-row"><span>Microphone access — 2 apps</span><span>Manage…</span></div>
+        <div class="settings-row"><span>XProtect / Malware Removal Tool</span><span style="color:#2fa84f;">Active</span></div>
+        <div class="settings-row"><span>FileVault (Full Disk Encryption)</span><div class="toggle on" onclick="this.classList.toggle('on'); Mac.toast('FileVault protects your startup disk using encryption tied to your login or a recovery key.')"><div class="knob"></div></div></div>
+        <div class="settings-desc">Manage per-app permissions to sensors and data (Location, Camera, Microphone, Contacts). macOS also ships built-in security layers — XProtect and the Malware Removal Tool — as its baseline antivirus protection, and FileVault for full-disk encryption.</div>`; }
+    },
+    accessibility: {
+      icon: iconImg('settings-accessibility.svg'), label:'Accessibility',
+      render(){ return `
+        <h2>Accessibility</h2>
+        <div class="settings-row"><span>VoiceOver</span><div class="toggle" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+        <div class="settings-row"><span>Zoom</span><div class="toggle" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+        <div class="settings-row"><span>Reduce Motion</span><div class="toggle" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+        <div class="settings-desc">Custom input and display options for accessibility, plus permissions for apps that need system-level control and automation.</div>`; }
+    },
+    appleid: {
+      icon: iconImg('settings-appleid.svg'), label:'Apple ID',
+      render(){ return `
+        <h2>Apple ID</h2>
+        <div class="settings-row"><span>Name</span><span>J. Smith</span></div>
+        <div class="settings-row"><span>iCloud storage</span><span>112 GB of 200 GB used</span></div>
+        <div class="settings-row"><span>Managed by organization</span><span style="color:#0a84ff;">MDM Profile Installed</span></div>
+        <div class="settings-desc">Identity management for Apple services. Organizations can enroll devices in Mobile Device Management (MDM) to enforce security policies and restrict features tied to a person's Apple ID.</div>`; }
+    },
+  };
+
+  function renderSettings(container){
+    const target = container || document.getElementById('settings-content');
+    if(!target) return;
+    target.innerHTML = `
+      <div class="settings-body">
+        <div class="settings-sidebar">
+          ${Object.entries(settingsPanes).map(([key,p])=>
+            `<div class="ss-item ${settingsState.pane===key?'active':''}" onclick="Mac.settingsGo('${key}')">${p.icon} ${p.label}</div>`
+          ).join('')}
+        </div>
+        <div class="settings-pane">${settingsPanes[settingsState.pane].render()}</div>
+      </div>`;
+  }
+  function settingsGo(key){ settingsState.pane = key; renderSettings(); }
+  function openSettings(pane){
+    if(pane) settingsState.pane = pane;
+    createWindow('settings', { title:'System Settings', width:620, height:420, x:120, y:70, render(c){ renderSettings(c); }, onFocus(){ renderSettings(document.getElementById('settings-content')); } });
+    if(pane) renderSettings(document.getElementById('settings-content'));
+  }
+
+  // ============== Terminal ==============
+  function openTerminal(){
+    createWindow('terminal', {
+      title:'jsmith — zsh — 80×24', width:520, height:340, x:160, y:100, dark:true,
+      render(c){
+        c.innerHTML = `<div class="term-body" id="term-body"></div>`;
+        const body = c.querySelector('#term-body');
+        function line(t){ const l=document.createElement('div'); l.className='term-line'; l.textContent=t; body.appendChild(l); }
+        line('Last login: today on ttys000');
+        line('Type a few commands: pwd, whoami, sw_vers, ls, clear');
+        renderTermPrompt(body);
+      }
+    });
+  }
+  function renderTermPrompt(body){
+    const wrap = document.createElement('div');
+    wrap.className = 'term-input-line';
+    wrap.innerHTML = `<span class="term-prompt">jsmith@MacBook-Pro ~ %&nbsp;</span><span class="term-input" id="term-input"></span><span class="term-cursor"></span>`;
+    body.appendChild(wrap);
+    const input = document.createElement('input');
+    input.style.position='absolute'; input.style.opacity='0'; input.style.pointerEvents='none';
+    document.body.appendChild(input);
+    input.focus();
+    let buf = '';
+    function refresh(){ wrap.querySelector('#term-input').textContent = buf; body.scrollTop = body.scrollHeight; }
+    function runTermCmd(cmdRaw){
+      const cmd = cmdRaw.trim();
+      wrap.querySelector('.term-cursor').remove();
+      if(cmd==='pwd') line2('/Users/jsmith');
+      else if(cmd==='whoami') line2('jsmith');
+      else if(cmd==='sw_vers') line2('ProductName:\tmacOS\nProductVersion:\t14.5\nBuildVersion:\t23F79');
+      else if(cmd==='ls') line2('Desktop\tDocuments\tDownloads\tLibrary');
+      else if(cmd==='clear'){ body.innerHTML=''; }
+      else if(cmd==='') {}
+      else line2(`zsh: command not found: ${cmd.split(' ')[0]}`);
+      renderTermPrompt(body);
+    }
+    function line2(t){ t.split('\n').forEach(x=>{ const l=document.createElement('div'); l.className='term-line'; l.textContent=x; body.appendChild(l); }); }
+    input.addEventListener('keydown', e=>{
+      if(e.key==='Enter'){ runTermCmd(buf); buf=''; input.remove(); }
+      else if(e.key==='Backspace'){ buf = buf.slice(0,-1); refresh(); }
+      else if(e.key.length===1){ buf += e.key; refresh(); }
+    });
+    body.parentElement.addEventListener('click', ()=>{ if(document.body.contains(input)) input.focus(); });
+    refresh();
+  }
+
+  // ============== Disk Utility ==============
+  function openDiskUtility(){
+    createWindow('diskutility', {
+      title:'Disk Utility', width:560, height:380, x:180, y:120,
+      render(c){
+        c.innerHTML = `
+          <div class="du-body">
+            <div class="du-sidebar">
+              <div class="du-item active">${iconImg('disk-utility.svg')} Macintosh HD — 494.38 GB</div>
+              <div class="du-item">${iconImg('external-drive.svg')} Time Machine Backups — 2 TB</div>
+            </div>
+            <div class="du-main">
+              <h3 style="margin-top:0;">Macintosh HD</h3>
+              <p style="font-size:12.5px;color:#555;">APFS · 385.5 GB available of 494.38 GB</p>
+              <div class="du-toolbar">
+                <button onclick="Mac.runFirstAid()">🩺 First Aid</button>
+                <button onclick="Mac.toast('Erase is disabled in this simulator to protect your (virtual) data.')">Erase…</button>
+                <button onclick="Mac.toast('Partition is disabled in this simulator.')">Partition…</button>
+              </div>
+              <div class="du-log" id="du-log">Ready.</div>
+            </div>
+          </div>`;
+      }
+    });
+  }
+  async function runFirstAid(){
+    const log = document.getElementById('du-log');
+    if(!log) return;
+    const lines = [
+      'Running First Aid on "Macintosh HD"',
+      'Verifying storage system',
+      'Checking volume bitmap',
+      'Checking volume header',
+      'Checking catalog hierarchy',
+      'Checking extended attributes file',
+      'The volume Macintosh HD appears to be OK.',
+      'Operation successful.'
+    ];
+    log.textContent = '';
+    for(const l of lines){
+      await new Promise(r=>setTimeout(r,260));
+      log.textContent += l + '\n';
+      log.scrollTop = log.scrollHeight;
+    }
+  }
+
+  // ============== Time Machine ==============
+  function openTimeMachine(){
+    createWindow('timemachine', {
+      title:'Time Machine', width:460, height:400, x:220, y:90,
+      render(c){
+        c.innerHTML = `
+          <div class="tm-body">
+            <div class="tm-dial" id="tm-dial">Idle</div>
+            <button style="padding:8px 16px;border:none;background:#0a84ff;color:#fff;border-radius:6px;cursor:pointer;" onclick="Mac.backupNow()">Back Up Now</button>
+            <div class="tm-list">
+              <div class="tm-row"><span>Today, 7:14 AM</span><span>Hourly</span></div>
+              <div class="tm-row"><span>Yesterday, 11:00 PM</span><span>Daily</span></div>
+              <div class="tm-row"><span>Last week, Sunday</span><span>Weekly</span></div>
+              <div class="tm-row"><span>Last month</span><span>Weekly</span></div>
+            </div>
+          </div>`;
+      }
+    });
+  }
+  async function backupNow(){
+    const dial = document.getElementById('tm-dial');
+    if(!dial) return;
+    for(let p=0;p<=100;p+=20){
+      dial.textContent = p+'%';
+      await new Promise(r=>setTimeout(r,180));
+    }
+    dial.textContent = 'Done';
+    toast('Backup complete. Time Machine keeps hourly backups for 24 hours, daily for a month, and weekly after that.');
+  }
+
+  // ============== Keychain ==============
+  const kcTabs = {
+    Passwords: [ ['github.com','jsmith'], ['icloud.com','jsmith@icloud.com'], ['Office Wi-Fi','—'] ],
+    Certificates: [ ['Apple Root CA','—'], ['Company VPN Cert','—'] ],
+    Keys: [ ['SSH: id_ed25519','—'] ],
+  };
+  let kcActive = 'Passwords';
+  function renderKeychain(c){
+    c.innerHTML = `
+      <div class="kc-tabs">${Object.keys(kcTabs).map(t=>`<button class="${t===kcActive?'active':''}" onclick="Mac.kcTab('${t}')">${t}</button>`).join('')}</div>
+      <table class="kc-table"><thead><tr><th>Name</th><th>Account</th></tr></thead>
+      <tbody>${kcTabs[kcActive].map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</tbody></table>`;
+  }
+  function kcTab(t){ kcActive = t; renderKeychain(document.getElementById('keychain-content')); }
+  function openKeychain(){
+    createWindow('keychain', { title:'Keychain Access', width:440, height:340, x:260, y:130, render(c){ renderKeychain(c); } });
+  }
+
+  // ============== App Store ==============
+  function openAppStore(){
+    createWindow('appstore', {
+      title:'App Store', width:460, height:400, x:300, y:70,
+      render(c){
+        const apps = [
+          ['🗂️','Pages','Word processing'],
+          ['📊','Numbers','Spreadsheets'],
+          ['🎬','Final Cut Pro','Video editing'],
+          ['🧮','1Password','Password manager'],
+        ];
+        c.innerHTML = `<div class="as-list">${apps.map(a=>`
+          <div class="as-row">
+            <div class="as-icon">${a[0]}</div>
+            <div class="as-info"><div class="as-name">${a[1]}</div><div class="as-desc">${a[2]}</div></div>
+            <button onclick="Mac.toast('Installing ${a[1]}… Done. The App Store vets and securely distributes macOS apps.')">GET</button>
+          </div>`).join('')}</div>`;
+      }
+    });
+  }
+
+  // ============== Trash ==============
+  function updateTrashBadge(){
+    const b = document.getElementById('trash-badge');
+    if(b) b.textContent = trashItems.length || '';
+    if(b) b.style.display = trashItems.length ? 'flex' : 'none';
+  }
+  function openTrash(){
+    createWindow('trash', {
+      title:'Trash', width:400, height:320, x:340, y:150,
+      render(c){ renderTrash(c); }
+    });
+  }
+  function renderTrash(container){
+    const target = container || document.getElementById('trash-content');
+    if(!target) return;
+    target.innerHTML = `
+      <div style="padding:14px;">
+        ${trashItems.length===0 ? '<p style="color:#888;">Trash is empty.</p>' :
+          `<div class="finder-grid" style="padding:0;">${trashItems.map(n=>`<div class="finder-item"><div class="fi-icon">${appIconFor(n)}</div><div class="fi-name">${n}</div></div>`).join('')}</div>`}
+        <button style="margin-top:14px;padding:6px 14px;border:none;background:#ff3b30;color:#fff;border-radius:6px;cursor:pointer;" onclick="Mac.emptyTrash()">Empty Trash</button>
+      </div>`;
+  }
+  function emptyTrash(){
+    trashItems.length = 0;
+    updateTrashBadge();
+    renderTrash(document.getElementById('trash-content'));
+    toast('Trash emptied. Uninstalled apps are now permanently removed.');
+  }
+
+  // ============== Spotlight ==============
+  const spotlightOverlay = document.getElementById('spotlightOverlay');
+  const spotlightInput = document.getElementById('spotlightInput');
+  const spotlightResults = document.getElementById('spotlightResults');
+  function openSpotlight(){
+    spotlightOverlay.classList.add('open');
+    spotlightInput.value = '';
+    spotlightInput.focus();
+    renderSpotlightResults('');
+  }
+  function closeSpotlight(){ spotlightOverlay.classList.remove('open'); }
+  function renderSpotlightResults(q){
+    const f = q.trim().toLowerCase();
+    const items = reference.filter(r=> !f || r.name.toLowerCase().includes(f) || r.desc.toLowerCase().includes(f));
+    spotlightResults.innerHTML = items.slice(0,8).map((r,i)=>`
+      <div class="spotlight-result" data-idx="${i}" onclick="Mac.runReference(${reference.indexOf(r)})">
+        <div class="sr-name">${r.name}</div>
+        <div class="sr-desc">${r.desc}</div>
+      </div>`).join('') || '<div class="spotlight-result">No results</div>';
+  }
+  spotlightInput.addEventListener('input', e=>renderSpotlightResults(e.target.value));
+  spotlightOverlay.addEventListener('click', e=>{ if(e.target===spotlightOverlay) closeSpotlight(); });
+
+  // ============== Mission Control ==============
+  const mcOverlay = document.getElementById('mcOverlay');
+  function openMissionControl(){
+    const ids = Object.keys(openWindows);
+    mcOverlay.innerHTML = ids.length ? ids.map(id=>`
+      <div class="mc-thumb" onclick="Mac.mcFocus('${id}')">
+        <div class="mc-thumb-bar">${openWindows[id].title}</div>
+        <div class="mc-thumb-body">${openWindows[id].icon}</div>
+      </div>`).join('') : '<div class="mc-empty">No open windows. Mission Control also lets you create separate Spaces to organize windows.</div>';
+    mcOverlay.classList.add('open');
+  }
+  function mcFocus(id){ mcOverlay.classList.remove('open'); focusWindow(id); const w=openWindows[id]; if(w) w.el.style.display='flex'; }
+  mcOverlay.addEventListener('click', e=>{ if(e.target===mcOverlay) mcOverlay.classList.remove('open'); });
+
+  // ============== Force Quit ==============
+  function forceQuitOpen(){
+    document.getElementById('appleMenuDD').classList.remove('open');
+    createWindow('forcequit', {
+      title:'Force Quit Applications', width:340, height:300, x:380, y:160,
+      render(c){ renderForceQuit(c); }
+    });
+  }
+  function renderForceQuit(container){
+    const target = container || document.getElementById('forcequit-content');
+    if(!target) return;
+    const ids = Object.keys(openWindows).filter(id=>id!=='forcequit');
+    target.innerHTML = `<div class="fq-list">
+      ${ids.length ? ids.map(id=>`<div class="fq-row"><span>${openWindows[id].icon} ${openWindows[id].title}</span><button onclick="Mac.forceQuitApp('${id}')">Force Quit</button></div>`).join('') : '<p style="color:#888;">No open applications.</p>'}
+    </div>`;
+  }
+  function forceQuitApp(id){ closeWindow(id); renderForceQuit(document.getElementById('forcequit-content')); toast(`${id} was force quit.`); }
+
+  // ============== Dock ==============
+  const dockApps = [
+    {id:'finder', icon:'finder.svg', label:'Finder', open:()=>openFinder()},
+    {id:'settings', icon:'settings.svg', label:'System Settings', open:()=>openSettings()},
+    {id:'diskutility', icon:'disk-utility.svg', label:'Disk Utility', open:()=>openDiskUtility()},
+    {id:'terminal', icon:'terminal.svg', label:'Terminal', open:()=>openTerminal()},
+    {id:'timemachine', icon:'time-machine.svg', label:'Time Machine', open:()=>openTimeMachine()},
+    {id:'keychain', icon:'keychain.svg', label:'Keychain Access', open:()=>openKeychain()},
+    {id:'appstore', icon:'app-store.svg', label:'App Store', open:()=>openAppStore()},
+    {sep:true},
+    {id:'missioncontrol', icon:'mission-control.svg', label:'Mission Control', open:()=>openMissionControl()},
+    {sep:true},
+    {id:'trash', icon:'trash.svg', label:'Trash', open:()=>openTrash(), badge:true},
+  ];
+  const dockEl = document.getElementById('dock');
+  dockApps.forEach(a=>{
+    if(a.sep){ const s=document.createElement('div'); s.className='dock-sep'; dockEl.appendChild(s); return; }
+    const div = document.createElement('div');
+    div.className = 'dock-icon';
+    div.title = a.label;
+    div.innerHTML = iconImg(a.icon) + (a.badge? `<span class="badge" id="trash-badge" style="display:none;"></span>` : '');
+    div.addEventListener('click', a.open);
+    dockEl.appendChild(div);
+  });
+
+  // ============== Apple menu ==============
+  const appleMenuBtn = document.getElementById('appleMenuBtn');
+  const appleMenuDD = document.getElementById('appleMenuDD');
+  appleMenuBtn.addEventListener('click', e=>{ e.stopPropagation(); appleMenuDD.classList.toggle('open'); });
+  document.addEventListener('click', ()=> appleMenuDD.classList.remove('open'));
+  document.getElementById('spotlightBtn').addEventListener('click', e=>{ e.stopPropagation(); openSpotlight(); });
+
+  // ============== Clock ==============
+  function tickClock(){
+    const now = new Date();
+    const el = document.getElementById('clock');
+    const opts = {weekday:'short', month:'short', day:'numeric'};
+    el.textContent = now.toLocaleDateString('en-US', opts) + '  ' + now.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit'});
+  }
+  tickClock(); setInterval(tickClock, 15000);
+
+  // ============== Keyboard shortcuts ==============
+  document.addEventListener('keydown', e=>{
+    if(e.metaKey && e.code==='Space'){ e.preventDefault(); spotlightOverlay.classList.contains('open') ? closeSpotlight() : openSpotlight(); }
+    else if(e.metaKey && e.altKey && e.key==='Escape'){ e.preventDefault(); forceQuitOpen(); }
+    else if(e.ctrlKey && e.key==='ArrowUp'){ e.preventDefault(); openMissionControl(); }
+    else if(e.key==='Escape'){ closeSpotlight(); mcOverlay.classList.remove('open'); }
+  });
+
+  // ============== Reference index (from provided glossary) ==============
+  const reference = [
+    { name:'.dmg', action:'Double-click Installer.dmg in Finder', desc:'Disk Image file format used to distribute software on macOS. Mounts like a virtual volume containing application installers or bundle folders.', run:()=>{ openFinder(); finderNavigate(['Macintosh HD','Users','jsmith','Downloads']); toast('Double-click Installer.dmg to mount it.'); } },
+    { name:'.pkg', action:'Double-click Sample.pkg in Finder', desc:'Installer package format containing an installation wizard, scripts, and payload files used to install software across system directories.', run:()=>{ openFinder(); finderNavigate(['Macintosh HD','Users','jsmith','Downloads']); toast('Double-click Sample.pkg to run its installer wizard.'); } },
+    { name:'.app', action:'Finder → Applications', desc:'Application bundle directory structure in macOS that appears as a single executable file to the end user.', run:()=>{ openFinder(); finderNavigate(['Macintosh HD','Applications']); } },
+    { name:'App Store', action:'Open App Store', desc:'Official Apple digital distribution platform for discovering, purchasing, and securely downloading vetted macOS applications.', run:()=> openAppStore() },
+    { name:'Uninstallation Process', action:'Select an app in Applications, then Move to Trash', desc:'Removal method for macOS apps — typically dragging a .app bundle from /Applications to the Trash, or running a dedicated uninstaller script for .pkg-installed software.', run:()=>{ openFinder(); finderNavigate(['Macintosh HD','Applications']); toast('Select an app icon, then click "Move to Trash" in the toolbar.'); } },
+    { name:'/Applications', action:'Finder → /Applications', desc:'Root directory storing installed applications accessible to all system users.', run:()=>{ openFinder(); finderNavigate(['Macintosh HD','Applications']); } },
+    { name:'/Users', action:'Finder → /Users', desc:'System folder containing individual user profile directories, including home folders, personal data, and desktop configurations.', run:()=>{ openFinder(); finderNavigate(['Macintosh HD','Users']); } },
+    { name:'/Library', action:'Finder → /Library', desc:'System-wide configuration folder storing shared application support files, drivers, and global preferences accessible by all users.', run:()=>{ openFinder(); finderNavigate(['Macintosh HD','Library']); } },
+    { name:'/System', action:'Finder → /System', desc:'Core OS directory containing critical macOS operating system files, system frameworks, and kernel components protected by System Integrity Protection (SIP).', run:()=>{ openFinder(); finderNavigate(['Macintosh HD','System']); } },
+    { name:'~/Library', action:'Finder → Users/jsmith/Library', desc:'User-specific Library folder (at /Users/<name>/Library) containing individual app preferences, caches, application support files, and user data.', run:()=>{ openFinder(); finderNavigate(['Macintosh HD','Users','jsmith','Library']); } },
+    { name:'Apple ID and Corporate Restrictions', action:'System Settings → Apple ID', desc:'Identity management for Apple services that organizations can manage via Mobile Device Management (MDM) enrollment profiles to enforce security policies and restrict features.', run:()=> openSettings('appleid') },
+    { name:'Backups', action:'Open Time Machine', desc:'Best practice of using utilities like Time Machine or third-party tools to maintain regular data copies on external or network drives.', run:()=> openTimeMachine() },
+    { name:'Antivirus', action:'System Settings → Privacy & Security', desc:'Security best practice of running endpoint protection or relying on built-in macOS security layers (XProtect, MRT) to detect and block malicious software.', run:()=> openSettings('privacy') },
+    { name:'Updates/Patches', action:'System Settings → General', desc:'Routine operating system and application updates deployed via System Settings to resolve vulnerabilities, fix bugs, and optimize system performance.', run:()=> openSettings('general') },
+    { name:'Rapid Security Response (RSR)', action:'System Settings → General', desc:'Automated macOS security mechanism delivering critical security fixes between standard software updates, without requiring a full OS reboot.', run:()=> openSettings('general') },
+    { name:'Displays', action:'System Settings → Displays', desc:'System Settings pane used to adjust screen resolution, arrangement, orientation, color profiles, and relative placement in multi-monitor setups.', run:()=> openSettings('displays') },
+    { name:'Networks', action:'System Settings → Network', desc:'System Settings menu for managing network adapters, Wi-Fi connections, Ethernet interfaces, IPv4/IPv6 settings, DNS configuration, and proxies.', run:()=> openSettings('network') },
+    { name:'Printers & Scanners', action:'System Settings → Printers & Scanners', desc:'System interface for adding, configuring, sharing, and troubleshooting printing and scanning hardware on local or network connections.', run:()=> openSettings('printers') },
+    { name:'Privacy', action:'System Settings → Privacy & Security', desc:'System Settings pane for managing per-application permissions to device sensors and user data, including Location Services, Camera, Microphone, and Contacts.', run:()=> openSettings('privacy') },
+    { name:'Accessibility', action:'System Settings → Accessibility', desc:'System Settings menu providing custom input and display options for accessibility, plus permissions for apps needing system-level control and automation.', run:()=> openSettings('accessibility') },
+    { name:'Time Machine', action:'Open Time Machine', desc:'Automated macOS backup feature that maintains hourly snapshots for 24 hours, daily backups for a month, and weekly backups for prior months.', run:()=> openTimeMachine() },
+    { name:'Multiple Desktops', action:'Mission Control (Control+↑)', desc:'Feature allowing users to create separate virtual workspace environments ("Spaces") to organize open application windows.', run:()=> openMissionControl() },
+    { name:'Mission Control', action:'Trigger Mission Control (Control+↑)', desc:'Window management interface launched via trackpad gestures or Control+Up Arrow that displays all open windows, full-screen apps, and virtual desktop Spaces.', run:()=> openMissionControl() },
+    { name:'Keychain', action:'Open Keychain Access', desc:'Encrypted password management database in macOS that securely stores user passwords, certificates, keys, and private application credentials, unlocked via login.', run:()=> openKeychain() },
+    { name:'Spotlight', action:'Trigger Spotlight (⌘+Space)', desc:'System-wide indexing and search utility launched via Command+Space to locate local files, launch applications, perform calculations, and fetch web data.', run:()=> openSpotlight() },
+    { name:'iCloud', action:'See it via Apple ID pane', desc:'Apple cloud storage and synchronization infrastructure that links user data across macOS, iOS, and iPadOS devices.', run:()=>{ openSettings('appleid'); toast('iCloud syncs data like Photos, Notes, and Drive across all your Apple devices.'); } },
+    { name:'iMessage', action:'Concept — no simulated app', desc:'Messaging service integrated into the macOS Messages application for secure text, media, and data communication across Apple devices.', run:()=> toast('iMessage lives in the Messages app (not simulated here) and syncs across your Apple devices.') },
+    { name:'FaceTime', action:'Concept — no simulated app', desc:'Built-in audio and video conferencing application integrated with macOS and iOS.', run:()=> toast("FaceTime is Apple's built-in video/audio calling app (not simulated here).") },
+    { name:'iCloud Drive', action:'Finder → iCloud Drive', desc:'Cloud-based file storage and synchronization folder built into the macOS file system, similar to Google Drive or Dropbox.', run:()=>{ openFinder(); finderNavigate(['iCloud Drive']); } },
+    { name:'Gestures', action:'Concept — trackpad input', desc:'Multi-touch trackpad and mouse input shortcuts allowing users to navigate, swipe, pinch, or tap to trigger system functions like Mission Control or desktop switching.', run:()=> toast('Gestures include things like a 4-finger swipe up for Mission Control, or a pinch to open Launchpad.') },
+    { name:'Finder', action:'Open Finder', desc:'Primary macOS desktop file manager used to browse, organize, launch, rename, and manage files, network shares, and connected media.', run:()=> openFinder() },
+    { name:'Dock', action:'Look at the bottom of the screen', desc:'Desktop shortcut bar providing quick access to pinned apps, open applications (indicated by a dot below the icon), folders, and the Trash.', run:()=>{ toast("That's the Dock at the bottom — pinned and running apps, plus the Trash."); const d=document.getElementById('dock'); d.style.transition='box-shadow .3s'; d.style.boxShadow='0 0 0 3px #0a84ff'; setTimeout(()=>d.style.boxShadow='',900); } },
+    { name:'Continuity', action:'Concept — cross-device features', desc:'Ecosystem integration allowing Apple devices to share features seamlessly, such as using an iPhone as a Mac webcam, AirDrop file sharing, and Universal Clipboard.', run:()=> toast('Continuity covers things like Handoff, AirDrop, and using an iPhone as a Mac webcam.') },
+    { name:'Disk Utility', action:'Open Disk Utility', desc:'System administration utility used to format, partition, repair (First Aid), erase, and create disk images of local storage drives and volumes.', run:()=> openDiskUtility() },
+    { name:'FileVault', action:'System Settings → Privacy & Security', desc:'Built-in macOS Full Disk Encryption (FDE) feature that protects system drive data using AES encryption linked to user credentials or a recovery key.', run:()=> openSettings('privacy') },
+    { name:'Terminal', action:'Open Terminal', desc:'Command-line interface application providing shell access (zsh/bash) for file manipulation, system configuration, scripting, and administrative functions.', run:()=> openTerminal() },
+    { name:'Force Quit', action:'⌘+Option+Esc', desc:'Troubleshooting feature (Command+Option+Escape) used to immediately terminate non-responsive or malfunctioning applications.', run:()=> forceQuitOpen() },
+  ];
+
+  function renderReference(filter){
+    const list = document.getElementById('refList');
+    list.innerHTML = '';
+    const f = (filter||'').trim().toLowerCase();
+    const items = reference.filter(r => !f || r.name.toLowerCase().includes(f) || r.desc.toLowerCase().includes(f));
+    if(items.length===0){
+      list.innerHTML = '<div class="ref-empty">No matching concepts.</div>';
+      return;
+    }
+    items.forEach(r=>{
+      const item = document.createElement('div');
+      item.className = 'ref-item';
+      item.innerHTML = `<div class="ref-name">${r.name}</div><div class="ref-action">${r.action}</div><div class="ref-desc">${r.desc}</div>`;
+      item.addEventListener('click', ()=> r.run());
+      list.appendChild(item);
+    });
+  }
+  document.getElementById('refSearchInput').addEventListener('input', e=>renderReference(e.target.value));
+  renderReference('');
+
+  function runReference(idx){ closeSpotlight(); reference[idx].run(); }
+
+  // ============== Expose global API used by inline handlers ==============
+  window.Mac = {
+    open: (id)=>{ if(id==='settings') openSettings(); },
+    toast, finderNav: finderNavigate, finderUp, trashApp, emptyTrash,
+    runFirstAid, backupNow, kcTab, mcFocus, forceQuitOpen, forceQuitApp,
+    finishPkg, runReference, settingsGo, mountDmg, runPkgInstaller,
+  };
+
+  // Boot: open Finder by default so the desktop isn't empty
+  openFinder();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>1.7 Configure Microsoft Windows Networking</title>
+<style>
+  :root{ --accent:#0078d4; --taskbar-bg:#1f1f1f; --win-bg:#f3f3f3; }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; margin:0; font-family:"Segoe UI",Tahoma,Arial,sans-serif; overflow:auto; }
+  body{ background:#202020; }
+  .app-root{ position:relative; width:100%; height:100%; overflow:hidden; user-select:none; }
+  .desktop{ position:absolute; inset:0; background: linear-gradient(150deg,#0b3d91 0%, #1e6fd9 45%, #56c2e6 100%); }
+  .desk-icons{ position:absolute; top:14px; left:14px; display:flex; flex-direction:column; gap:18px; }
+  .desk-icon{ width:80px; text-align:center; color:#fff; font-size:11px; text-shadow:0 1px 3px rgba(0,0,0,.6); cursor:pointer; }
+  .desk-icon .di-glyph{ font-size:30px; display:block; margin-bottom:3px; }
+
+  .taskbar{ position:absolute; left:0; right:0; bottom:0; height:46px; background:var(--taskbar-bg); display:flex; align-items:center; gap:4px; padding:0 8px; z-index:5000; color:#fff; }
+  .tb-start{ width:40px; height:36px; border-radius:6px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .tb-start:hover, .tb-icon:hover, .tb-tray-item:hover{ background:rgba(255,255,255,0.12); }
+  .win-grid{ display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:2px; width:15px; height:15px; }
+  .win-grid span{ background:#00adef; }
+  .tb-search{ display:flex; align-items:center; gap:8px; background:#2b2b2b; border-radius:18px; padding:6px 14px; width:260px; color:#ccc; font-size:12.5px; }
+  .tb-search input{ background:transparent; border:none; outline:none; color:#fff; font-size:12.5px; flex:1; }
+  .tb-icon{ width:36px; height:36px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:17px; cursor:pointer; }
+  .tb-right{ margin-left:auto; display:flex; align-items:center; gap:10px; }
+  .tb-tray-item{ font-size:14px; padding:6px 7px; border-radius:4px; cursor:pointer; }
+  .tb-clock{ font-size:11.5px; line-height:1.3; text-align:right; padding:4px 10px; border-radius:4px; cursor:pointer; }
+  .tb-clock:hover{ background:rgba(255,255,255,0.12); }
+
+  .start-menu{ position:absolute; bottom:52px; left:8px; width:420px; max-height:520px; background:rgba(32,32,32,0.92); backdrop-filter:blur(18px); border-radius:10px; box-shadow:0 20px 60px rgba(0,0,0,0.5); display:none; flex-direction:column; z-index:6000; color:#fff; overflow:hidden; }
+  .start-menu.open{ display:flex; }
+  .sm-search{ padding:14px 16px 8px; }
+  .sm-search input{ width:100%; box-sizing:border-box; background:#3a3a3a; border:none; border-radius:6px; padding:8px 12px; color:#fff; font-size:12.5px; outline:none; }
+  .sm-heading{ padding:10px 16px 6px; font-size:12px; color:#bbb; }
+  .sm-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; padding:0 12px 12px; overflow-y:auto; }
+  .sm-tile{ background:rgba(255,255,255,0.06); border-radius:6px; padding:12px 4px; text-align:center; cursor:pointer; font-size:10.5px; }
+  .sm-tile:hover{ background:rgba(255,255,255,0.14); }
+  .sm-tile .sm-glyph{ font-size:20px; display:block; margin-bottom:4px; }
+  .sm-footer{ border-top:1px solid rgba(255,255,255,0.12); padding:10px 16px; font-size:12px; display:flex; justify-content:space-between; color:#ccc; }
+
+  .run-dialog{ position:absolute; top:40%; left:50%; transform:translate(-50%,-50%); width:380px; background:#f0f0f0; border-radius:8px; box-shadow:0 20px 60px rgba(0,0,0,0.5); display:none; z-index:7000; overflow:hidden; border:1px solid #999; }
+  .run-dialog.open{ display:block; }
+  .run-title{ padding:8px 12px; font-size:13px; font-weight:600; border-bottom:1px solid #ddd; }
+  .run-body{ padding:16px; font-size:12.5px; }
+  .run-row{ display:flex; align-items:center; gap:10px; margin-top:10px; }
+  .run-row input{ flex:1; padding:5px 8px; border:1px solid #999; font-size:12.5px; }
+  .run-btns{ display:flex; justify-content:flex-end; gap:8px; margin-top:16px; }
+  .run-btns button{ padding:5px 16px; border:1px solid #888; background:#e8e8e8; border-radius:2px; cursor:pointer; font-size:12px; }
+
+  .win{ position:absolute; background:var(--win-bg); border:1px solid #9a9a9a; box-shadow:0 20px 50px rgba(0,0,0,0.4); display:flex; flex-direction:column; overflow:hidden; min-width:340px; min-height:220px; }
+  .win-titlebar{ height:32px; background:#e6e6e6; border-bottom:1px solid #cfcfcf; display:flex; align-items:center; padding:0 0 0 8px; cursor:move; flex-shrink:0; gap:6px; }
+  .win-titlebar .wt-title{ font-size:12.5px; color:#222; flex:1; }
+  .win-titlebar .wt-btns{ display:flex; height:100%; }
+  .win-titlebar .wt-btns div{ width:44px; height:100%; display:flex; align-items:center; justify-content:center; font-size:11px; cursor:pointer; }
+  .win-titlebar .wt-btns div:hover{ background:#d7d7d7; }
+  .win-titlebar .wt-btns .wt-close:hover{ background:#e81123; color:#fff; }
+  .win-content{ flex:1; overflow:auto; font-size:12.5px; background:#fff; }
+
+  .tabbar{ display:flex; background:#eaeaea; border-bottom:1px solid #ccc; flex-shrink:0; }
+  .tabbar .tab{ padding:8px 16px; font-size:12.5px; cursor:pointer; border-right:1px solid #ddd; color:#333; }
+  .tabbar .tab.active{ background:#fff; font-weight:600; border-bottom:2px solid var(--accent); }
+  .tabbar .tab:hover{ background:#f5f5f5; }
+
+  table.wtable{ width:100%; border-collapse:collapse; font-size:12px; }
+  table.wtable th{ text-align:left; background:#f3f3f3; border-bottom:1px solid #ddd; padding:6px 10px; color:#444; }
+  table.wtable td{ padding:5px 10px; border-bottom:1px solid #eee; }
+  table.wtable tr:hover td{ background:#f2f8ff; }
+  table.wtable tr.selected td{ background:#cfe4ff; }
+
+  .toolbar{ display:flex; gap:6px; padding:6px 10px; background:#f7f7f7; border-bottom:1px solid #e0e0e0; flex-shrink:0; align-items:center; flex-wrap:wrap; }
+  .toolbar button{ padding:5px 10px; font-size:12px; border:1px solid #c8c8c8; background:#fff; border-radius:3px; cursor:pointer; }
+  .toolbar button:hover{ background:#eef4ff; }
+
+  .split{ display:flex; height:100%; }
+  .tree-pane{ width:210px; background:#f7f7f7; border-right:1px solid #ddd; overflow-y:auto; padding:6px 0; flex-shrink:0; }
+  .tree-node{ padding:6px 10px 6px 16px; font-size:12.5px; cursor:pointer; display:flex; align-items:center; gap:6px; }
+  .tree-node:hover{ background:#e9f1fb; }
+  .tree-node.active{ background:#cfe4ff; font-weight:600; }
+  .detail-pane{ flex:1; overflow-y:auto; padding:16px 18px; }
+  .detail-pane h3{ margin:0 0 10px; font-size:15px; }
+  .kv-row{ display:flex; padding:4px 0; border-bottom:1px solid #f0f0f0; font-size:12px; }
+  .kv-row .k{ width:190px; color:#555; }
+  .desc-box{ background:#eef6ff; border:1px solid #cfe0f5; padding:10px 12px; border-radius:4px; font-size:12px; margin:12px 0; color:#204060; }
+  .warn-box{ background:#fff4ce; border:1px solid #f2c94c; padding:10px 12px; border-radius:4px; font-size:12px; margin-bottom:12px; color:#664d03; }
+
+  .field-row{ display:flex; align-items:center; gap:10px; margin:8px 0; font-size:12.5px; }
+  .field-row label{ width:150px; color:#333; }
+  .field-row input[type=text], .field-row input[type=number], .field-row select{ flex:1; padding:5px 7px; border:1px solid #aaa; font-size:12.5px; }
+  .field-row input:disabled{ background:#eee; color:#999; }
+
+  .card{ border:1px solid #ddd; border-radius:6px; padding:14px; margin-bottom:12px; background:#fff; }
+  .card h4{ margin:0 0 8px; font-size:13px; }
+  .toggle{ width:36px; height:20px; border-radius:12px; background:#ccc; position:relative; cursor:pointer; transition:background .15s; display:inline-block; vertical-align:middle; }
+  .toggle.on{ background:var(--accent); }
+  .toggle .knob{ position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:#fff; transition:left .15s; }
+  .toggle.on .knob{ left:18px; }
+
+  .wifi-row{ display:flex; align-items:center; justify-content:space-between; padding:9px 12px; border-bottom:1px solid #eee; cursor:pointer; }
+  .wifi-row:hover{ background:#f5f9ff; }
+  .wifi-row .wr-name{ font-size:12.5px; }
+  .wifi-row .wr-sub{ font-size:11px; color:#888; }
+
+  .modal-overlay{ position:absolute; inset:0; background:rgba(0,0,0,0.25); display:flex; align-items:center; justify-content:center; z-index:20; }
+  .modal-box{ background:#fff; border-radius:6px; box-shadow:0 15px 40px rgba(0,0,0,0.4); width:340px; padding:18px; font-size:12.5px; }
+  .modal-box h4{ margin:0 0 10px; }
+  .modal-btns{ display:flex; justify-content:flex-end; gap:8px; margin-top:16px; }
+  .modal-btns button{ padding:6px 14px; border:1px solid #999; background:#eee; border-radius:3px; cursor:pointer; font-size:12px; }
+
+  .finder-grid{ padding:14px; display:grid; grid-template-columns:repeat(auto-fill,minmax(90px,1fr)); gap:12px; }
+  .finder-item{ display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; padding:6px; border-radius:6px; text-align:center; }
+  .finder-item:hover{ background:#eef4ff; }
+  .finder-item .fi-icon{ font-size:30px; }
+  .finder-item .fi-name{ font-size:11px; }
+  .addr-bar{ display:flex; align-items:center; gap:6px; padding:6px 10px; background:#f7f7f7; border-bottom:1px solid #e0e0e0; }
+  .addr-bar input{ flex:1; padding:5px 8px; border:1px solid #bbb; font-size:12.5px; font-family:Consolas,monospace; }
+
+  .progress-track{ height:10px; background:#e2e2e2; border-radius:5px; overflow:hidden; margin:8px 0; }
+  .progress-fill{ height:100%; background:var(--accent); width:0%; transition:width .2s; }
+
+  .toast-wrap{ position:absolute; bottom:56px; right:14px; z-index:9500; display:flex; flex-direction:column; gap:8px; align-items:flex-end; }
+  .toast{ background:rgba(20,20,20,0.92); color:#fff; padding:10px 16px; border-radius:4px; font-size:12.5px; max-width:320px; box-shadow:0 10px 25px rgba(0,0,0,.35); animation:toastIn .18s ease; white-space:pre-wrap; }
+  @keyframes toastIn{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+  .layout{ display:flex; gap:16px; align-items:flex-start; justify-content:center; padding:20px; box-sizing:border-box; min-height:100vh; background:#242424; }
+  .screen-frame{ width:1040px; max-width:70%; min-width:660px; height:680px; max-height:82vh; border-radius:10px; overflow:hidden; box-shadow:0 25px 70px rgba(0,0,0,0.5); flex-shrink:0; position:relative; }
+  .reference{ width:410px; max-width:100%; height:680px; max-height:82vh; background:#181818; border-radius:10px; box-shadow:0 25px 70px rgba(0,0,0,0.5); display:flex; flex-direction:column; overflow:hidden; flex-shrink:0; color:#ddd; }
+  .ref-titlebar{ background:#242424; padding:10px 14px; font-size:13px; border-bottom:1px solid #333; display:flex; align-items:center; gap:8px; }
+  .ref-titlebar .dot{ width:8px; height:8px; border-radius:50%; background:var(--accent); }
+  .ref-search{ padding:10px 12px; border-bottom:1px solid #2e2e2e; background:#151515; }
+  .ref-search input{ width:100%; box-sizing:border-box; background:#0f0f0f; border:1px solid #333; color:#eee; font-size:12.5px; padding:8px 10px; border-radius:5px; outline:none; }
+  .ref-search input:focus{ border-color:var(--accent); }
+  .ref-list{ flex:1; overflow-y:auto; padding:4px 0 12px; }
+  .ref-item{ padding:11px 14px; border-bottom:1px solid #232323; cursor:pointer; }
+  .ref-item:hover{ background:#212121; }
+  .ref-item.sub{ padding-left:26px; }
+  .ref-item .ref-name{ font-size:13.5px; color:#4db3ff; font-weight:700; }
+  .ref-item.sub .ref-name{ font-size:12.5px; color:#7fcaff; font-weight:600; }
+  .ref-item .ref-action{ font-size:11.5px; color:#f4c95d; margin-top:3px; font-family:Consolas,monospace; }
+  .ref-item .ref-action::before{ content:"↳ "; color:#666; }
+  .ref-item .ref-desc{ font-size:12px; color:#aaa; margin-top:5px; line-height:1.45; }
+  .ref-empty{ padding:24px 14px; color:#777; font-size:12.5px; text-align:center; }
+  @media (max-width:1120px){
+    .layout{ flex-direction:column; }
+    .screen-frame, .reference{ width:100%; max-width:100%; height:640px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <div class="screen-frame">
+    <div class="app-root" id="appRoot">
+      <div class="desktop"></div>
+      <div class="desk-icons">
+        <div class="desk-icon" onclick="Win.openExplorer()"><span class="di-glyph">🖥️</span>This PC</div>
+        <div class="desk-icon" onclick="Win.openExplorer('Network')"><span class="di-glyph">🌐</span>Network</div>
+      </div>
+
+      <div id="windowLayer"></div>
+
+      <div class="start-menu" id="startMenu">
+        <div class="sm-search"><input id="smSearchInput" placeholder="Type here to search"></div>
+        <div class="sm-heading">Pinned</div>
+        <div class="sm-grid" id="smGrid"></div>
+        <div class="sm-footer">
+          <span onclick="Win.toast('Account switching is not simulated here.')">👤 jsmith</span>
+          <span onclick="Win.toast('Power options are not simulated here.')">⏻ Power</span>
+        </div>
+      </div>
+
+      <div class="run-dialog" id="runDialog">
+        <div class="run-title">Run</div>
+        <div class="run-body">
+          <div class="run-row" style="align-items:flex-start;">
+            <span style="font-size:22px;">🏃</span>
+            <div style="flex:1;">Type the name of a program, folder, or control panel applet (.cpl), and Windows will open it for you.</div>
+          </div>
+          <div class="run-row"><span>Open:</span><input id="runInput" placeholder="e.g. ncpa.cpl"></div>
+          <div class="run-btns"><button onclick="Win.runExecute()">OK</button><button onclick="Win.runClose()">Cancel</button></div>
+        </div>
+      </div>
+
+      <div class="toast-wrap" id="toastWrap"></div>
+
+      <div class="taskbar">
+        <div class="tb-start" id="startBtn" title="Start"><div class="win-grid"><span></span><span></span><span></span><span></span></div></div>
+        <div class="tb-search" id="tbSearchBox">🔍<input id="tbSearchInput" placeholder="Search"></div>
+        <div id="tbPinned" style="display:flex;"></div>
+        <div class="tb-right">
+          <div class="tb-tray-item" title="Wi-Fi" onclick="Win.openSettings('wifi')">📶</div>
+          <div class="tb-tray-item" title="Volume">🔊</div>
+          <div class="tb-clock" id="tbClock"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reference">
+    <div class="ref-titlebar"><span class="dot"></span><span>Networking Concept Index</span></div>
+    <div class="ref-search"><input type="text" id="refSearchInput" placeholder="Filter concepts..."></div>
+    <div class="ref-list" id="refList"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // ============== Window manager ==============
+  const layer = document.getElementById('windowLayer');
+  const openWins = {};
+  let zTop = 100;
+  function focusWin(id){ const w=openWins[id]; if(!w) return; zTop+=1; w.el.style.zIndex=zTop; }
+  function closeWin(id){ const w=openWins[id]; if(!w) return; w.el.remove(); delete openWins[id]; }
+  function makeDraggable(winEl, handleEl){
+    let dragging=false, sx=0, sy=0, ox=0, oy=0;
+    handleEl.addEventListener('mousedown', e=>{
+      if(e.target.closest('.wt-btns')) return;
+      dragging=true; sx=e.clientX; sy=e.clientY;
+      const rect = winEl.getBoundingClientRect();
+      const parentRect = winEl.parentElement.getBoundingClientRect();
+      ox = rect.left-parentRect.left; oy = rect.top-parentRect.top;
+      zTop+=1; winEl.style.zIndex=zTop;
+    });
+    window.addEventListener('mousemove', e=>{
+      if(!dragging) return;
+      winEl.style.left = (ox+(e.clientX-sx))+'px';
+      winEl.style.top = (oy+(e.clientY-sy))+'px';
+    });
+    window.addEventListener('mouseup', ()=> dragging=false);
+  }
+  function createWindow(id, opts){
+    if(openWins[id]){ focusWin(id); openWins[id].el.style.display='flex'; if(opts.onFocus) opts.onFocus(); return openWins[id].el; }
+    const el = document.createElement('div');
+    el.className = 'win';
+    el.style.width = (opts.width||560)+'px';
+    el.style.height = (opts.height||400)+'px';
+    el.style.left = (opts.x!==undefined?opts.x:(50+Object.keys(openWins).length*22))+'px';
+    el.style.top = (opts.y!==undefined?opts.y:(40+Object.keys(openWins).length*22))+'px';
+    zTop+=1; el.style.zIndex=zTop;
+    const tb = document.createElement('div');
+    tb.className = 'win-titlebar';
+    tb.innerHTML = `<span>${opts.icon||'🪟'}</span><span class="wt-title">${opts.title||''}</span>
+      <div class="wt-btns"><div class="wt-min">–</div><div class="wt-max">□</div><div class="wt-close">✕</div></div>`;
+    tb.querySelector('.wt-close').addEventListener('click', ()=>closeWin(id));
+    tb.querySelector('.wt-min').addEventListener('click', ()=>{ el.style.display='none'; });
+    tb.querySelector('.wt-max').addEventListener('click', ()=>{
+      if(el.dataset.max==='1'){ el.style.width=(opts.width||560)+'px'; el.style.height=(opts.height||400)+'px'; el.dataset.max='0'; }
+      else{ el.style.width='96%'; el.style.height='90%'; el.style.left='2%'; el.style.top='2%'; el.dataset.max='1'; }
+    });
+    const content = document.createElement('div');
+    content.className = 'win-content';
+    content.id = id+'-content';
+    el.appendChild(tb); el.appendChild(content);
+    el.addEventListener('mousedown', ()=>focusWin(id));
+    layer.appendChild(el);
+    makeDraggable(el, tb);
+    openWins[id] = { el, title:opts.title, icon:opts.icon||'🪟' };
+    if(opts.render) opts.render(content);
+    return el;
+  }
+
+  function toast(msg, ms){
+    const wrap = document.getElementById('toastWrap');
+    const t = document.createElement('div');
+    t.className='toast'; t.textContent=msg;
+    wrap.appendChild(t);
+    setTimeout(()=>{ t.style.opacity='0'; t.style.transition='opacity .3s'; setTimeout(()=>t.remove(),300); }, ms||3600);
+  }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function renderTable(container, columns, rows, opts){
+    opts = opts||{};
+    container.innerHTML = `<table class="wtable"><thead><tr>${columns.map(c=>`<th>${c}</th>`).join('')}</tr></thead>
+      <tbody>${rows.map((r,ri)=>`<tr data-ri="${ri}">${r.map(v=>`<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+    if(opts.onRowClick){
+      container.querySelectorAll('tbody tr').forEach(tr=>{
+        tr.addEventListener('click', ()=>{
+          container.querySelectorAll('tbody tr').forEach(x=>x.classList.remove('selected'));
+          tr.classList.add('selected');
+          opts.onRowClick(rows[parseInt(tr.dataset.ri)], tr);
+        });
+      });
+    }
+  }
+
+  // ============== Session state ==============
+  const state = {
+    joinType: 'workgroup', // 'domain' | 'workgroup'
+    domainName: 'CORP.LOCAL',
+    workgroupName: 'WORKGROUP',
+    networkProfile: 'private', // 'private' | 'public'
+    metered: false,
+    dataLimitGb: 5,
+    ipMode: 'dhcp', // 'dhcp' | 'static'
+    ip: '192.168.1.42', subnet:'255.255.255.0', gateway:'192.168.1.1', dns1:'1.1.1.1', dns2:'8.8.8.8',
+    proxyManual:false, proxyAddr:'proxy.corp.local', proxyPort:'8080', proxyAuto:true,
+    firewall: { domain:true, private:true, public:true },
+    vpns: [ {name:'Company VPN', server:'vpn.corp.local', connected:false} ],
+    wifiOn: true, wifiConnectedTo:'Home-5G',
+  };
+
+  // ============== System Properties (sysdm.cpl) ==============
+  function renderSysProps(container){
+    const target = container || document.getElementById('sysdm-content');
+    target.innerHTML = `
+      <div class="tabbar"><div class="tab active">Computer Name</div><div class="tab">Hardware</div><div class="tab">Advanced</div><div class="tab">System Protection</div><div class="tab">Remote</div></div>
+      <div style="padding:18px;">
+        <h3 style="margin-top:0;">Computer Name</h3>
+        <p style="color:#555;">Full computer name: <b>DESKTOP-7QK2P41</b></p>
+        <div class="card">
+          <h4>Member of</h4>
+          <label style="display:block;margin:6px 0;"><input type="radio" name="joinType" ${state.joinType==='domain'?'checked':''} onclick="Win.setJoinType('domain')"> Domain: <input type="text" value="${esc(state.domainName)}" ${state.joinType!=='domain'?'disabled':''} style="width:160px;"></label>
+          <label style="display:block;margin:6px 0;"><input type="radio" name="joinType" ${state.joinType==='workgroup'?'checked':''} onclick="Win.setJoinType('workgroup')"> Workgroup: <input type="text" value="${esc(state.workgroupName)}" ${state.joinType!=='workgroup'?'disabled':''} style="width:160px;"></label>
+          <button style="margin-top:8px;padding:6px 14px;border:1px solid #999;background:#eee;border-radius:3px;cursor:pointer;" onclick="Win.changeJoin()">Change…</button>
+        </div>
+        <div class="desc-box">
+          <b>Domain-joined:</b> centralized authentication via Active Directory and domain controllers — one set of credentials manages many machines, policies, and resources.<br><br>
+          <b>Workgroup:</b> decentralized, peer-to-peer administration — each computer keeps its own local user accounts and permissions, and there's no central authority.
+        </div>
+      </div>`;
+  }
+  function setJoinType(t){ state.joinType = t; renderSysProps(); }
+  function changeJoin(){
+    const el = document.getElementById('sysdm-content');
+    const modal = document.createElement('div'); modal.className='modal-overlay'; el.style.position='relative'; el.appendChild(modal);
+    if(state.joinType==='domain'){
+      modal.innerHTML = `<div class="modal-box">
+        <h4>Join Domain</h4>
+        <p>Enter the name of the domain and administrator credentials:</p>
+        <input id="jd-name" style="width:100%;padding:5px;margin-bottom:8px;" value="${esc(state.domainName)}">
+        <input id="jd-user" style="width:100%;padding:5px;margin-bottom:8px;" placeholder="Administrator username">
+        <input id="jd-pass" type="password" style="width:100%;padding:5px;" placeholder="Password">
+        <div class="modal-btns"><button data-a="cancel">Cancel</button><button data-a="ok">OK</button></div></div>`;
+    } else {
+      modal.innerHTML = `<div class="modal-box"><h4>Join Workgroup</h4>
+        <input id="jw-name" style="width:100%;padding:5px;" value="${esc(state.workgroupName)}">
+        <div class="modal-btns"><button data-a="cancel">Cancel</button><button data-a="ok">OK</button></div></div>`;
+    }
+    modal.querySelector('[data-a="cancel"]').onclick = ()=> modal.remove();
+    modal.querySelector('[data-a="ok"]').onclick = ()=>{
+      if(state.joinType==='domain'){ state.domainName = document.getElementById('jd-name').value || state.domainName; toast(`Welcome to the ${state.domainName} domain. A restart is required for these changes to take effect.`); }
+      else{ state.workgroupName = document.getElementById('jw-name').value || state.workgroupName; toast(`Welcome to the ${state.workgroupName} workgroup.`); }
+      modal.remove(); renderSysProps();
+    };
+  }
+  function openSysProps(){ createWindow('sysdm', { title:'System Properties', icon:'💻', width:520, height:440, x:60, y:60, render(c){ renderSysProps(c); } }); }
+
+  // ============== IPv4 Properties dialog ==============
+  function renderIpv4(container){
+    const target = container || document.getElementById('ipv4-content');
+    target.innerHTML = `<div style="padding:16px;">
+      <p style="color:#555;">You can get IP settings assigned automatically if your network supports this capability. Otherwise, you need to ask your network administrator for the appropriate settings.</p>
+      <label style="display:block;margin:8px 0;"><input type="radio" name="ipmode" ${state.ipMode==='dhcp'?'checked':''} onclick="Win.setIpMode('dhcp')"> Obtain an IP address automatically (DHCP)</label>
+      <label style="display:block;margin:8px 0 14px;"><input type="radio" name="ipmode" ${state.ipMode==='static'?'checked':''} onclick="Win.setIpMode('static')"> Use the following IP address:</label>
+      <div class="field-row"><label>IP address</label><input type="text" id="ip-ip" value="${esc(state.ip)}" ${state.ipMode==='dhcp'?'disabled':''}></div>
+      <div class="field-row"><label>Subnet mask</label><input type="text" id="ip-subnet" value="${esc(state.subnet)}" ${state.ipMode==='dhcp'?'disabled':''}></div>
+      <div class="field-row"><label>Default gateway</label><input type="text" id="ip-gw" value="${esc(state.gateway)}" ${state.ipMode==='dhcp'?'disabled':''}></div>
+      <hr style="margin:14px 0;border:none;border-top:1px solid #eee;">
+      <label style="display:block;margin:8px 0;"><input type="radio" name="dnsmode" ${state.ipMode==='dhcp'?'checked':''} disabled> Obtain DNS server address automatically</label>
+      <label style="display:block;margin:8px 0 14px;"><input type="radio" name="dnsmode" ${state.ipMode==='static'?'checked':''} disabled> Use the following DNS server addresses:</label>
+      <div class="field-row"><label>Preferred DNS server</label><input type="text" id="ip-dns1" value="${esc(state.dns1)}" ${state.ipMode==='dhcp'?'disabled':''}></div>
+      <div class="field-row"><label>Alternate DNS server</label><input type="text" id="ip-dns2" value="${esc(state.dns2)}" ${state.ipMode==='dhcp'?'disabled':''}></div>
+      <div class="desc-box">
+        <b>Subnet mask</b> splits an IP address into its network ID and host ID portions. <b>Default gateway</b> is the router that forwards traffic leaving this subnet. <b>DNS</b> servers resolve human-readable names to IP addresses.
+      </div>
+      <div class="modal-btns"><button onclick="Win.saveIpv4()">OK</button></div>
+    </div>`;
+  }
+  function setIpMode(m){ state.ipMode = m; renderIpv4(); }
+  function saveIpv4(){
+    if(state.ipMode==='static'){
+      state.ip = document.getElementById('ip-ip').value;
+      state.subnet = document.getElementById('ip-subnet').value;
+      state.gateway = document.getElementById('ip-gw').value;
+      state.dns1 = document.getElementById('ip-dns1').value;
+      state.dns2 = document.getElementById('ip-dns2').value;
+      toast(`Static IP settings saved: ${state.ip} / ${state.subnet}`);
+    } else {
+      toast('Adapter set to obtain an IP address automatically via DHCP.');
+    }
+  }
+  function openIpv4(){ createWindow('ipv4', { title:'Internet Protocol Version 4 (TCP/IPv4) Properties', icon:'🌐', width:460, height:520, x:250, y:80, render(c){ renderIpv4(c); } }); }
+
+  // ============== Network Connections (ncpa.cpl) ==============
+  function renderNcpa(container){
+    const target = container || document.getElementById('ncpa-content');
+    target.innerHTML = `<div id="ncpa-grid" class="finder-grid"></div>`;
+    const adapters = [
+      ['📶','Wi-Fi', state.wifiOn ? `Connected — ${state.wifiConnectedTo}` : 'Disabled'],
+      ['🔌','Ethernet','Not connected — cable unplugged'],
+    ];
+    const grid = target.querySelector('#ncpa-grid');
+    adapters.forEach(([icon,name,status])=>{
+      const div = document.createElement('div');
+      div.className='finder-item';
+      div.innerHTML = `<div class="fi-icon">${icon}</div><div class="fi-name">${name}<br><span style="color:#888;font-size:10px;">${status}</span></div>`;
+      div.addEventListener('dblclick', ()=> openAdapterProps(name));
+      grid.appendChild(div);
+    });
+  }
+  function openAdapterProps(name){
+    createWindow('adapterprops', { title:`${name} Properties`, icon:'🔧', width:420, height:340, x:200, y:100, render(c){
+      c.innerHTML = `<div style="padding:16px;">
+        <p><b>Connect using:</b> ${name==='Wi-Fi'?'Intel(R) Wi-Fi 6 AX201':'Realtek USB GbE Family Controller'}</p>
+        <p style="color:#555;">This connection uses the following items:</p>
+        <ul style="font-size:12px;color:#333;">
+          <li>Client for Microsoft Networks</li>
+          <li>File and Printer Sharing for Microsoft Networks</li>
+          <li>Internet Protocol Version 4 (TCP/IPv4)</li>
+          <li>Internet Protocol Version 6 (TCP/IPv6)</li>
+        </ul>
+        <button style="padding:6px 14px;border:1px solid #999;background:#eee;border-radius:3px;cursor:pointer;" onclick="Win.openIpv4()">Properties (IPv4)…</button>
+      </div>`;
+    }});
+  }
+  function openNcpa(){ createWindow('ncpa', { title:'Network Connections', icon:'🔌', width:420, height:280, x:110, y:90, render(c){ renderNcpa(c); } }); }
+
+  // ============== Windows Defender Firewall (firewall.cpl) ==============
+  const allowedApps = [
+    ['Microsoft Teams', true, true, false],
+    ['Google Chrome', true, true, true],
+    ['File and Printer Sharing', true, true, false],
+    ['Remote Desktop', true, false, false],
+    ['Steam', true, true, true],
+  ];
+  const fwRules = [
+    ['Core Networking - DNS (UDP-Out)','All','Yes','Allow'],
+    ['File and Printer Sharing (SMB-In)','Domain, Private','Yes','Allow'],
+    ['Remote Desktop - User Mode (TCP-In)','Domain','Yes','Allow'],
+    ['Block Legacy SMBv1','All','Yes','Block'],
+  ];
+  const fwState = { tab:'home' };
+  function renderFirewall(container){
+    const target = container || document.getElementById('firewall-content');
+    target.innerHTML = `<div class="tabbar">
+      <div class="tab ${fwState.tab==='home'?'active':''}" onclick="Win.fwTab('home')">Home</div>
+      <div class="tab ${fwState.tab==='apps'?'active':''}" onclick="Win.fwTab('apps')">Allowed apps</div>
+      <div class="tab ${fwState.tab==='advanced'?'active':''}" onclick="Win.fwTab('advanced')">Advanced settings</div>
+    </div><div id="fw-pane" style="padding:14px;"></div>`;
+    const pane = target.querySelector('#fw-pane');
+    if(fwState.tab==='home'){
+      pane.innerHTML = ['domain','private','public'].map(p=>`
+        <div class="card">
+          <h4>${p[0].toUpperCase()+p.slice(1)} network ${p==='private'&&state.networkProfile==='private'?'(active)':(p==='public'&&state.networkProfile==='public'?'(active)':'')}</h4>
+          <div class="kv-row"><span class="k">Windows Defender Firewall</span><span>${state.firewall[p]?'On':'Off'}</span></div>
+          <div class="kv-row"><span class="k">Toggle</span><span><div class="toggle ${state.firewall[p]?'on':''}" onclick="Win.toggleFw('${p}')"><div class="knob"></div></div></span></div>
+        </div>`).join('');
+    } else if(fwState.tab==='apps'){
+      pane.innerHTML = `<p style="color:#555;">Allow specific programs to communicate through the firewall by profile — click a checkbox to toggle.</p>
+        <table class="wtable"><thead><tr><th>App</th><th>Domain</th><th>Private</th><th>Public</th></tr></thead>
+        <tbody>${allowedApps.map((a,i)=>`<tr><td>${a[0]}</td>
+          <td><input type="checkbox" ${a[1]?'checked':''} onchange="Win.toggleApp(${i},1,this.checked)"></td>
+          <td><input type="checkbox" ${a[2]?'checked':''} onchange="Win.toggleApp(${i},2,this.checked)"></td>
+          <td><input type="checkbox" ${a[3]?'checked':''} onchange="Win.toggleApp(${i},3,this.checked)"></td></tr>`).join('')}</tbody></table>`;
+    } else {
+      pane.innerHTML = `<p style="color:#555;">Inbound and outbound rules control specific applications or ports through the firewall.</p><div id="fw-rules"></div>`;
+      renderTable(pane.querySelector('#fw-rules'), ['Rule Name','Profile','Enabled','Action'], fwRules);
+    }
+  }
+  function fwTab(t){ fwState.tab=t; renderFirewall(); }
+  function toggleFw(p){ state.firewall[p] = !state.firewall[p]; renderFirewall(); toast(`Firewall for ${p} network turned ${state.firewall[p]?'on':'off'}.`); }
+  function toggleApp(i,col,checked){ allowedApps[i][col]=checked; }
+  function openFirewall(){ createWindow('firewall', { title:'Windows Defender Firewall', icon:'🛡️', width:560, height:420, x:140, y:100, render(c){ renderFirewall(c); } }); }
+
+  // ============== Settings: Network & Internet ==============
+  const settingsState = { pane:'status' };
+  const wifiNetworks = [
+    ['Home-5G','WPA3','Strong'],
+    ['Neighbor_WiFi','WPA2','Medium'],
+    ['CoffeeShop-Guest','Open','Weak'],
+    ['CORP-Secure','WPA2-Enterprise','Strong'],
+  ];
+  function settingsSidebar(active){
+    const items = [['status','🏠','Status'],['wifi','📶','Wi-Fi'],['ethernet','🔌','Ethernet'],['vpn','🔒','VPN'],['mobilehotspot','📱','Mobile hotspot'],['proxy','🌐','Proxy'],['advanced','⚙️','Advanced network settings']];
+    return `<div class="tree-pane">${items.map(([k,i,l])=>`<div class="tree-node ${active===k?'active':''}" onclick="Win.settingsGo('${k}')">${i} ${l}</div>`).join('')}</div>`;
+  }
+  function renderSettings(container){
+    const target = container || document.getElementById('settings-content');
+    const pane = settingsState.pane;
+    let body = '';
+    if(pane==='status'){
+      body = `<h3>Network status</h3>
+        <div class="card"><h4>${state.wifiOn ? '📶 '+state.wifiConnectedTo : '🔌 Not connected'}</h4>
+        <p style="color:#555;">${state.wifiOn ? 'You are connected to the Internet.' : 'No active connection.'}</p></div>
+        <div class="card"><h4>Network profile</h4>
+          <label style="display:block;margin:4px 0;"><input type="radio" name="netprofile" ${state.networkProfile==='public'?'checked':''} onclick="Win.setProfile('public')"> Public — hide this PC from other devices on the network</label>
+          <label style="display:block;margin:4px 0;"><input type="radio" name="netprofile" ${state.networkProfile==='private'?'checked':''} onclick="Win.setProfile('private')"> Private — allow this PC to be discoverable, file/printer sharing enabled</label>
+          <div class="desc-box">Network location profiles automatically adjust firewall rules — hiding the device on public Wi-Fi, or enabling discovery and sharing on trusted private networks.</div>
+        </div>`;
+    } else if(pane==='wifi'){
+      body = `<h3>Wi-Fi</h3>
+        <div class="card"><span>Wi-Fi</span> <div class="toggle ${state.wifiOn?'on':''}" style="float:right;" onclick="Win.toggleWifi()"><div class="knob"></div></div></div>
+        <div class="card" style="padding:0;">${state.wifiOn ? wifiNetworks.map(w=>`
+          <div class="wifi-row" onclick="Win.connectWifi('${esc(w[0])}')">
+            <div><div class="wr-name">${w[0]==state.wifiConnectedTo?'🔒 ':'📶 '}${w[0]}</div><div class="wr-sub">${w[1]} · Signal: ${w[2]}</div></div>
+            <div>${w[0]===state.wifiConnectedTo?'<span style="color:#2fa84f;">Connected</span>':''}</div>
+          </div>`).join('') : '<p style="padding:12px;color:#888;">Wi-Fi is off.</p>'}</div>
+        ${state.wifiOn ? `<button style="margin-top:6px;padding:6px 12px;border:1px solid #ccc;background:#fff;border-radius:3px;cursor:pointer;" onclick="Win.openWifiProps()">Properties (current network)</button>` : ''}`;
+    } else if(pane==='ethernet'){
+      body = `<h3>Ethernet</h3><div class="card"><h4>Ethernet</h4><p style="color:#888;">Not connected — cable unplugged.</p></div>
+        <button style="padding:6px 12px;border:1px solid #ccc;background:#fff;border-radius:3px;cursor:pointer;" onclick="Win.openNcpa()">Change adapter options</button>`;
+    } else if(pane==='vpn'){
+      body = `<h3>VPN</h3><div id="vpn-list"></div>
+        <button style="margin-top:10px;padding:6px 12px;border:1px solid #ccc;background:#fff;border-radius:3px;cursor:pointer;" onclick="Win.addVpn()">+ Add a VPN connection</button>
+        <div class="desc-box">A VPN creates an encrypted tunnel over a public network to provide secure remote access to a private network.</div>`;
+    } else if(pane==='mobilehotspot'){
+      body = `<h3>Cellular</h3><div class="card"><h4>📶 4G LTE — Carrier Wireless</h4>
+        <div class="kv-row"><span class="k">Status</span><span>Connected</span></div>
+        <div class="kv-row"><span class="k">Data usage this month</span><span>2.4 GB of 10 GB</span></div>
+        </div>
+        <div class="card"><h4>Mobile hotspot</h4><span>Share my Internet connection</span> <div class="toggle" style="float:right;" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+        <div class="desc-box">Connects laptops or mobile devices to internet services using cellular data networks like 4G LTE or 5G — useful when Wi-Fi and Ethernet aren't available.</div>`;
+    } else if(pane==='proxy'){
+      body = `<h3>Proxy</h3>
+        <div class="card"><h4>Automatic proxy setup</h4>
+          <span>Automatically detect settings</span> <div class="toggle ${state.proxyAuto?'on':''}" style="float:right;" onclick="Win.toggleProxyAuto()"><div class="knob"></div></div>
+        </div>
+        <div class="card"><h4>Manual proxy setup</h4>
+          <span>Use a proxy server</span> <div class="toggle ${state.proxyManual?'on':''}" style="float:right;" onclick="Win.toggleProxyManual()"><div class="knob"></div></div>
+          <div class="field-row"><label>Address</label><input type="text" id="proxy-addr" value="${esc(state.proxyAddr)}" ${!state.proxyManual?'disabled':''}></div>
+          <div class="field-row"><label>Port</label><input type="text" id="proxy-port" value="${esc(state.proxyPort)}" ${!state.proxyManual?'disabled':''}></div>
+          <button style="padding:6px 12px;border:1px solid #ccc;background:#fff;border-radius:3px;cursor:pointer;" ${!state.proxyManual?'disabled':''} onclick="Win.saveProxy()">Save</button>
+        </div>
+        <div class="desc-box">A proxy redirects client web traffic through an intermediate server for security inspection, caching, or content filtering.</div>`;
+    } else if(pane==='advanced'){
+      body = `<h3>Advanced network settings</h3>
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee;"><span>Network Connections</span><button style="padding:5px 12px;border:1px solid #ccc;background:#fff;border-radius:3px;cursor:pointer;" onclick="Win.openNcpa()">Open</button></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee;"><span>Windows Defender Firewall</span><button style="padding:5px 12px;border:1px solid #ccc;background:#fff;border-radius:3px;cursor:pointer;" onclick="Win.openFirewall()">Open</button></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee;"><span>System Properties (computer name / domain)</span><button style="padding:5px 12px;border:1px solid #ccc;background:#fff;border-radius:3px;cursor:pointer;" onclick="Win.openSysProps()">Open</button></div>`;
+    }
+    target.innerHTML = `<div class="split" style="height:100%;">${settingsSidebar(pane)}<div class="detail-pane">${body}</div></div>`;
+    if(pane==='vpn'){
+      renderTable(target.querySelector('#vpn-list'), ['Name','Server','Status'], state.vpns.map(v=>[v.name,v.server,v.connected?'Connected':'Disconnected']), {
+        onRowClick(r){
+          const v = state.vpns.find(x=>x.name===r[0]);
+          v.connected = !v.connected;
+          toast(`${v.name} ${v.connected?'connected':'disconnected'}.`);
+          renderSettings();
+        }
+      });
+    }
+  }
+  function settingsGo(p){ settingsState.pane=p; renderSettings(); }
+  function setProfile(p){ state.networkProfile=p; renderSettings(); toast(`Network set to ${p}. Firewall rules adjusted accordingly.`); }
+  function toggleWifi(){ state.wifiOn = !state.wifiOn; renderSettings(); }
+  function connectWifi(name){
+    const el = document.getElementById('settings-content');
+    const modal = document.createElement('div'); modal.className='modal-overlay'; el.style.position='relative'; el.appendChild(modal);
+    const net = wifiNetworks.find(w=>w[0]===name);
+    if(net[1]==='Open'){
+      state.wifiConnectedTo = name; modal.remove(); renderSettings(); toast(`Connected to ${name} (open network — no encryption).`); return;
+    }
+    modal.innerHTML = `<div class="modal-box"><h4>Connect to ${esc(name)}</h4>
+      <p>Security type: ${net[1]}</p>
+      <input type="password" placeholder="Network security key" style="width:100%;padding:6px;">
+      <div class="modal-btns"><button data-a="cancel">Cancel</button><button data-a="ok">Connect</button></div></div>`;
+    modal.querySelector('[data-a="cancel"]').onclick = ()=> modal.remove();
+    modal.querySelector('[data-a="ok"]').onclick = ()=>{ state.wifiConnectedTo=name; modal.remove(); renderSettings(); toast(`Connected to ${name}.`); };
+  }
+  function openWifiProps(){
+    createWindow('wifiprops', { title:`${state.wifiConnectedTo} Properties`, icon:'📶', width:420, height:360, x:260, y:120, render(c){
+      c.innerHTML = `<div style="padding:16px;">
+        <div class="kv-row"><span class="k">Network band</span><span>5 GHz</span></div>
+        <div class="kv-row"><span class="k">Network security key</span><span>••••••••</span></div>
+        <div class="card" style="margin-top:12px;">
+          <h4>Metered connection</h4>
+          <span>Set as metered connection</span> <div class="toggle ${state.metered?'on':''}" style="float:right;" onclick="Win.toggleMetered()"><div class="knob"></div></div>
+          <div class="field-row" style="margin-top:10px;"><label>Data limit (GB)</label><input type="number" value="${state.dataLimitGb}" ${!state.metered?'disabled':''} onchange="Win.setDataLimit(this.value)"></div>
+          <div class="desc-box">Metered connections restrict background data usage and defer automatic Windows updates — useful on limited Wi-Fi or cellular data plans.</div>
+        </div>
+      </div>`;
+    }});
+  }
+  function toggleMetered(){ state.metered = !state.metered; openWifiProps(); toast(`Metered connection turned ${state.metered?'on':'off'}.`); }
+  function setDataLimit(v){ state.dataLimitGb = parseInt(v)||5; }
+  function addVpn(){
+    const el = document.getElementById('settings-content');
+    const modal = document.createElement('div'); modal.className='modal-overlay'; el.style.position='relative'; el.appendChild(modal);
+    modal.innerHTML = `<div class="modal-box"><h4>Add a VPN connection</h4>
+      <input id="vpn-name" style="width:100%;padding:5px;margin-bottom:8px;" placeholder="Connection name">
+      <input id="vpn-server" style="width:100%;padding:5px;" placeholder="Server address">
+      <div class="modal-btns"><button data-a="cancel">Cancel</button><button data-a="ok">Save</button></div></div>`;
+    modal.querySelector('[data-a="cancel"]').onclick = ()=> modal.remove();
+    modal.querySelector('[data-a="ok"]').onclick = ()=>{
+      const name = document.getElementById('vpn-name').value || 'New VPN';
+      const server = document.getElementById('vpn-server').value || 'vpn.example.com';
+      state.vpns.push({name, server, connected:false});
+      modal.remove(); renderSettings(); toast(`VPN connection "${name}" added.`);
+    };
+  }
+  function toggleProxyAuto(){ state.proxyAuto = !state.proxyAuto; renderSettings(); }
+  function toggleProxyManual(){ state.proxyManual = !state.proxyManual; renderSettings(); }
+  function saveProxy(){
+    state.proxyAddr = document.getElementById('proxy-addr').value;
+    state.proxyPort = document.getElementById('proxy-port').value;
+    toast(`Proxy saved: ${state.proxyAddr}:${state.proxyPort}`);
+  }
+  function openSettings(pane){
+    if(pane) settingsState.pane = pane;
+    createWindow('settings', { title:'Settings — Network & Internet', icon:'⚙️', width:600, height:440, x:90, y:70, render(c){ renderSettings(c); }, onFocus(){ renderSettings(document.getElementById('settings-content')); } });
+    if(pane) renderSettings(document.getElementById('settings-content'));
+  }
+
+  // ============== File Explorer (network paths, shares, mapped drives) ==============
+  const mappedDrives = [ {letter:'Z:', path:'\\\\FS01\\Shared'}, {letter:'Y:', path:'\\\\FS01\\Users$\\jsmith'} ];
+  const networkComputers = ['FS01','PRINTSERVER01','WORKSTATION-02'];
+  const shareContents = {
+    '\\\\FS01\\Shared': ['Policies.docx','Org Chart.pdf','Templates'],
+    '\\\\FS01\\Users$\\jsmith': ['Desktop','Documents'],
+  };
+  const explorerState = { view:'thispc', path:'' };
+  function renderExplorer(container){
+    const target = container || document.getElementById('explorer-content');
+    target.innerHTML = `
+      <div class="addr-bar"><span>📍</span><input id="exp-addr" value="${explorerState.view==='thispc'?'This PC':(explorerState.view==='network'?'Network':explorerState.path)}"></div>
+      <div class="split" style="height:calc(100% - 39px);">
+        <div class="tree-pane">
+          <div class="tree-node ${explorerState.view==='thispc'?'active':''}" onclick="Win.explorerGo('thispc')">🖥️ This PC</div>
+          <div class="tree-node ${explorerState.view==='network'?'active':''}" onclick="Win.explorerGo('network')">🌐 Network</div>
+          <div class="tree-node" onclick="Win.mapDriveWizard()">➕ Map network drive…</div>
+        </div>
+        <div class="detail-pane" style="padding:0;" id="exp-main"></div>
+      </div>`;
+    const main = target.querySelector('#exp-main');
+    if(explorerState.view==='thispc'){
+      main.innerHTML = `<div class="finder-grid" id="exp-grid"></div>`;
+      const grid = main.querySelector('#exp-grid');
+      const items = [ ['💾','Local Disk (C:)'], ...mappedDrives.map(d=>['🌐',`${d.path.split('\\\\')[1].split('\\')[0]} (${d.letter})`, d.path]) ];
+      items.forEach(it=>{
+        const div = document.createElement('div'); div.className='finder-item';
+        div.innerHTML = `<div class="fi-icon">${it[0]}</div><div class="fi-name">${it[1]}</div>`;
+        if(it[2]) div.addEventListener('dblclick', ()=>{ explorerState.view='share'; explorerState.path=it[2]; renderExplorer(target); });
+        grid.appendChild(div);
+      });
+    } else if(explorerState.view==='network'){
+      main.innerHTML = `<div class="finder-grid" id="exp-grid"></div>`;
+      const grid = main.querySelector('#exp-grid');
+      networkComputers.forEach(pc=>{
+        const div = document.createElement('div'); div.className='finder-item';
+        div.innerHTML = `<div class="fi-icon">🖥️</div><div class="fi-name">${pc}</div>`;
+        div.addEventListener('dblclick', ()=>{
+          if(pc==='FS01'){ explorerState.view='share'; explorerState.path='\\\\FS01\\Shared'; renderExplorer(target); }
+          else toast(`${pc} would show its shared resources — not simulated in depth here.`);
+        });
+        grid.appendChild(div);
+      });
+    } else if(explorerState.view==='share'){
+      const files = shareContents[explorerState.path] || [];
+      main.innerHTML = `<div class="toolbar"><button onclick="Win.shareProperties()">Properties (Sharing / Security)</button></div><div class="finder-grid" id="exp-grid"></div>`;
+      const grid = main.querySelector('#exp-grid');
+      files.forEach(f=>{
+        const div = document.createElement('div'); div.className='finder-item';
+        div.innerHTML = `<div class="fi-icon">${f.includes('.')?'📄':'📁'}</div><div class="fi-name">${f}</div>`;
+        grid.appendChild(div);
+      });
+      if(files.length===0) grid.innerHTML = '<div style="grid-column:1/-1;color:#888;padding:14px;">This folder is empty.</div>';
+    }
+    target.querySelector('#exp-addr').addEventListener('keydown', e=>{
+      if(e.key==='Enter'){
+        const v = e.target.value.trim();
+        if(v.startsWith('\\\\')){
+          explorerState.view='share'; explorerState.path = shareContents[v] ? v : v;
+          if(!shareContents[v]) shareContents[v] = ['Notes.txt'];
+          renderExplorer(target);
+          toast(`Navigated to UNC path ${v} — the standard \\\\ServerName\\ShareName format for accessing shared resources.`);
+        } else if(v.toLowerCase()==='this pc'){ explorerState.view='thispc'; renderExplorer(target); }
+        else if(v.toLowerCase()==='network'){ explorerState.view='network'; renderExplorer(target); }
+      }
+    });
+  }
+  function explorerGo(v){ explorerState.view=v; explorerState.path=''; renderExplorer(); }
+  function shareProperties(){
+    const el = document.getElementById('explorer-content');
+    const modal = document.createElement('div'); modal.className='modal-overlay'; el.style.position='relative'; el.appendChild(modal);
+    modal.innerHTML = `<div class="modal-box" style="width:380px;">
+      <h4>Shared Properties</h4>
+      <div class="tabbar" style="margin:0 -18px 10px;"><div class="tab active">Sharing</div><div class="tab" onclick="this.parentElement.nextElementSibling.style.display='none';this.parentElement.parentElement.querySelector('.sec-view').style.display='block';">Security</div></div>
+      <div class="share-view">
+        <p style="font-size:12px;color:#555;">Share permissions (network access level):</p>
+        <table class="wtable"><tr><th>Name</th><th>Permission</th></tr>
+          <tr><td>Everyone</td><td>Read</td></tr>
+          <tr><td>jsmith</td><td>Full Control</td></tr></table>
+      </div>
+      <div class="sec-view" style="display:none;">
+        <p style="font-size:12px;color:#555;">NTFS permissions (local filesystem-level access):</p>
+        <table class="wtable"><tr><th>Group</th><th>Permission</th></tr>
+          <tr><td>Administrators</td><td>Full Control</td></tr>
+          <tr><td>Users</td><td>Read &amp; Execute</td></tr></table>
+      </div>
+      <div class="desc-box">NTFS permissions and share permissions both apply when accessing a resource over the network — the more restrictive of the two wins.</div>
+      <div class="modal-btns"><button data-a="close">Close</button></div></div>`;
+    modal.querySelector('[data-a="close"]').onclick = ()=> modal.remove();
+  }
+  function mapDriveWizard(){
+    const el = document.getElementById('explorer-content');
+    const modal = document.createElement('div'); modal.className='modal-overlay'; el.style.position='relative'; el.appendChild(modal);
+    modal.innerHTML = `<div class="modal-box"><h4>Map Network Drive</h4>
+      <div class="field-row"><label>Drive</label><select id="md-letter"><option>X:</option><option>W:</option><option>V:</option></select></div>
+      <div class="field-row"><label>Folder</label><input type="text" id="md-path" placeholder="\\\\ServerName\\ShareName"></div>
+      <label style="display:block;margin-top:8px;"><input type="checkbox" checked> Reconnect at sign-in</label>
+      <div class="modal-btns"><button data-a="cancel">Cancel</button><button data-a="ok">Finish</button></div></div>`;
+    modal.querySelector('[data-a="cancel"]').onclick = ()=> modal.remove();
+    modal.querySelector('[data-a="ok"]').onclick = ()=>{
+      const letter = document.getElementById('md-letter').value;
+      const path = document.getElementById('md-path').value || '\\\\FS01\\Shared';
+      mappedDrives.push({letter, path});
+      if(!shareContents[path]) shareContents[path] = ['Notes.txt'];
+      modal.remove();
+      explorerState.view='thispc'; renderExplorer();
+      toast(`Mapped ${path} to drive ${letter}`);
+    };
+  }
+  function openExplorer(view){ explorerState.view = view==='Network'?'network':'thispc'; createWindow('explorer', { title:'File Explorer', icon:'📁', width:600, height:420, x:130, y:90, render(c){ renderExplorer(c); } }); }
+
+  // ============== Printers & Scanners ==============
+  function renderPrinters(container){
+    const target = container || document.getElementById('printers-content');
+    target.innerHTML = `<div id="pr-table"></div><div class="desc-box" style="margin:14px;">Domain environments typically manage printers centrally through a print server; workgroup computers instead share printers directly from the PC they're attached to.</div>`;
+    renderTable(target.querySelector('#pr-table'), ['Printer','Managed via','Status'], [
+      ['Office LaserJet M604', 'Print Server PRINTSERVER01 (Domain)', 'Ready'],
+      ['HP DeskJet 3700', 'Shared from WORKSTATION-02 (Workgroup)', 'Ready'],
+      ['Reception Color Printer', 'Print Server PRINTSERVER01 (Domain)', 'Offline'],
+    ]);
+  }
+  function openPrinters(){ createWindow('printers', { title:'Printers & Scanners', icon:'🖨️', width:520, height:340, x:170, y:110, render(c){ renderPrinters(c); } }); }
+
+  // ============== Command map (Run / Search / Start) ==============
+  const commandMap = {
+    'sysdm.cpl': openSysProps, 'sysdm': openSysProps,
+    'ncpa.cpl': openNcpa, 'ncpa': openNcpa,
+    'firewall.cpl': openFirewall,
+    'control printers': openPrinters, 'printers': openPrinters,
+    'explorer': ()=>openExplorer(), 'explorer.exe': ()=>openExplorer(),
+    'ms-settings:network': ()=>openSettings('status'), 'settings': ()=>openSettings('status'),
+    'inetcpl.cpl': ()=>openSettings('proxy'),
+  };
+  function executeCommand(raw){
+    const text = raw.trim();
+    if(!text) return;
+    const lower = text.toLowerCase();
+    if(lower.startsWith('\\\\')){ openExplorer(); setTimeout(()=>{ explorerState.view='share'; explorerState.path=text; if(!shareContents[text]) shareContents[text]=['Notes.txt']; renderExplorer(); },50); return; }
+    const key = Object.keys(commandMap).find(k=> lower===k);
+    if(key){ commandMap[key](); return; }
+    toast(`Windows cannot find '${text}'. Make sure you typed the name correctly.`);
+  }
+
+  // ============== Run dialog ==============
+  const runDialog = document.getElementById('runDialog');
+  const runInput = document.getElementById('runInput');
+  function runOpen(){ runDialog.classList.add('open'); runInput.value=''; runInput.focus(); }
+  function runClose(){ runDialog.classList.remove('open'); }
+  function runExecute(){ executeCommand(runInput.value); runClose(); }
+  runInput.addEventListener('keydown', e=>{ if(e.key==='Enter') runExecute(); if(e.key==='Escape') runClose(); });
+
+  // ============== Start menu ==============
+  const startMenu = document.getElementById('startMenu');
+  const startBtn = document.getElementById('startBtn');
+  const pinnedApps = [
+    ['⚙️','Network & Internet Settings', ()=>openSettings('status')],
+    ['💻','System Properties', openSysProps],
+    ['🔌','Network Connections', openNcpa],
+    ['🛡️','Windows Defender Firewall', openFirewall],
+    ['📁','File Explorer', ()=>openExplorer()],
+    ['🖨️','Printers & Scanners', openPrinters],
+    ['📶','Wi-Fi Settings', ()=>openSettings('wifi')],
+    ['🔒','VPN Settings', ()=>openSettings('vpn')],
+    ['🌐','Proxy Settings', ()=>openSettings('proxy')],
+    ['🏃','Run…', runOpen],
+  ];
+  const smGrid = document.getElementById('smGrid');
+  pinnedApps.forEach(([icon,label,fn])=>{
+    const t = document.createElement('div'); t.className='sm-tile';
+    t.innerHTML = `<span class="sm-glyph">${icon}</span>${label}`;
+    t.addEventListener('click', ()=>{ fn(); startMenu.classList.remove('open'); });
+    smGrid.appendChild(t);
+  });
+  const tbPinned = document.getElementById('tbPinned');
+  [['📁',()=>openExplorer()],['⚙️',()=>openSettings('status')],['🛡️',openFirewall]].forEach(([icon,fn])=>{
+    const d = document.createElement('div'); d.className='tb-icon'; d.textContent=icon;
+    d.addEventListener('click', fn);
+    tbPinned.appendChild(d);
+  });
+  startBtn.addEventListener('click', e=>{ e.stopPropagation(); startMenu.classList.toggle('open'); });
+  document.addEventListener('click', e=>{
+    if(!startMenu.contains(e.target) && e.target!==startBtn && !startBtn.contains(e.target)) startMenu.classList.remove('open');
+  });
+  document.getElementById('smSearchInput').addEventListener('keydown', e=>{ if(e.key==='Enter'){ executeCommand(e.target.value); startMenu.classList.remove('open'); e.target.value=''; } });
+  document.getElementById('tbSearchInput').addEventListener('keydown', e=>{ if(e.key==='Enter'){ executeCommand(e.target.value); e.target.value=''; } });
+
+  // ============== Clock ==============
+  function tickClock(){
+    const now = new Date();
+    document.getElementById('tbClock').innerHTML = now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}) + '<br>' + now.toLocaleDateString('en-US',{month:'numeric',day:'numeric',year:'numeric'});
+  }
+  tickClock(); setInterval(tickClock, 15000);
+  window.addEventListener('keydown', e=>{ if(e.key==='Escape'){ runClose(); startMenu.classList.remove('open'); } });
+  document.addEventListener('keydown', e=>{ if(e.ctrlKey && e.altKey && e.key.toLowerCase()==='r'){ e.preventDefault(); runOpen(); } });
+
+  // ============== Reference index ==============
+  const reference = [
+    { name:'Domain joined vs. workgroup', action:'System Properties (sysdm.cpl)', desc:'Compares centralized authentication using Active Directory and domain controllers against decentralized peer-to-peer administrative groups.', run: openSysProps },
+    { name:'Shared resources', sub:true, action:'File Explorer → \\\\FS01\\Shared → Properties', desc:'Network assets like folders and devices made accessible across the network using NTFS and share permissions.', run:()=>{ openExplorer(); setTimeout(()=>{ explorerState.view='share'; explorerState.path='\\\\FS01\\Shared'; renderExplorer(); shareProperties(); },50); } },
+    { name:'Printers', sub:true, action:'Printers & Scanners', desc:'Networked printing devices managed centrally via print servers, or shared locally across workgroup computers.', run: openPrinters },
+    { name:'File servers', sub:true, action:'File Explorer → Network → FS01', desc:'Centralized storage systems in a domain environment providing authenticated file shares and access controls.', run:()=>{ openExplorer('Network'); } },
+    { name:'Mapped drives', sub:true, action:'File Explorer → This PC → Map network drive…', desc:'Mounting network shared folders to a local drive letter for quick access in File Explorer.', run:()=>{ openExplorer(); setTimeout(()=>{ explorerState.view='thispc'; renderExplorer(); mapDriveWizard(); },50); } },
+
+    { name:'Local OS firewall settings', action:'Windows Defender Firewall (firewall.cpl)', desc:'Software-based security rules configured to allow or block inbound and outbound network traffic on a host.', run: openFirewall },
+    { name:'Application restrictions and exceptions', sub:true, action:'Firewall → Allowed apps', desc:'Rules configured to allow specific programs or block executable binaries through network ports.', run:()=>{ openFirewall(); setTimeout(()=>{ fwState.tab='apps'; renderFirewall(); },50); } },
+    { name:'Firewall Configuration', sub:true, action:'Firewall → Home (profiles)', desc:'Setting firewall profiles like Public, Private, and Domain to enforce distinct traffic filtering rules.', run:()=>{ openFirewall(); setTimeout(()=>{ fwState.tab='home'; renderFirewall(); },50); } },
+
+    { name:'Client network configuration', action:'Network Connections → Adapter Properties', desc:'Setting adapter parameters including IP addressing, subnetting, gateway routing, and name resolution.', run:()=>{ openNcpa(); setTimeout(()=>openAdapterProps('Wi-Fi'),50); } },
+    { name:'IP addressing scheme', sub:true, action:'IPv4 Properties → IP address', desc:'System of unique logical numbers like IPv4 or IPv6 assigned to network host interfaces.', run: openIpv4 },
+    { name:'DNS settings', sub:true, action:'IPv4 Properties → DNS servers', desc:'Configured IP addresses of servers that resolve human-readable domain names to IP addresses.', run: openIpv4 },
+    { name:'Subnet mask', sub:true, action:'IPv4 Properties → Subnet mask', desc:'A 32-bit mask that separates an IP address into its network ID and host ID portions.', run: openIpv4 },
+    { name:'Gateway', sub:true, action:'IPv4 Properties → Default gateway', desc:'The IP address of the local router interface that forwards out-of-subnet traffic to external networks.', run: openIpv4 },
+    { name:'Static vs. dynamic', sub:true, action:'IPv4 Properties → Obtain automatically / Use the following', desc:'Choosing manually assigned permanent IP settings versus automatic configuration via DHCP.', run: openIpv4 },
+
+    { name:'Establish network connections', action:'Settings → Network & Internet', desc:'Configuring local client network adapters to connect to local and remote infrastructure.', run:()=> openSettings('status') },
+    { name:'Virtual private network (VPN)', sub:true, action:'Settings → VPN', desc:'Encrypted tunnel created over a public network to provide secure remote access to a private network.', run:()=> openSettings('vpn') },
+    { name:'Wireless', sub:true, action:'Settings → Wi-Fi', desc:'Connecting to local area networks using Wi-Fi radio standards and security protocols like WPA3.', run:()=> openSettings('wifi') },
+    { name:'Wired', sub:true, action:'Settings → Ethernet', desc:'Physical Ethernet cable connection linking a local network interface card directly to a switch or router port.', run:()=> openSettings('ethernet') },
+    { name:'Wireless wide area network (WWAN)/cellular network', sub:true, action:'Settings → Mobile hotspot', desc:'Connecting laptops or mobile devices to internet services using cellular data networks like 4G LTE or 5G.', run:()=> openSettings('mobilehotspot') },
+
+    { name:'Proxy settings', action:'Settings → Proxy', desc:'Redirecting client web traffic through an intermediate proxy server for security inspection, caching, or content filtering.', run:()=> openSettings('proxy') },
+    { name:'Public network vs private network', action:'Settings → Status → Network profile', desc:'Network location profiles that automatically adjust firewall rules, hiding the device on public Wi-Fi or enabling discovery on trusted private networks.', run:()=> openSettings('status') },
+    { name:'File Explorer navigation – network paths', action:'File Explorer address bar → \\\\ServerName\\ShareName', desc:'Accessing shared resources using Universal Naming Convention paths like \\\\ServerName\\ShareName.', run:()=>{ openExplorer(); setTimeout(()=>{ explorerState.view='share'; explorerState.path='\\\\FS01\\Shared'; renderExplorer(); },50); } },
+    { name:'Metered connections and limitations', action:'Settings → Wi-Fi → Properties → Metered connection', desc:'Setting a data-cap constraint on Wi-Fi or cellular connections to restrict background data usage and defer automatic Windows updates.', run:()=>{ openSettings('wifi'); setTimeout(()=> openWifiProps(), 50); } },
+  ];
+
+  function renderReference(filter){
+    const list = document.getElementById('refList');
+    list.innerHTML = '';
+    const f = (filter||'').trim().toLowerCase();
+    const items = reference.filter(r=> !f || r.name.toLowerCase().includes(f) || r.desc.toLowerCase().includes(f));
+    if(items.length===0){ list.innerHTML = '<div class="ref-empty">No matching concepts.</div>'; return; }
+    items.forEach(r=>{
+      const item = document.createElement('div');
+      item.className='ref-item'+(r.sub?' sub':'');
+      item.innerHTML = `<div class="ref-name">${r.name}</div><div class="ref-action">${r.action}</div><div class="ref-desc">${r.desc}</div>`;
+      item.addEventListener('click', ()=> r.run());
+      list.appendChild(item);
+    });
+  }
+  document.getElementById('refSearchInput').addEventListener('input', e=> renderReference(e.target.value));
+  renderReference('');
+
+  // ============== Expose API ==============
+  window.Win = {
+    toast, setJoinType, changeJoin, setIpMode, saveIpv4, openIpv4, openAdapterProps, openNcpa,
+    fwTab, toggleFw, toggleApp, openFirewall, settingsGo, setProfile, toggleWifi, connectWifi, openWifiProps,
+    toggleMetered, setDataLimit, addVpn, toggleProxyAuto, toggleProxyManual, saveProxy, openSettings,
+    explorerGo, shareProperties, mapDriveWizard, openExplorer, openPrinters, openSysProps,
+    runOpen, runClose, runExecute,
+  };
+
+  // Boot
+  openSettings('status');
+})();
+</script>
+</body>
+</html>

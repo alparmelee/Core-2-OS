@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>1.10 Installing Applications</title>
+<style>
+  :root{
+    --accent:#0067c0;
+    --accent-light:#3a96dd;
+    --good:#1f8f5f;
+    --warn:#c9701f;
+    --bad:#c0271b;
+    --mono:"Cascadia Mono","Consolas",monospace;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; margin:0; font-family:"Segoe UI",Arial,sans-serif; }
+  body{ background:#202020; }
+
+  .layout{ display:flex; height:100%; gap:14px; padding:14px; }
+  .app-frame{ width:min(78%,1220px); height:100%; border-radius:10px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.5); flex-shrink:0; display:flex; flex-direction:column; background:#f3f3f3; }
+
+  .app-header{ background:linear-gradient(135deg,#0067c0,#3a96dd); color:#fff; padding:16px 22px; display:flex; align-items:center; gap:14px; flex-shrink:0; }
+  .app-header .hicon{ width:40px; height:40px; border-radius:10px; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+  .app-header h1{ font-size:16px; margin:0; }
+  .app-header p{ font-size:11.5px; margin:2px 0 0; opacity:0.85; }
+
+  .app-shell{ flex:1; display:flex; overflow:hidden; }
+  .app-nav{ width:270px; flex-shrink:0; background:#fafafa; border-right:1px solid #e2e2e2; overflow-y:auto; padding:10px 0 20px; }
+  .nav-group-title{ font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:#888; font-weight:700; padding:14px 16px 6px; }
+  .nav-item{ display:flex; align-items:center; gap:10px; padding:9px 16px; font-size:12.5px; cursor:pointer; color:#222; }
+  .nav-item .ni-num{ width:20px; height:20px; border-radius:50%; background:#e2e2e2; color:#666; font-size:10.5px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:700; }
+  .nav-item:hover{ background:#eef4fb; }
+  .nav-item.active{ background:#dceafb; font-weight:600; }
+  .nav-item.active .ni-num{ background:var(--accent); color:#fff; }
+
+  .app-main{ flex:1; overflow-y:auto; padding:26px 30px; background:#fff; }
+  .topic-title{ font-size:19px; margin:0 0 4px; display:flex; align-items:center; gap:10px; }
+  .topic-kicker{ font-size:11px; color:#888; text-transform:uppercase; letter-spacing:.05em; margin-bottom:14px; }
+  .topic-lede{ color:#555; font-size:13px; line-height:1.55; margin-bottom:20px; max-width:760px; }
+
+  .card{ border:1px solid #e2e2e2; border-radius:10px; padding:16px 18px; margin-bottom:16px; background:#fcfcfd; max-width:760px; }
+  .card h4{ margin:0 0 10px; font-size:12.5px; text-transform:uppercase; letter-spacing:.03em; color:#666; }
+  .row2{ display:flex; gap:16px; flex-wrap:wrap; }
+  .choice-card{ flex:1; min-width:220px; border:2px solid #e2e2e2; border-radius:10px; padding:14px 16px; cursor:pointer; transition:border-color .15s, background .15s; }
+  .choice-card:hover{ border-color:var(--accent-light); }
+  .choice-card.selected{ border-color:var(--accent); background:#eef6fd; }
+  .choice-card .cc-title{ font-weight:700; font-size:13px; margin-bottom:4px; }
+  .choice-card .cc-desc{ font-size:11.5px; color:#666; line-height:1.5; }
+
+  .field-row{ display:flex; align-items:center; gap:12px; margin-bottom:12px; font-size:12.5px; flex-wrap:wrap; }
+  .field-row label{ min-width:190px; flex-shrink:0; font-weight:500; }
+  .field-row input[type=range]{ flex:1; max-width:280px; }
+  .range-val{ font-weight:700; color:var(--accent); min-width:56px; }
+  select, input[type=text]{ border:1px solid #ccc; border-radius:5px; padding:6px 8px; font-size:12.5px; }
+
+  .btn{ border:1px solid #c8c8c8; background:#fff; border-radius:5px; padding:7px 14px; font-size:12.5px; cursor:pointer; }
+  .btn:hover{ background:#f0f6fc; border-color:var(--accent-light); }
+  .btn.primary{ background:var(--accent); color:#fff; border-color:var(--accent); }
+  .btn.primary:hover{ background:var(--accent-light); }
+
+  .badge{ display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:20px; font-size:12px; font-weight:700; }
+  .badge.good{ background:#e6f6ee; color:var(--good); }
+  .badge.warn{ background:#fdf2e3; color:var(--warn); }
+  .badge.bad{ background:#fbe9e7; color:var(--bad); }
+  .badge .dot{ width:8px; height:8px; border-radius:50%; background:currentColor; }
+
+  .bar-track{ background:#e9e9e9; border-radius:6px; height:16px; overflow:hidden; display:flex; }
+  .bar-seg{ height:100%; transition:width .3s; }
+  .bar-legend{ display:flex; gap:16px; margin-top:8px; font-size:11px; color:#555; flex-wrap:wrap; }
+  .bar-legend span{ display:inline-flex; align-items:center; gap:5px; }
+  .bar-legend .sw{ width:10px; height:10px; border-radius:2px; display:inline-block; }
+
+  .checklist-row{ display:flex; align-items:flex-start; gap:10px; padding:9px 0; border-bottom:1px solid #f0f0f0; font-size:12.5px; }
+  .checklist-row:last-child{ border-bottom:none; }
+  .checklist-row input{ margin-top:2px; }
+
+  .banner{ display:flex; gap:10px; align-items:flex-start; background:#fff4e5; border:1px solid #f0c986; color:#7a4b00; padding:10px 12px; border-radius:6px; font-size:12px; margin-bottom:14px; max-width:760px; }
+  .banner.danger{ background:#fdecea; border-color:#f0a9a2; color:#7a1c14; }
+  .banner.good{ background:#eafaf1; border-color:#a9e0c0; color:#0f5c37; }
+
+  .accordion-item{ border:1px solid #e2e2e2; border-radius:8px; margin-bottom:10px; max-width:760px; overflow:hidden; }
+  .accordion-head{ padding:12px 14px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; background:#fafafa; font-size:12.5px; font-weight:600; }
+  .accordion-head:hover{ background:#f0f4f8; }
+  .accordion-body{ display:none; padding:12px 14px; font-size:12px; color:#555; border-top:1px solid #eee; line-height:1.5; }
+  .accordion-item.open .accordion-body{ display:block; }
+  .accordion-item.open .accordion-chev{ transform:rotate(90deg); }
+  .accordion-chev{ transition:transform .15s; display:inline-block; }
+
+  .log-box{ background:#111; color:#c8e6ff; font-family:var(--mono); font-size:11.5px; border-radius:8px; padding:12px 14px; max-width:760px; min-height:70px; white-space:pre-wrap; line-height:1.6; }
+
+  .toggle{ width:36px; height:20px; border-radius:12px; background:#c6c6c6; position:relative; cursor:pointer; flex-shrink:0; transition:background .15s; }
+  .toggle.on{ background:var(--accent); }
+  .toggle .knob{ position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:#fff; transition:left .15s; }
+  .toggle.on .knob{ left:18px; }
+  .settings-row{ display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid #ececec; font-size:12.5px; gap:14px; max-width:760px; }
+  .settings-row:last-child{ border-bottom:none; }
+
+  /* Reference panel */
+  .reference{ width:420px; max-width:100%; height:100%; background:#181818; border-radius:14px; box-shadow:0 25px 70px rgba(0,0,0,0.5); display:flex; flex-direction:column; overflow:hidden; flex-shrink:0; color:#ddd; }
+  .ref-titlebar{ background:#242424; padding:10px 14px; font-size:13px; border-bottom:1px solid #333; display:flex; align-items:center; gap:8px; }
+  .ref-titlebar .dot{ width:8px; height:8px; border-radius:50%; background:#0067c0; }
+  .ref-search{ padding:10px 12px; border-bottom:1px solid #2e2e2e; background:#151515; }
+  .ref-search input{ width:100%; box-sizing:border-box; background:#0f0f0f; border:1px solid #333; color:#eee; font-size:12.5px; padding:8px 10px; border-radius:6px; outline:none; }
+  .ref-search input:focus{ border-color:#0067c0; }
+  .ref-list{ flex:1; overflow-y:auto; padding:4px 0 12px; }
+  .ref-item{ padding:11px 14px; border-bottom:1px solid #232323; cursor:pointer; }
+  .ref-item:hover{ background:#212121; }
+  .ref-item .ref-name{ font-size:13px; color:#5ac8fa; font-weight:700; }
+  .ref-item .ref-tag{ font-size:10px; color:#f4c95d; margin-top:2px; text-transform:uppercase; letter-spacing:.04em; }
+  .ref-item .ref-desc{ font-size:11.5px; color:#aaa; margin-top:5px; line-height:1.45; }
+  .ref-empty{ padding:24px 14px; color:#777; font-size:12.5px; text-align:center; }
+
+  @media (max-width:1100px){
+    .layout{ flex-direction:column; height:auto; }
+    .app-frame, .reference{ width:100%; max-width:100%; height:680px; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+  <div class="app-frame">
+    <div class="app-header">
+      <div class="hicon">🧩</div>
+      <div><h1>Application Deployment &amp; Requirements Advisor</h1><p>15 interactive concepts — system requirements, deployment methods, and impact considerations</p></div>
+    </div>
+    <div class="app-shell">
+      <div class="app-nav" id="appNav"></div>
+      <div class="app-main" id="appMain"></div>
+    </div>
+  </div>
+
+  <div class="reference">
+    <div class="ref-titlebar"><span class="dot"></span><span>Concept Index</span></div>
+    <div class="ref-search"><input type="text" id="refSearchInput" placeholder="Filter concepts..."></div>
+    <div class="ref-list" id="refList"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  function elc(html){ const t=document.createElement('template'); t.innerHTML=html.trim(); return t.content.firstChild; }
+  function esc(s){ return String(s).replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+  function badge(kind, text){ return `<span class="badge ${kind}"><span class="dot"></span>${esc(text)}</span>`; }
+
+  function mountGeneric(panel){
+    panel.addEventListener('click', (e)=>{
+      const tg = e.target.closest('.toggle');
+      if(tg){ tg.classList.toggle('on'); tg.dispatchEvent(new CustomEvent('toggled', {bubbles:true})); }
+      const acc = e.target.closest('.accordion-head');
+      if(acc){ acc.closest('.accordion-item').classList.toggle('open'); }
+      const cc = e.target.closest('.choice-card');
+      if(cc && cc.parentElement.classList.contains('row2')){
+        cc.parentElement.querySelectorAll('.choice-card').forEach(c=>c.classList.remove('selected'));
+        cc.classList.add('selected');
+        cc.dispatchEvent(new CustomEvent('picked', {bubbles:true}));
+      }
+    });
+    panel.addEventListener('input', (e)=>{
+      if(e.target.type==='range'){
+        const out = e.target.parentElement.querySelector('.range-val');
+        if(out) out.textContent = e.target.dataset.fmt ? e.target.dataset.fmt.replace('{v}', e.target.value) : e.target.value;
+      }
+    });
+  }
+
+  /* ============================================================
+     Topic definitions
+  ============================================================ */
+  const topics = [
+    { id:'bitness', group:'System Requirements', name:'32-bit vs. 64-bit dependent application requirements', emoji:'🔢',
+      desc:'Hardware drivers are specific to the OS version — 32-bit (x86) or 64-bit (x64). A 32-bit OS cannot run 64-bit apps. A 64-bit OS can run 32-bit apps.',
+      render:()=>`<div class="card"><h4>Pick an OS and application architecture</h4>
+        <div class="row2">
+          <div><b style="font-size:11.5px; color:#666;">OPERATING SYSTEM</b>
+            <div class="field-row" style="margin-top:8px;"><label><input type="radio" name="osarch" value="64" checked> 64-bit (x64)</label></div>
+            <div class="field-row"><label><input type="radio" name="osarch" value="32"> 32-bit (x86)</label></div>
+          </div>
+          <div><b style="font-size:11.5px; color:#666;">APPLICATION</b>
+            <div class="field-row" style="margin-top:8px;"><label><input type="radio" name="apparch" value="64" checked> 64-bit build</label></div>
+            <div class="field-row"><label><input type="radio" name="apparch" value="32"> 32-bit build</label></div>
+          </div>
+        </div>
+        <div id="bitnessResult" style="margin-top:14px;"></div>
+      </div>
+      <div class="banner">Hardware device drivers must also match the OS architecture — a 32-bit driver will not load on a 64-bit OS, regardless of the application's architecture.</div>`,
+      init:(panel)=>{
+        function compute(){
+          const os = panel.querySelector('input[name=osarch]:checked').value;
+          const app = panel.querySelector('input[name=apparch]:checked').value;
+          const out = panel.querySelector('#bitnessResult');
+          if(os==='32' && app==='64'){
+            out.innerHTML = badge('bad','Incompatible') + `<p style="margin-top:10px; color:#555; font-size:12.5px;">A 32-bit OS cannot run a 64-bit application — it lacks the wider registers and memory addressing the app needs. The app will not install or launch.</p>`;
+          } else if(os==='64' && app==='32'){
+            out.innerHTML = badge('warn','Compatible (compatibility layer)') + `<p style="margin-top:10px; color:#555; font-size:12.5px;">64-bit Windows runs 32-bit apps through the WOW64 subsystem. It works, but the app is limited to 32-bit addressable memory and can't use certain 64-bit-only components.</p>`;
+          } else {
+            out.innerHTML = badge('good','Fully compatible') + `<p style="margin-top:10px; color:#555; font-size:12.5px;">Architectures match — the application can use the full capabilities of the 64-bit OS, including large memory addressing.</p>`;
+          }
+        }
+        panel.querySelectorAll('input[name=osarch],input[name=apparch]').forEach(r=> r.addEventListener('change', compute));
+        compute();
+      } },
+
+    { id:'graphics', group:'System Requirements', name:'Dedicated vs. integrated graphics card', emoji:'🎮',
+      desc:'Integrated: CPU and GPU are the same chip and share system memory for graphics — common in laptops. Dedicated (discrete): has its own VRAM, for high-end graphics requirements.',
+      render:()=>`<div class="row2">
+        <div class="choice-card selected" data-gpu="integrated">
+          <div class="cc-title">🔗 Integrated Graphics</div>
+          <div class="cc-desc">CPU and GPU are the same chip. Uses system memory for graphics. Common in laptops and budget desktops. Lower power draw and cost.</div>
+        </div>
+        <div class="choice-card" data-gpu="dedicated">
+          <div class="cc-title">🎴 Dedicated Graphics</div>
+          <div class="cc-desc">Also called a discrete GPU. Has its own physical VRAM. Built for high-end graphics requirements — 3D rendering, gaming, video editing.</div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:16px;"><h4>What this affects</h4><div id="gpuDetail"></div></div>`,
+      init:(panel)=>{
+        function paint(kind){
+          const detail = panel.querySelector('#gpuDetail');
+          if(kind==='integrated'){
+            detail.innerHTML = `<div class="kv-list" style="font-size:12.5px; line-height:1.9;">
+              <div>🧠 <b>Memory source:</b> Shared from system RAM</div>
+              <div>💰 <b>Cost:</b> Included with the CPU — no added expense</div>
+              <div>🔋 <b>Power use:</b> Low — good for battery life</div>
+              <div>🎯 <b>Best for:</b> Web browsing, office apps, video playback</div>
+            </div>`;
+          } else {
+            detail.innerHTML = `<div class="kv-list" style="font-size:12.5px; line-height:1.9;">
+              <div>🧠 <b>Memory source:</b> Dedicated on-board VRAM (e.g. GDDR6)</div>
+              <div>💰 <b>Cost:</b> Additional hardware expense</div>
+              <div>🔋 <b>Power use:</b> Higher — often needs extra cooling/power</div>
+              <div>🎯 <b>Best for:</b> Gaming, 3D rendering, video editing, CAD, ML workloads</div>
+            </div>`;
+          }
+        }
+        panel.addEventListener('picked', (e)=>{ const cc=e.target.closest('.choice-card'); if(cc) paint(cc.dataset.gpu); });
+        paint('integrated');
+      } },
+
+    { id:'vram', group:'System Requirements', name:'Video random-access memory (VRAM) requirements', emoji:'🖼️',
+      desc:'VRAM is high-speed memory dedicated exclusively to storing graphical assets — framebuffers, 3D geometry, textures, and depth buffers. Dedicated cards have built-in VRAM; integrated graphics borrow a portion of main system RAM, reducing what is left for other applications.',
+      render:()=>`<div class="card"><h4>Simulate shared VRAM allocation (integrated graphics)</h4>
+        <div class="field-row"><label>Total system RAM</label><span>16 GB</span></div>
+        <div class="field-row"><label>Shared VRAM allocation</label><input type="range" min="0" max="4" step="0.5" value="1" id="vramSlider" data-fmt="{v} GB"><span class="range-val">1 GB</span></div>
+        <div class="bar-track" style="margin-top:12px;"><div class="bar-seg" id="vramRamSeg" style="background:#3a96dd; width:93.75%;"></div><div class="bar-seg" id="vramGpuSeg" style="background:#e0954f; width:6.25%;"></div></div>
+        <div class="bar-legend"><span><span class="sw" style="background:#3a96dd;"></span>Available system RAM</span><span><span class="sw" style="background:#e0954f;"></span>Reserved as shared VRAM</span></div>
+      </div>
+      <div class="banner">Dedicated graphics cards are unaffected by this slider — their VRAM is separate, physical memory (e.g. GDDR6) that never subtracts from system RAM.</div>`,
+      init:(panel)=>{
+        const slider = panel.querySelector('#vramSlider');
+        function paint(){
+          const v = parseFloat(slider.value);
+          const pct = (v/16)*100;
+          panel.querySelector('#vramGpuSeg').style.width = pct+'%';
+          panel.querySelector('#vramRamSeg').style.width = (100-pct)+'%';
+        }
+        slider.addEventListener('input', paint); paint();
+      } },
+
+    { id:'ram', group:'System Requirements', name:'RAM requirements', emoji:'💾',
+      desc:'A critical specification — the application may perform poorly or not at all without enough RAM. This is above and beyond the OS requirements, depends on the application, and must account for every other running application.',
+      render:()=>`<div class="card"><h4>RAM budget calculator</h4>
+        <div class="field-row"><label>Installed RAM</label><input type="range" min="4" max="64" step="4" value="16" id="ramTotal" data-fmt="{v} GB"><span class="range-val">16 GB</span></div>
+        <h4 style="margin-top:16px;">Currently running</h4>
+        <label class="checklist-row"><input type="checkbox" checked disabled> Operating system baseline — 4 GB</label>
+        <label class="checklist-row"><input type="checkbox" checked class="ram-item" data-gb="4"> Target application requirement — 4 GB</label>
+        <label class="checklist-row"><input type="checkbox" checked class="ram-item" data-gb="2"> Web browser (12 tabs) — 2 GB</label>
+        <label class="checklist-row"><input type="checkbox" class="ram-item" data-gb="3"> Video conferencing app — 3 GB</label>
+        <label class="checklist-row"><input type="checkbox" class="ram-item" data-gb="2"> Chat / email client — 2 GB</label>
+        <div id="ramResult" style="margin-top:14px;"></div>
+      </div>`,
+      init:(panel)=>{
+        function compute(){
+          const total = parseFloat(panel.querySelector('#ramTotal').value);
+          let used = 4;
+          panel.querySelectorAll('.ram-item:checked').forEach(cb=> used += parseFloat(cb.dataset.gb));
+          const out = panel.querySelector('#ramResult');
+          const pct = Math.min(100, (used/total)*100);
+          let kind = 'good', label = 'Comfortable headroom';
+          if(used > total){ kind='bad'; label='Insufficient RAM'; }
+          else if(pct > 80){ kind='warn'; label='Tight — expect slowdowns'; }
+          out.innerHTML = `${badge(kind,label)} <span style="margin-left:10px; font-size:12px; color:#666;">${used} GB needed of ${total} GB installed</span>
+            <div class="bar-track" style="margin-top:10px;"><div class="bar-seg" style="width:${pct}%; background:${kind==='bad'?'#c0271b':kind==='warn'?'#c9701f':'#1f8f5f'};"></div></div>`;
+        }
+        panel.querySelectorAll('#ramTotal, .ram-item').forEach(el=> el.addEventListener('input', compute));
+        compute();
+      } },
+
+    { id:'cpu', group:'System Requirements', name:'Central processing unit (CPU) requirements', emoji:'⚙️',
+      desc:'Processing speed is usually measured in gigahertz (GHz) — a broad measurement where higher numbers mean faster CPUs. Requirements vary a lot by application: word processing needs far less than video editing.',
+      render:()=>`<div class="card"><h4>Match CPU speed to workload</h4>
+        <div class="field-row"><label>Workload type</label><select id="cpuTask">
+          <option value="1.2">Word processing / email (min ~1.2 GHz)</option>
+          <option value="2.0">Web browsing / spreadsheets (min ~2.0 GHz)</option>
+          <option value="2.8">Photo editing (min ~2.8 GHz)</option>
+          <option value="3.5">Video editing / 3D rendering (min ~3.5 GHz)</option>
+        </select></div>
+        <div class="field-row"><label>Available CPU speed</label><input type="range" min="1" max="5" step="0.1" value="3.0" id="cpuSpeed" data-fmt="{v} GHz"><span class="range-val">3.0 GHz</span></div>
+        <div id="cpuResult" style="margin-top:12px;"></div>
+      </div>`,
+      init:(panel)=>{
+        function compute(){
+          const min = parseFloat(panel.querySelector('#cpuTask').value);
+          const have = parseFloat(panel.querySelector('#cpuSpeed').value);
+          const out = panel.querySelector('#cpuResult');
+          if(have >= min) out.innerHTML = badge('good','Meets requirement') + ` <span style="font-size:12px; color:#666; margin-left:8px;">${have.toFixed(1)} GHz ≥ ${min.toFixed(1)} GHz minimum</span>`;
+          else out.innerHTML = badge('bad','Below requirement') + ` <span style="font-size:12px; color:#666; margin-left:8px;">${have.toFixed(1)} GHz &lt; ${min.toFixed(1)} GHz minimum — expect poor performance</span>`;
+        }
+        panel.querySelector('#cpuTask').addEventListener('change', compute);
+        panel.querySelector('#cpuSpeed').addEventListener('input', compute);
+        compute();
+      } },
+
+    { id:'hwtoken', group:'System Requirements', name:'External hardware tokens', emoji:'🔑',
+      desc:'Used to manage application usage and limit access to authorized users — the application will only operate with the hardware token connected. Commonly a USB device. Can be a challenge to manage, and is often used with high-end software that carries high per-seat licensing costs.',
+      render:()=>`<div class="card"><h4>License dongle simulation</h4>
+        <div class="settings-row">
+          <div><div style="font-weight:600;">USB hardware token</div><div style="color:#666; font-size:11.5px; margin-top:2px;">Required for CAD Suite Pro (per-seat licensed)</div></div>
+          <div class="toggle" id="tokenToggle"><div class="knob"></div></div>
+        </div>
+        <div id="tokenResult" style="margin-top:14px;"></div>
+      </div>
+      <div class="banner">Hardware tokens are effective for enforcing per-seat licenses, but add an operational burden: lost or forgotten tokens block legitimate work, and issuing/tracking them for a large team takes real management effort.</div>`,
+      init:(panel)=>{
+        const t = panel.querySelector('#tokenToggle');
+        function paint(){
+          const on = t.classList.contains('on');
+          panel.querySelector('#tokenResult').innerHTML = on ? badge('good','Application unlocked') : badge('bad','Application locked — token not detected');
+        }
+        t.addEventListener('toggled', paint); paint();
+      } },
+
+    { id:'storage', group:'System Requirements', name:'Storage requirements', emoji:'💽',
+      desc:'A drive-space concern with two parts: the initial installation space requirement, and ongoing application-use requirements. Some applications consume a lot of additional storage after installation — so the initial install size may not be the most important number.',
+      render:()=>`<div class="card"><h4>Storage growth over time</h4>
+        <div class="field-row"><label>Free disk space</label><span>120 GB</span></div>
+        <div class="field-row"><label>Initial install size</label><span>18 GB</span></div>
+        <div class="field-row"><label>Months of active use</label><input type="range" min="0" max="24" value="6" id="stoMonths" data-fmt="{v} mo"><span class="range-val">6 mo</span></div>
+        <p style="font-size:11.5px; color:#666;">This application generates ~4.5 GB/month of caches, project files, and version history.</p>
+        <div class="bar-track" style="margin-top:8px;"><div class="bar-seg" id="stoUsedSeg" style="background:#8e6bd1;"></div><div class="bar-seg" id="stoFreeSeg" style="background:#e2e2e2;"></div></div>
+        <div id="stoResult" style="margin-top:12px;"></div>
+      </div>`,
+      init:(panel)=>{
+        const FREE=120, INSTALL=18, RATE=4.5;
+        function compute(){
+          const months = parseFloat(panel.querySelector('#stoMonths').value);
+          const used = INSTALL + RATE*months;
+          const pct = Math.min(100,(used/FREE)*100);
+          panel.querySelector('#stoUsedSeg').style.width = pct+'%';
+          panel.querySelector('#stoFreeSeg').style.width = (100-pct)+'%';
+          const out = panel.querySelector('#stoResult');
+          if(used > FREE) out.innerHTML = badge('bad','Will run out of space') + ` <span style="font-size:12px; color:#666; margin-left:8px;">≈${used.toFixed(0)} GB needed of ${FREE} GB free</span>`;
+          else if(used/FREE > 0.75) out.innerHTML = badge('warn','Getting tight') + ` <span style="font-size:12px; color:#666; margin-left:8px;">≈${used.toFixed(0)} GB used of ${FREE} GB free</span>`;
+          else out.innerHTML = badge('good','Plenty of room') + ` <span style="font-size:12px; color:#666; margin-left:8px;">≈${used.toFixed(0)} GB used of ${FREE} GB free</span>`;
+        }
+        panel.querySelector('#stoMonths').addEventListener('input', compute); compute();
+      } },
+
+    { id:'compat', group:'System Requirements', name:'Application to OS compatibility', emoji:'🧩',
+      desc:'The software must match the system architecture (32-bit vs. 64-bit), have its software dependencies satisfied, and meet the operating system API requirements of the host environment in order to run properly.',
+      render:()=>`<div class="card"><h4>Compatibility checklist</h4>
+        <label class="checklist-row"><input type="checkbox" checked class="compat-item"> Architecture matches (x64 app on x64 OS)</label>
+        <label class="checklist-row"><input type="checkbox" checked class="compat-item"> Required runtime installed (.NET 8 / Visual C++ Redistributable)</label>
+        <label class="checklist-row"><input type="checkbox" class="compat-item"> Required disk driver / filesystem feature present</label>
+        <div class="field-row" style="margin-top:10px;"><label>OS API / build version</label><select id="compatApi"><option value="ok">Meets minimum build (22621+)</option><option value="old">Below minimum build</option></select></div>
+        <div id="compatResult" style="margin-top:12px;"></div>
+      </div>`,
+      init:(panel)=>{
+        function compute(){
+          const items = Array.from(panel.querySelectorAll('.compat-item'));
+          const allChecked = items.every(i=>i.checked);
+          const apiOk = panel.querySelector('#compatApi').value==='ok';
+          const out = panel.querySelector('#compatResult');
+          if(allChecked && apiOk) out.innerHTML = badge('good','Compatible — ready to install');
+          else {
+            const missing = [];
+            if(!allChecked) missing.push('one or more dependencies are missing');
+            if(!apiOk) missing.push('OS build is below the minimum API version required');
+            out.innerHTML = badge('bad','Not compatible') + `<p style="margin-top:8px; font-size:12px; color:#666;">${missing.join('; ')}.</p>`;
+          }
+        }
+        panel.querySelectorAll('.compat-item').forEach(i=> i.addEventListener('change', compute));
+        panel.querySelector('#compatApi').addEventListener('change', compute);
+        compute();
+      } },
+
+    { id:'physicalvsiso', group:'Deployment Methods', name:'Physical media vs. mountable ISO file', emoji:'💿',
+      desc:'Physical media — optical disc, USB drive, etc. — is increasingly rare. An ISO is an optical disk image: a single file that is a sector-by-sector copy of a disc\u2019s files and folders, which can be mounted directly.',
+      render:()=>`<div class="row2">
+        <div class="card" style="flex:1; margin-bottom:0;"><h4>💿 Physical media</h4>
+          <button class="btn" id="insertDisc">Insert disc</button>
+          <p style="font-size:11.5px; color:#666; margin-top:8px;">Requires a physical drive, a shelf of discs, and manual handling — increasingly rare in modern deployments.</p>
+        </div>
+        <div class="card" style="flex:1; margin-bottom:0;"><h4>📀 Mountable ISO</h4>
+          <button class="btn" id="mountIso">Mount ISO</button>
+          <p style="font-size:11.5px; color:#666; margin-top:8px;">A single .iso file mounts instantly as a virtual drive — no physical disc, drive, or shipping required.</p>
+        </div>
+      </div>
+      <div class="log-box" id="mediaLog" style="margin-top:16px;">Ready.</div>`,
+      init:(panel)=>{
+        const log = panel.querySelector('#mediaLog');
+        panel.querySelector('#insertDisc').addEventListener('click', ()=>{
+          log.textContent = 'Insert physical disc…\nSpinning up optical drive…';
+          setTimeout(()=>{ log.textContent += '\nReading disc table of contents…'; }, 700);
+          setTimeout(()=>{ log.textContent += '\nDrive D:\\ ready. (≈3.2s total)'; }, 1600);
+        });
+        panel.querySelector('#mountIso').addEventListener('click', ()=>{
+          log.textContent = 'Mounting install.iso…\nVirtual drive E:\\ ready. (≈0.2s total)';
+        });
+      } },
+
+    { id:'download', group:'Deployment Methods', name:'Downloadable package', emoji:'⬇️',
+      desc:'Get the installer direct from the manufacturer or a centralized app store — and avoid third-party download sites, which carry a higher risk of tampered or bundled software.',
+      render:()=>`<div class="card"><h4>Choose a download source</h4>
+        <div class="field-row"><label>Source</label><select id="dlSource">
+          <option value="mfg">Manufacturer's website</option>
+          <option value="store">Centralized app store</option>
+          <option value="third">Third-party download site</option>
+        </select></div>
+        <div id="dlWarning"></div>
+        <button class="btn primary" id="dlStart" style="margin-top:8px;">Download</button>
+        <div class="bar-track" style="margin-top:12px; display:none;" id="dlBarWrap"><div class="bar-seg" id="dlBar" style="background:var(--accent); width:0%;"></div></div>
+      </div>`,
+      init:(panel)=>{
+        function paintWarn(){
+          const src = panel.querySelector('#dlSource').value;
+          panel.querySelector('#dlWarning').innerHTML = src==='third'
+            ? `<div class="banner danger">Avoid third-party download sites — installers here are frequently repackaged with adware, outdated, or outright malicious.</div>`
+            : `<div class="banner good">Trusted source — files are distributed directly by the publisher or a vetted app store.</div>`;
+        }
+        panel.querySelector('#dlSource').addEventListener('change', paintWarn); paintWarn();
+        panel.querySelector('#dlStart').addEventListener('click', ()=>{
+          const wrap = panel.querySelector('#dlBarWrap'); const bar = panel.querySelector('#dlBar');
+          wrap.style.display='block'; let p=0;
+          const t = setInterval(()=>{ if(!bar.isConnected){ clearInterval(t); return; } p+=Math.random()*18; bar.style.width=Math.min(p,100)+'%'; if(p>=100) clearInterval(t); }, 200);
+        });
+      } },
+
+    { id:'imagedeploy', group:'Deployment Methods', name:'Image deployment', emoji:'🖼️',
+      desc:'Create a standard OS "master image" (gold image) and clone it across many target systems over the network or via physical media. A perfect fit for virtual machines, and very fast to deploy at scale.',
+      render:()=>`<div class="card"><h4>Deploy a gold image</h4>
+        <div class="field-row"><label>Target machines</label><input type="range" min="1" max="200" value="25" id="imgCount" data-fmt="{v} machines"><span class="range-val">25 machines</span></div>
+        <button class="btn primary" id="imgDeploy">Deploy image</button>
+        <div class="bar-track" style="margin-top:12px; display:none;" id="imgBarWrap"><div class="bar-seg" id="imgBar" style="background:#4fbf8e; width:0%;"></div></div>
+        <div id="imgResult" style="margin-top:10px;"></div>
+      </div>
+      <div class="banner">Compare: individually installing each machine's OS and applications by hand typically runs ~35–45 minutes per device — image deployment clones them in parallel in a fraction of that time.</div>`,
+      init:(panel)=>{
+        panel.querySelector('#imgDeploy').addEventListener('click', ()=>{
+          const count = parseInt(panel.querySelector('#imgCount').value);
+          const wrap = panel.querySelector('#imgBarWrap'); const bar = panel.querySelector('#imgBar');
+          const resultEl = panel.querySelector('#imgResult');
+          wrap.style.display='block'; bar.style.width='0%';
+          const est = (2 + Math.log2(count)*0.6).toFixed(1);
+          let p=0;
+          const t = setInterval(()=>{
+            if(!bar.isConnected){ clearInterval(t); return; }
+            p+=Math.random()*22; bar.style.width=Math.min(p,100)+'%';
+            if(p>=100){ clearInterval(t); if(resultEl) resultEl.innerHTML = badge('good','Deployment complete') + ` <span style="font-size:12px; color:#666; margin-left:8px;">${count} machines imaged in ≈${est} minutes — vs. ≈${(count*38/60).toFixed(0)} hours installed by hand.</span>`; }
+          }, 160);
+        });
+      } },
+
+    { id:'deviceimpact', group:'Impact Considerations', name:'Device impact considerations for new applications', emoji:'📱',
+      desc:'Think through what a new application or upgrade can do to the device it runs on: it may stop working after an upgrade, cause slowdowns, or even delete files.',
+      render:()=>`<div id="deviceAcc"></div>`,
+      init:(panel)=>{
+        const items = [
+          {t:'Application upgrade stops working', d:'A new version may drop support for old file formats, plugins, or OS versions. Mitigation: test upgrades in a pilot group first, and keep the previous installer available for rollback.'},
+          {t:'Slowdowns', d:'Bloated new features or background services can consume more CPU/RAM than the device was sized for. Mitigation: check updated system requirements against your hardware baseline before rolling out broadly.'},
+          {t:'Deleted files', d:'Installers or upgrades sometimes clean up or migrate data incorrectly. Mitigation: back up user data before major upgrades and verify the rollback path.'},
+        ];
+        panel.querySelector('#deviceAcc').innerHTML = items.map((it,i)=>`<div class="accordion-item ${i===0?'open':''}"><div class="accordion-head"><span><span class="accordion-chev">▶</span> ${esc(it.t)}</span></div><div class="accordion-body">${esc(it.d)}</div></div>`).join('');
+      } },
+
+    { id:'networkimpact', group:'Impact Considerations', name:'Network impact considerations for new applications', emoji:'🌐',
+      desc:'A new application often needs access to internal services, plus the rights and permissions to reach file shares — both of which need to be planned and provisioned.',
+      render:()=>`<div class="card"><h4>Network readiness checklist</h4>
+        <div class="settings-row"><div><div style="font-weight:600;">Access to internal services</div><div style="color:#666; font-size:11.5px;">Firewall rules / VPN routes allow the app to reach required internal servers</div></div><div class="toggle" data-key="svc"><div class="knob"></div></div></div>
+        <div class="settings-row"><div><div style="font-weight:600;">File share rights & permissions</div><div style="color:#666; font-size:11.5px;">The service account or users have been granted access to needed shares</div></div><div class="toggle" data-key="share"><div class="knob"></div></div></div>
+        <div id="netResult" style="margin-top:14px;"></div>
+      </div>`,
+      init:(panel)=>{
+        function compute(){
+          const svc = panel.querySelector('.toggle[data-key=svc]').classList.contains('on');
+          const share = panel.querySelector('.toggle[data-key=share]').classList.contains('on');
+          const out = panel.querySelector('#netResult');
+          if(svc && share) out.innerHTML = badge('good','Network access ready');
+          else if(!svc && !share) out.innerHTML = badge('bad','Not ready — no network access provisioned');
+          else out.innerHTML = badge('warn','Partially ready — the app may fail intermittently');
+        }
+        panel.querySelectorAll('.toggle').forEach(t=> t.addEventListener('toggled', compute));
+        compute();
+      } },
+
+    { id:'operationimpact', group:'Impact Considerations', name:'Operation impact considerations for new applications', emoji:'⏱️',
+      desc:'Many jobs are time-sensitive. An updated application may require a change to an existing workflow — or it may not work with that workflow at all.',
+      render:()=>`<div class="card"><h4>Workflow disruption check</h4>
+        <div class="settings-row"><div><div style="font-weight:600;">Job is time-sensitive</div><div style="color:#666; font-size:11.5px;">e.g. nightly batch processing, shift-based order entry</div></div><div class="toggle on" data-key="ts"><div class="knob"></div></div></div>
+        <div class="settings-row"><div><div style="font-weight:600;">Update changes the workflow</div><div style="color:#666; font-size:11.5px;">New steps, moved menus, or a changed file format</div></div><div class="toggle on" data-key="wf"><div class="knob"></div></div></div>
+        <div id="opResult" style="margin-top:14px;"></div>
+      </div>`,
+      init:(panel)=>{
+        function compute(){
+          const ts = panel.querySelector('.toggle[data-key=ts]').classList.contains('on');
+          const wf = panel.querySelector('.toggle[data-key=wf]').classList.contains('on');
+          const out = panel.querySelector('#opResult');
+          if(ts && wf) out.innerHTML = badge('bad','High risk') + `<p style="margin-top:8px; font-size:12px; color:#666;">Schedule the change outside the time-sensitive window and retrain staff on the new workflow beforehand.</p>`;
+          else if(ts || wf) out.innerHTML = badge('warn','Moderate risk') + `<p style="margin-top:8px; font-size:12px; color:#666;">Communicate the change ahead of time and monitor the first cycle closely.</p>`;
+          else out.innerHTML = badge('good','Low risk');
+        }
+        panel.querySelectorAll('.toggle').forEach(t=> t.addEventListener('toggled', compute));
+        compute();
+      } },
+
+    { id:'businessimpact', group:'Impact Considerations', name:'Business impact considerations for new applications', emoji:'🏢',
+      desc:'Critical business processes are sensitive to downtime and outages. A change to one application can create issues elsewhere — other parts of the business rely on its results.',
+      render:()=>`<div class="card"><h4>Dependency simulation</h4>
+        <div class="settings-row"><div><div style="font-weight:600;">Simulate an outage</div><div style="color:#666; font-size:11.5px;">Take the application offline and see who is affected</div></div><div class="toggle" id="outageToggle"><div class="knob"></div></div></div>
+        <div id="bizChain" style="margin-top:14px; font-size:12.5px; line-height:2.1;"></div>
+      </div>`,
+      init:(panel)=>{
+        const chain = ['Order Entry App', 'Warehouse Fulfillment', 'Shipping & Invoicing', 'Finance Reporting'];
+        function paint(){
+          const down = panel.querySelector('#outageToggle').classList.contains('on');
+          panel.querySelector('#bizChain').innerHTML = chain.map((c,i)=>{
+            const affected = down && i>0;
+            const isSource = down && i===0;
+            const style = isSource ? 'color:#c0271b; font-weight:700;' : affected ? 'color:#c9701f; font-weight:600;' : 'color:#222;';
+            return `<div style="${style}">${i>0?'→ ':''}${isSource?'🔴 ':affected?'🟠 ':'⚪ '}${esc(c)}${isSource?' (offline)':affected?' — blocked, waiting on upstream data':' — normal'}</div>`;
+          }).join('');
+        }
+        panel.querySelector('#outageToggle').addEventListener('toggled', paint); paint();
+      } },
+  ];
+
+  /* ============================================================
+     Layout: nav + main
+  ============================================================ */
+  const nav = document.getElementById('appNav');
+  const main = document.getElementById('appMain');
+  const groups = ['System Requirements','Deployment Methods','Impact Considerations'];
+  let counter = 0;
+  const navHTML = groups.map(g=>{
+    const items = topics.filter(t=>t.group===g);
+    return `<div class="nav-group-title">${esc(g)}</div>` + items.map(t=>{
+      counter++;
+      return `<div class="nav-item" data-id="${t.id}"><span class="ni-num">${counter}</span><span>${esc(t.name)}</span></div>`;
+    }).join('');
+  }).join('');
+  nav.innerHTML = navHTML;
+
+  function showTopic(id){
+    const t = topics.find(x=>x.id===id);
+    if(!t) return;
+    nav.querySelectorAll('.nav-item').forEach(n=> n.classList.toggle('active', n.dataset.id===id));
+    main.innerHTML = `<div class="topic-kicker">${esc(t.group)}</div>
+      <h2 class="topic-title">${t.emoji} ${esc(t.name)}</h2>
+      <p class="topic-lede">${esc(t.desc)}</p>
+      ${t.render()}`;
+    mountGeneric(main);
+    if(t.init) t.init(main);
+  }
+  nav.addEventListener('click', (e)=>{ const item = e.target.closest('.nav-item'); if(item) showTopic(item.dataset.id); });
+
+  /* ============================================================
+     Reference panel
+  ============================================================ */
+  function renderReference(filter){
+    const list = document.getElementById('refList');
+    list.innerHTML = '';
+    const f = (filter||'').trim().toLowerCase();
+    const items = topics.filter(t => !f || t.name.toLowerCase().includes(f) || t.desc.toLowerCase().includes(f));
+    if(items.length===0){ list.innerHTML = '<div class="ref-empty">No matching concepts.</div>'; return; }
+    items.forEach(t=>{
+      const item = elc(`<div class="ref-item"><div class="ref-name">${t.emoji} ${esc(t.name)}</div><div class="ref-tag">${esc(t.group)}</div><div class="ref-desc">${esc(t.desc)}</div></div>`);
+      item.addEventListener('click', ()=> showTopic(t.id));
+      list.appendChild(item);
+    });
+  }
+  document.getElementById('refSearchInput').addEventListener('input', e=> renderReference(e.target.value));
+  renderReference('');
+
+  showTopic(topics[0].id);
+})();
+</script>
+</body>
+</html>

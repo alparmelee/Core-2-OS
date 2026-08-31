@@ -1,0 +1,235 @@
+In this video, we'll look at a number of different issues
+that you may have to troubleshoot inside of Microsoft Windows.
+In fact, this type of message is a very common one
+that you might have to deal with.
+This is, of course, the blue screen of death.
+This may be related to bad hardware.
+It might have bad drivers.
+There might be an issue with the application
+that you're using.
+But something inside of your system
+has determined that whatever error has occurred
+prevents the entire operating system from continuing.
+And because of that, it's going to put
+a message on our screen that tells us
+that Windows has to stop what it's doing,
+and then it gives us some information that might help us
+with the troubleshooting process.
+In previous Windows versions, you
+got a very detailed set of information
+that was provided on what we call the Windows blue screen
+of death.
+On newer versions of Windows, we get a prettier stop screen,
+but the issue is still the same.
+Our operating system stops completely,
+and we have to reboot our system to get the system back up
+and running again.
+If you find that your system will not reboot after this Windows
+stop error, then you might want to try the last known good
+option inside of the startup screen.
+There might be an option for system restore that you can use,
+or you may have to roll back a driver if this is related
+to a driver that you have recently installed.
+Another good option would be to try to use safe mode in order
+to resolve any problems that are occurring during a normal
+startup.
+If you believe the problem may be related to hardware,
+this might be a good opportunity to take the top
+off your computer and try removing and replacing
+all of the different components to ensure
+that you have a good connection.
+And if you're not sure if the problem is related
+to hardware or software, you might want
+to perform a hardware diagnostics.
+This will test your CPU, your memory,
+and other components within your system.
+And you may be able to rule out hardware
+as the cause of this issue.
+On this Windows error stop screen, or this blue screen of death
+as we like to call it, it provides us with information
+that we can use for the troubleshooting process.
+For example, it tells us for more information
+about this issue and possible fixes,
+visit windows.com slash stop code.
+And they put a QR code on the screen.
+You can try this QR code yourself.
+It will take you over to the Microsoft support website.
+They also give you information about the error itself.
+This stop code is kernel mode heap corruption.
+And you can type this into the Windows support site
+to get options for troubleshooting the hardware
+or the software of your system.
+But perhaps our issue is not a blue screen type issue,
+but the operating system itself is not performing efficiently.
+Maybe it's running sluggishly, or you're finding
+that it slows down and speeds up.
+You might want to look at your task manager
+to see what applications are running,
+and to see if any of those applications are using
+an excessive number of resources.
+For example, task manager can show you
+how much CPU, memory, disk access, and network access
+is being used by each individual application.
+You can also click the performance tab
+and get an overview of how these individual resources have been
+performing over the last 60 seconds.
+This is a great short-term view of how your system is performing,
+and you may be able to visually see where the different spikes
+are occurring with the different resources
+inside of your computer.
+The problem you're having might be related to a known bug
+in the operating system, which may have already been resolved.
+So you might want to check Windows Update
+to ensure that you have the latest patches and latest fixes
+for your OS.
+Most operating systems need to have some free disk space
+that they can use for the normal operation of the OS.
+So you might want to check the availability of disk space
+on your computer.
+If you're running out of space, you
+might want to free up some space for the OS to use.
+And if you're running a hard drive,
+you might want to run a defrag just
+to get that much more efficiency out of your storage device.
+If you're on a laptop, you may notice
+that the laptop slows down if you're not directly connected
+to a power source.
+This is a normal configuration for most laptops,
+and it's designed for efficient use of your CPU
+and to limit the amount of heat that's created inside
+of your laptop.
+If you're not sure if this throttling is your problem,
+you might want to connect it to a power source
+and monitor the CPU usage when you're connected to direct power.
+And it's possible that this sluggish behavior
+may be caused by virus or malware.
+So you might want to update your antivirus signatures, run a scan,
+and make sure that your system doesn't have anything running
+that you don't know about.
+Some of the messages that you do not want to see when you're starting
+your computer are operating system not found or missing operating system.
+This is obviously a problem because your system can't identify where
+your operating system might be.
+So obviously, it will not be able to start the OS.
+You might also have problems if you try to install a separate operating system
+at the same time for dual boot purposes.
+You might find that the bootloader itself has been replaced or changed,
+preventing the original operating system from starting.
+If your operating system is not found during startup,
+it could be that you plugged in a bootable drive that no longer has an operating system on it.
+So you simply need to remove that media from your system and try restarting again.
+Windows also includes a troubleshooting feature known as startup repair.
+It will go through the most common issues associated with startup and try resolving them automatically.
+And if your problem is related to a bootloader,
+or you may have changed the location where Windows may be installed,
+you might want to change the Windows Boot Configuration Database, or the BCD.
+In earlier versions of Windows, we referred to this as the boot.ini file.
+Now it uses a different process that allows you to change this boot configuration database
+so that you can add different startup parameters to the Windows operating system.
+So if you'd like to resolve any problems with the boot configuration database,
+you can use the boot rec command.
+And if you use it with the slash rebuild BCD option,
+it will rebuild the Windows boot configuration database from the recovery console command prompt.
+If you run this in the recovery console,
+it will scan all of your drives to find a Windows installation.
+If it finds one, it will tell you where it's found that installation.
+And you can choose to add that installation to your boot list,
+and then restart your computer.
+Startup Repair is a utility that can find and solve many different problems automatically.
+For example, if you have changed a Windows bootloader,
+you might be getting a message on your screen like missing NT loader or a similar message.
+You can run Startup Repair.
+It will look for that missing Windows configuration and add it back to your existing bootloader.
+If you've changed your Windows directory name or you've moved it to a different drive,
+you can have Windows Startup Repair find that Windows configuration.
+Or as we've already seen, you can manually configure the boot configuration database yourself.
+And sometimes you'll start up Windows and it will automatically start into safe mode
+instead of starting into the normal Windows configuration.
+If that's the case, you can run Startup Prepare to try to determine why your system is only booting in safe mode
+instead of the normal Windows config.
+Sometimes your Windows operating system is working as expected,
+but there's one piece of hardware that for some reason is not working inside of Windows.
+It may be that the device is not starting at all.
+And you'll be able to find the status of that device inside of Device Manager.
+You can find that device driver listed in this large list of devices.
+And you can choose to remove, replace, or roll back to a previous driver version.
+Or when you log into Windows, you'll get a message on your screen that says one or more services failed to start.
+Those services are obviously the background processes that are running inside of your Windows operating system.
+And often they're not starting due to an incorrect driver, a bad configuration, or bad hardware itself.
+You can go into the Services app inside of Windows and try starting the service manually to see if you can get it running.
+If it's still having problems, you might want to check the account permissions.
+Many services run as the system account, but some services require additional authentication.
+Sometimes these services will have dependencies.
+So one service has to start first, and only after that service has started will the next service be able to run.
+There's a list of these dependencies inside of each service profile.
+If this is a service that is built into Windows, you'll want to check the system files and perhaps run SFC to confirm that your base operating system is still configured properly.
+If this service is based on an application, you might want to uninstall the application and then try reinstalling with administrator rights and permissions.
+Sometimes it's the application itself that is simply not running inside of our Windows operating system.
+This might be a message on the screen that provides detailed information about what the error might be.
+Or you may try to simply start the application, the window might appear, and then instantly the window disappears with no error message at all.
+Often the information about what just happened on the screen can be found inside of your event viewer.
+This is a log that shows everything about what's happening inside of Windows, so you may need to filter down for that application to find it in this very large haystack of log data.
+Windows also includes a nifty utility known as Reliability Monitor that tracks the performance of your applications.
+And if an application fails, it will identify what the failure was.
+And you can easily click on this screen to filter out all of the information in your event viewer.
+This can also be a useful tool to track how an application has been performing over time.
+You can see if this issue was simply a one-off problem, or you can see if the application has consistently been having problems over a period of time.
+If you think the application itself is a problem, you may just want to uninstall the app and reinstall to see if that fixes the issue.
+All the work that happens on our computer happens inside of the RAM that's in our system.
+So in order to keep all of these applications running, we have to make sure that we have plenty of memory available for them to work.
+If we start running out of memory resources, we might get a message on the screen that says your computer is low on memory.
+To restore enough memory for programs to work correctly, save your files and then close or restart all open programs.
+To know where to start, you might want to go back to your task manager and look at the memory column to see how much memory is being used by each individual application.
+You can also sort this column by clicking on the top, and that will bring the most used resources to the top of this list.
+Windows also has the ability to take some information that's in your memory and page it out to your storage drive temporarily.
+This frees up room for other applications to be able to work, and when you need that information again in memory, Windows will pull it off of your storage device and begin running it in the memory of your system.
+We refer to this process as using virtual memory.
+We're swapping out our applications and putting them into a temporary storage location.
+To find out how your virtual memory may be configured, you can find this under your System, About, Advanced System Settings, under Performance, Settings, and Virtual Memory.
+On my system, the virtual memory setting shows that a paging file is being used, and it's using approximately 1,280 megabytes to store virtual memory.
+If you wanted to change this amount, or you wanted to disable virtual memory, you can do all of that under the Performance options.
+The USB interfaces on our computers have practically become the default connectivity for most hardware devices that are external to our computer.
+And each time you plug in one of these USB devices, they take up additional resources inside of your computer known as USB endpoints.
+The USB controller that's inside of your computer supports a certain number of endpoints, so your USB controller might support 96 endpoints or 254 endpoints.
+And each device that you're plugging in will use a different number of endpoints.
+If it's a more complex device, it will use a larger number of endpoints.
+If you run out of these endpoints, then you'll get a message on your screen that says the USB controller resources are exceeded and the controller does not have enough resources for this device.
+One of the challenges in trying to troubleshoot this is that it's hard to tell how many endpoints is needed by each device that you're connecting to your computer.
+If you are receiving a message that says the USB controller resources are exceeded, you might want to try disconnecting that USB device and plugging it into a different USB interface.
+Different USB controllers inside of your computer may support a different number of USB endpoints, so when you unplug from one interface and plug into another, you might be connecting to a different controller and you might have more resources to use.
+You might also find that controllers supporting newer versions of USB may have additional endpoints available, so you might want to focus on plugging USB 2.0 devices into USB 2.0 controllers and plugging in newer USB 3 devices into
+interfaces supported by USB 3.0 controllers. This would distribute the endpoints differently on your computer and perhaps free up the proper number of resources for all of your hardware to be able to work.
+One of the most challenging problems to troubleshoot is one that happens randomly. There's no message, there's no warning, the problem simply occurs, and you don't have any idea what may have caused the problem to begin with.
+This could be a software problem with an application, it could be that the system simply stops with no error message at all, or it might be a constant application failure that provides you with no feedback as to what might be occurring.
+A good place to start would be a full hardware diagnostic to confirm that the platform that we're using is working as expected. This would cover your CPU, your memory, and all critical hardware inside of that system.
+Most motherboard manufacturers have hardware diagnostics that are specific to that hardware, or you might find that the UE5 BIOS inside of your system has a hardware troubleshooting and diagnostics feature built into the BIOS.
+Windows also includes a memory diagnostics tool inside of Windows itself, so you might want to run that overnight just to confirm that the RAM inside of your system is working as expected.
+And you might want to be sure that nothing has modified your operating system, so you might want to run the System File Checker, or SFC, to confirm that your core operating system files are still valid, and you might want to perform an anti-malware scan just to be sure that nothing unusual is running inside of your operating system.
+If you use Windows at work, then you probably have found that you can move from one computer to another, and all of your configuration settings move each time you authenticate to that device.
+Windows refers to this as a roaming user profile, and it makes it very easy to have a consistent user interface and work environment regardless of what computer you're using.
+However, this roaming profile has to download to each computer that you're logging into, and you may find in some cases that it's taking an excessive amount of time to log into your system once you've provided a username and a password.
+This is often related to network latency between your device and the domain controller that's responsible for providing that synchronization.
+Sometimes you're at a remote site, and it has to transfer that information over a wide area network, and that wide area network might be congested.
+Or it could be that your local domain controller is not working properly, and it has to go outside of your local network to perform that file transfer.
+This is often an issue that can be resolved by your local Windows domain administrator, and they might find that they're able to repair your local domain controller so that now your profiles will load much faster at that remote location.
+Our computers were not designed to be great time keepers, and if there was no synchronization of the times on your computer, you will find that it will slowly drift away from an accurate time frame in a relatively short period.
+We could certainly fix this issue by redesigning the internals of how each computer manages the process of keeping time.
+That is certainly not an easy thing to engineer, and it may require additional cost to every system if we were to integrate a better time keeping process.
+The fix here is not to change the way that our computers keep time, but instead change how often they check to see if they are using the correct time.
+You can set this with an automatic time setting inside of your operating system that will periodically go to a central time server and update the time so that all of your systems stay in perfect time and date synchronization.
+In Windows, you'll find this under the settings app, under time and language, and the option for date and time.
+When it brings up that screen, you have the option to set time automatically.
+This is the default for most Windows configurations, and you can even have it adjust the daylight saving time automatically if you happen to live in an area that has that type of time change.
+You can then set time zones associated with that system and have it synchronized manually if you'd like to have the time updated immediately while you're working on that system.
+This ensures that this computer and all of the computers on your network will all be updated and synchronized with exactly the right date and exactly the right time.
+It's just a simple one, Microsoft 기us and the ec beholds, since the 0.548 A.M.
+It has an będzie used saben especially since the 0.838 A.M.
+However is his way dib decades itself.
+It's the same way that you use and you use the 000UNG Alert.
+Yes, it has been used in one of the framers, so that both of the 3 Izquierek shares will solve it once you seem to follow.
+It makes you a dime channel and you know the answer also asks how to do this and get your anal scriptures.
+Instead of that, this is also known a little bit more� worthwhile,
+things that the internet have are collected to see if спас and not only them aren't hiding before.
+Keep my bildc kal.
+You're supporting herself and that you can see that the other person in the same context
+or this other person says, sometimes there's not an accent.

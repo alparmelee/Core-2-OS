@@ -1,0 +1,127 @@
+There are a number of reasons why you might want to automate or script different processes.
+One of these would be that you don't have to be there when it's performing this task.
+You don't have to watch log files going by.
+You don't have to wait for an event to occur.
+You simply have the script provide all of that automation.
+And this is often very useful for identifying problems before they become a much bigger
+issue.
+You can have the script constantly watch for problems to start smoldering, and then
+you can stop it before it turns into a full-blown fire.
+The scripts are also much faster than you are.
+They are running as fast as your computer can run, which means they don't wait for you
+to type anything in for input, and there's nothing that you would have to do to make
+that script operate.
+And there are probably tasks that you're performing that are repetitious and mundane.
+This would be a perfect use of a script, and that would leave you with more time to perform
+more important functions.
+Scripts are very good at restarting computers.
+We're certainly familiar with the process.
+When we run into a problem with Windows, it's very common to turn everything off and then
+back on again to try to resolve the problem.
+But why would you want to use that as part of a script?
+Well, you've probably performed an application update, and the only way for that application
+update to take effect is to restart a system.
+But if that server is in a different data center that's located in another country, you might
+want to have a script perform that reboot process.
+Security patches often require a restart of a system, so you can deploy these patches
+at night while you're sleeping and have all of these systems automatically reboot during
+the evening.
+And then when everybody comes in in the morning, their systems are ready to go.
+And this may be a reboot process that you implement to run at different times of the day.
+I was working with some software that had a memory leak.
+And after three or four hours, that software would stop working and hang the entire system.
+But if I rebooted every two hours, we would start with a completely clean slate.
+And I would never have that memory leak use up all of the RAM in my system and cause the
+system to hang.
+When users start up their computer, they like to have all of the resources they need available
+to them inside of the operating system.
+And one way that we can automate the process of connecting an individual's computer to
+all of their necessary resources and file shares is by using a login script.
+During the login process, a user's login script will connect to all of the necessary share
+drives that they would commonly use throughout the day.
+We could also have this automated mapping function of network drives built into an upgrade program.
+To run the upgrade, the script connects to the repository containing all of the upgrade
+files.
+It runs those upgrade files against the existing system.
+And then at the end of the script, it disconnects from that repository.
+You might also automate this connection and disconnection of shared files with a process that backs
+up user documents.
+So we might connect to the backup drive, transfer all of the user documents, and then disconnect
+from the backup drive as part of that script.
+If you need to upgrade an application, you could certainly sit at your screen, watch the
+upgrade prompts, click OK, add any other additional information it needs, and manually step through
+the entire upgrade process.
+Or you could write a script that does all of this for you.
+And if this is in a script, you can connect it to a login process, or you can have the users
+start the script themselves to upgrade the applications that they need.
+Scripting an application is a common task for any IT environment.
+You would usually have a process that maps the application installation drive.
+The script then installs the application and maybe includes the information that normally
+would be manually typed in.
+It would then disconnect that drive and then restart the system, all automated within the
+same script.
+In this course, you've constantly heard us talk about the importance of having good backups.
+And scripting is a great way to make sure these backups take place either at night or during
+some type of off hours.
+We also have to consider that backups tend to take quite a bit of time.
+We're transferring a lot of information from one system to another, and we're using quite
+a number of network resources during those backups.
+So instead of doing this during the day, we set a script to begin the backup process at
+one in the morning.
+It happens while you're sleeping.
+And when you come in in the morning, your users have the normal system in front of them.
+But in the meantime, you've now created an entire set of backups.
+In IT, we have a number of methods that we use to monitor all of the systems that are in
+our infrastructure and provide reports, alarms, and alerts about how those systems are performing.
+We can use scripting to be able to automate this process so that the monitoring happens
+behind the scenes, and we might even be able to solve problems automatically using our scripts.
+For example, we might have a very important database server that we need to make sure
+is always up and running.
+So we might want to monitor CPU usage, memory utilization, and the amount of network traffic
+to and from that device.
+You can automate that entire monitoring process using SNMP, built-in monitoring functions,
+or other third-party monitoring tools.
+Some organizations will have a script that goes out to all of the systems logged on to
+the network and perform an automated inventory of the hardware and software of that system.
+This is a very easy way to keep your inventory database up to date, and you don't have to
+perform any of this process manually.
+And many organizations will perform automated vulnerability checks throughout the day.
+They'll run automated vulnerability scanners that are checking operating systems and applications
+to ensure that they are running the latest version of those apps.
+And they check to see if there's any known vulnerabilities that could be a security concern.
+And if the script does find that an application or operating system needs to be updated,
+we can then run the update script for that specific resource.
+Updates are a constant task in information technology, and you will constantly receive updates about
+operating systems that need new features or that need to push out security patches.
+Or maybe there are new device drivers for the hardware that you're using so that you get
+rid of any bugs that may be associated with the old drivers or perhaps include new features
+that may be included with the latest set of device drivers.
+And of course, when a new application is available, we can create a script to be able to push that
+application out automatically with no user intervention.
+Of course, scripting is not a panacea.
+There are still best practices that we have to consider, and we have to also be aware of
+problems that could occur during the scripting process.
+For example, if we're installing new software, we might want to make sure that that software
+is not already infected with some type of malware.
+Otherwise, we would be distributing this new software to all of these systems automatically
+and effectively automating the malware distribution process to all of these systems.
+You might also create a script that makes changes to a system registry.
+Normally this is something that you can easily test and confirm that it doesn't affect any
+other part of the system.
+But occasionally you might find that the change that you've made affects other applications
+and other resources on the network.
+So it's always a good idea to perform as much testing as possible, but it's also a good
+idea to have a script that allows you to roll back if that change doesn't work.
+These scripts are obviously only performing the tasks that you asked them to perform.
+And if there is any syntax error, any issue with the information that you've added to the
+script, or maybe it's just a loose character that slipped into the script somewhere, you could
+create a problem with the script running, or in worst case, you create problems with the
+systems that are running the script themselves.
+It's very easy to create outages and downtime by using scripts that have inadvertent information
+inside of the script itself.
+Your best practice is to always backup information, perhaps even as part of the script, and to always
+perform as much testing as possible to confirm that there will not be any problems when you
+start running this script in production.
+haha
+how do you think about it?
+H

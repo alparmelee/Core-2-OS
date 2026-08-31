@@ -1,0 +1,267 @@
+It is said that the only constant is change, and that is certainly true in the world of
+technology.
+We have changes that need to be made all the time on our systems.
+For example, we get monthly updates from Microsoft for updating and upgrading software or patching
+applications.
+Or you might get a request to modify or update the rules that are in your firewall, or to
+modify the configuration of a network switch.
+Every time you make a change, there is a chance that that change could cause more problems
+to occur.
+This may be a relatively minor issue that maybe nobody even notices, or it might be a major
+problem that brings the network down and causes downtime for everybody in the organization.
+Unfortunately, in many organizations, the process of change management is something that is either
+dismissed or completely overlooked, and if everybody in the organization is able to make
+any change they'd like whenever they'd like, there will certainly be downtime and outages
+associated with those processes.
+Change management brings a series of very standard processes and procedures whenever you need
+to make a change.
+This includes how often this change will occur, how long it takes to implement this change,
+the process that will be used for installing that change, and procedures for rolling back
+if the change doesn't work.
+If an organization does not have a formal change management process, then this can be very
+difficult to implement.
+It's much easier to make changes whenever you'd like, instead of going through a very
+standard set of processes and procedures that tends to extend the entire change management
+process.
+We certainly want to avoid any type of downtime, and that's a major objective of having a change
+management process.
+But we also need to make sure that everybody knows when these changes are occurring.
+If one part of the organization has asked to make a change, but that change affects a different
+part of the organization, then there is obviously a conflict.
+We also want to make sure that there's no mistakes.
+There might be two people making changes on the network, and those changes conflict with
+each other and ultimately cause downtime or data loss.
+To give you an idea of what a standard change management process might look like, you start
+with the change management request itself.
+Someone may need you to upgrade some software, there might be a requirement to change a firewall
+configuration, or you might have received the latest monthly patches from Microsoft and
+you need to deploy those patches on your network.
+This purpose for the change is put into the change process so that everyone knows why you're
+going through the process of making these changes.
+You also need to identify what the scope of this change might be.
+If you're modifying software that's only used by three people in the organization, then the
+scope is relatively small.
+But if you're upgrading software that is used in the core switch in your data center,
+you may be affecting everybody in the organization.
+This change management process also determines when this change will be made.
+This way, everybody in the organization has this change on their calendar, and they know
+exactly what is expected during that time frame.
+The change request form commonly describes what devices will be affected by this change
+and the potential impact for making this change in the organization.
+If we're applying the latest set of Microsoft patches, then the affected systems would be
+every Windows device or every Windows server in the organization.
+And the impact of this might be to close potential security holes, and perhaps there are additional
+features or enhancements that may be included as part of these patches.
+The folks in your organization in charge of this change management process will evaluate
+any risks associated with this change.
+If you're making a change to your core router, for example, there might be a significant risk,
+and we need to understand what those risks might be so that we can better understand how
+to manage this particular change.
+There's very often a change control board that looks over all of this information and determines
+if this change can proceed.
+In some organizations, this change may be pushed off until a different time frame.
+For example, if you're in a retail environment, you may not be able to make changes during the
+holiday season.
+But after the first of the year, these changes may be easily implemented.
+And after making the change, there's still the final step of having the end user approve that
+the change was successful.
+This way you're able to get feedback from the user saying that they have tested your change
+and everything is working as expected.
+One thing you should always plan for is a situation where you have implemented a change, it did not
+work the way you expected, and you somehow need to bring everything back to the way you started.
+We refer to this as a rollback plan.
+The rollback plan is a set of processes and procedures that tells someone how to get back to the original
+configuration if everything goes wrong.
+In some cases, this might be a very simple process.
+If this is on a virtual machine, for example, you simply need to roll back to a previous snapshot and
+you're back up and running in the original configuration.
+But if this is a firmware upgrade, it might be difficult and sometimes impossible to revert back to a previous firmware version.
+This means that your rollback plan may not be to install the old software.
+It may be to swap out that equipment with one running the older firmware.
+And of course, you should always, always have a backup of this system.
+That way, if something does go wrong, you can simply restore from the backup and everything is exactly the way it was before you started.
+Another way to approach problems during this change process is to have a backup plan.
+This is a series of steps you can follow if your original plan does not go the way you were expecting.
+For example, let's say that you're going to install a software update on an existing firewall.
+This process should take these steps.
+You should connect to the web-based management front end of the firewall, click the update button, wait for the download to complete,
+press the reset button to restart the firewall, and then test the firewall settings with the new software in place.
+The problem, however, is if something goes wrong in any of these steps.
+What is the alternate plan if you run into issues during that change process?
+Here's an example of the things that could go wrong during that firewall upgrade.
+The internet might be down, so it's not able to download the updated code.
+Maybe the browser that you're using is not properly interpreting the page that's used for management on that firewall.
+Maybe the download is starting, but it's failing halfway through the download.
+Or once it's downloaded, the update file isn't being validated properly by the software inside of the firewall.
+All of these problems are things that should have been thought about prior to starting this update process,
+and there should be a secondary process in place so that you can get around these issues.
+So if we run into these problems, what's your plan B?
+And if there's a problem with plan B, what's your plan C? And so on.
+For example, maybe you thought beforehand that the internet could be an issue.
+So instead of relying on that internet connection, you download the file prior to the change so you have a copy locally that you can install.
+Maybe you put it on a flash drive to make it easy to plug into the firewall and install that change.
+Maybe you upload it via TFTP on the management interface of the firewall itself.
+Or perhaps you use the firewall's command line console to perform the upgrade.
+All of these are useful backup plans, and you should consider all of these prior to the change date.
+It can be difficult sometimes to make a reasoned decision when you're in the heat of the moment.
+So instead of having all of this occur and try to make changes in real time,
+you should think about where things can go wrong and then come up with different plans in case that issue occurs.
+Let's say the change that you're working on is upgrading the software in your core switch in the middle of your data center.
+This is the switch that everyone in your organization relies on to be able to access the internet and all of the primary resources in the core of your network.
+This would obviously be a relatively risky change.
+So what you might want to do is perform plenty of testing before implementing that software.
+You would commonly do this in a sandbox.
+This is a self-contained system where you can make any changes you like, and it has no effect on the uptime and availability of any of your systems.
+So you might have a separate core switch that you use just for testing.
+You put that into your sandbox environment, and you start doing the upgrade and applying the patches you need to bring that software up to the latest version.
+Once that upgrade is done, you can now start testing that software to see if it's performing as you would expect.
+Normally, there would be a list of tasks that you can try and confirm that that software is working without any problem.
+And once you've gone through this process, you can feel relatively secure that the upgrade is going to work as expected.
+This would also be a good place to test your rollback plan.
+You could install the new software on the switch, pretend that there is some type of problem with the software,
+and then see if you can install the older version of the software to bring everything back to the way it was originally.
+This whole time, you're performing all of these functions in a sandbox, and you don't have to worry about bringing down any part of the network or causing any disconnection for your users.
+The change management process involves a number of different people across many parts of the organization.
+Obviously, the IT department will be involved for the technical part of this change.
+They're the ones that manage the software, the operating systems, and the applications that are running in your technical environment.
+We'll also need support from the business customer.
+This is the person who is using this software.
+IT is responsible for upgrading the code, but the actual day-to-day use of that software will be done by your user community.
+And there's usually a sponsor associated with this change.
+This is usually part of the organization that is using this software, or it may be the part of the organization that is using their budget to pay for this particular change.
+This is very often three different parts of the organization, so we have to make sure that the communication channels are open and that everybody is aware of the change management process.
+Like any good set of processes and procedures, we need a form to be able to implement this change management process.
+This change request form is usually an online system where we can put all of this information in and submit it to the change management board.
+Having a standardized form or a standardized process in place ensures that we're not missing anything.
+We know exactly what the risks are, we know who will be affected by this change, we know technically what will be required, and we have information that describes the rollback process.
+This also allows the change management team to get detailed reports so they can see how well or how badly the change management process is working for the company.
+This is usually a very transparent process.
+It's very common to have everyone in the organization aware of the changes that are going to take place and to have a way that they can monitor these changes as they are occurring.
+The change management process starts with one question, which is, why is this change taking place?
+We need to understand the reasoning behind making this change so that all of the rest of the processes down the line understand the purpose for going through this process.
+For example, this change may be part of an application upgrade.
+And as part of the application upgrade, there are a number of new features that this department has been waiting for for a very long time.
+Also, as part of this upgrade are a series of bug fixes that resolve a number of issues that they currently have open.
+And in some cases, these application upgrades might provide you with performance enhancements.
+So not only are they getting newer features and taking care of a number of bugs, they may find that the application works better than it ever has.
+We've already talked about Microsoft's monthly security patches, and that is a very good reason to have a change control process because you want to make sure that all of your systems remain as secure as possible.
+Every change we make is going to have some cost associated with it.
+And this is why the very first part of this change management process is understanding why we're doing this so that we can financially justify this change.
+From a technical perspective, we may not always consider what the scope of the change might be.
+We may have been tasked with upgrading software that's on a server.
+We perform the upgrade, we restart the server, and we're done.
+But did this change affect just people connecting to that server?
+Or did that change affect a large part of your infrastructure?
+A single change to a firewall rule could affect multiple applications that people are using.
+It could affect internet connectivity for one or more people in your company.
+People connecting from a remote site may find that they're no longer able to connect to the resources they need.
+And you might have external customers that have lost access to a particular resource.
+All of these things could happen simultaneously just by changing a single rule in a corporate firewall.
+We also need to understand when this change will occur.
+Is this something that we can do during a normal workday?
+Or will we need to do this change during a time where the network is rarely used?
+Many companies will have redundant systems which allow them to make these changes without having any impact to the user community.
+Or this change may have an impact on a core piece of equipment and may have hours of downtime just to make this single change.
+Not every change is the same as every other change.
+For example, you might have a standard change.
+This is often a low risk change to the organization.
+It's something where you probably don't even have to go through a formal change management process because it is a change that is already pre-approved.
+This is something that happens all the time.
+It's a well-documented change.
+And it's something that has a very low risk of causing problems.
+For example, if you need to replace a monitor on a user's desk because the monitor is no longer working,
+that is a change that has very little risk to anyone else in the organization.
+And it's something that you can easily replace without involving the change management team.
+A normal change might be something that's more of a medium risk.
+It's not an urgent change, but we still need to go through the full change management process.
+For example, if we need to update a rule in a firewall or upgrade a database software engine or replace a switch in the core of our network,
+that goes through the normal change management process.
+And there will be times when you need to make an emergency change.
+This may be a high risk change because you may not have time to do all of the testing that you would normally perform.
+An example of an emergency change may be the announcement of a zero day vulnerability that could affect your primary web server.
+You might need to get a patch for that web server as quickly as possible and install it immediately on the corporate web server.
+This type of change does commonly involve the change management board, but it's one that is set to a much higher priority and very often is implemented without any type of delay.
+The change management board will often determine the best timeframe to be able to make that particular change.
+The change is usually assigned to one of many maintenance windows that have already been pre-approved by the organization.
+Or this might be an on-demand change.
+It might be a date and time that's not part of a standard maintenance window, so we pick a specific date and a specific time for this particular change.
+Some organizations have a regularly scheduled downtime, usually Sunday mornings at 2 a.m.
+If there are changes to occur, that's when the change will take place.
+If there are no changes, then we skip that downtime this week.
+And you may find that your organization has certain times in the year where there is a change freeze.
+That means that you're not allowed to make any changes at all unless it is an emergency change to the infrastructure.
+This might be a block of time that's already preset.
+For example, if you're in retail, you might have a change freeze every year between November 15th through January 5th.
+It might take a little bit of thought to really determine what the impact of any particular change might be.
+For example, if you're upgrading firewall software, you'll need to reboot that firewall after installing the new software version.
+You may think that that only affects the firewall itself, but of course, everybody in the organization uses that firewall to communicate with the internet.
+So while you're making that change, you could be affecting everybody in the organization.
+Or this change might affect a very small number of people in the organization.
+For example, you might be upgrading software that is only used by two or three people in the company.
+And when you make that change, they're the only ones who could ever be affected by anything associated with that update.
+Sometimes it's difficult to really understand what the scope of a change might be.
+Let's say you've been asked to upgrade the software on a database server.
+Which applications are using that database server?
+If you don't have very good documentation, it might take a little bit of work to determine which applications are connecting and using the data stored on that device.
+Or let's say you've been tasked with upgrading every database server in the company.
+But what if it's a database server that's still powered on and running, but nobody is using any part of that server?
+No one's connected to that device in a month.
+And therefore, you might need to understand that the scope of that change may be very different for that particular server.
+When you're filling out your change management form, it will certainly ask what the affected systems might be and what the impact of making that change could possibly be.
+You need to understand the complete impact of making this particular change so that the change management committee can make the best possible decision.
+There's very often a risk level associated with any change you're making in the organization.
+This might be a relatively low risk change that affects very few people.
+Or it may be a very high risk change that could affect everybody in the company.
+For example, let's say that you've been asked to implement a patch for problems that are occurring on a server.
+But when you install that patch, you find out that the fix doesn't actually fix anything in the software.
+Or maybe you find that the patch that you've installed breaks something else in that software.
+And now you have to go through the entire process again with this new problem.
+Or maybe you find that implementing the fix causes a problem with the underlying operating system.
+And now the computer won't boot.
+Or maybe everything is working great.
+You put the fix on the system.
+The patch doesn't break anything else.
+Your computer reboots exactly the way you would expect.
+But then all of the data associated with that application is now no longer accessible.
+All of these things could potentially happen just by installing a patch to an existing application.
+Now we need to look at the other side of the coin and understand what the risk might be for not making this change.
+Perhaps installing this patch would solve a number of connectivity and availability problems for the application.
+So not making the change would mean that the application continues to have these problems.
+Or it could be that this patch is necessary to communicate properly with other devices.
+And not making this change could cause downtime to those other services.
+So now that you've put together all the work to create that change control plan.
+You can now present it to the change control board.
+They will be responsible for determining if that change takes place or not.
+This very often includes every department in the company.
+So that everyone understands what changes are taking place.
+And what the effects of those changes might be.
+And you may find that the change that you're trying to implement does not have the priority it needs to get done quickly.
+There may be a number of other changes with a higher priority that take precedence over yours.
+So it might take quite a bit of time for the change control board to schedule your change and put it on the calendar.
+But now that the change control board has given their approval.
+It's up to you to make sure that the change happens.
+Most of the time we're not putting these plans together in some type of vacuum where only we know what's going on.
+Very often we're interacting with other parts of the IT department and professionals who have gone through this process before.
+For example, if we're upgrading a firewall.
+We may want to talk with people who are experts in that firewall and that have gone through this upgrade process before.
+They might give you some ideas of what other backup plans you might want to have ready to go.
+And they might also give you some ideas of how viable a rollback plan might be for this particular change.
+The goal is to make this process go as easily and efficiently as possible.
+So talking with other experts can give you the information you need to make sure that you've covered every possible scenario.
+And of course, no change is complete until the users test the change and that they're happy with the results.
+Often these changes are not only for the IT department.
+We might be updating some accounting software that's important to use for the ongoing operation of the company.
+If we do our job properly, that software will be updated and they'll be very happy with the results.
+We tend to talk about the end user acceptance process as the last bit of the process that the users are finally getting involved with.
+But in reality, they've been involved with this entire change management process from the very beginning.
+They're the ones that needed the software updated.
+They've worked with you to make sure that you're able to test that software.
+And ultimately, they will be the ones to determine if the software upgrade was a success.
+So going with that, before we look at the purpose of the business, the smartそして lab 그거ärer作為e 1.1md cp-cosmosis.
+Bye!
+irgendwelche funcisseusスステット
+002md cp-cosis
+0mdc.
+sería
+да
+te

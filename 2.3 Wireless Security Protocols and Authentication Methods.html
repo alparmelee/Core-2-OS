@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2.3 Wireless Security Protocols and Authentication Methods</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#121820;
+    --muted:#4b5563;
+    --paper:#eef3f8;
+    --line:rgba(18,24,32,0.12);
+    --accent:#0369a1;
+    --accent-soft:#dbeafe;
+    --good:#166534;
+    --warn:#9a3412;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(3,105,161,0.14), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.08), transparent 50%),
+      linear-gradient(180deg, #e4edf5 0%, var(--paper) 40%, #e8f0f7 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#f0f9ff;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,24,48,0.3) 0%, rgba(8,24,48,0.72) 52%, rgba(8,24,48,0.94) 100%),
+      url("2.3/Banner.png") center/cover no-repeat;
+  }
+
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:40ch;
+    color:#e0f2fe;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:48ch;
+    color:#94a3b8;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#e0f2fe;
+    color:#0c4a6e;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#e0f2fe;
+    border:1px solid rgba(224,242,254,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(238,243,248,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+  .visual.logo{ padding:1rem; background:#fff; }
+  .visual.logo img{ width:100%; height:140px; object-fit:contain; }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body ul{
+    margin:0.5rem 0 0.7rem;
+    padding-left:1.2rem;
+  }
+  .body li{ margin-bottom:0.35rem; }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(3,105,161,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+  .note.warn{
+    border-left-color:var(--danger);
+    background:rgba(180,35,24,0.08);
+    color:#7a271a;
+  }
+
+  .split{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0.7rem;
+    margin-top:0.8rem;
+  }
+  .pill{
+    border-radius:14px;
+    padding:0.85rem 1rem;
+    font-size:0.9rem;
+  }
+  .pill strong{
+    display:block;
+    margin-bottom:0.25rem;
+    font-size:0.74rem;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+  }
+  .pill.pro{ background:#e8f6ee; color:var(--good); }
+  .pill.con{ background:#fdece7; color:var(--warn); }
+  .pill p{ margin:0; color:inherit; }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .split{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">2.3</p>
+    <h1>Wireless Security Protocols and Authentication Methods</h1>
+    <p>How Wi-Fi networks are encrypted and how users are verified before they connect.</p>
+    <div class="hero-cta">
+      <a href="#wireless-protocols">Wireless protocols</a>
+      <a class="ghost" href="#authentication">Authentication</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#wpa2">WPA2</a>
+    <a href="#wpa3">WPA3</a>
+    <a href="#tkip">TKIP</a>
+    <a href="#aes">AES</a>
+    <a href="#radius">RADIUS</a>
+    <a href="#tacacs">TACACS+</a>
+    <a href="#kerberos">Kerberos</a>
+    <a href="#mfa">Multifactor</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ===== PART A: Wireless security protocols ===== -->
+  <section id="wireless-protocols">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Wireless security protocols</h2>
+        <p>Encryption standards that protect data traveling over Wi-Fi — from legacy bridges to modern protections.</p>
+      </div>
+
+      <article class="term" id="wpa2">
+        <div class="visual logo">
+          <img src="2.3/WPA2.png" alt="Wi-Fi Protected Access 2 WPA2" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Wi-Fi Protected Access 2 (WPA2)</h3>
+          <span class="aka">Introduced 2004 — legacy standard</span>
+          <p>WPA2 is a legacy wireless security protocol introduced in 2004 that uses <strong>AES encryption</strong> to secure Wi-Fi networks.</p>
+          <div class="note">Still widely deployed, but WPA3 is the current recommended standard.</div>
+        </div>
+      </article>
+
+      <article class="term" id="wpa3">
+        <div class="visual logo">
+          <img src="2.3/WPA3.png" alt="WPA3 wireless security" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>WPA3</h3>
+          <span class="aka">Introduced 2018 — modern standard</span>
+          <p>WPA3 is the modern wireless security standard that provides stronger AES encryption options, improved key exchange security, and individual encryption even on open networks.</p>
+          <div class="split">
+            <div class="pill pro">
+              <strong>WPA3</strong>
+              <p>Stronger key exchange, per-device encryption on open networks, forward secrecy.</p>
+            </div>
+            <div class="pill con">
+              <strong>WPA2</strong>
+              <p>Older, widely supported, but lacks WPA3’s protections against offline dictionary attacks.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="term" id="tkip">
+        <div class="visual photo">
+          <img src="2.3/TKIP.png" alt="Temporal Key Integrity Protocol TKIP" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Temporal Key Integrity Protocol (TKIP)</h3>
+          <span class="aka">WPA bridge from WEP</span>
+          <p>TKIP is an older encryption protocol designed for WPA as a temporary bridge to replace WEP without requiring new hardware.</p>
+          <div class="note warn"><strong>Legacy only.</strong> TKIP is deprecated — use AES with WPA2 or WPA3 instead.</div>
+        </div>
+      </article>
+
+      <article class="term" id="aes">
+        <div class="visual photo">
+          <img src="2.3/AES.png" alt="Advanced Encryption Standard AES" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Advanced Encryption Standard (AES)</h3>
+          <span class="aka">CCMP — used by WPA2 and WPA3</span>
+          <p>AES is a highly secure symmetric encryption algorithm used by WPA2 and WPA3 that offers significantly stronger protection than TKIP at the cost of higher CPU processing requirements.</p>
+          <div class="split">
+            <div class="pill pro">
+              <strong>AES</strong>
+              <p>Industry-standard strong encryption. Required for modern WPA2/WPA3 deployments.</p>
+            </div>
+            <div class="pill con">
+              <strong>TKIP</strong>
+              <p>Weaker, older. Only existed to extend hardware life after WEP was broken.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART B: Authentication methods ===== -->
+  <section id="authentication">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Authentication methods</h2>
+        <p>Protocols and practices that verify who is connecting — on Wi-Fi, VPNs, and network infrastructure.</p>
+      </div>
+
+      <article class="term" id="radius">
+        <div class="visual photo">
+          <img src="2.3/RADIUS.png" alt="Remote Authentication Dial-in User Service RADIUS" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Remote Authentication Dial-in User Service (RADIUS)</h3>
+          <span class="aka">AAA — Authentication, Authorization, Accounting</span>
+          <p>RADIUS is a widely supported AAA protocol used in enterprise networks to centralize user authentication across 802.1X Wi-Fi, VPNs, and network infrastructure.</p>
+        </div>
+      </article>
+
+      <article class="term" id="tacacs">
+        <div class="visual photo">
+          <img src="2.3/TACACS+.png" alt="Terminal Access Controller Access-Control System TACACS+" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Terminal Access Controller Access-Control System (TACACS+)</h3>
+          <span class="aka">Cisco-developed — open standard</span>
+          <p>TACACS+ is an open-standard remote authentication protocol created as an upgraded alternative to TACACS for managing administrative access to network devices.</p>
+          <div class="split">
+            <div class="pill pro">
+              <strong>RADIUS</strong>
+              <p>User/network access — Wi-Fi (802.1X), VPN, dial-in. Combines auth and accounting.</p>
+            </div>
+            <div class="pill con">
+              <strong>TACACS+</strong>
+              <p>Device administration — separates authentication, authorization, and accounting. Common on routers/switches.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="term" id="kerberos">
+        <div class="visual photo">
+          <img src="2.3/Kerberos.png" alt="Kerberos authentication" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Kerberos</h3>
+          <span class="aka">Ticket-based SSO</span>
+          <p>Kerberos is a ticket-based network authentication protocol that enables single sign-on (SSO) and mutual authentication between clients and servers to prevent replay attacks.</p>
+        </div>
+      </article>
+
+      <article class="term" id="mfa">
+        <div class="visual photo">
+          <img src="2.3/Multifactor authentication.png" alt="Multifactor authentication" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Multifactor authentication</h3>
+          <span class="aka">MFA — two or more factors</span>
+          <p>Multifactor authentication verifies user identity by requiring two or more distinct verification credentials, such as passwords and security tokens, before granting wireless network access.</p>
+          <ul class="tags">
+            <li>Something you know</li>
+            <li>Something you have</li>
+            <li>Something you are</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Images in the <code>2.3</code> folder. Study notes for Core 2 objective 2.3 — Wireless Security Protocols and Authentication Methods.
+  </div>
+</footer>
+
+  <script src="study-lightbox.js"></script>
+</body>
+</html>

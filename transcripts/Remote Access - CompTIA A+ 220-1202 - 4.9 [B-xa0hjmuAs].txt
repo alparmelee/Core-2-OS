@@ -1,0 +1,119 @@
+If you've ever worked in a helpdesk, then you're probably very familiar with remote desktop
+connections. This is when you can share someone else's desktop while sitting at your desk. That
+user's desktop may be in the next room, the next building over, or the next country. You're able
+to make this connection using a number of different utilities. You might be using RDP,
+which is part of the Microsoft Remote Desktop Protocol. There are clients or applications you
+can run to connect to other RDP services in macOS, Linux, Windows, your mobile devices,
+and almost any other operating system. There's, of course, open source options available for remote
+desktop using VNC. This is the Virtual Network Computing. It uses a protocol known as RFB,
+or Remote Frame Buffer. There are also clients available on many different operating systems
+if you're using VNC for your remote desktop connection. Remote desktop enables any organization
+to support everyone in the field, regardless of where they might be. But scammers love to use
+remote desktop as well. So if you find that a third party is trying to connect to you using remote
+desktop, you might want to get a bit more information before allowing a third party access
+to your computer. One way to tell if someone has a remote desktop service running on their system
+is to check available open ports. The remote desktop service, of course, is waiting for someone to
+connect to that device to be able to control it. If someone has an open port of TCP port 3389,
+then they are most likely running a remote desktop service, and someone with the correct credentials
+would be able to connect to this device and be able to control the desktop. Of course, someone
+might be running VNC or one of the many other third party remote desktop solutions out there.
+They're usually just secured with a username and a password. This makes it very easy to perform a
+brute force attack. So you might want to add additional authentication factors to keep anyone from
+connecting to your device from a remote location. Attackers love to take advantage of open ports for
+remote desktop and easy to find usernames and passwords. Because once they're on a system,
+it's all theirs as if they were sitting in front of the computer physically, they're able to go
+through all of your files, they're able to connect to other sites, and they're able to perform whatever
+they'd like to do from your machine using remote desktop. If you have a mobile device or a laptop,
+and you need to connect back to your corporate office across the internet, then you're probably very
+familiar with a VPN. This is a virtual private network, and it encrypts all of the data going
+back and forth between you and the other device, even if you're going across a public network like
+the internet. From your device, you're connecting to a VPN concentrator. This is a centralized device.
+Usually it's at your point of business, and everyone who needs access to your company is going to
+use the VPN client on their computer to connect to the VPN concentrator at your corporate office.
+You may find that you have a single appliance or server that's configured as a VPN concentrator,
+but these days you often find VPN concentrators built into next-generation firewalls.
+This gives you options as to how you'd like to deploy these VPN services. You can build your
+own software-based VPN, or you can use an integrated hardware-based VPN that may be part of your next-gen
+firewall. Some VPN concentrators require that you install special software on your client machine.
+Other operating systems have built-in VPNs, and you may be able to connect to the VPN concentrator
+using software that's already available in Windows, Linux, or macOS.
+Here's how a VPN works visually. You're the remote user at home that needs to access resources that are
+on your corporate network, but your only connection is through the internet, and you certainly don't want
+to send unencrypted information across that public network. So you'll use VPN software on your remote
+device to encrypt all of the data sent across the internet, and on the other side, the device that is
+acting as your VPN concentrator will decrypt that information and send it into your corporate network.
+For this information to get back to you, we simply reverse this process. So information is sent from your
+corporate network, it hits the VPN concentrator where it is encrypted, sent across the internet, and it's
+decrypted on your local device at home. We rely on VPNs to encrypt and secure all of the data that
+we're sending across the network. This means that if someone's taking a packet capture or has some way
+to view the information that we're sending across the network, we'd not be able to see any of the data
+since it's all encrypted over the network. When you're connecting to that concentrator, you're often
+asked for some type of authentication credentials. If you're only using a username and password, there is
+potential that someone could perform a brute force attack to try to determine the best combination to
+gain access to that system. This means that we often have additional multi-factor authentication
+that we use during this login process. So we might provide a username, a password, and then an additional
+code that's provided to us from an app. This ensures that only people authorized are able to gain access
+to this virtual private network. As an administrator, there may be times when you need to connect to a
+remote device and be able to make a configuration change at the console of that device. In order to
+have a protected communication between your device and the remote device, you would probably use SSH or
+Secure Shell. Secure Shell is designed for terminal communication like the one you see here,
+and it uses TCP port 22 in order to communicate. This looks and feels very similar to the older
+Telnet protocol, which runs on TCP port 23, but all of the communication used by Telnet is sent in the
+clear across the network. If you want to have an encrypted connection to that remote device,
+you'll always want to use Secure Shell. There's a great deal of security built into SSH, which is why
+it's a great utility to use for connecting to that remote terminal. Since all of the SSH communication
+is sent and encrypted, there's no way for anyone to perform a packet capture and somehow determine what
+your username and password might be. You can enhance the use of SSH by adding additional authentication
+options. For example, SSH supports the use of public-private key pairs to add additional authentication
+for connecting to that remote device. And as a best practice, it's probably a good idea to disable
+any type of remote access to certain usernames. For example, the root account on a Linux machine
+is the super user of that device, and you probably don't want people being able to log in as root
+by using SSH. Some organizations have completely removed all password-based authentication,
+and they require a certificate to be able to authenticate to these remote devices.
+You can enhance this by limiting who's able to connect to these remote devices based on an IP address.
+So you might want to configure a filter or network firewall to be able to only allow access to or
+from certain IP address ranges. Many organizations have outsourced the monitoring and ongoing maintenance
+of their networks by using a Managed Service Provider, or MSP. The MSP will often use a tool known as
+an RMM in order to provide that monitoring. RMM stands for Remote Monitoring and Management,
+and this provides a way for the MSP to be able to monitor and manage all of their customers from one single console.
+From this single console, your MSP can patch operating systems, log in remotely to a device,
+monitor for any security anomalies, and provide additional inventory of your hardware and software.
+Here's an example of an RMM that I've used. You can see on the left side that this MSP has six
+different companies that they can access, and right now we're looking at Company 5, which has three
+different locations in HQ 5, LA Office 5, and New York Office 5. You can see across those, we're looking
+at the LA Office right now, and the LA Office has a file server, there's Karen's laptop, there's domain
+controllers, and a file server. We can also see a status of how those devices are running, and we can
+get detailed information about the monitoring and ongoing performance of each individual device.
+This remote monitoring and management tool has access to many different customers from one single
+screen. This makes it very attractive to an attacker, because once they get access to the RMM,
+they now have access to many different companies. This is why access to this console should be very
+tightly controlled and limited to only the authorized users. We might also want to require multi-factor
+authentication to anyone who logs into the RMM console, and we might want to perform ongoing
+auditing to make sure that we know exactly who's connecting to our RMM console.
+As our cloud infrastructures became larger and larger, we needed a better way to remotely connect
+and manage these virtual machines. We were able to provide that by using SPICE. This is the simple
+protocol for independent computing environments. This allows us to view and control the remote
+desktop on a virtual machine using a very lightweight and easy-to-use protocol.
+This provides a seamless remote control solution across many different operating systems running
+in many different virtual machines. If you've ever used any type of remote control software,
+then running a SPICE protocol application is going to be very similar. SPICE excels by having
+very efficient graphics rendering and very fast response times, and you're able to integrate with
+that remote operating system by sharing the folder and clipboard between your device and the SPICE-enabled
+virtual machine. When you run a script in Windows, you have to connect to that Windows machine, run the
+script, and then be able to see the results of that script on something like a remote desktop or remote
+terminal screen. But what if you could send that script to a third-party Windows device, have it
+run the script, and then have all the results of that script sent back to you without directly
+connecting to that remote device? You're able to do that by using Windows Remote Management, or WinRM.
+WinRM is turned on by default on most Windows servers, so all the administrator needs to do is send the script to that Windows server.
+Obviously, the administrator will need to authenticate to that remote device when they're sending the script to verify that the script is trusted.
+The script then runs on that remote server, and the resulting information is all sent back to the original screen to be able to evaluate what occurred during that script.
+I used WinRM on my local device to run a script on an external server. My local device is the Naqueta Lab server, and I'm connecting to a server that's elsewhere on the network
+called Atlantis Lab PC. I'm running a script that performs a GetWMI object of all the Win32 services, so this should tell me all the services running on that remote device.
+When I send this information over, it asks for authentication. I add my username and my password, and what I receive in return are the results of that script that have run on that remote server.
+I didn't have to perform a remote desktop to that device or interactively connect through a console or terminal. I simply used WinRM to run that script remotely.
+You might also find a number of third-party tools that provide a number of different remote management capabilities. For example, if you need to perform screen sharing, you can use GoToMyPC, TeamViewer, or a similar third-party utility.
+If you want to be able to videoconference, there are many options available on the market. Two of the most popular are Zoom and WebEx.
+You might also find tools that allow you to easily store and transfer files between systems. If you're using Dropbox, Box.com, or Google Drive, then you've taken advantage of some of this file synchronization technology.
+Or if you're performing ongoing desktop management of a system where you're monitoring and updating those systems, you might be using Citrix Endpoint Management or Manage Engine Desktop Central.
+All of these third-party utilities have advantages and disadvantages, but the key to all of them is making sure that we use appropriate security, multi-factor authentication, and limit access to only the people who are authorized.
+You can also find and

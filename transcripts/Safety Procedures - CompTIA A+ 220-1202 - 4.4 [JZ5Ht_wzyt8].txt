@@ -1,0 +1,126 @@
+Our computers rely on a power source to be able to operate,
+but we also have to consider our safety
+when it comes to working inside of these computers.
+If you're working on a computer, a printer,
+or anything with a power cord, you
+should always disconnect that power source
+before working inside of those devices.
+And if you are working inside of those devices
+and you see a component that you don't immediately recognize,
+you should definitely not touch that particular component.
+It's possible that that device might have capacitors,
+and those capacitors may be storing power.
+The power supplies that are inside of these devices
+are designed to be removable.
+So you would remove the entire power supply
+and replace it with a brand new one.
+Generally, we don't work on the inside of these power supplies,
+and certainly there are components inside of those power supplies
+that could be harmful if you were to touch them.
+Any time you're working with devices such as power supplies,
+displays, or laser printers, you should always
+keep in mind that there may still be some residual power
+inside of those devices, so you should always
+take proper precautions.
+The goal of an electrical ground is
+to take the power associated with an electrical fault
+and put it onto that ground connection instead
+of that power going into you.
+This is an important part of any electrical system,
+and you'll notice that most of your computing devices
+will have ground connections on the power cord.
+If you're in a data center, this also
+applies to the racks that you have set up on the data center
+floor.
+You not only want to ground all of the components inside
+of the rack, you also want to electrically ground
+the rack itself.
+That way, if there is power that finds its way onto the metal
+rack, you can take all of that power and send it to the ground.
+This is why you should never remove any of those ground
+connections from your power plugs, and you should always
+make sure that all of those racks are always connected
+to an electrical ground.
+And most importantly, you should never
+connect any part of yourself to an electrical ground.
+That electrical ground could become energized,
+and we don't want any part of you to be touching any other part
+of that electrical ground.
+We should not only be concerned about power,
+but we should also be concerned about the safety
+of our workspace.
+We work with a lot of different cables,
+and we have to be very careful when we're putting that cable
+somewhere near the floor.
+This would create a trip hazard for anyone walking by,
+so you want to be sure that you tape down or cover
+any of these cables that may be in a walking area.
+It might also be a good idea to have all of these cables
+bundled together to help prevent any type of trip hazard.
+So you should use Velcro, cable ties, or anything else that can
+group all of those cables together.
+We also have to think about our own personal safety,
+and there are things you can do in the workplace to limit
+any type of accident or injury.
+For example, you should follow best practices
+for lifting heavy equipment.
+We often deal with printers and computers
+that are relatively heavy, so you'll
+want to be sure that if you're lifting any of these
+that you lift with your legs and you're not
+lifting with your back.
+They're specially designed equipment
+that you can get for a data center that
+allows you to slide this equipment into the rack
+without having to lift and hold it into the rack.
+Our electrical devices also don't work very well with water.
+You'll notice in a data center that we don't use water
+and we don't use foam.
+We instead use some other chemicals,
+such as FM 200, carbon dioxide, or some other type
+of dry chemical.
+And of course, if one of the devices you're working on
+does catch fire, one of the things
+that you want to do very quickly is remove it
+from any power source.
+Another good best practice is to always wear safety goggles
+if you're working with chemicals or anything else that
+could splash on you.
+If you're working inside of a printer with toner,
+or you're working with the chemicals that might be
+associated with batteries, it's always a good idea
+to have on a pair of safety goggles.
+It's also very easy for dust or toner to get into the air.
+So if you're working on a printer, you
+might want to wear an air filter mask
+to prevent you from breathing in any of that toner.
+It's very possible that there are existing health and safety
+laws that are associated with working
+in some type of technical environment.
+So you might want to check your local rules and regulations
+to see what guidelines may be in place for the job
+that you need to do.
+When it comes to electrical safety or fire prevention,
+there are usually building codes that set minimum safety
+standards for all of these environments.
+And if you have a lot of old computers and old batteries,
+there are usually environmental regulations
+that cover how and where you should dispose
+of all of this equipment.
+So when you're working on your computer,
+I'm looking at managers,
+Inspector's control,
+you want to admit this to the machines
+that don't expect to avoid using the energy
+of the services for the business ,
+which you shouldn't target with them.
+You need management,
+the care system,
+considering the maintenance areas,
+you need management,
+you need management,
+edenning,
+able to construe
+spending time on the upside
+of your breathing hours,
+especially if you've barely got any of those

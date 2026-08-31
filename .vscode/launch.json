@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Whisper Transcript GUI",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/whisper_transcript_gui.py",
+            "python": "C:\\Users\\Andre\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
+    ]
+}

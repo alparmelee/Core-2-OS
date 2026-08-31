@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2.5 Social Engineering Attacks, Threats, and Vulnerabilities</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1a1410;
+    --muted:#4b5563;
+    --paper:#f5f2ee;
+    --line:rgba(26,20,16,0.12);
+    --accent:#c2410c;
+    --accent-soft:#ffedd5;
+    --good:#166534;
+    --warn:#9a3412;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(194,65,12,0.12), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.06), transparent 50%),
+      linear-gradient(180deg, #ebe6e0 0%, var(--paper) 40%, #f0ebe5 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#fff7ed;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(28,16,8,0.55) 0%, rgba(28,16,8,0.78) 52%, rgba(28,16,8,0.94) 100%),
+      url("2.5/phishing.webp") center/cover no-repeat;
+  }
+
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:40ch;
+    color:#ffedd5;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:50ch;
+    color:#d6d3d1;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#ffedd5;
+    color:#431407;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#ffedd5;
+    border:1px solid rgba(255,237,213,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(245,242,238,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+  .visual.logo{ padding:1rem; background:#fff; }
+  .visual.logo img{ width:100%; height:140px; object-fit:contain; }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(194,65,12,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+  .note.warn{
+    border-left-color:var(--danger);
+    background:rgba(180,35,24,0.08);
+    color:#7a271a;
+  }
+
+  .split{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0.7rem;
+    margin-top:0.8rem;
+  }
+  .pill{
+    border-radius:14px;
+    padding:0.85rem 1rem;
+    font-size:0.9rem;
+  }
+  .pill strong{
+    display:block;
+    margin-bottom:0.25rem;
+    font-size:0.74rem;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+  }
+  .pill.pro{ background:#e8f6ee; color:var(--good); }
+  .pill.con{ background:#fdece7; color:var(--warn); }
+  .pill p{ margin:0; color:inherit; }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .split{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">2.5</p>
+    <h1>Social Engineering Attacks, Threats, and Vulnerabilities</h1>
+    <p>How attackers manipulate people, exploit systems, and take advantage of weak security posture.</p>
+    <div class="hero-cta">
+      <a href="#social-engineering">Social engineering</a>
+      <a class="ghost" href="#threats">Threats</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#phishing">Phishing</a>
+    <a href="#vishing">Vishing</a>
+    <a href="#spear-phishing">Spear phishing</a>
+    <a href="#tailgating">Tailgating</a>
+    <a href="#dos">DoS</a>
+    <a href="#ddos">DDoS</a>
+    <a href="#zero-day">Zero-day</a>
+    <a href="#sqli">SQLi</a>
+    <a href="#xss">XSS</a>
+    <a href="#vulnerabilities">Vulnerabilities</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ===== PART A: Social engineering ===== -->
+  <section id="social-engineering">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Social engineering attacks</h2>
+        <p>Manipulating people into revealing information, granting access, or taking unsafe actions.</p>
+      </div>
+
+      <article class="term" id="phishing">
+        <div class="visual photo">
+          <img src="2.5/phishing.webp" alt="Phishing attack" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Phishing</h3>
+          <p>Generic fraudulent emails sent to mass audiences attempting to trick victims into revealing sensitive credentials or clicking malicious links.</p>
+        </div>
+      </article>
+
+      <article class="term" id="vishing">
+        <div class="visual photo">
+          <img src="2.5/Vishing.webp" alt="Vishing voice phishing" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Vishing</h3>
+          <span class="aka">Voice phishing</span>
+          <p>Voice-based phishing attacks where scammers use phone calls to manipulate victims into providing confidential information.</p>
+        </div>
+      </article>
+
+      <article class="term" id="smishing">
+        <div class="visual photo">
+          <img src="2.5/Smishing.jpg" alt="Smishing SMS phishing" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Smishing</h3>
+          <span class="aka">SMS phishing</span>
+          <p>Phishing attacks delivered via SMS text messages containing malicious links or urgent requests for personal data.</p>
+        </div>
+      </article>
+
+      <article class="term" id="quishing">
+        <div class="visual photo">
+          <img src="2.5/QR code phishing (quishing).jfif" alt="QR code phishing quishing" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>QR code phishing (quishing)</h3>
+          <p>Malicious QR codes placed in physical or digital locations that direct users to credential-harvesting websites when scanned.</p>
+        </div>
+      </article>
+
+      <article class="term" id="spear-phishing">
+        <div class="visual photo">
+          <img src="2.5/Spear phishing.jfif" alt="Spear phishing" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Spear phishing</h3>
+          <p>Highly targeted phishing campaigns tailored to a specific individual or organization using gathered personal details.</p>
+        </div>
+      </article>
+
+      <article class="term" id="whaling">
+        <div class="visual logo">
+          <img src="2.5/Whaling-1.png" alt="Whaling attack" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Whaling</h3>
+          <span class="aka">CEO fraud — targets big fish</span>
+          <p>A specialized form of spear phishing that specifically targets high-profile executives, business owners, or senior leadership.</p>
+        </div>
+      </article>
+
+      <article class="term" id="shoulder-surfing">
+        <div class="visual photo">
+          <img src="2.5/Shoulder surfing.webp" alt="Shoulder surfing" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Shoulder surfing</h3>
+          <p>Observing a target’s screen or keyboard directly — either in person or through cameras — to steal sensitive data or passwords.</p>
+        </div>
+      </article>
+
+      <article class="term" id="tailgating">
+        <div class="visual logo">
+          <img src="2.5/Tailgating.svg" alt="Tailgating" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Tailgating</h3>
+          <span class="aka">Piggybacking</span>
+          <p>Following an authorized person through a restricted physical door or entryway without validating credentials.</p>
+        </div>
+      </article>
+
+      <article class="term" id="impersonation">
+        <div class="visual photo">
+          <img src="2.5/Impersonation.avif" alt="Impersonation" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Impersonation</h3>
+          <p>Pretending to be a trusted figure, such as an IT technician or executive, to trick employees into granting access or resetting passwords.</p>
+        </div>
+      </article>
+
+      <article class="term" id="dumpster-diving">
+        <div class="visual photo">
+          <img src="2.5/Dumpster diving.jfif" alt="Dumpster diving" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Dumpster diving</h3>
+          <p>Searching through discarded trash, recycling bins, or paper shredder waste to recover sensitive documents or configuration details.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART B: Threats ===== -->
+  <section id="threats">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Threats</h2>
+        <p>Attack types and techniques that compromise availability, confidentiality, or integrity.</p>
+      </div>
+
+      <article class="term" id="dos">
+        <div class="visual photo">
+          <img src="2.5/Denial of Service (DoS).jpg" alt="Denial of Service DoS" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Denial of Service (DoS)</h3>
+          <p>Overwhelms a target system or service with traffic from a <strong>single source</strong> to disrupt availability.</p>
+        </div>
+      </article>
+
+      <article class="term" id="ddos">
+        <div class="visual photo">
+          <img src="2.5/Distributed Denial of Service (DDoS).png" alt="Distributed Denial of Service DDoS" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Distributed Denial of Service (DDoS)</h3>
+          <p>Floods a target system using <strong>multiple compromised systems (botnets)</strong> from distributed locations to crash services.</p>
+          <div class="split">
+            <div class="pill con">
+              <strong>DoS</strong>
+              <p>Single source overwhelms the target.</p>
+            </div>
+            <div class="pill pro">
+              <strong>DDoS</strong>
+              <p>Many distributed sources — harder to block.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="term" id="evil-twin">
+        <div class="visual logo">
+          <img src="2.5/Evil twin.svg" alt="Evil twin Wi-Fi attack" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Evil twin</h3>
+          <p>A rogue Wi-Fi access point set up to mimic a legitimate network to intercept user traffic and credentials.</p>
+        </div>
+      </article>
+
+      <article class="term" id="zero-day">
+        <div class="visual photo">
+          <img src="2.5/Zero-day attack.jfif" alt="Zero-day attack" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Zero-day attack</h3>
+          <p>An exploit targeting a previously unknown software vulnerability before the vendor releases a patch.</p>
+          <div class="note warn">No patch exists yet — defenders have zero days to prepare.</div>
+        </div>
+      </article>
+
+      <article class="term" id="spoofing">
+        <div class="visual photo">
+          <img src="2.5/Spoofing.png" alt="Spoofing" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Spoofing</h3>
+          <p>Falsifying network headers, IP addresses, or sender identities to disguise the origin of malicious traffic or communications.</p>
+        </div>
+      </article>
+
+      <article class="term" id="on-path">
+        <div class="visual photo">
+          <img src="2.5/On-path attack.png" alt="On-path attack" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>On-path attack</h3>
+          <span class="aka">Formerly man-in-the-middle (MITM)</span>
+          <p>Secretly relaying and altering communications between two parties who believe they are directly communicating with each other.</p>
+        </div>
+      </article>
+
+      <article class="term" id="brute-force">
+        <div class="visual photo">
+          <img src="2.5/Brute-force attack.jfif" alt="Brute-force attack" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Brute-force attack</h3>
+          <p>Systematically testing every possible character combination until the correct password or key is found.</p>
+        </div>
+      </article>
+
+      <article class="term" id="dictionary-attack">
+        <div class="visual photo">
+          <img src="2.5/Dictionary attack.webp" alt="Dictionary attack" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Dictionary attack</h3>
+          <p>Automated password cracking using a predefined list of common words, phrases, and leaked passwords.</p>
+          <div class="note"><strong>vs brute-force:</strong> Dictionary attacks try likely passwords first — faster but less exhaustive.</div>
+        </div>
+      </article>
+
+      <article class="term" id="insider-threat">
+        <div class="visual photo">
+          <img src="2.5/Insider threat.webp" alt="Insider threat" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Insider threat</h3>
+          <p>Security risks originating from current or former employees, contractors, or business partners with authorized access.</p>
+        </div>
+      </article>
+
+      <article class="term" id="sqli">
+        <div class="visual photo">
+          <img src="2.5/SQL injection (SQLi).jpg" alt="SQL injection SQLi" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>SQL injection (SQLi)</h3>
+          <p>Injecting malicious database queries into application entry fields to read or manipulate backend database contents.</p>
+        </div>
+      </article>
+
+      <article class="term" id="xss">
+        <div class="visual photo">
+          <img src="2.5/Cross-site scripting (XSS).jpg" alt="Cross-site scripting XSS" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Cross-site scripting (XSS)</h3>
+          <p>Injecting malicious client-side scripts into trusted web applications to execute in victim browsers and steal session tokens.</p>
+        </div>
+      </article>
+
+      <article class="term" id="bec">
+        <div class="visual photo">
+          <img src="2.5/Business email compromise (BEC).webp" alt="Business email compromise BEC" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Business email compromise (BEC)</h3>
+          <p>Hijacking or spoofing executive email accounts to trick finance teams or employees into executing unauthorized wire transfers.</p>
+        </div>
+      </article>
+
+      <article class="term" id="supply-chain">
+        <div class="visual photo">
+          <img src="2.5/Supply chain attack.png" alt="Supply chain attack" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Supply chain attack</h3>
+          <p>Compromising a third-party vendor, software dependency, or service provider to breach target organizations downstream.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART C: Vulnerabilities ===== -->
+  <section id="vulnerabilities">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Vulnerabilities</h2>
+        <p>Weaknesses in systems, policies, and device management that attackers exploit.</p>
+      </div>
+
+      <article class="term" id="non-compliant">
+        <div class="visual photo">
+          <img src="2.5/Non-compliant systems.jpg" alt="Non-compliant systems" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Non-compliant systems</h3>
+          <p>Devices or systems that violate organizational security policies, baseline standards, or regulatory frameworks.</p>
+        </div>
+      </article>
+
+      <article class="term" id="unpatched">
+        <div class="visual photo">
+          <img src="2.5/Unpatched systems.jpg" alt="Unpatched systems" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Unpatched systems</h3>
+          <p>Devices running software with known security flaws due to missing vendor updates and security fixes.</p>
+        </div>
+      </article>
+
+      <article class="term" id="unprotected">
+        <div class="visual photo">
+          <img src="2.5/Unprotected systems.webp" alt="Unprotected systems" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Unprotected systems</h3>
+          <p>Systems lacking basic baseline security controls, such as active antivirus software or properly configured local firewalls.</p>
+        </div>
+      </article>
+
+      <article class="term" id="eol">
+        <div class="visual photo">
+          <img src="2.5/End-of-life (EOL).jfif" alt="End-of-life EOL" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>End-of-life (EOL)</h3>
+          <p>Hardware or software no longer supported or patched by vendors, leaving newly discovered vulnerabilities permanently unaddressed.</p>
+        </div>
+      </article>
+
+      <article class="term" id="byod">
+        <div class="visual photo">
+          <img src="2.5/Bring Your Own Device (BYOD).png" alt="Bring Your Own Device BYOD" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Bring Your Own Device (BYOD)</h3>
+          <p>Unmanaged personal employee devices connected to enterprise resources without strict organizational security enforcement.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Images in the <code>2.5</code> folder. Study notes for Core 2 objective 2.5 — Social Engineering Attacks, Threats, and Vulnerabilities.
+  </div>
+</footer>
+
+  <script src="study-lightbox.js"></script>
+</body>
+</html>

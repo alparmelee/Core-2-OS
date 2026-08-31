@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e5e5ea"/>
+      <stop offset="100%" stop-color="#8e8e93"/>
+    </linearGradient>
+    <clipPath id="sq"><rect width="128" height="128" rx="28"/></clipPath>
+  </defs>
+  <g clip-path="url(#sq)">
+    <rect width="128" height="128" fill="url(#bg)"/>
+    <ellipse cx="64" cy="64" rx="40" ry="40" fill="#f2f2f7" stroke="#636366" stroke-width="3"/>
+    <ellipse cx="64" cy="64" rx="14" ry="14" fill="#636366"/>
+    <circle cx="64" cy="64" r="5" fill="#f2f2f7"/>
+    <text x="64" y="108" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="14" font-weight="700" fill="#3a3a3c">DMG</text>
+  </g>
+</svg>

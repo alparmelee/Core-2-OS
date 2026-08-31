@@ -1,0 +1,247 @@
+One of the reasons we use centralized application
+stores for downloading our applications
+is that we can trust the software that's
+installed on that store.
+If we install an application from a third-party website,
+it's possible that app could contain malware.
+And once malware gets on your mobile device,
+it does have access to quite a bit of data.
+That's why a good best practice is to not install APK files
+onto your Android device.
+These are Android package kits that contain the app itself.
+And if you're installing from any source,
+it's very possible that that source
+might have malicious software.
+In Apple's ecosystem, this process
+is a bit more straightforward because the only way
+to install applications is through the curated Apple App
+Store.
+If you're an Android, a good safe location
+would be the Google Play or a trusted App Store
+instead of simply downloading any file from any website.
+Installing these apps from anywhere but the larger App Store
+is referred to as side loading.
+And it's the side loading process that can create problems
+for us from a security perspective because we
+don't have as much control over where those applications are
+coming from.
+One of the challenges with these mobile phones
+is that a lot of the operating system is hidden from view.
+There is a little bit of information you can turn on,
+though, using developer mode.
+This turns on capabilities that allow for you to debug using
+the USB connection.
+You can view additional memory statistics.
+And there's a lot more details and logs
+that you can gather when you're running in developer mode.
+If you have an Apple iPhone or an iPad,
+then you'll need to use the developer mode built into Xcode.
+Xcode is the developer environment that's available on Mac OS.
+So if you want to get additional log information or more details
+about how that device is performing, you will need a Mac OS
+device that is connected to your iPhone or your iPad.
+If you're on an Android device, you
+can configure developer mode on the Android device itself.
+You go to the Settings and About Phone option.
+And from there, you tap the build number seven times.
+That is your secret access into this developer mode.
+And you can configure and manage the developer mode
+from that same About Phone screen.
+As we've seen, these mobile devices
+are very good at restricting our access
+to the underlying operating system.
+But some enterprising researchers
+have found ways to gain more access to the OS
+of these mobile devices.
+If you're running on an Android, we often
+refer to this as rooting.
+And on an Apple iOS or iPad OS device,
+we refer to this as jailbreaking, although these terms
+tend to be used interchangeably.
+Whether you are rooting or jailbreaking,
+you are effectively modifying the firmware of that device.
+You're overriding the core operating system
+with a completely different operating system.
+And that's what's giving you access to the underlying OS.
+A device that has this level of root access effectively
+gives you complete control of that mobile device.
+So if you wanted to sideload your own apps,
+you can do that on a device that has been rooted or jailbroken.
+And if you have this device connected to an MDM,
+it no longer has that MDM capability.
+It is now an independent device.
+Sometimes downloading an application
+from a trusted app store isn't enough
+to keep your system safe.
+There could be situations where you might download an app
+that looks normal, but when you download it,
+it turns out to be an illegitimate application.
+A good example of this is the process that Google went through
+in 2021 where they removed 150 apps from their app store.
+And these were apps that did a lot of different things.
+Some of them were photo editing apps, some were games,
+some were QR code scanners.
+One app called Ultima SMS tried to subscribe users
+to a $40 a month SMS service without the user knowing
+that that was occurring.
+Some attackers have even tried infecting the development environment
+used to create the applications.
+For example, there was a malicious version of Xcode
+being used called Xcode Ghost, which effectively
+was malware that would infect its own code
+into the applications built on Xcode.
+A good best practice is to always check the source
+of where that download is coming from
+and to be very familiar with the application
+that you're installing on your mobile device.
+Many of our mobile devices provide us with a way
+to see how much data we're transferring
+over our wireless networks.
+And you can determine what applications may be performing
+more traffic transfers versus lower traffic transfers.
+If you happen to see one app that's suddenly using a lot
+of network usage, it may be related to a malware infection.
+There may be command and control information,
+or perhaps the malware is proxying your communication
+so that it can see into your encrypted packets.
+Some of these reports that you'll see in your mobile device
+are very detailed, and you can break down
+how much traffic is being transferred
+from different network connections and be able to break this
+down on an app-by-app basis.
+There are also a number of third-party reporting apps
+that can break down this for you in a different form
+to show additional graphs and metrics.
+And if you're not sure if malware is your issue,
+it's always a good idea to run a third-party malware scan
+to see if it identifies anything that might not be normal
+on your mobile device.
+When your mobile phone starts running poorly,
+you can really tell.
+It's not responsive to pushing on the screen.
+Some of the applications perform slowly,
+and you can see the animations begin to chop and slow down.
+Very often, restarting the device will get the device back up
+and running with very good response time.
+And often, you'll see there is an operating system update
+or an update for the application that might fix the code
+that's causing the rest of this to slow down.
+You also have the ability to close different apps
+that are running on your mobile device,
+so you might be able to close things you're not currently using
+and free up those resources for other apps.
+And if this is constantly occurring,
+and you don't think it's a hardware problem,
+you might want to perform a factory reset.
+This will delete all of the software on your device.
+You're back at an original starting point,
+and then you can restore the applications and data from there.
+If you're on a different network,
+or you want to control how much information is being
+transferred from your mobile device,
+you might want to set an alarm or alert that tells you
+when you're reaching a certain threshold.
+If you're on Android, this is a feature that is built in.
+It's a data warning and limit.
+And you can turn on this data warning
+to inform you when you hit a certain data limit over time.
+This is not a feature that is available natively in iOS,
+but there are capabilities in iOS
+to prevent you from transferring large information
+over a much slower cellular data connection.
+This data limit feature in Android
+allows you to receive a message telling you
+when you're reaching that upper threshold.
+So if you are on a limited data plan,
+you'll be able to react accordingly
+when you start to hit that threshold.
+This could also inform you of unusual traffic patterns,
+especially if a lot of information is being transferred.
+So if you have been infected with malware,
+this data usage limit may be the first notification you have
+that something unusual is going on.
+At that point, you might want to run a malware scan,
+or check into the applications that you're
+using to see if you can limit how much data they happen
+to be transferring.
+If the device you're using is not able to connect to the network
+at all and not able to download anything from the internet,
+this might be something that is malicious,
+or it may just be a misconfiguration inside the mobile device.
+If it's malware, it may be restricting your access
+to those network resources so that you don't download
+any anti-malware software.
+If you think the issue is related to your Wi-Fi connection,
+you could disable and then re-enable,
+or you could try turning off all of the radios using airplane mode.
+It could be that restarting the device will resolve the problem.
+That clears out everything that might be in memory
+and starts your network connection over from a clean slate.
+And of course, if we're concerned about security,
+we might want to run that malware scan
+to see if something might have gotten onto your system.
+If you're on an iOS device, you can go to the transfer
+or reset iPhone section, and you can try resetting
+the network settings and then reconfiguring them
+to see if that solves your network connectivity issue.
+We get a lot of ads when we're surfing around the internet,
+but you may find that your phone is showing you a few more ads
+than you might normally get.
+This could be due to a malware infection
+that is simply showing you ads that are making money
+for the malware author.
+Trying to remove ads from these mobile devices
+has been an ongoing challenge.
+For example, in 2019, an app called Ads Blocker for Android
+promised to remove all of those ads from your system.
+In reality, this showed more ads on your mobile device.
+But if you went into the list of available apps to uninstall it,
+you'll find that it wasn't even listed on your system.
+This was part of a strain of malware known as Fake Ads Block,
+and its goal was to show more ads on the screen
+and make more money for the malware developer.
+Ultimately, running an anti-malware scan can give you
+more feedback on whether this application is one that is legitimate
+or if it happened to be malicious.
+Malware authors know that the easiest way to get their malware on your phone
+is to have you install the malware yourself.
+Sometimes they do this when we're surfing the internet
+and they find a way to present you with a screen telling you
+that you're infected with malware,
+but all you have to do is click this button to install a security update.
+In reality, of course, you're clicking this button and you're installing malware.
+The challenge, of course, is that many of these alerts and warnings look very legitimate,
+and someone who's not familiar with this process might easily click that button
+to install the security update and immediately they're now infected.
+Once this malware gets on your system, it can start asking you for additional access to your email,
+to any files that you may have stored, or anything else that's on your mobile device.
+These warning messages themselves are relatively benign.
+You can simply close the window and there's no harm done to your mobile device.
+But if you did happen to click the install security update button,
+you're going to have to either delete everything on that device and start from scratch
+or find a way to remove that malware from your system.
+In many cases, the folks that are developing the applications for your mobile device
+are different from the people that are manufacturing your mobile device.
+And for that reason, there could be inconsistencies on how these applications perform
+between one device and another.
+Many of us have experienced an app that is working normally and then suddenly closes with no warning,
+or it starts having very long delays when you're trying to use the app on your mobile phone.
+Or it could be that there are features in the app that you're trying to use,
+and those features aren't working for one reason or another.
+And it could be that when the app is running, that it's drawing a lot of power
+and using up all of your battery.
+In all of these cases, the problem is probably related to the app itself.
+So you'll want to contact the developer of the application and download the latest version of the app
+to see if these bugs have been fixed in the latest version.
+Many of us have seen instances where private information has been leaked onto the internet for everyone to see.
+Sometimes this is due to a data breach on your mobile device.
+You may want to run an app scan or an anti-malware scan to see if something unexpected is running on your mobile phone.
+And if you think your device has been infected or has been breached in any way,
+you might want to perform a factory reset and perform a clean install of your operating system.
+This will certainly remove any malware that was there previously and leave you with a system that is a fresh install.
+And it may be that all of this data that somebody has gathered is not directly from your phone,
+but is from the cloud-based resources that you use to store this data.
+So if your data has been breached on the internet, make sure you check your iCloud or Apple Configurator logins,
+your Google Workspace logins, and change any passwords you may have associated with your Microsoft OneDrive.
+You might also want to consider adding some multi-factor authentication to any place where you're storing information in the cloud.
+What is your website?

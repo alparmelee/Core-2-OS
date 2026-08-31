@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>1.6 Configure Microsoft Windows Settings</title>
+<style>
+  :root{
+    --accent:#0067c0;
+    --accent-light:#3a96dd;
+    --taskbar-bg: rgba(32,32,32,0.78);
+    --win-bg:#f3f3f3;
+    --panel-border:#d9d9d9;
+    --mono: "Cascadia Mono","Consolas",monospace;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; margin:0; font-family:"Segoe UI",Arial,sans-serif; overflow:hidden; }
+  body{ background:#202020; }
+
+  .layout{ display:flex; height:100%; gap:14px; padding:14px; }
+  .screen-frame{ width:min(78%,1180px); height:100%; border-radius:10px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.5); flex-shrink:0; }
+  .win-root{ position:relative; width:100%; height:100%; overflow:hidden; user-select:none; background:#000; }
+
+  .desktop{
+    position:absolute; inset:0;
+    background:
+      radial-gradient(1200px 700px at 15% 15%, #1b3a63 0%, transparent 55%),
+      radial-gradient(1000px 800px at 85% 25%, #2e5f8a 0%, transparent 60%),
+      radial-gradient(1400px 900px at 50% 100%, #0b2647 0%, transparent 60%),
+      linear-gradient(160deg,#0a3d62 0%, #1e5f8f 40%, #5aa9c9 75%, #bfe3f0 100%);
+  }
+  .desktop-icons{ position:absolute; top:14px; left:14px; display:flex; flex-direction:column; gap:2px; }
+  .di{ width:84px; padding:8px 4px; border-radius:4px; display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; }
+  .di:hover{ background:rgba(255,255,255,0.12); }
+  .di.selected{ background:rgba(255,255,255,0.22); }
+  .di .di-label{ color:#fff; font-size:11.5px; text-align:center; text-shadow:0 1px 3px rgba(0,0,0,0.85); line-height:1.25; }
+
+  .app-icon{ width:40px; height:40px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; box-shadow:0 2px 5px rgba(0,0,0,0.35); }
+  .app-icon.sm{ width:22px; height:22px; border-radius:6px; font-size:12px; }
+  .app-icon.lg{ width:52px; height:52px; border-radius:12px; font-size:26px; }
+  .ic-0{ background:linear-gradient(135deg,#3a96dd,#0067c0); }
+  .ic-1{ background:linear-gradient(135deg,#8e6bd1,#5b3fa0); }
+  .ic-2{ background:linear-gradient(135deg,#e0954f,#c9701f); }
+  .ic-3{ background:linear-gradient(135deg,#4fbf8e,#1f8f5f); }
+  .ic-4{ background:linear-gradient(135deg,#e0637a,#b6304a); }
+  .ic-5{ background:linear-gradient(135deg,#5fb0c9,#2c7f97); }
+  .ic-6{ background:linear-gradient(135deg,#c9b23a,#9e8814); }
+  .ic-7{ background:linear-gradient(135deg,#7f8ea3,#4d5a6c); }
+
+  #windowLayer{ position:absolute; inset:0; pointer-events:none; }
+  .win-window{
+    position:absolute; pointer-events:auto;
+    background:var(--win-bg); border-radius:8px; overflow:hidden;
+    display:flex; flex-direction:column;
+    box-shadow:0 20px 50px rgba(0,0,0,0.5);
+    border:1px solid rgba(0,0,0,0.15);
+    resize:both; min-width:520px; min-height:360px;
+  }
+  .win-window.maximized{ border-radius:0; }
+  .win-titlebar{
+    height:36px; background:#e9e9e9; display:flex; align-items:center; padding:0 6px 0 10px; cursor:move; flex-shrink:0;
+    border-bottom:1px solid #d6d6d6; gap:8px;
+  }
+  .win-titlebar .app-icon{ width:16px; height:16px; border-radius:4px; font-size:10px; }
+  .win-title{ font-size:12.5px; color:#222; flex:1; }
+  .win-controls{ display:flex; height:100%; margin-right:-6px; }
+  .win-controls button{ width:42px; height:36px; border:none; background:transparent; cursor:pointer; font-size:12px; color:#333; display:flex; align-items:center; justify-content:center; }
+  .win-controls button:hover{ background:#dcdcdc; }
+  .win-controls button.wc-close:hover{ background:#e81123; color:#fff; }
+  .win-content{ flex:1; overflow:auto; font-size:12.5px; background:#fff; color:#1b1b1b; position:relative; }
+
+  .toolbar{ display:flex; align-items:center; gap:6px; padding:6px 10px; background:#f7f7f7; border-bottom:1px solid #e2e2e2; flex-shrink:0; flex-wrap:wrap; }
+  .toolbar button, .btn{ border:1px solid #c8c8c8; background:#fff; border-radius:4px; padding:5px 11px; font-size:12px; cursor:pointer; color:#1b1b1b; }
+  .toolbar button:hover, .btn:hover{ background:#f0f6fc; border-color:var(--accent-light); }
+  .btn.primary{ background:var(--accent); color:#fff; border-color:var(--accent); }
+  .btn.primary:hover{ background:var(--accent-light); }
+  .btn.danger{ background:#fff; border-color:#d0362b; color:#c0271b; }
+  .btn.danger:hover{ background:#fdecea; }
+  .btn.small{ padding:3px 9px; font-size:11.5px; }
+
+  table.dtable{ width:100%; border-collapse:collapse; font-size:12px; }
+  table.dtable th{ text-align:left; padding:7px 10px; background:#f4f4f5; color:#444; font-weight:600; border-bottom:1px solid #e2e2e2; }
+  table.dtable td{ padding:6px 10px; border-bottom:1px solid #eee; vertical-align:middle; }
+  table.dtable tr:hover td{ background:#f5f9fd; }
+
+  .banner{ display:flex; gap:10px; align-items:flex-start; background:#fff4e5; border:1px solid #f0c986; color:#7a4b00; padding:10px 12px; border-radius:6px; font-size:12px; margin-bottom:14px; }
+  .banner.danger{ background:#fdecea; border-color:#f0a9a2; color:#7a1c14; }
+  .banner.info{ background:#eaf3fc; border-color:#a9cdf0; color:#0a3d70; }
+  .card{ border:1px solid #e2e2e2; border-radius:8px; padding:14px; margin-bottom:12px; background:#fff; }
+  .kv{ display:grid; grid-template-columns:190px 1fr; gap:6px 14px; font-size:12.5px; }
+  .kv div:nth-child(odd){ color:#666; }
+  .field-row{ display:flex; align-items:center; gap:10px; margin-bottom:10px; font-size:12.5px; }
+  .field-row label{ min-width:150px; flex-shrink:0; }
+  .checklist-row{ display:flex; align-items:flex-start; gap:8px; padding:6px 0; border-bottom:1px solid #f0f0f0; font-size:12.5px; }
+  .checklist-row input{ margin-top:2px; }
+  .range-val{ font-weight:600; color:var(--accent); margin-left:8px; }
+
+  .tabset .tabs{ display:flex; background:#eee; border-bottom:1px solid #d8d8d8; overflow-x:auto; margin:0 -18px 16px; padding:0 12px; }
+  .tabset .tabs button{ border:none; background:transparent; padding:9px 16px; font-size:12.5px; cursor:pointer; color:#444; border-bottom:2px solid transparent; white-space:nowrap; }
+  .tabset .tabs button:hover{ background:#e2e2e2; }
+  .tabset .tabs button.active{ color:var(--accent); border-bottom-color:var(--accent); background:#fff; font-weight:600; }
+  .tabset .tabpage{ display:none; }
+  .tabset .tabpage.active{ display:block; }
+
+  .settings-row{ display:flex; align-items:center; justify-content:space-between; padding:11px 0; border-bottom:1px solid #ececec; font-size:12.5px; gap:14px; }
+  .settings-row:last-child{ border-bottom:none; }
+  .toggle{ width:36px; height:20px; border-radius:12px; background:#c6c6c6; position:relative; cursor:pointer; flex-shrink:0; transition:background .15s; }
+  .toggle.on{ background:var(--accent); }
+  .toggle .knob{ position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:#fff; transition:left .15s; }
+  .toggle.on .knob{ left:18px; }
+
+  .swatch{ width:28px; height:28px; border-radius:5px; cursor:pointer; border:2px solid transparent; display:inline-block; }
+  .swatch.selected{ border-color:#222; }
+  .theme-card{ width:130px; border:1px solid #e2e2e2; border-radius:8px; overflow:hidden; cursor:pointer; }
+  .theme-card .theme-thumb{ height:74px; }
+  .theme-card .theme-name{ padding:6px 8px; font-size:11.5px; }
+  .theme-card.selected{ outline:2px solid var(--accent); }
+
+  /* Control Panel */
+  .cp-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:18px 10px; }
+  .cp-icon{ display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; padding:10px 6px; border-radius:6px; text-align:center; }
+  .cp-icon:hover{ background:#eef4fb; }
+  .cp-icon-label{ font-size:12px; color:#222; }
+
+  /* Settings */
+  .settings-nav{ width:230px; flex-shrink:0; background:#fafafa; border-right:1px solid #e2e2e2; overflow-y:auto; padding:10px 0; }
+  .set-nav-item{ display:flex; align-items:center; gap:10px; padding:9px 16px; font-size:12.5px; cursor:pointer; color:#222; }
+  .set-nav-item:hover{ background:#eef4fb; }
+  .set-nav-item.active{ background:#dceafb; font-weight:600; }
+
+  .statusbar{ padding:5px 12px; background:#f2f2f2; border-top:1px solid #e2e2e2; font-size:11px; color:#666; flex-shrink:0; }
+
+  .modal-overlay{ position:absolute; inset:0; background:rgba(0,0,0,0.35); display:flex; align-items:center; justify-content:center; z-index:50; }
+  .modal-box{ width:440px; max-width:90%; background:#fff; border-radius:8px; box-shadow:0 20px 50px rgba(0,0,0,0.4); overflow:hidden; }
+  .modal-head{ padding:12px 16px; border-bottom:1px solid #eee; font-weight:600; font-size:13px; display:flex; justify-content:space-between; align-items:center; }
+  .modal-body{ padding:14px 16px; font-size:12.5px; max-height:360px; overflow-y:auto; }
+  .modal-foot{ padding:10px 16px; border-top:1px solid #eee; display:flex; justify-content:flex-end; gap:8px; }
+
+  .start-menu{
+    position:absolute; bottom:56px; left:50%; transform:translateX(-50%) translateY(10px);
+    width:560px; max-width:92%; height:520px; max-height:75%;
+    background:rgba(243,243,243,0.92); backdrop-filter:blur(20px);
+    border-radius:10px; box-shadow:0 25px 60px rgba(0,0,0,0.5);
+    display:none; flex-direction:column; padding:22px 26px; z-index:9000; opacity:0;
+    transition:opacity .15s, transform .15s;
+  }
+  .start-menu.open{ display:flex; opacity:1; transform:translateX(-50%) translateY(0); }
+  .sm-search{ background:#fff; border:1px solid #ddd; border-radius:6px; padding:9px 12px; font-size:12.5px; margin-bottom:18px; color:#333; }
+  .sm-heading{ font-size:12.5px; font-weight:600; color:#333; margin-bottom:10px; }
+  .sm-grid{ display:grid; grid-template-columns:repeat(6,1fr); gap:6px; overflow-y:auto; }
+  .sm-tile{ display:flex; flex-direction:column; align-items:center; gap:6px; padding:10px 4px; border-radius:6px; cursor:pointer; }
+  .sm-tile:hover{ background:rgba(0,0,0,0.06); }
+  .sm-tile .tile-label{ font-size:10.5px; text-align:center; color:#222; line-height:1.2; }
+  .sm-user{ margin-top:auto; padding-top:14px; border-top:1px solid rgba(0,0,0,0.08); display:flex; align-items:center; gap:10px; font-size:12.5px; color:#222; }
+  .sm-avatar{ width:30px; height:30px; border-radius:50%; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px; }
+
+  .taskbar{ position:absolute; left:0; right:0; bottom:0; height:48px; background:var(--taskbar-bg); backdrop-filter:blur(20px); display:flex; align-items:center; z-index:8000; padding:0 10px; gap:4px; }
+  .tb-start{ width:40px; height:40px; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:18px; cursor:pointer; }
+  .tb-start:hover, .tb-start.open{ background:rgba(255,255,255,0.12); }
+  .tb-search{ height:32px; background:rgba(255,255,255,0.10); border-radius:16px; display:flex; align-items:center; gap:8px; padding:0 14px; color:#e6e6e6; font-size:12px; cursor:text; width:220px; flex-shrink:0; }
+  .tb-search:hover{ background:rgba(255,255,255,0.16); }
+  .tb-apps{ display:flex; align-items:center; gap:2px; margin:0 auto; }
+  .tb-app{ width:40px; height:40px; border-radius:6px; display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; }
+  .tb-app:hover{ background:rgba(255,255,255,0.12); }
+  .tb-app.active{ background:rgba(255,255,255,0.18); }
+  .tb-app .app-icon{ width:22px; height:22px; font-size:12px; border-radius:5px; }
+  .tb-app .ind{ position:absolute; bottom:2px; left:50%; transform:translateX(-50%); width:6px; height:3px; border-radius:2px; background:#fff; }
+  .tb-tray{ display:flex; align-items:center; gap:14px; color:#e6e6e6; font-size:11.5px; padding:0 10px; flex-shrink:0; }
+  .tb-clock{ text-align:right; line-height:1.3; cursor:pointer; padding:4px 8px; border-radius:4px; }
+  .tb-clock:hover{ background:rgba(255,255,255,0.1); }
+
+  .toast-wrap{ position:absolute; bottom:60px; right:16px; z-index:9500; display:flex; flex-direction:column; gap:8px; align-items:flex-end; }
+  .toast{ background:rgba(32,32,32,0.95); color:#fff; padding:10px 16px; border-radius:8px; font-size:12.5px; max-width:300px; box-shadow:0 10px 25px rgba(0,0,0,0.35); animation:toastIn .18s ease; }
+  @keyframes toastIn{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+  .reference{
+    width:420px; max-width:100%; height:100%;
+    background:#181818; border-radius:14px; box-shadow:0 25px 70px rgba(0,0,0,0.5);
+    display:flex; flex-direction:column; overflow:hidden; flex-shrink:0; color:#ddd;
+    font-family:"Segoe UI",Arial,sans-serif;
+  }
+  .ref-titlebar{ background:#242424; padding:10px 14px; font-size:13px; border-bottom:1px solid #333; display:flex; align-items:center; gap:8px; }
+  .ref-titlebar .dot{ width:8px; height:8px; border-radius:50%; background:#0067c0; }
+  .ref-search{ padding:10px 12px; border-bottom:1px solid #2e2e2e; background:#151515; }
+  .ref-search input{ width:100%; box-sizing:border-box; background:#0f0f0f; border:1px solid #333; color:#eee; font-size:12.5px; padding:8px 10px; border-radius:6px; outline:none; }
+  .ref-search input:focus{ border-color:#0067c0; }
+  .ref-list{ flex:1; overflow-y:auto; padding:4px 0 12px; }
+  .ref-item{ padding:10px 14px; border-bottom:1px solid #232323; cursor:pointer; }
+  .ref-item:hover{ background:#212121; }
+  .ref-item .ref-name{ font-size:13px; color:#5ac8fa; font-weight:700; }
+  .ref-item .ref-path{ font-size:10.5px; color:#f4c95d; margin-top:2px; font-family:var(--mono); }
+  .ref-item .ref-desc{ font-size:11.5px; color:#aaa; margin-top:4px; line-height:1.4; }
+  .ref-empty{ padding:24px 14px; color:#777; font-size:12.5px; text-align:center; }
+
+  @media (max-width:1100px){
+    .layout{ flex-direction:column; height:auto; }
+    .screen-frame, .reference{ width:100%; max-width:100%; height:640px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <div class="screen-frame">
+    <div class="win-root" id="winRoot">
+      <div class="desktop"><div class="desktop-icons" id="desktopIcons"></div></div>
+      <div id="windowLayer"></div>
+
+      <div class="start-menu" id="startMenu">
+        <input class="sm-search" id="smSearch" placeholder="Type here to search">
+        <div class="sm-heading">Pinned</div>
+        <div class="sm-grid" id="smGrid"></div>
+        <div class="sm-user"><div class="sm-avatar">A</div> Administrator</div>
+      </div>
+
+      <div class="taskbar" id="taskbar">
+        <div class="tb-start" id="tbStart">⊞</div>
+        <div class="tb-search" id="tbSearchBtn">🔍&nbsp; Type here to search</div>
+        <div class="tb-apps" id="tbApps"></div>
+        <div class="tb-tray"><span>🔊 📶 🔋</span><span class="tb-clock" id="tbClock"></span></div>
+      </div>
+
+      <div class="toast-wrap" id="toastWrap"></div>
+    </div>
+  </div>
+
+  <div class="reference">
+    <div class="ref-titlebar"><span class="dot"></span><span>Control Panel &amp; Settings Index</span></div>
+    <div class="ref-search"><input type="text" id="refSearchInput" placeholder="Filter items..."></div>
+    <div class="ref-list" id="refList"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  function elc(html){ const t=document.createElement('template'); t.innerHTML=html.trim(); return t.content.firstChild; }
+  function icon(glyph, cIdx, size){ return `<span class="app-icon ${size||''} ic-${cIdx}">${glyph}</span>`; }
+  function esc(s){ return String(s).replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+  function table(columns, rows){ return `<table class="dtable"><thead><tr>${columns.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`; }
+  function toggleRow(label, desc, on, extra){
+    return `<div class="settings-row">${extra||''}<div style="flex:1;"><div style="font-weight:500;">${esc(label)}</div>${desc?`<div style="color:#666; font-size:11.5px; margin-top:2px;">${esc(desc)}</div>`:''}</div><div class="toggle ${on?'on':''}"><div class="knob"></div></div></div>`;
+  }
+  function sliderRow(label, min, max, val, unit){
+    return `<div class="field-row"><label>${esc(label)}</label><input type="range" min="${min}" max="${max}" value="${val}" style="flex:1; max-width:220px;"><span class="range-val">${val}${unit||''}</span></div>`;
+  }
+  function h3(t){ return `<h3 style="margin:20px 0 10px; font-size:14px;">${esc(t)}</h3>`; }
+
+  function toast(msg){
+    const wrap = document.getElementById('toastWrap');
+    const t = elc(`<div class="toast">${esc(msg)}</div>`);
+    wrap.appendChild(t);
+    setTimeout(()=>{ t.style.opacity='0'; t.style.transition='opacity .3s'; setTimeout(()=>t.remove(),300); }, 3200);
+  }
+
+  /* ============================================================
+     Generic behaviors: toggles, tabsets, toast-buttons, sliders
+  ============================================================ */
+  function mountGenericBehaviors(content, api){
+    content.addEventListener('click', (e)=>{
+      const tg = e.target.closest('.toggle');
+      if(tg){ tg.classList.toggle('on'); }
+      const tabBtn = e.target.closest('.tabset > .tabs button');
+      if(tabBtn){
+        const tabset = tabBtn.closest('.tabset');
+        tabset.querySelectorAll(':scope > .tabs button').forEach(b=>b.classList.remove('active'));
+        tabBtn.classList.add('active');
+        tabset.querySelectorAll(':scope > .tabpage').forEach(p=>p.classList.remove('active'));
+        const page = tabset.querySelector(`:scope > .tabpage[data-page="${tabBtn.dataset.tab}"]`);
+        if(page) page.classList.add('active');
+      }
+      const sw = e.target.closest('.swatch');
+      if(sw && sw.parentElement){ sw.parentElement.querySelectorAll('.swatch').forEach(s=>s.classList.remove('selected')); sw.classList.add('selected'); }
+      const th = e.target.closest('.theme-card');
+      if(th && th.parentElement){ th.parentElement.querySelectorAll('.theme-card').forEach(s=>s.classList.remove('selected')); th.classList.add('selected'); }
+      const toastBtn = e.target.closest('[data-toast]');
+      if(toastBtn && !toastBtn.hasAttribute('data-no-auto-toast')){ api.toast(toastBtn.getAttribute('data-toast')); }
+    });
+    content.addEventListener('input', (e)=>{
+      if(e.target.type==='range'){
+        const out = e.target.parentElement.querySelector('.range-val');
+        if(out) out.textContent = e.target.value + (out.dataset.unit||'');
+      }
+    });
+  }
+
+  /* ============================================================
+     Modal helper
+  ============================================================ */
+  function showModal(content, {title, bodyHTML, buttons}){
+    closeModal();
+    const overlay = elc(`<div class="modal-overlay">
+      <div class="modal-box">
+        <div class="modal-head"><span>${esc(title)}</span><span style="cursor:pointer;" class="modal-x">✕</span></div>
+        <div class="modal-body">${bodyHTML}</div>
+        <div class="modal-foot"></div>
+      </div>
+    </div>`);
+    const foot = overlay.querySelector('.modal-foot');
+    (buttons||[]).forEach(b=>{
+      const btn = elc(`<button class="btn ${b.primary?'primary':''} ${b.danger?'danger':''}">${esc(b.label)}</button>`);
+      btn.addEventListener('click', ()=> b.onClick());
+      foot.appendChild(btn);
+    });
+    overlay.querySelector('.modal-x').addEventListener('click', closeModal);
+    content.appendChild(overlay);
+  }
+  function closeModal(){ document.querySelectorAll('.modal-overlay').forEach(m=>m.remove()); }
+
+  /* ============================================================
+     Fake data
+  ============================================================ */
+  const installedApps = [
+    {name:'Microsoft 365 Apps', size:'3.8 GB'}, {name:'Adobe Acrobat Reader', size:'420 MB'},
+    {name:'Google Chrome', size:'310 MB'}, {name:'Zoom', size:'180 MB'}, {name:'7-Zip', size:'4 MB'},
+    {name:'Spotify', size:'260 MB'},
+  ];
+  const defaultApps = [
+    {type:'Web browser', current:'Microsoft Edge'}, {type:'Email', current:'Mail'},
+    {type:'Music player', current:'Windows Media Player'}, {type:'Video player', current:'Movies & TV'},
+    {type:'Photo viewer', current:'Photos'},
+  ];
+  const startupApps2 = [
+    {name:'OneDrive', publisher:'Microsoft Corporation', status:'Enabled', impact:'Medium'},
+    {name:'Spotify', publisher:'Spotify AB', status:'Enabled', impact:'Low'},
+    {name:'Adobe Creative Cloud', publisher:'Adobe Inc.', status:'Disabled', impact:'High'},
+  ];
+  const wifiNetworks = [
+    {name:'Home-5G', secured:true, connected:true}, {name:'Home-2.4G', secured:true, connected:false},
+    {name:'CoffeeShop-Guest', secured:false, connected:false}, {name:'Neighbor_Wifi', secured:true, connected:false},
+  ];
+  const restorePoints = [
+    {name:'Windows Update', date:'2026-08-20 03:12 AM'}, {name:'Driver install: NVIDIA', date:'2026-08-11 06:40 PM'},
+    {name:'System Checkpoint', date:'2026-08-01 12:00 AM'},
+  ];
+  const printQueue = [ {name:'HP LaserJet Pro MFP', status:'Ready', jobs:0}, {name:'Microsoft Print to PDF', status:'Ready', jobs:0}, {name:'OneNote', status:'Ready', jobs:0} ];
+  const emailAccounts = [ {name:'jsmith@corp.local', type:'Exchange'}, {name:'jsmith@gmail.com', type:'IMAP'} ];
+  const soundDevices = [ {name:'Speakers (Realtek Audio)', kind:'Playback', def:true}, {name:'Headphones (Bluetooth)', kind:'Playback', def:false}, {name:'Microphone Array', kind:'Recording', def:true} ];
+  const localAccounts = [ {name:'Administrator', type:'Administrator'}, {name:'jsmith', type:'Administrator'}, {name:'guest', type:'Standard user'} ];
+  const firewallRules = [
+    {name:'File and Printer Sharing (SMB-In)', dir:'Inbound', profile:'Private', action:'Allow'},
+    {name:'Remote Desktop (TCP-In)', dir:'Inbound', profile:'Domain', action:'Allow'},
+    {name:'Core Networking - DNS (UDP-Out)', dir:'Outbound', profile:'All', action:'Allow'},
+    {name:'Block Legacy Telnet', dir:'Inbound', profile:'All', action:'Block'},
+  ];
+  const deviceCats = {
+    'Display adapters': ['NVIDIA GeForce RTX 4060'], 'Disk drives': ['Samsung SSD 980 PRO 1TB'],
+    'Network adapters': ['Intel(R) Wi-Fi 6 AX201'], 'Human Interface Devices': ['HID Keyboard Device','HID-compliant mouse'],
+  };
+
+  /* ============================================================
+     Control Panel applets
+  ============================================================ */
+  const cpApplets = [
+    { id:'internetoptions', name:'Internet Options', emoji:'🌐', color:0,
+      bodyHTML: ()=>`<div class="tabset"><div class="tabs">
+        <button class="active" data-tab="general">General</button>
+        <button data-tab="security">Security</button>
+        <button data-tab="privacy">Privacy</button>
+        <button data-tab="content">Content</button>
+        <button data-tab="connections">Connections</button>
+      </div>
+      <div class="tabpage active" data-page="general">
+        <div class="field-row"><label>Home page</label><input type="text" value="https://www.msn.com" style="flex:1;"></div>
+        <div class="card"><b>Browsing history</b><p style="color:#666; font-size:12px;">Delete temporary internet files, history, cookies, and saved passwords.</p>
+          <button class="btn small" data-toast="Temporary internet files, cookies, and browsing history were deleted.">Delete browsing history…</button></div>
+      </div>
+      <div class="tabpage" data-page="security">
+        <p style="color:#666;">Select a zone to view or change security settings.</p>
+        <div style="display:flex; gap:10px; margin-bottom:14px;">${['Internet','Local intranet','Trusted sites','Restricted sites'].map(z=>`<div class="card" style="flex:1; text-align:center; margin-bottom:0;">🌍<br>${z}</div>`).join('')}</div>
+        ${sliderRow('Security level for this zone', 0, 3, 2)}
+      </div>
+      <div class="tabpage" data-page="privacy">
+        ${sliderRow('Cookie handling strictness', 0, 4, 2)}
+        <label class="field-row"><input type="checkbox" checked> Turn on Pop-up Blocker</label>
+      </div>
+      <div class="tabpage" data-page="content">
+        <div class="card"><b>Certificates</b><p style="color:#666; font-size:12px;">Use certificates for encrypted connections and identification.</p>
+          <button class="btn small" data-toast="Opening the certificate store…">Certificates…</button></div>
+      </div>
+      <div class="tabpage" data-page="connections">
+        <div class="card"><b>Proxy settings</b>
+          <label class="field-row" style="margin-top:8px;"><input type="checkbox"> Use a proxy server for this connection</label>
+          <div class="field-row"><label>Address</label><input type="text" placeholder="proxy.corp.local" style="flex:1;"></div>
+          <div class="field-row"><label>Port</label><input type="text" placeholder="8080" style="width:100px;"></div>
+        </div>
+      </div></div>` },
+
+    { id:'devicesprinters', name:'Devices and Printers', emoji:'🖨️', color:1,
+      bodyHTML: ()=>`<div class="toolbar" style="margin:0 -18px 16px; padding-left:18px;"><button class="btn small" data-toast="Searching for nearby devices…">Add a device</button><button class="btn small" data-toast="Opening printer properties…">Print server properties</button></div>
+      ${h3('Printers')}
+      ${table(['Printer','Status','Jobs',''], printQueue.map(p=>`<tr><td>🖨️ ${esc(p.name)}</td><td>${p.status}</td><td>${p.jobs}</td><td><button class="btn small pr-default" data-name="${esc(p.name)}">Set as default</button></td></tr>`))}
+      ${h3('Devices')}
+      <div style="display:flex; gap:18px;">
+        <div class="card" style="text-align:center; width:120px;">🖱️<br>USB Mouse</div>
+        <div class="card" style="text-align:center; width:120px;">⌨️<br>Keyboard</div>
+        <div class="card" style="text-align:center; width:120px;">📷<br>Webcam</div>
+      </div>`,
+      extraInit:(panel, api)=>{
+        panel.querySelectorAll('.pr-default').forEach(btn=> btn.addEventListener('click', ()=> api.toast(btn.dataset.name + ' set as the default printer.')));
+      } },
+
+    { id:'programsfeatures', name:'Programs and Features', emoji:'📦', color:2,
+      bodyHTML: ()=>`<div class="banner info">Uninstalling a program removes it from this PC. Some data may remain unless you also remove associated files.</div>
+      ${table(['Name','Size',''], installedApps.map((a,i)=>`<tr data-i="${i}"><td>${esc(a.name)}</td><td>${a.size}</td><td><button class="btn small danger pf-uninstall">Uninstall</button></td></tr>`))}
+      <div style="margin-top:16px; display:flex; gap:8px;">
+        <button class="btn small" data-toast="Opening installed Windows updates…">View installed updates</button>
+        <button class="btn small" id="pf-features">Turn Windows features on or off</button>
+      </div>`,
+      extraInit:(panel, api)=>{
+        panel.querySelectorAll('.pf-uninstall').forEach(btn=> btn.addEventListener('click', ()=>{
+          const row = btn.closest('tr'); const name = row.children[0].textContent;
+          row.remove(); api.toast(`${name} was uninstalled.`);
+        }));
+        panel.querySelector('#pf-features').addEventListener('click', ()=>{
+          showModal(panel, { title:'Windows Features',
+            bodyHTML: ['.NET Framework 3.5','Hyper-V','Windows Subsystem for Linux','Internet Information Services','Telnet Client','Media Features'].map((f,i)=>
+              `<label class="checklist-row"><input type="checkbox" ${i<2?'checked':''}> ${f}</label>`).join(''),
+            buttons:[{label:'Cancel', onClick:closeModal},{label:'OK', primary:true, onClick:()=>{ closeModal(); api.toast('Applying feature changes… this may require a restart.'); }}] });
+        });
+      } },
+
+    { id:'networksharing', name:'Network and Sharing Center', emoji:'🌐', color:3,
+      bodyHTML: ()=>`<div class="card"><b>Active network</b><div class="kv" style="margin-top:8px;"><div>Network</div><div>Home-5G (Private network)</div><div>Access type</div><div>Internet</div><div>Connections</div><div>Wi-Fi (Intel Wi-Fi 6 AX201)</div></div></div>
+      ${h3('Change your network settings')}
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <button class="btn" id="ns-adapters">Change adapter settings</button>
+        <button class="btn" data-toast="Opening advanced sharing settings for this profile.">Change advanced sharing settings</button>
+        <button class="btn" data-toast="Network troubleshooter started — checking adapters and connectivity…">Troubleshoot problems</button>
+      </div>
+      <div id="ns-adapter-list" style="margin-top:16px;"></div>`,
+      extraInit:(panel, api)=>{
+        panel.querySelector('#ns-adapters').addEventListener('click', ()=>{
+          panel.querySelector('#ns-adapter-list').innerHTML = h3('Network Adapters') + table(['Adapter','Status','IPv4 Address',''], [
+            `<tr><td>Wi-Fi</td><td>🟢 Connected</td><td>192.168.1.42</td><td><button class="btn small" data-toast="Opening IPv4/DNS properties for Wi-Fi…">Properties</button></td></tr>`,
+            `<tr><td>Ethernet</td><td>⚪ Not connected</td><td>—</td><td><button class="btn small" data-toast="Opening IPv4/DNS properties for Ethernet…">Properties</button></td></tr>`,
+          ]);
+        });
+      } },
+
+    { id:'systemcp', name:'System', emoji:'💻', color:4,
+      bodyHTML: ()=>`<div class="kv">
+        <div>Windows edition</div><div>Windows 11 Pro, version 23H2</div>
+        <div>Processor</div><div>Intel(R) Core(TM) i7-13700 @ 2.10GHz</div>
+        <div>Installed memory (RAM)</div><div>32.0 GB</div>
+        <div>System type</div><div>64-bit operating system, x64-based processor</div>
+        <div>Computer name</div><div id="sc-name">DESKTOP-7QX2K1</div>
+        <div>Domain/Workgroup</div><div id="sc-domain">WORKGROUP</div>
+      </div>
+      <div style="margin-top:14px;"><button class="btn small" id="sc-rename">Change settings</button></div>
+      ${h3('System Protection')}
+      ${table(['Restore point','Date'], restorePoints.map(r=>`<tr><td>${esc(r.name)}</td><td>${r.date}</td></tr>`))}
+      <div style="margin-top:10px; display:flex; gap:8px;">
+        <button class="btn small" data-toast="Restore point created.">Create…</button>
+        <button class="btn small" data-toast="System Restore would roll back system files and settings to the selected point.">System Restore…</button>
+      </div>`,
+      extraInit:(panel, api)=>{
+        panel.querySelector('#sc-rename').addEventListener('click', ()=>{
+          showModal(panel, { title:'Computer Name/Domain Changes',
+            bodyHTML:`<div class="field-row"><label>Computer name</label><input type="text" id="sc-name-input" value="DESKTOP-7QX2K1" style="flex:1;"></div>
+              <label class="field-row"><input type="radio" name="scdom" checked> Workgroup</label>
+              <label class="field-row"><input type="radio" name="scdom"> Domain</label>
+              <div class="field-row"><label>Name</label><input type="text" id="sc-domain-input" value="WORKGROUP" style="flex:1;"></div>`,
+            buttons:[{label:'Cancel', onClick:closeModal},{label:'OK', primary:true, onClick:()=>{
+              panel.querySelector('#sc-name').textContent = panel.querySelector('#sc-name-input').value;
+              panel.querySelector('#sc-domain').textContent = panel.querySelector('#sc-domain-input').value;
+              closeModal(); api.toast('A restart is required to apply these changes.');
+            }}] });
+        });
+      } },
+
+    { id:'firewall', name:'Windows Defender Firewall', emoji:'🛡️', color:5,
+      bodyHTML: ()=>`${h3('Firewall state by network profile')}
+      ${toggleRow('Domain network firewall', 'Applies when connected to a domain network', true)}
+      ${toggleRow('Private network firewall', 'Applies on home or work networks', true)}
+      ${toggleRow('Public network firewall', 'Applies on public, untrusted networks', true)}
+      <div class="tabset" style="margin-top:18px;"><div class="tabs">
+        <button class="active" data-tab="inbound">Inbound Rules</button>
+        <button data-tab="outbound">Outbound Rules</button>
+        <button data-tab="apps">Allowed Apps</button>
+      </div>
+      <div class="tabpage active" data-page="inbound">${table(['Rule','Profile','Action'], firewallRules.filter(r=>r.dir==='Inbound').map(r=>`<tr><td>${esc(r.name)}</td><td>${r.profile}</td><td>${r.action==='Allow'?'✅ Allow':'⛔ Block'}</td></tr>`))}</div>
+      <div class="tabpage" data-page="outbound">${table(['Rule','Profile','Action'], firewallRules.filter(r=>r.dir==='Outbound').map(r=>`<tr><td>${esc(r.name)}</td><td>${r.profile}</td><td>${r.action==='Allow'?'✅ Allow':'⛔ Block'}</td></tr>`))}</div>
+      <div class="tabpage" data-page="apps">
+        ${['Microsoft Edge','Slack','Steam','Remote Desktop'].map(a=>toggleRow(a,'',a!=='Steam')).join('')}
+        <div style="margin-top:10px; display:flex; gap:8px;">
+          <button class="btn small" data-toast="Change settings unlocked — allowed apps list is now editable.">Change settings</button>
+          <button class="btn small" data-toast="Logging options: dropped packets and successful connections can be logged to pfirewall.log.">Logging options…</button>
+        </div>
+      </div></div>` },
+
+    { id:'mail', name:'Mail', emoji:'📧', color:6,
+      bodyHTML: ()=>`<div class="tabset"><div class="tabs"><button class="active" data-tab="accounts">E-mail Accounts</button><button data-tab="datafiles">Data Files</button><button data-tab="profiles">Profiles</button></div>
+      <div class="tabpage active" data-page="accounts">
+        ${table(['Account','Type',''], emailAccounts.map(a=>`<tr><td>${esc(a.name)}</td><td>${a.type}</td><td><button class="btn small" data-toast="Opening properties for ${esc(a.name)}…">Properties</button></td></tr>`))}
+        <div style="margin-top:10px; display:flex; gap:8px;"><button class="btn small" data-toast="Add Account wizard started — choose Exchange, IMAP, or POP3.">New…</button><button class="btn small danger" data-toast="Account removed. Associated data files remain unless deleted separately.">Remove</button></div>
+      </div>
+      <div class="tabpage" data-page="datafiles">${table(['Data file','Type','Size'], [`<tr><td>jsmith@corp.local.ost</td><td>Exchange OST</td><td>4.2 GB</td></tr>`,`<tr><td>jsmith@gmail.com.pst</td><td>Outlook PST</td><td>1.1 GB</td></tr>`])}</div>
+      <div class="tabpage" data-page="profiles"><p style="color:#666;">Outlook uses profiles to store settings for email accounts, data files, and address books.</p>${table(['Profile'], [`<tr><td>Outlook (default)</td></tr>`])}</div>
+      </div>` },
+
+    { id:'sound', name:'Sound', emoji:'🔊', color:7,
+      bodyHTML: ()=>`<div class="tabset"><div class="tabs"><button class="active" data-tab="playback">Playback</button><button data-tab="recording">Recording</button><button data-tab="comm">Communications</button></div>
+      <div class="tabpage active" data-page="playback">
+        ${table(['Device','Default',''], soundDevices.filter(d=>d.kind==='Playback').map(d=>`<tr><td>🔊 ${esc(d.name)}</td><td>${d.def?'✅ Default device':''}</td><td><button class="btn small snd-default" data-name="${esc(d.name)}">Set Default</button></td></tr>`))}
+        ${sliderRow('Master volume', 0, 100, 68, '%')}
+      </div>
+      <div class="tabpage" data-page="recording">${table(['Device','Default'], soundDevices.filter(d=>d.kind==='Recording').map(d=>`<tr><td>🎙️ ${esc(d.name)}</td><td>${d.def?'✅ Default device':''}</td></tr>`))}</div>
+      <div class="tabpage" data-page="comm">
+        <label class="field-row"><input type="radio" name="commmute" checked> Do nothing</label>
+        <label class="field-row"><input type="radio" name="commmute"> Reduce the volume of other sounds by 80%</label>
+        <label class="field-row"><input type="radio" name="commmute"> Mute all other sounds</label>
+      </div></div>`,
+      extraInit:(panel, api)=>{ panel.querySelectorAll('.snd-default').forEach(btn=> btn.addEventListener('click', ()=> api.toast(btn.dataset.name + ' set as the default device.'))); } },
+
+    { id:'useraccounts', name:'User Accounts', emoji:'👤', color:0,
+      bodyHTML: ()=>`${table(['Account','Type'], localAccounts.map(a=>`<tr><td>${esc(a.name)}</td><td>${a.type}</td></tr>`))}
+      <div style="margin-top:10px;"><button class="btn small" data-toast="Opening Manage Accounts to add or change other user accounts.">Manage another account</button></div>
+      ${h3('User Account Control')}
+      ${sliderRow('Notify me when apps try to make changes', 0, 4, 2)}
+      <p style="color:#666; font-size:12px; margin-top:6px;">Default — notify only when apps try to make changes to your computer.</p>
+      <div style="margin-top:10px;"><button class="btn small" data-toast="Opening Windows Credential Manager: Web Credentials and Windows Credentials.">Manage your credentials</button></div>` },
+
+    { id:'devicemanager', name:'Device Manager', emoji:'🖧', color:1,
+      bodyHTML: ()=>`<div class="banner info">Device drivers are hardware- and OS-specific. An older driver may not work correctly on a newer version of Windows.</div>
+      ${Object.keys(deviceCats).map(cat=>`${h3(cat)}${table(['Device','Status',''], deviceCats[cat].map(d=>`<tr><td>🔌 ${esc(d)}</td><td>✅ Working properly</td><td>
+        <button class="btn small dv-update" data-name="${esc(d)}">Update driver</button>
+        <button class="btn small" data-toast="Rolling back ${esc(d)} to its previous driver…">Roll back</button>
+        <button class="btn small danger" data-toast="${esc(d)} disabled. It will not be usable until re-enabled.">Disable</button></td></tr>`))}`).join('')}`,
+      extraInit:(panel, api)=>{ panel.querySelectorAll('.dv-update').forEach(btn=> btn.addEventListener('click', ()=> api.toast('Searching for updated drivers for ' + btn.dataset.name + '… best driver already installed.'))); } },
+
+    { id:'indexing', name:'Indexing Options', emoji:'🔎', color:2,
+      bodyHTML: ()=>`<p style="color:#666;">${'12,480'} items indexed.</p>
+      ${h3('Included Locations')}
+      ${table(['Location'], ['C:\\Users\\jsmith','C:\\Users\\jsmith\\Documents','Start Menu'].map(l=>`<tr><td>📁 ${esc(l)}</td></tr>`))}
+      <div style="margin-top:10px; display:flex; gap:8px;">
+        <button class="btn small" id="ix-modify">Modify…</button>
+        <button class="btn small" data-toast="Rebuilding the search index — this can take a while.">Advanced… (Rebuild)</button>
+      </div>`,
+      extraInit:(panel, api)=>{
+        panel.querySelector('#ix-modify').addEventListener('click', ()=>{
+          showModal(panel, { title:'Indexed Locations',
+            bodyHTML: ['C:\\Users\\jsmith','C:\\Users\\jsmith\\Documents','C:\\Users\\jsmith\\Downloads','Start Menu','Control Panel','C:\\ProgramData'].map((l,i)=>`<label class="checklist-row"><input type="checkbox" ${i<3?'checked':''}> ${esc(l)}</label>`).join(''),
+            buttons:[{label:'Cancel', onClick:closeModal},{label:'OK', primary:true, onClick:()=>{ closeModal(); api.toast('Index locations updated. Rebuilding catalog…'); }}] });
+        });
+      } },
+
+    { id:'admintools', name:'Administrative Tools', emoji:'🧰', color:3,
+      bodyHTML: ()=>`<div class="cp-grid">
+        ${[
+          ['Computer Management','🖥️','A single console to manage disks, services, and devices for this computer.'],
+          ['Event Viewer','📋','Browse Application, Security, Setup, and System event logs.'],
+          ['Services','⚙️','Start, stop, and configure background services.'],
+          ['Local Security Policy','🔒','Configure account, audit, and user rights policies for this device.'],
+          ['Task Scheduler','⏰','Automate scripts and applications on a schedule.'],
+        ].map(([name,em,desc])=>`<div class="card" style="width:190px;">${icon(em,4,'')}<div style="font-weight:600; margin-top:8px;">${name}</div><div style="color:#666; font-size:11px; margin:6px 0 10px;">${desc}</div><button class="btn small" data-toast="Opening ${name}…">Open</button></div>`).join('')}
+      </div>` },
+
+    { id:'fileexploreroptions', name:'File Explorer Options', emoji:'📁', color:5,
+      bodyHTML: ()=>`<div class="tabset"><div class="tabs">
+        <button class="active" data-tab="general">General</button>
+        <button data-tab="view">View</button>
+        <button data-tab="search">Search</button>
+      </div>
+      <div class="tabpage active" data-page="general">
+        <div class="field-row"><label>Open File Explorer to</label>
+          <select style="flex:1;"><option>Quick access</option><option>This PC</option></select>
+        </div>
+        ${h3('Privacy')}
+        <label class="field-row"><input type="checkbox" checked> Show recently used files</label>
+        <label class="field-row"><input type="checkbox" checked> Show frequently used folders</label>
+        <button class="btn small" data-toast="File Explorer history cleared.">Clear</button>
+        ${h3('Browse folders')}
+        <label class="field-row"><input type="radio" name="feobrowse" checked> Open each folder in the same window</label>
+        <label class="field-row"><input type="radio" name="feobrowse"> Open each folder in its own window</label>
+      </div>
+      <div class="tabpage" data-page="view">
+        ${h3('Advanced settings')}
+        <label class="field-row" data-anchor="hideext"><input type="checkbox" checked> Hide extensions for known file types</label>
+        <label class="field-row"><input type="checkbox" checked> Hide protected operating system files (Recommended)</label>
+        <div style="margin:8px 0;" data-anchor="viewhidden">
+          <label class="field-row"><input type="radio" name="feohidden"> Don't show hidden files, folders, or drives</label>
+          <label class="field-row"><input type="radio" name="feohidden" checked> Show hidden files, folders, and drives</label>
+        </div>
+        <label class="field-row"><input type="checkbox"> Always show icons, never thumbnails</label>
+        <label class="field-row"><input type="checkbox" checked> Show drive letters</label>
+        <button class="btn small" data-toast="These view settings were applied to every folder of this type.">Apply to Folders</button>
+      </div>
+      <div class="tabpage" data-page="search">
+        <label class="field-row"><input type="checkbox" checked> Include subfolders in search results</label>
+        <label class="field-row"><input type="checkbox"> Don't use the index when searching in file folders</label>
+      </div></div>` },
+
+    { id:'poweroptions', name:'Power Options', emoji:'🔋', color:6,
+      bodyHTML: ()=>`<div class="tabset"><div class="tabs">
+        <button class="active" data-tab="plans">Power Plans</button>
+        <button data-tab="syssettings">System Settings</button>
+        <button data-tab="advanced">Advanced Settings</button>
+        <button data-tab="concepts">Sleep States</button>
+      </div>
+      <div class="tabpage active" data-page="plans">
+        <p style="color:#666;">A power plan is a collection of hardware and system settings that manages how your computer uses power.</p>
+        <label class="field-row"><input type="radio" name="pplan" checked> Balanced (recommended)</label>
+        <label class="field-row"><input type="radio" name="pplan"> Power saver</label>
+        <label class="field-row"><input type="radio" name="pplan"> High performance</label>
+        <div style="margin-top:8px; display:flex; gap:8px;">
+          <button class="btn small" data-toast="Opening plan settings — screen and sleep timeouts.">Change plan settings</button>
+          <button class="btn small" data-toast="Create a Power Plan wizard started.">Create a power plan</button>
+        </div>
+      </div>
+      <div class="tabpage" data-page="syssettings">
+        <div class="field-row"><label>Power button does</label><select><option>Sleep</option><option>Hibernate</option><option>Shut down</option><option>Do nothing</option></select></div>
+        <div class="field-row" data-anchor="lid"><label>Closing the lid does</label><select><option selected>Sleep</option><option>Hibernate</option><option>Shut down</option><option>Do nothing</option></select></div>
+        ${h3('Shutdown settings')}
+        <label class="field-row" data-anchor="faststartup"><input type="checkbox" checked> Turn on fast startup (recommended)</label>
+        <label class="field-row"><input type="checkbox" checked> Sleep</label>
+        <label class="field-row"><input type="checkbox"> Hibernate</label>
+      </div>
+      <div class="tabpage" data-page="advanced">
+        ${h3('Hard disk')}
+        ${sliderRow('Turn off hard disk after (minutes)', 0, 60, 20)}
+        ${h3('USB settings')}
+        <div data-anchor="usbsuspend">${toggleRow('USB selective suspend', 'Suspends power to individual idle USB ports without affecting other devices', true)}</div>
+        ${h3('Sleep')}
+        ${sliderRow('Sleep after (minutes)', 0, 60, 15)}
+      </div>
+      <div class="tabpage" data-page="concepts">
+        <div class="card" data-anchor="sleep"><b>Sleep / Suspend</b><p style="color:#666; font-size:12px;">Keeps RAM powered while placing the CPU and other components into low-power states, so the PC resumes almost instantly.</p></div>
+        <div class="card" data-anchor="standby"><b>Standby</b><p style="color:#666; font-size:12px;">Legacy low-power state that preserves the current session in memory while powering down non-essential hardware.</p></div>
+        <div class="card" data-anchor="hibernate2"><b>Hibernate</b><p style="color:#666; font-size:12px;">Saves active system memory to the hard drive (hiberfil.sys) and powers off the system completely — ideal for preserving battery during long downtime.</p></div>
+      </div></div>` },
+
+    { id:'easeofaccess', name:'Ease of Access', emoji:'♿', color:7,
+      bodyHTML: ()=>`${h3('Display')}
+      ${sliderRow('Scale (text and app size)', 100, 250, 100, '%')}
+      ${toggleRow('High Contrast', 'Increase contrast for text and colors', false)}
+      ${h3('Narrator')}
+      ${toggleRow('Narrator', 'Reads on-screen text and describes events like notifications aloud', false)}
+      ${h3('Magnifier')}
+      ${toggleRow('Magnifier', 'Zooms in on part or all of the screen', false)}
+      ${h3('Interaction')}
+      ${toggleRow('Sticky Keys', 'Press keyboard shortcuts one key at a time instead of simultaneously', false)}
+      ${h3('Mouse pointer')}
+      ${sliderRow('Pointer size', 1, 10, 2)}` },
+  ];
+  const CP_BY_ID = {}; cpApplets.forEach(a=> CP_BY_ID[a.id]=a);
+
+  /* ============================================================
+     Settings categories
+  ============================================================ */
+  const settingsCats = [
+    { id:'system', name:'System', emoji:'🖥️', color:0,
+      bodyHTML: ()=>`${h3('Display')}
+      <div class="field-row"><label>Resolution</label><select><option>2560 x 1440 (Recommended)</option><option>1920 x 1080</option></select></div>
+      ${sliderRow('Scale', 100, 175, 100, '%')}
+      ${sliderRow('Brightness', 0, 100, 80, '%')}
+      ${toggleRow('Night light', 'Reduces blue light in the evening', false)}
+      ${h3('Sound')}
+      <div class="field-row"><label>Output device</label><select><option>Speakers (Realtek Audio)</option><option>Headphones (Bluetooth)</option></select></div>
+      ${sliderRow('Volume', 0, 100, 62, '%')}
+      ${h3('Notifications')}
+      ${toggleRow('Notifications', 'Get notifications from apps and other senders', true)}
+      ${['Mail','Teams','Slack'].map(a=>toggleRow(a,'',a!=='Slack')).join('')}
+      ${h3('Focus assist')}
+      <label class="field-row"><input type="radio" name="focus" checked> Off</label>
+      <label class="field-row"><input type="radio" name="focus"> Priority only</label>
+      <label class="field-row"><input type="radio" name="focus"> Alarms only</label>
+      ${h3('Storage')}
+      ${toggleRow('Storage Sense', 'Automatically free up space by getting rid of temporary files', true)}
+      <div style="display:flex; height:22px; border-radius:5px; overflow:hidden; margin-top:10px;">
+        <div style="width:38%; background:#3a96dd;" title="Apps & features"></div>
+        <div style="width:22%; background:#8e6bd1;" title="System"></div>
+        <div style="width:15%; background:#4fbf8e;" title="Documents"></div>
+        <div style="width:25%; background:#e0954f;" title="Other"></div>
+      </div>
+      <div style="font-size:11px; color:#666; margin-top:6px;">187 GB used of 512 GB — Apps 38%, System 22%, Documents 15%, Other 25%</div>
+      ${h3('Remote Desktop')}
+      ${toggleRow('Remote Desktop', 'Allow remote connections to this PC', false)}` },
+
+    { id:'devices', name:'Devices', emoji:'🖱️', color:1,
+      bodyHTML: ()=>`${h3('Bluetooth & other devices')}
+      ${toggleRow('Bluetooth', '', true)}
+      ${table(['Device','Status'], [
+        `<tr><td>🖱️ MX Master Mouse</td><td>🟢 Connected</td></tr>`,
+        `<tr><td>🎧 WH-1000XM5</td><td>🟢 Connected</td></tr>`,
+        `<tr><td>⌨️ Wireless Keyboard</td><td>⚪ Paired</td></tr>`,
+      ])}
+      <div style="margin-top:8px;"><button class="btn small" data-toast="Scanning for nearby Bluetooth and wireless devices…">Add device</button></div>
+      ${h3('Printers & scanners')}
+      ${table(['Device','Status'], printQueue.map(p=>`<tr><td>🖨️ ${esc(p.name)}</td><td>${p.status}</td></tr>`))}
+      <div style="margin-top:8px;"><button class="btn small" data-toast="Searching for printers and scanners on the network…">Add device</button></div>
+      ${h3('Touchpad')}
+      ${sliderRow('Cursor speed', 1, 10, 6)}
+      ${toggleRow('Tap-to-click', '', true)}
+      ${h3('AutoPlay')}
+      ${toggleRow('Use AutoPlay for all media and devices', '', true)}
+      ${h3('USB')}
+      ${toggleRow('Notify me if there are issues connecting to USB devices', '', true)}` },
+
+    { id:'network', name:'Network & Internet', emoji:'📶', color:2,
+      bodyHTML: ()=>`${h3('Wi-Fi')}
+      ${toggleRow('Wi-Fi', '', true)}
+      ${table(['Network','Security',''], wifiNetworks.map(n=>`<tr><td>${n.connected?'🟢':'📶'} ${esc(n.name)}</td><td>${n.secured?'🔒 Secured':'Open'}</td><td>${n.connected?'Connected':`<button class="btn small nw-connect" data-name="${esc(n.name)}">Connect</button>`}</td></tr>`))}
+      ${h3('Ethernet')}
+      <div class="card">⚪ Not connected — Realtek USB GbE Ethernet Adapter</div>
+      ${h3('VPN')}
+      ${table(['Connection','Status'], [`<tr><td>Corp VPN</td><td>Disconnected</td></tr>`])}
+      <div style="margin-top:8px;"><button class="btn small" id="nw-addvpn">Add a VPN connection</button></div>
+      ${h3('Proxy')}
+      ${toggleRow('Use a proxy server', '', false)}
+      <div class="field-row"><label>Address</label><input type="text" placeholder="proxy.corp.local" style="flex:1;"></div>
+      ${h3('Data usage')}
+      <div style="font-size:11.5px; color:#666;">Wi-Fi — 12.4 GB used in the last 30 days</div>
+      <div style="margin-top:10px;"><button class="btn small danger" id="nw-reset">Network reset</button></div>`,
+      extraInit:(panel, api)=>{
+        panel.querySelectorAll('.nw-connect').forEach(btn=> btn.addEventListener('click', ()=> api.toast('Connected to ' + btn.dataset.name + '.')));
+        panel.querySelector('#nw-addvpn').addEventListener('click', ()=>{
+          showModal(panel, { title:'Add a VPN connection',
+            bodyHTML:`<div class="field-row"><label>VPN provider</label><select style="flex:1;"><option>Windows (built-in)</option></select></div>
+              <div class="field-row"><label>Connection name</label><input type="text" value="Corp VPN 2" style="flex:1;"></div>
+              <div class="field-row"><label>Server address</label><input type="text" placeholder="vpn.corp.local" style="flex:1;"></div>
+              <div class="field-row"><label>Type of sign-in info</label><select style="flex:1;"><option>User name and password</option></select></div>`,
+            buttons:[{label:'Cancel', onClick:closeModal},{label:'Save', primary:true, onClick:()=>{ closeModal(); api.toast('VPN connection added.'); }}] });
+        });
+        panel.querySelector('#nw-reset').addEventListener('click', ()=>{
+          showModal(panel, { title:'Network reset',
+            bodyHTML:`<div class="banner danger">This will remove and reinstall all network adapters, and set other networking components back to their original settings. Your PC will restart.</div>`,
+            buttons:[{label:'Cancel', onClick:closeModal},{label:'Reset now', danger:true, onClick:()=>{ closeModal(); api.toast('Network reset scheduled — this PC will restart shortly.'); }}] });
+        });
+      } },
+
+    { id:'personalization', name:'Personalization', emoji:'🎨', color:3,
+      bodyHTML: ()=>`${h3('Background')}
+      <div class="field-row"><label>Personalize your background</label><select><option>Picture</option><option>Solid color</option><option>Slideshow</option></select></div>
+      ${h3('Colors')}
+      <div style="display:flex; gap:8px; margin-bottom:10px;">${['#0067c0','#8e6bd1','#e0954f','#4fbf8e','#e0637a','#5fb0c9'].map((c,i)=>`<span class="swatch ${i===0?'selected':''}" style="background:${c};"></span>`).join('')}</div>
+      <label class="field-row"><input type="radio" name="mode" checked> Light mode</label>
+      <label class="field-row"><input type="radio" name="mode"> Dark mode</label>
+      ${h3('Lock screen')}
+      <div style="display:flex; gap:8px;">${['#3a6bd6','#7f5bd6','#1e5f8f','#0a3d62'].map((c,i)=>`<span class="swatch ${i===0?'selected':''}" style="background:${c};"></span>`).join('')}</div>
+      ${h3('Themes')}
+      <div style="display:flex; gap:12px;">
+        ${['Windows (light)','Windows (dark)','Glow','Sunrise'].map((t,i)=>`<div class="theme-card ${i===0?'selected':''}"><div class="theme-thumb" style="background:linear-gradient(135deg,#${['3a96dd,0067c0','2b2b2e,1c1c1e','e0954f,c9701f','e0637a,b6304a'][i].replace(',', ',#')});"></div><div class="theme-name">${t}</div></div>`).join('')}
+      </div>
+      ${h3('Start')}
+      ${toggleRow('Show more tiles', '', false)}
+      ${toggleRow('Show recently added apps', '', true)}
+      ${toggleRow('Show recommended files', '', true)}
+      ${h3('Taskbar')}
+      ${toggleRow('Lock the taskbar', '', true)}
+      ${toggleRow('Automatically hide the taskbar', '', false)}
+      <label class="field-row"><input type="radio" name="tbalign" checked> Center</label>
+      <label class="field-row"><input type="radio" name="tbalign"> Left</label>` },
+
+    { id:'apps', name:'Apps', emoji:'📱', color:4,
+      bodyHTML: ()=>`${h3('Installed apps')}
+      ${table(['Name','Size',''], installedApps.map((a,i)=>`<tr data-i="${i}"><td>${esc(a.name)}</td><td>${a.size}</td><td><button class="btn small danger ap-uninstall">Uninstall</button></td></tr>`))}
+      ${h3('Default apps')}
+      ${table(['Type','Current default',''], defaultApps.map((d,i)=>`<tr data-i="${i}"><td>${esc(d.type)}</td><td class="ap-current">${esc(d.current)}</td><td><button class="btn small ap-change" data-i="${i}">Change</button></td></tr>`))}
+      ${h3('Startup')}
+      ${table(['App','Publisher','Status','Impact',''], startupApps2.map((s,i)=>`<tr data-i="${i}"><td>${esc(s.name)}</td><td>${esc(s.publisher)}</td><td class="ap-su-status">${s.status}</td><td>${s.impact}</td><td><button class="btn small ap-su-toggle">${s.status==='Enabled'?'Disable':'Enable'}</button></td></tr>`))}
+      ${h3('Optional features')}
+      <p style="color:#666; font-size:12px;">104 optional features installed.</p>
+      <button class="btn small" data-toast="Opening Optional Features — add or remove language packs, tools, and legacy components.">Manage optional features</button>`,
+      extraInit:(panel, api)=>{
+        panel.querySelectorAll('.ap-uninstall').forEach(btn=> btn.addEventListener('click', ()=>{ const row=btn.closest('tr'); const name=row.children[0].textContent; row.remove(); api.toast(name+' was uninstalled.'); }));
+        panel.querySelectorAll('.ap-change').forEach(btn=> btn.addEventListener('click', ()=>{
+          const i = btn.dataset.i; const d = defaultApps[i];
+          const options = ['Microsoft Edge','Google Chrome','Firefox','Outlook','Mail','Gmail','Spotify','Windows Media Player','VLC'];
+          showModal(panel, { title:'Choose an app for ' + d.type,
+            bodyHTML: options.map(o=>`<div class="checklist-row" style="cursor:pointer;" data-choice="${esc(o)}">${o===d.current?'●':'○'} ${o}</div>`).join(''),
+            buttons:[{label:'Cancel', onClick:closeModal}] });
+          document.querySelectorAll('.modal-overlay [data-choice]').forEach(el=> el.addEventListener('click', ()=>{
+            d.current = el.dataset.choice;
+            panel.querySelectorAll('.ap-current')[i].textContent = d.current;
+            closeModal(); api.toast(d.type + ' default set to ' + d.current + '.');
+          }));
+        }));
+        panel.querySelectorAll('.ap-su-toggle').forEach(btn=> btn.addEventListener('click', ()=>{
+          const row = btn.closest('tr'); const i = row.dataset.i; const rec = startupApps2[i];
+          rec.status = rec.status==='Enabled' ? 'Disabled' : 'Enabled';
+          row.querySelector('.ap-su-status').textContent = rec.status;
+          btn.textContent = rec.status==='Enabled' ? 'Disable' : 'Enable';
+          api.toast(rec.name + ' startup ' + rec.status.toLowerCase() + '.');
+        }));
+      } },
+
+    { id:'accounts', name:'Accounts', emoji:'👤', color:5,
+      bodyHTML: ()=>`<div class="card" style="display:flex; gap:14px; align-items:center;">
+        <div class="sm-avatar" style="width:56px; height:56px; font-size:20px;">A</div>
+        <div><div style="font-weight:600; font-size:14px;">Administrator</div><div style="color:#666; font-size:12px;">Local account</div>
+        <button class="btn small" style="margin-top:6px;" data-toast="Microsoft account sign-in started — you would enter your email and password next.">Sign in with a Microsoft account instead</button></div>
+      </div>
+      ${h3('Work or school access')}
+      <p style="color:#666; font-size:12px;">No organizations connected.</p>
+      <button class="btn small" data-toast="Opening the Connect flow for a work or school account.">Connect</button>
+      ${h3('Windows Hello')}
+      ${table(['Method','Status'], [`<tr><td>PIN</td><td>Not set up — <button class="btn small" data-toast="PIN setup started — you would verify your identity, then choose a PIN.">Set up</button></td></tr>`,`<tr><td>Facial recognition</td><td>No compatible camera found</td></tr>`,`<tr><td>Fingerprint</td><td>No compatible sensor found</td></tr>`])}
+      ${h3('Family & other users')}
+      <p style="color:#666; font-size:12px;">jsmith (Administrator), guest (Standard)</p>
+      <button class="btn small" data-toast="Add someone else to this PC wizard started.">Add someone else to this PC</button>
+      ${h3('Sync your settings')}
+      ${toggleRow('Sync settings', 'Theme, passwords, language preferences, and other settings', true)}` },
+
+    { id:'timelanguage', name:'Time & Language', emoji:'🕒', color:6,
+      bodyHTML: ()=>`${h3('Date & time')}
+      <div class="kv"><div>Current time</div><div id="tl-time">--</div><div>Time zone</div><div><select><option>(UTC-05:00) Eastern Time</option><option>(UTC-08:00) Pacific Time</option><option>(UTC+00:00) UTC</option></select></div></div>
+      ${toggleRow('Set time automatically', '', true)}
+      ${toggleRow('Adjust for daylight saving time automatically', '', true)}
+      <button class="btn small" data-toast="Synchronized with time.windows.com.">Sync now</button>
+      ${h3('Region')}
+      <div class="field-row"><label>Country or region</label><select><option>United States</option><option>United Kingdom</option><option>Canada</option></select></div>
+      <div class="field-row"><label>Regional format</label><select><option>English (United States)</option><option>English (United Kingdom)</option></select></div>
+      ${h3('Language')}
+      ${table(['Language','Status'], [`<tr><td>English (United States)</td><td>Default</td></tr>`])}
+      <button class="btn small" data-toast="Add a language wizard started.">Add a language</button>
+      ${h3('Speech')}
+      <div class="field-row"><label>Voice</label><select><option>Microsoft David</option><option>Microsoft Zira</option></select></div>`,
+      extraInit:(panel)=>{ const t = panel.querySelector('#tl-time'); function tick(){ t.textContent = new Date().toLocaleTimeString(); } tick(); setInterval(tick, 1000); } },
+
+    { id:'gaming', name:'Gaming', emoji:'🎮', color:7,
+      bodyHTML: ()=>`${h3('Xbox Game Bar')}
+      ${toggleRow('Xbox Game Bar', 'Press Win+G to open Game Bar for capturing game clips and screenshots', true)}
+      ${h3('Captures')}
+      ${toggleRow('Record clips automatically while playing a game', '', false)}
+      <div class="field-row"><label>Capture folder</label><input type="text" value="C:\\Users\\jsmith\\Videos\\Captures" style="flex:1;"></div>
+      <div class="field-row"><label>Video quality</label><select><option>Standard (720p)</option><option>High (1080p)</option><option>Source resolution</option></select></div>
+      ${h3('Game Mode')}
+      ${toggleRow('Game Mode', 'Prevents background activity from affecting game performance', true)}
+      ${h3('Shortcuts')}
+      ${table(['Action','Shortcut'], [`<tr><td>Open Game Bar</td><td>Win+G</td></tr>`,`<tr><td>Take screenshot</td><td>Win+Alt+PrtScn</td></tr>`,`<tr><td>Record last 30 seconds</td><td>Win+Alt+G</td></tr>`])}` },
+
+    { id:'privacy', name:'Privacy', emoji:'🔏', color:0,
+      bodyHTML: ()=>`${h3('General')}
+      ${toggleRow('Let apps use advertising ID', '', false)}
+      ${toggleRow('Let websites provide locally relevant content', '', true)}
+      ${toggleRow('Let Windows track app launches for Start and Search', '', true)}
+      ${h3('App permissions')}
+      ${toggleRow('Camera', 'Allow apps to access your camera', true)}
+      ${toggleRow('Microphone', 'Allow apps to access your microphone', true)}
+      ${toggleRow('Location', 'Allow apps to access your location', false)}
+      ${toggleRow('Contacts', '', true)}
+      ${toggleRow('Calendar', '', true)}
+      ${h3('Diagnostics & feedback')}
+      <label class="field-row"><input type="radio" name="diag" checked> Required diagnostic data</label>
+      <label class="field-row"><input type="radio" name="diag"> Optional diagnostic data</label>
+      ${h3('Activity history')}
+      ${toggleRow('Store my activity history on this device', '', true)}` },
+
+    { id:'updatesecurity', name:'Update & Security', emoji:'🛡️', color:1,
+      bodyHTML: ()=>`<div class="card"><b>You're up to date</b><div style="color:#666; font-size:12px; margin-top:4px;">Last checked: Today, 6:12 AM</div><button class="btn small primary" id="us-check" style="margin-top:8px;">Check for updates</button><div id="us-progress" style="display:none; margin-top:10px;"><div class="bar-track" style="background:#e6e6e6; border-radius:3px; height:8px;"><div id="us-bar" style="background:var(--accent); height:100%; width:0%; border-radius:3px; transition:width .3s;"></div></div></div></div>
+      ${toggleRow('Delivery Optimization', 'Download updates from other PCs on your network or the internet', true)}
+      ${h3('Windows Security')}
+      <div class="cp-grid">
+        ${[['Virus & threat protection','🦠'],['Firewall & network protection','🛡️'],['App & browser control','🌐'],['Device security','🔐'],['Device performance & health','📈'],['Family options','👨‍👩‍👧']].map(([n,em])=>`<div class="card" style="width:170px;">${icon(em,2,'')}<div style="font-weight:600; margin-top:8px; font-size:12px;">${n}</div><button class="btn small" style="margin-top:8px;" data-toast="Opening ${n}…">Open</button></div>`).join('')}
+      </div>
+      ${h3('Backup')}
+      ${toggleRow('File History', 'Automatically back up your files to another drive', false)}
+      ${h3('Troubleshoot')}
+      <button class="btn small" data-toast="Running the recommended troubleshooter…">Run the troubleshooter</button>
+      ${h3('Recovery')}
+      <button class="btn small danger" id="us-reset">Reset this PC</button>
+      <button class="btn small" data-toast="Restarting into Advanced startup options…" style="margin-left:8px;">Advanced startup — Restart now</button>`,
+      extraInit:(panel, api)=>{
+        panel.querySelector('#us-check').addEventListener('click', ()=>{
+          const wrap = panel.querySelector('#us-progress'); const bar = panel.querySelector('#us-bar');
+          wrap.style.display='block'; let p=0;
+          const t = setInterval(()=>{ p+=Math.random()*20; bar.style.width=Math.min(p,100)+'%'; if(p>=100){ clearInterval(t); api.toast("You're up to date."); } }, 220);
+          api.onCleanup(()=>clearInterval(t));
+        });
+        panel.querySelector('#us-reset').addEventListener('click', ()=>{
+          showModal(panel, { title:'Reset this PC',
+            bodyHTML:`<div class="banner danger">Choose to keep your files or remove everything, then reinstall Windows. This cannot be undone once started.</div>
+              <label class="field-row"><input type="radio" name="resetmode" checked> Keep my files</label>
+              <label class="field-row"><input type="radio" name="resetmode"> Remove everything</label>`,
+            buttons:[{label:'Cancel', onClick:closeModal},{label:'Next', danger:true, onClick:()=>{ closeModal(); api.toast('Reset this PC would restart and begin reinstalling Windows.'); }}] });
+        });
+      } },
+  ];
+  const SET_BY_ID = {}; settingsCats.forEach(c=> SET_BY_ID[c.id]=c);
+
+  /* ============================================================
+     App renderers
+  ============================================================ */
+  function cpRender(){
+    return `<div style="display:flex; flex-direction:column; height:100%;">
+      <div class="toolbar">
+        <button class="btn small" id="cpBack" style="display:none;">◀ Back</button>
+        <span id="cpCrumb" style="color:#555; font-size:12px;">Control Panel</span>
+      </div>
+      <div style="flex:1; overflow:auto; padding:18px;" id="cpBody"></div>
+      <div class="statusbar">${cpApplets.length} Control Panel items</div>
+    </div>`;
+  }
+  function cpInit(content, api){
+    mountGenericBehaviors(content, api);
+    const body = content.querySelector('#cpBody');
+    const backBtn = content.querySelector('#cpBack');
+    const crumb = content.querySelector('#cpCrumb');
+    function showGrid(){
+      backBtn.style.display='none'; crumb.textContent='Control Panel';
+      body.innerHTML = `<div class="cp-grid">${cpApplets.map(a=>`<div class="cp-icon" data-open="${a.id}">${icon(a.emoji,a.color,'lg')}<div class="cp-icon-label">${esc(a.name)}</div></div>`).join('')}</div>`;
+    }
+    function showApplet(id, section){
+      const a = CP_BY_ID[id];
+      if(!a) return;
+      backBtn.style.display='inline-block'; crumb.textContent = 'Control Panel  ›  ' + a.name;
+      body.innerHTML = a.bodyHTML();
+      if(a.extraInit) a.extraInit(body, api);
+      if(section){
+        const tabBtn = body.querySelector(`.tabs button[data-tab="${section}"]`);
+        if(tabBtn) tabBtn.click();
+        const anchor = body.querySelector(`[data-anchor="${section}"]`);
+        if(anchor) setTimeout(()=>{ anchor.scrollIntoView({block:'center'}); anchor.style.outline='2px solid #0067c0'; anchor.style.borderRadius='4px'; setTimeout(()=> anchor.style.outline='', 1600); }, 60);
+      }
+    }
+    body.addEventListener('click', (e)=>{ const i = e.target.closest('.cp-icon'); if(i) showApplet(i.dataset.open); });
+    backBtn.addEventListener('click', showGrid);
+    api.showApplet = showApplet;
+    showGrid();
+  }
+
+  function settingsRender(){
+    return `<div style="display:flex; height:100%;">
+      <div class="settings-nav" id="setNav"></div>
+      <div style="flex:1; overflow:auto; padding:20px 24px;" id="setContent"></div>
+    </div>`;
+  }
+  function settingsInit(content, api){
+    mountGenericBehaviors(content, api);
+    const nav = content.querySelector('#setNav');
+    const body = content.querySelector('#setContent');
+    nav.innerHTML = settingsCats.map(c=>`<div class="set-nav-item" data-cat="${c.id}">${icon(c.emoji,c.color,'sm')} <span>${esc(c.name)}</span></div>`).join('');
+    function show(id){
+      nav.querySelectorAll('.set-nav-item').forEach(n=> n.classList.toggle('active', n.dataset.cat===id));
+      const c = SET_BY_ID[id];
+      body.innerHTML = `<h2 style="margin:0 0 14px;">${esc(c.name)}</h2>` + c.bodyHTML();
+      if(c.extraInit) c.extraInit(body, api);
+    }
+    nav.addEventListener('click', (e)=>{ const item = e.target.closest('.set-nav-item'); if(item) show(item.dataset.cat); });
+    api.showCategory = show;
+    show(settingsCats[0].id);
+  }
+
+  /* ============================================================
+     Window manager
+  ============================================================ */
+  const layer = document.getElementById('windowLayer');
+  const tbApps = document.getElementById('tbApps');
+  const openWindows = {};
+  let zTop = 100, cascade = 0;
+
+  function bringToFront(id){
+    zTop += 1; openWindows[id].el.style.zIndex = zTop;
+    document.querySelectorAll('.tb-app').forEach(b=>b.classList.remove('active'));
+    if(openWindows[id].tbBtn) openWindows[id].tbBtn.classList.add('active');
+  }
+  function closeWindow(id){
+    const w = openWindows[id]; if(!w) return;
+    (w.cleanups||[]).forEach(fn=>{ try{fn();}catch(e){} });
+    w.el.remove(); if(w.tbBtn) w.tbBtn.remove();
+    delete openWindows[id];
+  }
+  function minimizeWindow(id){ const w=openWindows[id]; w.el.style.display='none'; w.tbBtn.classList.remove('active'); }
+  function toggleMaximize(id){
+    const w = openWindows[id]; const win = w.el;
+    if(!win.classList.contains('maximized')){
+      w.prevRect = {left:win.style.left, top:win.style.top, width:win.style.width, height:win.style.height};
+      win.style.left='0'; win.style.top='0'; win.style.width='100%'; win.style.height='calc(100% - 48px)';
+      win.classList.add('maximized');
+    } else { Object.assign(win.style, w.prevRect); win.classList.remove('maximized'); }
+  }
+
+  function openApp(app){
+    if(openWindows[app.id]){
+      openWindows[app.id].el.style.display='flex'; bringToFront(app.id);
+      return openWindows[app.id];
+    }
+    const w = app.width||880, h = app.height||600;
+    const offset = (cascade++ % 6) * 26;
+    const win = elc(`<div class="win-window" style="left:${40+offset}px; top:${24+offset}px; width:${w}px; height:${h}px;">
+      <div class="win-titlebar">${icon(app.emoji, app.color, '')}<div class="win-title">${esc(app.name)}</div>
+        <div class="win-controls"><button class="wc-min" title="Minimize">—</button><button class="wc-max" title="Maximize">▢</button><button class="wc-close" title="Close">✕</button></div>
+      </div>
+      <div class="win-content"></div>
+    </div>`);
+    layer.appendChild(win);
+    const content = win.querySelector('.win-content');
+    content.innerHTML = app.render();
+
+    const cleanups = [];
+    const api = { el:win, content, onCleanup:(fn)=>cleanups.push(fn), close:()=>closeWindow(app.id), toast };
+    if(app.init) app.init(content, api);
+
+    openWindows[app.id] = { el:win, cleanups, tbBtn:null, api };
+
+    const btn = elc(`<div class="tb-app active" title="${esc(app.name)}">${icon(app.emoji, app.color, '')}<span class="ind"></span></div>`);
+    btn.addEventListener('click', ()=>{
+      if(win.style.display==='none'){ win.style.display='flex'; bringToFront(app.id); }
+      else if(parseInt(win.style.zIndex||0) === zTop){ minimizeWindow(app.id); }
+      else { bringToFront(app.id); }
+    });
+    tbApps.appendChild(btn);
+    openWindows[app.id].tbBtn = btn;
+
+    const titlebar = win.querySelector('.win-titlebar');
+    let dragging=false, sx=0, sy=0, ox=0, oy=0;
+    titlebar.addEventListener('mousedown', (e)=>{
+      if(e.target.closest('.win-controls')) return;
+      if(win.classList.contains('maximized')) return;
+      dragging=true; sx=e.clientX; sy=e.clientY; ox=win.offsetLeft; oy=win.offsetTop;
+      bringToFront(app.id); e.preventDefault();
+    });
+    window.addEventListener('mousemove', (e)=>{ if(!dragging) return; win.style.left = Math.max(0, ox+(e.clientX-sx))+'px'; win.style.top = Math.max(0, oy+(e.clientY-sy))+'px'; });
+    window.addEventListener('mouseup', ()=> dragging=false);
+    win.addEventListener('mousedown', ()=> bringToFront(app.id));
+
+    win.querySelector('.wc-close').addEventListener('click', ()=> closeWindow(app.id));
+    win.querySelector('.wc-min').addEventListener('click', ()=> minimizeWindow(app.id));
+    win.querySelector('.wc-max').addEventListener('click', ()=> toggleMaximize(app.id));
+
+    bringToFront(app.id);
+    return openWindows[app.id];
+  }
+
+  /* ============================================================
+     App registry
+  ============================================================ */
+  const APPS = [
+    { id:'controlpanel', name:'Control Panel', emoji:'🎛️', color:4, width:920, height:620, render:cpRender, init:cpInit },
+    { id:'settings', name:'Settings', emoji:'⚙️', color:0, width:920, height:620, render:settingsRender, init:settingsInit },
+  ];
+  const APP_BY_ID = {}; APPS.forEach(a=> APP_BY_ID[a.id]=a);
+
+  function openDeepLink(appId, target, section){
+    const w = openApp(APP_BY_ID[appId]);
+    if(appId==='controlpanel' && w.api.showApplet) w.api.showApplet(target, section);
+    if(appId==='settings' && w.api.showCategory) w.api.showCategory(target);
+  }
+
+  /* ============================================================
+     Desktop icons, taskbar, start menu
+  ============================================================ */
+  const desktopIconsEl = document.getElementById('desktopIcons');
+  APPS.forEach(app=>{
+    const di = elc(`<div class="di">${icon(app.emoji, app.color, 'lg')}<div class="di-label">${esc(app.name)}</div></div>`);
+    di.addEventListener('click', ()=>{ document.querySelectorAll('.di.selected').forEach(d=>d.classList.remove('selected')); di.classList.add('selected'); });
+    di.addEventListener('dblclick', ()=> openApp(app));
+    desktopIconsEl.appendChild(di);
+  });
+
+  const smGrid = document.getElementById('smGrid');
+  APPS.forEach(app=>{
+    const tile = elc(`<div class="sm-tile">${icon(app.emoji, app.color, '')}<div class="tile-label">${esc(app.name)}</div></div>`);
+    tile.addEventListener('click', ()=>{ openApp(app); closeStart(); });
+    smGrid.appendChild(tile);
+  });
+  cpApplets.forEach(a=>{
+    const tile = elc(`<div class="sm-tile">${icon(a.emoji, a.color, '')}<div class="tile-label">${esc(a.name)}</div></div>`);
+    tile.addEventListener('click', ()=>{ openDeepLink('controlpanel', a.id); closeStart(); });
+    smGrid.appendChild(tile);
+  });
+
+  const startMenu = document.getElementById('startMenu');
+  const tbStart = document.getElementById('tbStart');
+  function openStart(){ startMenu.classList.add('open'); document.getElementById('smSearch').value=''; filterStart(''); tbStart.classList.add('open'); }
+  function closeStart(){ startMenu.classList.remove('open'); tbStart.classList.remove('open'); }
+  tbStart.addEventListener('click', (e)=>{ e.stopPropagation(); startMenu.classList.contains('open') ? closeStart() : openStart(); });
+  document.getElementById('tbSearchBtn').addEventListener('click', openStart);
+  document.addEventListener('click', (e)=>{ if(!startMenu.contains(e.target) && !tbStart.contains(e.target) && e.target.id!=='tbSearchBtn') closeStart(); });
+  function filterStart(q){
+    q=q.toLowerCase();
+    smGrid.querySelectorAll('.sm-tile').forEach(tile=>{
+      const label = tile.querySelector('.tile-label').textContent.toLowerCase();
+      tile.style.display = label.includes(q) ? 'flex' : 'none';
+    });
+  }
+  document.getElementById('smSearch').addEventListener('input', e=> filterStart(e.target.value));
+
+  function fmtTime(d){ return d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}); }
+  function tickClock(){ const d = new Date(); document.getElementById('tbClock').innerHTML = `${fmtTime(d)}<br>${d.toLocaleDateString([], {month:'numeric',day:'numeric',year:'numeric'})}`; }
+  tickClock(); setInterval(tickClock, 15000);
+
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ closeStart(); closeModal(); } });
+
+  /* ============================================================
+     Reference index (matches the provided item list)
+  ============================================================ */
+  const reference = [
+    { name:'Internet Options', path:'Control Panel › Internet Options', desc:'Configure browser proxy settings, security zones, certificate management, privacy settings, and temporary internet files.', app:'controlpanel', target:'internetoptions' },
+    { name:'Devices and Printers', path:'Control Panel › Devices and Printers', desc:'Add peripheral devices, view connected hardware, set default printer, manage print queues, and configure printer properties.', app:'controlpanel', target:'devicesprinters' },
+    { name:'Program and Features', path:'Control Panel › Programs and Features', desc:'Uninstall desktop applications, view installed updates, and turn optional Windows features on or off.', app:'controlpanel', target:'programsfeatures' },
+    { name:'Network and Sharing Center', path:'Control Panel › Network and Sharing Center', desc:'View network topology, map network drives, change adapter IP or DNS settings, set network profiles, and configure advanced sharing.', app:'controlpanel', target:'networksharing' },
+    { name:'System (Control Panel)', path:'Control Panel › System', desc:'View basic system specs, rename computer, join Active Directory domain or workgroup, and access System Protection restore points.', app:'controlpanel', target:'systemcp' },
+    { name:'Windows Defender Firewall', path:'Control Panel › Windows Defender Firewall', desc:'Configure inbound and outbound traffic rules, allow applications through firewall, enable profiles, and set logging options.', app:'controlpanel', target:'firewall' },
+    { name:'Mail', path:'Control Panel › Mail', desc:'Set up local email client profiles, configure Exchange, IMAP, or POP3 accounts, and manage data files like PST and OST.', app:'controlpanel', target:'mail' },
+    { name:'Sound', path:'Control Panel › Sound', desc:'Select default playback and recording audio devices, configure speaker properties, adjust volume, and manage auto-muting.', app:'controlpanel', target:'sound' },
+    { name:'User Accounts', path:'Control Panel › User Accounts', desc:'Manage local user profiles, change account types, manage saved Windows credentials, and adjust User Account Control settings.', app:'controlpanel', target:'useraccounts' },
+    { name:'Device Manager', path:'Control Panel › Device Manager', desc:'View and troubleshoot hardware, update, roll back, or disable drivers, and resolve hardware resource conflicts.', app:'controlpanel', target:'devicemanager' },
+    { name:'Indexing Options', path:'Control Panel › Indexing Options', desc:'Modify search indexing locations and file types to rebuild search catalogs and accelerate File Explorer search.', app:'controlpanel', target:'indexing' },
+    { name:'Administrative Tools', path:'Control Panel › Administrative Tools', desc:'Access core management consoles including Computer Management, Event Viewer, Services, Local Security Policy, and Task Scheduler.', app:'controlpanel', target:'admintools' },
+    { name:'File Explorer Options', path:'Control Panel › File Explorer Options', desc:'Configure global settings for file browsing, folder views, search behavior, and hidden file visibility.', app:'controlpanel', target:'fileexploreroptions' },
+    { name:'File Explorer Options — View hidden files', path:'File Explorer Options › View tab', desc:'Select "Show hidden files, folders, and drives" under the View tab to reveal system or hidden items.', app:'controlpanel', target:'fileexploreroptions', section:'view' },
+    { name:'File Explorer Options — Hide extensions', path:'File Explorer Options › View tab', desc:'Uncheck "Hide extensions for known file types" to display full file extensions for identifying malware files.', app:'controlpanel', target:'fileexploreroptions', section:'view' },
+    { name:'File Explorer Options — General options', path:'File Explorer Options › General tab', desc:'Set default opening location like This PC or Quick Access, clear history, and manage folder opening behavior.', app:'controlpanel', target:'fileexploreroptions', section:'general' },
+    { name:'File Explorer Options — View options', path:'File Explorer Options › View tab', desc:'Apply current folder view settings to all folders of the same type, show drive letters, or toggle preview pane.', app:'controlpanel', target:'fileexploreroptions', section:'view' },
+    { name:'Power Options', path:'Control Panel › Power Options', desc:'Manage computer energy usage, sleep behaviors, power plan profiles, and hardware button actions.', app:'controlpanel', target:'poweroptions' },
+    { name:'Power Options — Hibernate', path:'Power Options › Sleep States', desc:'Saves active system memory to hard drive hiberfil.sys and powers off the system for preserving battery during long downtime.', app:'controlpanel', target:'poweroptions', section:'concepts' },
+    { name:'Power Options — Power plans', path:'Power Options › Power Plans', desc:'Select or customize power profiles like Balanced, Power Saver, or High Performance to balance battery life and system performance.', app:'controlpanel', target:'poweroptions', section:'plans' },
+    { name:'Power Options — Sleep/suspend', path:'Power Options › Sleep States', desc:'Keeps RAM powered while placing CPU and components into low-power states for fast instant-on resumption.', app:'controlpanel', target:'poweroptions', section:'concepts' },
+    { name:'Power Options — Standby', path:'Power Options › Sleep States', desc:'Legacy low-power state that preserves system session in memory while powering down non-essential hardware.', app:'controlpanel', target:'poweroptions', section:'concepts' },
+    { name:'Power Options — Choose what closing the lid does', path:'Power Options › System Settings', desc:'Defines hardware button and lid closure actions like Do Nothing, Sleep, Hibernate, or Shut Down.', app:'controlpanel', target:'poweroptions', section:'syssettings' },
+    { name:'Power Options — Turn on fast startup', path:'Power Options › System Settings', desc:'Hybrid boot state that saves the Windows kernel session state to disk during shutdown to reduce boot times.', app:'controlpanel', target:'poweroptions', section:'syssettings' },
+    { name:'Power Options — USB selective suspend', path:'Power Options › Advanced Settings', desc:'Power-saving feature that suspends power to individual USB ports when idle without affecting other USB devices.', app:'controlpanel', target:'poweroptions', section:'advanced' },
+    { name:'Ease of Access', path:'Control Panel › Ease of Access', desc:'Configure accessibility features including Display scale, Narrator, Magnifier, High Contrast, Sticky Keys, and Mouse pointer size.', app:'controlpanel', target:'easeofaccess' },
+    { name:'Time and Language', path:'Settings › Time & Language', desc:'Set time zone automatically, sync clock servers, add language packs, configure regional formats, and adjust speech or keyboard input.', app:'settings', target:'timelanguage' },
+    { name:'Update and Security', path:'Settings › Update & Security', desc:'Manage Windows Update schedules, Delivery Optimization, Windows Security Defender, File History Backup, and Reset This PC recovery.', app:'settings', target:'updatesecurity' },
+    { name:'Personalization', path:'Settings › Personalization', desc:'Customize Desktop background, colors, Lock Screen images, system Themes, Fonts, and Start menu or Taskbar behaviors.', app:'settings', target:'personalization' },
+    { name:'Apps', path:'Settings › Apps', desc:'Uninstall modern UWP apps and legacy software, set default apps by protocol or file type, and manage startup applications.', app:'settings', target:'apps' },
+    { name:'Privacy', path:'Settings › Privacy', desc:'Control app permissions for hardware like Camera and Microphone, manage background app permissions, and configure diagnostic data.', app:'settings', target:'privacy' },
+    { name:'System (Settings)', path:'Settings › System', desc:'Manage Display resolution, Sound outputs, Notifications, Focus Assist, Storage Sense drive cleanup, and Remote Desktop access.', app:'settings', target:'system' },
+    { name:'Devices (Settings)', path:'Settings › Devices', desc:'Pair Bluetooth devices, add printers or scanners, adjust touchpad sensitivity, and manage USB connection notifications.', app:'settings', target:'devices' },
+    { name:'Network and Internet', path:'Settings › Network & Internet', desc:'Toggle Wi-Fi or Ethernet, configure VPN connections, set up proxy servers, view Data Usage limits, and perform Network Reset.', app:'settings', target:'network' },
+    { name:'Gaming', path:'Settings › Gaming', desc:'Configure Xbox Game Bar, adjust Game Mode settings for hardware performance allocation, and manage screen recording options.', app:'settings', target:'gaming' },
+    { name:'Accounts', path:'Settings › Accounts', desc:'Sign in with Microsoft account, manage Work or School connections, set up Windows Hello PIN or biometrics, and manage family accounts.', app:'settings', target:'accounts' },
+  ];
+
+  function renderReference(filter){
+    const list = document.getElementById('refList');
+    list.innerHTML = '';
+    const f = (filter||'').trim().toLowerCase();
+    const items = reference.filter(r => !f || r.name.toLowerCase().includes(f) || r.desc.toLowerCase().includes(f));
+    if(items.length===0){ list.innerHTML = '<div class="ref-empty">No matching items.</div>'; return; }
+    items.forEach(r=>{
+      const item = elc(`<div class="ref-item"><div class="ref-name">${esc(r.name)}</div><div class="ref-path">↳ ${esc(r.path)}</div><div class="ref-desc">${esc(r.desc)}</div></div>`);
+      item.addEventListener('click', ()=> openDeepLink(r.app, r.target, r.section));
+      list.appendChild(item);
+    });
+  }
+  document.getElementById('refSearchInput').addEventListener('input', e=> renderReference(e.target.value));
+  renderReference('');
+
+  // Boot
+  openApp(APP_BY_ID.controlpanel);
+})();
+</script>
+</body>
+</html>

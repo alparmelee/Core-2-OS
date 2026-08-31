@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2.9 Data Destruction and Sanitization</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#18181b;
+    --muted:#52525b;
+    --paper:#f4f4f5;
+    --line:rgba(24,24,27,0.12);
+    --accent:#52525b;
+    --accent-soft:#e4e4e7;
+    --good:#166534;
+    --warn:#9a3412;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(82,82,91,0.12), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.05), transparent 50%),
+      linear-gradient(180deg, #eaeaec 0%, var(--paper) 40%, #efeff1 100%);
+    line-height:1.55;
+  }
+  a{ color:#3f3f46; }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#fafafa;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(12,12,14,0.35) 0%, rgba(12,12,14,0.75) 52%, rgba(12,12,14,0.94) 100%),
+      url("2.9/Shredding.jpg") center/cover no-repeat;
+  }
+
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:38ch;
+    color:#e4e4e7;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:50ch;
+    color:#a1a1aa;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#e4e4e7;
+    color:#27272a;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#e4e4e7;
+    border:1px solid rgba(228,228,231,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(244,244,245,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+  .visual.emoji{ font-size:4.2rem; line-height:1; }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+  .visual.logo{ padding:1rem; background:#fff; }
+  .visual.logo img{ width:100%; height:140px; object-fit:contain; }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(82,82,91,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+  .note.warn{
+    border-left-color:var(--danger);
+    background:rgba(180,35,24,0.08);
+    color:#7a271a;
+  }
+
+  .split{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0.7rem;
+    margin-top:0.8rem;
+  }
+  .pill{
+    border-radius:14px;
+    padding:0.85rem 1rem;
+    font-size:0.9rem;
+  }
+  .pill strong{
+    display:block;
+    margin-bottom:0.25rem;
+    font-size:0.74rem;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+  }
+  .pill.pro{ background:#e8f6ee; color:var(--good); }
+  .pill.con{ background:#fdece7; color:var(--warn); }
+  .pill p{ margin:0; color:inherit; }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .split{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">2.9</p>
+    <h1>Data Destruction and Sanitization</h1>
+    <p>How to permanently destroy or securely wipe storage media before disposal, recycling, or repurposing.</p>
+    <div class="hero-cta">
+      <a href="#physical-destruction">Physical destruction</a>
+      <a class="ghost" href="#regulatory">Compliance</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#drilling">Drilling</a>
+    <a href="#degaussing">Degaussing</a>
+    <a href="#wiping">Wiping</a>
+    <a href="#quick-format">Quick format</a>
+    <a href="#outsourcing">Outsourcing</a>
+    <a href="#certificate">Certificate</a>
+    <a href="#compliance">Compliance</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ===== PART A: Physical destruction ===== -->
+  <section id="physical-destruction">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Physical destruction methods</h2>
+        <p>Irreversible techniques that render storage media completely unusable.</p>
+      </div>
+
+      <article class="term" id="drilling">
+        <div class="visual photo">
+          <img src="2.9/Drilling  hammering.jpeg" alt="Drilling and hammering" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Drilling / hammering</h3>
+          <p>Drilling holes straight through magnetic platters or physically breaking the drive. Offers a quick, simple way to render media unusable.</p>
+        </div>
+      </article>
+
+      <article class="term" id="shredding">
+        <div class="visual photo">
+          <img src="2.9/Shredding.jpg" alt="Shredding" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Shredding</h3>
+          <p>Uses heavy industrial machinery to grind drives into tiny fragments for complete destruction.</p>
+        </div>
+      </article>
+
+      <article class="term" id="degaussing">
+        <div class="visual photo">
+          <img src="2.9/Degaussing.png" alt="Degaussing" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Degaussing</h3>
+          <p>Applies high-power electromagnetic fields to remove magnetic domains. Completely erases data and destroys hard drive functionality.</p>
+          <div class="note warn"><strong>Does not work on SSDs or flash memory.</strong> Degaussing only affects magnetic storage media.</div>
+        </div>
+      </article>
+
+      <article class="term" id="incineration">
+        <div class="visual photo">
+          <img src="2.9/Incineration.webp" alt="Incineration" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Incineration</h3>
+          <p>Subjects drive hardware to extreme heat to burn and destroy storage components.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART B: Recycling / repurposing ===== -->
+  <section id="recycling">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Recycling or repurposing methods</h2>
+        <p>Software-based sanitization that allows drives to be reused — with varying levels of security.</p>
+      </div>
+
+      <article class="term" id="file-overwrite">
+        <div class="visual photo">
+          <img src="2.9/File-level overwriting.png" alt="File-level overwriting" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>File-level overwriting</h3>
+          <p>Deletes specific files using tools like Windows Sysinternals <strong>Sdelete</strong>, though remaining unallocated data remains untouched.</p>
+        </div>
+      </article>
+
+      <article class="term" id="wiping">
+        <div class="visual photo">
+          <img src="2.9/Whole-drive wiping.png" alt="Whole-drive wiping" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Whole-drive wiping</h3>
+          <p>Software utilities like <strong>DBAN</strong> (Darik’s Boot and Nuke) overwrite all storage sectors, securely wiping data so the drive can safely be repurposed.</p>
+        </div>
+      </article>
+
+      <article class="term" id="low-level-format">
+        <div class="visual photo">
+          <img src="2.9/Low-level formatting.webp" alt="Low-level formatting" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Low-level formatting</h3>
+          <p>Performed at the factory by the manufacturer. Generally <strong>not recommended</strong> or performed by end users.</p>
+        </div>
+      </article>
+
+      <article class="term" id="quick-format">
+        <div class="visual photo">
+          <img src="2.9/Standard%20formatting%20%E2%80%94%20quick%20format.jpg" alt="Quick format" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Standard formatting — quick format</h3>
+          <p>Clears the Master File Table (MFT) and sets up a new file system, but leaves the underlying data intact where software recovery tools can still retrieve it.</p>
+          <div class="note warn"><strong>Not secure.</strong> Data remains recoverable after a quick format.</div>
+        </div>
+      </article>
+
+      <article class="term" id="regular-format">
+        <div class="visual photo">
+          <img src="2.9/Standard%20formatting%20%E2%80%94%20regular%20format.png" alt="Regular format" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Standard formatting — regular format</h3>
+          <p>Overwrites every drive sector with zeros, preventing data recovery. This process has been the default behavior since <strong>Windows Vista</strong>.</p>
+          <div class="split">
+            <div class="pill con">
+              <strong>Quick format</strong>
+              <p>Clears file table only — data recoverable.</p>
+            </div>
+            <div class="pill pro">
+              <strong>Regular format</strong>
+              <p>Overwrites all sectors with zeros — data not recoverable.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART C: Outsourcing ===== -->
+  <section id="outsourcing">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Outsourcing concepts</h2>
+        <p>When organizations hand off destruction to specialized vendors.</p>
+      </div>
+
+      <article class="term" id="third-party">
+        <div class="visual photo">
+          <img src="2.9/Third-party vendors.webp" alt="Third-party vendors" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Third-party vendors</h3>
+          <p>Organizations frequently contract specialized third-party vendors equipped with industrial destroyers, drills, and degaussers to manage high-volume disposal.</p>
+        </div>
+      </article>
+
+      <article class="term" id="certificate">
+        <div class="visual photo">
+          <img src="2.9/Certificate of destruction.webp" alt="Certificate of destruction" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Certificate of destruction</h3>
+          <p>Service providers supply an official certificate to provide a verified paper trail confirming how and when specific hardware serial numbers were destroyed.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART D: Regulatory requirements ===== -->
+  <section id="regulatory">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part D</span>
+        <h2>Regulatory requirements &amp; data security</h2>
+        <p>Legal obligations and risks when sanitization is done poorly.</p>
+      </div>
+
+      <article class="term" id="compliance">
+        <div class="visual photo">
+          <img src="2.9/Legal compliance.jpg" alt="Legal compliance" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Legal compliance</h3>
+          <p>Highly regulated sectors — including healthcare, financial services, and research organizations — are bound by legal mandates and local policies requiring complete physical destruction of retired storage media.</p>
+          <ul class="tags">
+            <li>HIPAA</li>
+            <li>Financial regulations</li>
+            <li>Research data policies</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="data-leakage">
+        <div class="visual logo">
+          <img src="2.9/Data leakage risks.svg" alt="Data leakage risks" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Data leakage risks</h3>
+          <p>Inadequate sanitization leaves residual PII (Personally Identifiable Information), corporate emails, and confidential files on secondary markets (e.g., eBay), exposing organizations to regulatory fines and privacy breaches.</p>
+          <div class="note warn">Never sell or donate drives without verified sanitization or destruction.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Study notes for Core 2 objective 2.9 — Data Destruction and Sanitization. Images from the <code>2.9</code> folder.
+  </div>
+</footer>
+
+  <script src="study-lightbox.js"></script>
+</body>
+</html>

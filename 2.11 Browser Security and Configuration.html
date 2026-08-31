@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2.11 Browser Security and Configuration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101820;
+    --muted:#4b5563;
+    --paper:#f0f4fa;
+    --line:rgba(16,24,32,0.12);
+    --accent:#2563eb;
+    --accent-soft:#dbeafe;
+    --good:#166534;
+    --warn:#9a3412;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(37,99,235,0.12), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.06), transparent 50%),
+      linear-gradient(180deg, #e6edf8 0%, var(--paper) 40%, #ecf1f8 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#eff6ff;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,20,48,0.3) 0%, rgba(8,20,48,0.72) 52%, rgba(8,20,48,0.94) 100%),
+      url("2.11/Certificate%20inspection.jpg") center/cover no-repeat;
+  }
+
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:36ch;
+    color:#dbeafe;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:50ch;
+    color:#94a3b8;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#dbeafe;
+    color:#1e40af;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#dbeafe;
+    border:1px solid rgba(219,234,254,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(240,244,250,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+  .visual.emoji{ font-size:4.2rem; line-height:1; }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+  .visual.logo{ padding:1rem; background:#fff; }
+  .visual.logo img{ width:100%; height:140px; object-fit:contain; }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body ul{
+    margin:0.5rem 0 0.7rem;
+    padding-left:1.2rem;
+  }
+  .body li{ margin-bottom:0.35rem; }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(37,99,235,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+  .note.warn{
+    border-left-color:var(--danger);
+    background:rgba(180,35,24,0.08);
+    color:#7a271a;
+  }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">2.11</p>
+    <h1>Browser Security and Configuration</h1>
+    <p>Safe downloads, patching, extensions, certificates, privacy settings, and browser feature management.</p>
+    <div class="hero-cta">
+      <a href="#downloads">Downloads</a>
+      <a class="ghost" href="#settings">Settings</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#trusted-downloads">Trusted sources</a>
+    <a href="#hashing">Hashing</a>
+    <a href="#patching">Patching</a>
+    <a href="#extensions">Extensions</a>
+    <a href="#password-managers">Passwords</a>
+    <a href="#certificates">Certificates</a>
+    <a href="#private-browsing">Private</a>
+    <a href="#secure-dns">DNS</a>
+    <a href="#features">Features</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ===== PART A: Download and installation ===== -->
+  <section id="downloads">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Browser download and installation</h2>
+        <p>How to obtain software safely and verify it hasn’t been tampered with.</p>
+      </div>
+
+      <article class="term" id="trusted-downloads">
+        <div class="visual photo">
+          <img src="2.11/Trusted%20sources.png" alt="Trusted sources" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Trusted sources</h3>
+          <p>Obtain software exclusively from official vendor sites to prevent downloading malware embedded in third-party installers. Avoid clicking links in emails or external pages — <strong>type the URL directly</strong> into the address bar.</p>
+        </div>
+      </article>
+
+      <article class="term" id="untrusted-downloads">
+        <div class="visual photo">
+          <img src="2.11/Untrusted%20sources.webp" alt="Untrusted sources" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Untrusted sources</h3>
+          <p>Avoid downloading applications from random websites, file-sharing platforms, or links embedded in unsolicited emails.</p>
+        </div>
+      </article>
+
+      <article class="term" id="hashing">
+        <div class="visual photo">
+          <img src="2.11/Hashing.png" alt="Hashing" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Hashing</h3>
+          <p>Install a hash-checking application (CLI or GUI) to calculate the file’s hash value (e.g., <strong>SHA-256</strong>). Compare the calculated hash against the official value published on the vendor’s download site to verify file integrity.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART B: Browser patching ===== -->
+  <section id="patching">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Browser patching</h2>
+        <p>Keeping the browser current with security fixes.</p>
+      </div>
+
+      <article class="term" id="browser-updates">
+        <div class="visual photo">
+          <img src="2.11/Updating.avif" alt="Browser updating" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Updating</h3>
+          <p>Keep browsers updated to apply critical security patches. Updates are frequently integrated directly into the OS update manager or automatically installed within the browser.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART C: Extensions and plug-ins ===== -->
+  <section id="extensions">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Extensions and plug-ins</h2>
+        <p>Add-ons expand browser functionality — but are also a major attack vector.</p>
+      </div>
+
+      <article class="term" id="trusted-extensions">
+        <div class="visual photo">
+          <img src="2.11/Trusted%20sources.png" alt="Trusted extension sources" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Trusted sources</h3>
+          <p>Install add-ons exclusively from official repositories like the <strong>Chrome Web Store</strong> or <strong>Microsoft Store</strong>.</p>
+        </div>
+      </article>
+
+      <article class="term" id="untrusted-extensions">
+        <div class="visual photo">
+          <img src="2.11/Untrusted%20sources.webp" alt="Untrusted extension sources" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Untrusted sources</h3>
+          <p>Avoid third-party sites or unverified software installers, which represent a significant attack vector capable of credential theft, keylogging, and data exfiltration.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART D: Password managers ===== -->
+  <section id="password-managers">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part D</span>
+        <h2>Password managers</h2>
+        <p>Better credential storage than the browser’s built-in password save.</p>
+      </div>
+
+      <article class="term" id="password-vaults">
+        <div class="visual photo">
+          <img src="2.11/Password%20vaults.jpg" alt="Password vaults" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Password vaults</h3>
+          <p>Store credentials inside encrypted vaults rather than plain browser stores.</p>
+        </div>
+      </article>
+
+      <article class="term" id="unique-passwords">
+        <div class="visual photo">
+          <img src="2.11/Unique%20passwords.webp" alt="Unique passwords" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Unique passwords</h3>
+          <p>Use password managers to generate unique, complex passwords per site to eliminate credential reuse risks.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART E: Secure connections ===== -->
+  <section id="certificates">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part E</span>
+        <h2>Secure connections / sites — valid certificates</h2>
+        <p>How to verify a site’s identity through TLS certificates.</p>
+      </div>
+
+      <article class="term" id="certificate-inspection">
+        <div class="visual photo">
+          <img src="2.11/Certificate%20inspection.jpg" alt="Certificate inspection" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Certificate inspection</h3>
+          <p>Inspect security alerts regarding untrusted root authorities, expired certificates, or domain mismatches. Verify certificate details, including issuer and subject common names. Ensure local system date and time settings are correct to prevent false certificate invalidation.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART F: Settings configuration ===== -->
+  <section id="settings">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part F</span>
+        <h2>Settings configuration</h2>
+        <p>Privacy, data cleanup, sync, and network settings.</p>
+      </div>
+
+      <article class="term" id="popup-blocker">
+        <div class="visual photo">
+          <img src="2.11/Pop-up%20blocker.jfif" alt="Pop-up blocker" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Pop-up blocker</h3>
+          <p>Keep pop-up blockers enabled by default to block unwanted notifications and malicious windows. Disable temporarily only for specific troubleshooting, or add site-specific allow/block rules.</p>
+        </div>
+      </article>
+
+      <article class="term" id="clear-browsing-data">
+        <div class="visual photo">
+          <img src="2.11/Clearing%20browsing%20data.png" alt="Clearing browsing data" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Clearing browsing data</h3>
+          <p>Manually or automatically remove stored browsing history, saved passwords, and downloaded file lists from browser settings.</p>
+        </div>
+      </article>
+
+      <article class="term" id="clear-cache">
+        <div class="visual photo">
+          <img src="2.11/Clearing%20cache.jpg" alt="Clearing cache" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Clearing cache</h3>
+          <p>Delete locally stored web assets, images, and cookies to free space and clear stale or sensitive site data.</p>
+        </div>
+      </article>
+
+      <article class="term" id="private-browsing">
+        <div class="visual photo">
+          <img src="2.11/Private-browsing%20mode.webp" alt="Private browsing mode" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Private-browsing mode</h3>
+          <span class="aka">InPrivate / Incognito</span>
+          <p>Launch private windows to prevent session data, history, download lists, and caches from being retained locally once closed.</p>
+          <div class="note">Private browsing does <strong>not</strong> hide activity from your ISP, employer, or the websites you visit.</div>
+        </div>
+      </article>
+
+      <article class="term" id="sync">
+        <div class="visual photo">
+          <img src="2.11/Sign-in%20%20browser%20data%20synchronization.avif" alt="Sign-in and browser data synchronization" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Sign-in / browser data synchronization</h3>
+          <p>Sign into the browser profile to synchronize history, favorites, settings, and extensions across multiple devices.</p>
+        </div>
+      </article>
+
+      <article class="term" id="ad-blockers">
+        <div class="visual photo">
+          <img src="2.11/Ad-blocker.webp" alt="Ad blockers" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Ad blockers</h3>
+          <p>Configure tracking prevention and ad-blocking levels (Basic, Balanced, Strict) within privacy settings to restrict site tracking across visits.</p>
+        </div>
+      </article>
+
+      <article class="term" id="proxy">
+        <div class="visual photo">
+          <img src="2.11/Proxy.png" alt="Proxy" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Proxy</h3>
+          <p>Configure explicit proxy IP addresses and port numbers under OS or browser network settings to route traffic through intermediary servers for caching, URL filtering, and content scanning. Transparent proxies function inline without client-side setup.</p>
+        </div>
+      </article>
+
+      <article class="term" id="secure-dns">
+        <div class="visual photo">
+          <img src="2.11/Secure%20DNS.jpg" alt="Secure DNS" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Secure DNS</h3>
+          <span class="aka">DNS over HTTPS (DoH)</span>
+          <p>Enable DNS over HTTPS (DoH) in browser advanced settings to encrypt plaintext DNS queries, preventing external observers from monitoring requested FQDNs.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PART G: Browser feature management ===== -->
+  <section id="features">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part G</span>
+        <h2>Browser feature management</h2>
+        <p>Control which browser capabilities and add-ons are active.</p>
+      </div>
+
+      <article class="term" id="enable-disable">
+        <div class="visual photo">
+          <img src="2.11/Enable%20%20disable.jpg" alt="Enable and disable browser features" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Enable / disable</h3>
+          <p>Access browser management interfaces (e.g., <code>chrome://extensions</code> or browser settings) to manually enable, disable, or remove specific plug-ins, extensions, or native browser capabilities to minimize exposure to security risks.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Study notes for Core 2 objective 2.11 — Browser Security and Configuration. Images from the <code>2.11</code> folder.
+  </div>
+</footer>
+
+  <script src="study-lightbox.js"></script>
+</body>
+</html>

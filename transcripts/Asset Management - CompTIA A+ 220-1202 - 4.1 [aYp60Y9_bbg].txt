@@ -1,0 +1,110 @@
+Most organizations have a wide variety of technology
+they use to accomplish their task.
+This can include all of the mobile devices, laptops,
+desktop computers, anything that's
+in our network infrastructure, such as routers, switches,
+or firewalls.
+We also have to think about all of the fiber modules
+and individual cards that we're putting into these devices.
+And all of this information needs
+to be tracked and managed from one central point.
+Having a centralized database with all of this information
+contained in it allows us to provide better support
+for all of these different products.
+When the user contacts us about a problem,
+we can bring up their entire system
+with all of the individual components, the make, the model,
+the date it was purchased, and any other important information
+that we might need to help resolve this problem.
+We can also use this database from a financial perspective.
+We can create reports showing how much money we've spent
+on these technologies over the last year.
+We can determine if we have a larger spend
+on tablets versus laptops.
+We can also run audits to make sure
+that all of these devices are still being used
+in the organization.
+And from a tax perspective, it's
+useful to understand the depreciation of all these devices.
+So it's important to know when they were purchased
+and how long the organization has held on to these assets.
+And if you work for a company and they've handed you a laptop,
+you might look at the laptop and notice that there is a tag
+on the laptop itself.
+This is an asset tag, and it usually
+has the name of the organization along
+with some type of QR code or barcode,
+along with a number that is specific to this tag.
+Inside of our database, we are associating
+this specific tag number with the component
+that it's connected to.
+So we can ask our user for the asset number or the asset tag value,
+and we can bring that up on our screen
+and see exactly the hardware that we're talking about.
+This centralized asset tracking system
+is often referred to as a configuration management
+database, or CMDB.
+This is not just used by the help desk,
+but used across the organization.
+This might be used by the IT department
+so that we can tie a specific asset to a specific individual.
+So if we bring up a person's name,
+we can see if they've been assigned a laptop,
+if they have a mobile device, or if they're using a tablet.
+Our financial department might use this database
+to understand when these devices were purchased
+so that they can understand which one of these devices
+are in warranty and how many of these devices
+are out of warranty.
+This might help them understand if they need to allocate funds
+towards a maintenance program or if they should budget
+for additional technologies in the coming year.
+And the licensing team might use the information
+in this database to understand how much they're spending
+on individual software licenses and to get an understanding
+of what the renewal deadlines might
+be for these licenses and how much money they'll need to spend.
+Every company has a different process
+for requesting, purchasing, and then deploying
+these different technologies.
+We refer to this as the procurement lifecycle.
+This is effectively the process used for purchasing
+this equipment and getting it into the hands of the end user.
+This commonly starts with an internal purchase request form
+that is coming from the user.
+This will list out all of the different devices
+this user is requesting.
+And it usually has information on whether this is something
+that is budgeted or not.
+And it might also include a set of formal approvals
+so you can see exactly who signed off on this user
+receiving this equipment.
+The purchasing department is responsible for receiving
+these requests from the user and then negotiating with suppliers
+to find the best deal.
+This may not necessarily be the provider that has the least cost
+because there are a number of terms and conditions that
+might be associated with this purchase.
+For example, one vendor might add on an additional year
+of maintenance, whereas another vendor might not
+provide that as part of the cost.
+And once the purchasing department has decided on a vendor,
+they can send a purchase order over to that vendor
+for the purchase.
+The vendor then provides the products to the end user
+and then commonly sends an invoice to the purchasing
+department.
+This is a request made by the vendor
+to have the company pay for the products that
+have been shipped to the user.
+Usually, there is an accepted time frame
+between when the invoice is received by the purchasing
+department and when the payment is made
+by the accounting department.
+As you can see with this process,
+there are a series of checks and balances
+to ensure that the end user is getting the equipment they
+need, that that equipment has been verified as something
+the user should be purchasing, and we have the proper procedures
+in place to receive the equipment, be invoiced on that equipment,
+and then pay the vendor for that service or that product.

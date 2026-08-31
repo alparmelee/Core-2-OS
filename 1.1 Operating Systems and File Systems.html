@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.1 Operating Systems and File Systems</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14201c;
+    --muted:#4a5c54;
+    --paper:#f3f0e8;
+    --line:rgba(20,32,28,0.12);
+    --accent:#0f6e56;
+    --accent-soft:#d7efe6;
+    --good:#166534;
+    --warn:#9a3412;
+    --sky:#0e4d7b;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(15,110,86,0.16), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.10), transparent 50%),
+      linear-gradient(180deg, #e7ece7 0%, var(--paper) 40%, #ebe6db 100%);
+    line-height:1.55;
+  }
+  img{ max-width:100%; display:block; }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  /* Hero */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#f4faf7;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,18,16,0.2) 0%, rgba(8,18,16,0.72) 52%, rgba(8,18,16,0.94) 100%),
+      url("https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1600&q=80") center/cover no-repeat;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:28ch;
+    color:#e7f4ed;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:42ch;
+    color:#c5d7ce;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#e8f7f0;
+    color:#07261d;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#e8f7f0;
+    border:1px solid rgba(232,247,240,0.4);
+  }
+
+  /* TOC */
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(243,240,232,0.9);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.8rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  /* Sections */
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  /* Terms */
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:#fffdf8;
+  }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+  .visual.logo{ padding:1.2rem; }
+  .visual.logo img{ width:min(110px, 72%); max-height:110px; object-fit:contain; }
+  .visual.logo.fill img{ width:100%; height:160px; max-height:none; padding:0.8rem; }
+  .visual.win{ background:#0b1c3a; }
+  .visual.win img{ width:86px; }
+  .visual.linux{ background:#f3efe4; }
+  .visual.linux img{ width:100px; }
+  .visual.apple{ background:#111827; }
+  .visual.apple img{ filter:invert(1); width:70px; }
+  .visual.chrome{ background:#fff; }
+  .visual.chrome img{ width:92px; }
+  .visual.android{ background:#e8f5e9; }
+  .visual.android img{ width:92px; }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+
+  .split{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0.7rem;
+    margin-top:0.8rem;
+  }
+  .pill{
+    border-radius:14px;
+    padding:0.85rem 1rem;
+    font-size:0.9rem;
+  }
+  .pill strong{
+    display:block;
+    margin-bottom:0.25rem;
+    font-size:0.74rem;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+  }
+  .pill.pro{ background:#e8f6ee; color:var(--good); }
+  .pill.con{ background:#fdece7; color:var(--warn); }
+  .pill p{ margin:0; color:inherit; }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(15,110,86,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .visual.photo img{ height:140px; }
+    .split{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">1.1</p>
+    <h1>Operating Systems and File Systems</h1>
+    <p>Terms and definitions for how computers run software and organize data on storage devices.</p>
+    <div class="hero-cta">
+      <a href="#operating-systems">Browse operating systems</a>
+      <a class="ghost" href="#file-systems">Jump to file systems</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#operating-system">OS</a>
+    <a href="#windows">Windows</a>
+    <a href="#linux">Linux</a>
+    <a href="#macos">macOS</a>
+    <a href="#chromeos">Chrome OS</a>
+    <a href="#ipados">iPadOS</a>
+    <a href="#ios">iOS</a>
+    <a href="#android">Android</a>
+    <a href="#file-systems">File systems</a>
+    <a href="#ntfs">NTFS</a>
+    <a href="#refs">ReFS</a>
+    <a href="#fat32">FAT32</a>
+    <a href="#ext4">ext4</a>
+    <a href="#xfs">XFS</a>
+    <a href="#apfs">APFS</a>
+    <a href="#exfat">exFAT</a>
+    <a href="#lifecycle">EOL &amp; updates</a>
+  </div>
+</nav>
+
+<main>
+  <section id="operating-systems">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Operating systems</h2>
+        <p>An OS sits between you, your apps, and the hardware — scheduling work, managing memory, and making devices usable.</p>
+      </div>
+
+      <article class="term" id="operating-system">
+        <div class="visual photo">
+          <img src="1.1/Operating System.jfif" alt="Operating system overview" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Operating System</h3>
+          <p>An operating system is foundational system software that manages a computer’s hardware and software resources while acting as an intermediary between the user, applications, and physical components.</p>
+          <div class="note">Think of it as the layer that turns raw CPU, RAM, storage, and devices into a usable computer.</div>
+        </div>
+      </article>
+
+      <article class="term" id="windows">
+        <div class="visual logo win">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Windows_logo_-_2021.svg" alt="Microsoft Windows logo" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Windows</h3>
+          <p>Major market presence. Many different versions, such as Windows 10, Windows 11, and Windows Server.</p>
+          <div class="split">
+            <div class="pill pro">
+              <strong>Advantages</strong>
+              <p>Large industry support, a broad selection of OS options, and a wide variety of software support.</p>
+            </div>
+            <div class="pill con">
+              <strong>Disadvantages</strong>
+              <p>A big target for security exploitation, and large hardware support can create challenging integration exercises.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="term" id="linux">
+        <div class="visual logo linux">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Tux, the Linux mascot" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Linux</h3>
+          <p>Free Unix-compatible software system. Unix-like, but not Unix. Many different distributions such as Ubuntu, Debian, Red Hat, and Fedora.</p>
+          <div class="split">
+            <div class="pill pro">
+              <strong>Advantages</strong>
+              <p>Free, works on a wide variety of hardware, and has a passionate and active community.</p>
+            </div>
+            <div class="pill con">
+              <strong>Disadvantages</strong>
+              <p>Limited driver support (especially on laptops) and limited support options compared with commercial platforms.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="term" id="macos">
+        <div class="visual logo apple">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple logo" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>macOS</h3>
+          <p>A desktop OS running on Apple hardware.</p>
+          <div class="split">
+            <div class="pill pro">
+              <strong>Advantages</strong>
+              <p>Ease of use, high compatibility within Apple’s ecosystem, and fewer security concerns relative to broader PC targets.</p>
+            </div>
+            <div class="pill con">
+              <strong>Disadvantages</strong>
+              <p>Requires Apple hardware, less industry support than the PC platform, and higher initial hardware cost.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="term" id="chromeos">
+        <div class="visual logo chrome">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%28February_2022%29.svg" alt="Google Chrome icon representing Chrome OS" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Chrome OS</h3>
+          <p>Google’s operating system, based on the Linux kernel. It centers around the Chrome web browser, and most apps are web-based. Many manufacturers make Chromebooks, and devices are relatively less expensive.</p>
+          <div class="pill con" style="margin-top:0.8rem;">
+            <strong>Trade-off</strong>
+            <p>It relies on the cloud for many apps and services — connectivity matters.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="term" id="ipados">
+        <div class="visual photo">
+          <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&q=80" alt="Tablet representing iPadOS" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>iPadOS</h3>
+          <p>Operating system for Apple’s iPad tablets and a variant of Apple’s phone OS (iOS).</p>
+          <ul class="tags">
+            <li>Desktop-class Safari</li>
+            <li>Sidecar (second monitor)</li>
+            <li>Keyboard support</li>
+            <li>Multitasking</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="ios">
+        <div class="visual photo">
+          <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&q=80" alt="Smartphone representing iOS" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>iOS</h3>
+          <p>Apple iOS, used for Apple iPhones, is based on Unix. It is closed source (no public access to the source code) and exclusive to Apple products.</p>
+          <p>iOS apps are developed with Apple’s SDK on macOS, must be approved by Apple before release, and are available to users in the Apple App Store.</p>
+        </div>
+      </article>
+
+      <article class="term" id="android">
+        <div class="visual logo android">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Android_robot.svg" alt="Android robot logo" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Android</h3>
+          <p>Google Android is backed by the Open Handset Alliance. It is an open-source OS based on Linux and is supported on many manufacturers’ devices.</p>
+          <p>Android apps are developed on Windows, macOS, and Linux with the Android SDK. Apps are available from Google Play and also from third-party sites like the Amazon Appstore.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="file-systems">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>File systems</h2>
+        <p>How an OS names, stores, and finds files on disks, SSDs, and removable media.</p>
+      </div>
+
+      <article class="term" id="filesystem">
+        <div class="visual logo fill">
+          <img src="1.1/file-system.png" alt="File system diagram with filing cabinet and documents" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>File Systems</h3>
+          <p>A file system is the method and data structure an operating system uses to organize, name, store, and retrieve files on a storage device.</p>
+          <div class="note">Without a file system, data on a drive would be an unorganized stream of bytes with no way to identify where one file ends and the next begins.</div>
+        </div>
+      </article>
+
+      <article class="term" id="ntfs">
+        <div class="visual photo">
+          <img src="1.1/NTFS.jpg" alt="NTFS New Technology File System" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>New Technology File System (NTFS)</h3>
+          <span class="aka">Windows default for most modern volumes</span>
+          <p>Extensive improvements over FAT32: quotas, file compression, encryption, symbolic links, large file support, security, and recoverability.</p>
+          <p>Not very compatible across operating systems. Many OSes will read NTFS but not write. Some have limited write functionality to an NTFS file system.</p>
+        </div>
+      </article>
+
+      <article class="term" id="refs">
+        <div class="visual logo fill">
+          <img src="1.1/refs.png" alt="Microsoft ReFS logo" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Resilient File System (ReFS)</h3>
+          <span class="aka">The future of Windows file systems</span>
+          <p>An update to NTFS concepts for Server 2012 and later, with limited support in Windows 8.1 and later. Built for huge storage requirements and very large drives and storage arrays.</p>
+          <ul class="tags">
+            <li>Constant data availability</li>
+            <li>Self-repairing</li>
+            <li>Ongoing integrity checks</li>
+            <li>No more chkdsk!</li>
+            <li>RAID-like redundancy</li>
+          </ul>
+          <p style="margin-top:0.8rem;">Measured integration, updates, and improvements are ongoing.</p>
+        </div>
+      </article>
+
+      <article class="term" id="fat32">
+        <div class="visual logo fill">
+          <img src="1.1/fat32.webp" alt="FAT32 USB drive max file size" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>File Allocation Table 32 (FAT32)</h3>
+          <p><strong>FAT</strong> (File Allocation Table) is one of the first PC-based file systems (circa 1980).</p>
+          <p><strong>FAT32</strong> supports larger volume sizes (up to about 2 terabytes) and a maximum file size of 4 gigabytes.</p>
+        </div>
+      </article>
+
+      <article class="term" id="ext4">
+        <div class="visual logo fill">
+          <img src="1.1/ext4-file-system.avif" alt="ext4 fourth extended filesystem for Linux" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Fourth extended filesystem (ext4)</h3>
+          <p>Fourth extended file system — an update to ext3. Commonly seen in Linux and Android OS.</p>
+        </div>
+      </article>
+
+      <article class="term" id="xfs">
+        <div class="visual logo fill">
+          <img src="1.1/xfs_linux.webp" alt="XFS high-performance Linux file system" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Extended filesystem (XFS)</h3>
+          <p>High-performance file system for Linux, supported in most Linux distributions. Designed for scalability, large-scale computing, and high-speed processing.</p>
+          <ul class="tags">
+            <li>Enterprise features</li>
+            <li>Large file system sizes</li>
+            <li>Built-in journaling</li>
+            <li>Minimal fragmentation</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="apfs">
+        <div class="visual logo fill">
+          <img src="1.1/apfs-logo.jpg" alt="APFS Apple File System logo" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Apple File System (APFS)</h3>
+          <p>Added in macOS High Sierra (10.12.4). Also included with iOS and iPadOS. Optimized for solid-state storage.</p>
+          <ul class="tags">
+            <li>Encryption</li>
+            <li>Snapshots</li>
+            <li>Increased data integrity</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="exfat">
+        <div class="visual logo fill">
+          <img src="1.1/images.png" alt="exFAT extensible file allocation table logo" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Extensible File Allocation Table (exFAT)</h3>
+          <p>Microsoft flash drive file system. Files can be larger than 4 gigabytes. Compatible across many operating systems — Windows, Linux, and macOS.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="lifecycle">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Updates, EOL, and compatibility</h2>
+        <p>How long platforms are supported, how updates arrive, and what moves cleanly between OSes.</p>
+      </div>
+
+      <article class="term" id="eol">
+        <div class="visual photo">
+          <img src="1.1/EOL.jfif" alt="End of life EOL support timeline" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>End-of-life (EOL)</h3>
+          <p>Vendor-specific limitations. Different companies set their own EOL policies for when a product stops receiving updates and support.</p>
+        </div>
+      </article>
+
+      <article class="term" id="updates">
+        <div class="visual photo">
+          <img src="1.1/update.jfif" alt="Software update notification" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Update limitations</h3>
+          <p>iOS, Android, and Windows check and prompt for updates. Chrome OS will update automatically.</p>
+        </div>
+      </article>
+
+      <article class="term" id="compatibility">
+        <div class="visual photo">
+          <img src="1.1/OS_and_File_System_Blog.png" alt="Cross-compatibility between Windows, Apple, Android, and Linux" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Compatibility concerns between operating systems</h3>
+          <p>Some movies and music can be shared. However, there is no direct application compatibility. Fortunately, many apps have been built to run on different OSes.</p>
+          <p>Some data files can be moved across systems. Web-based apps have strong potential for cross-platform use.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    Images in the <code>1.1</code> folder. Study notes for Core 2 objective 1.1 — Operating Systems and File Systems.
+  </div>
+</footer>
+
+  <script src="study-lightbox.js"></script>
+</body>
+</html>

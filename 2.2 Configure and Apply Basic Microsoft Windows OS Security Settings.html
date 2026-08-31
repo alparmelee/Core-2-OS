@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>2.2 Configure and Apply Basic Microsoft Windows OS Security Settings</title>
+<style>
+  :root{
+    --accent:#0067c0;
+    --accent-light:#3a96dd;
+    --good:#1f8f5f;
+    --warn:#c9701f;
+    --bad:#c0271b;
+    --mono:"Cascadia Mono","Consolas",monospace;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; margin:0; font-family:"Segoe UI",Arial,sans-serif; }
+  body{ background:#202020; }
+
+  .layout{ display:flex; height:100%; gap:14px; padding:14px; }
+  .app-frame{ width:min(78%,1220px); height:100%; border-radius:10px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.5); flex-shrink:0; display:flex; flex-direction:column; background:#f3f3f3; }
+
+  .app-header{ background:linear-gradient(135deg,#12683e,#1f8f5f); color:#fff; padding:16px 22px; display:flex; align-items:center; gap:14px; flex-shrink:0; }
+  .app-header .hicon{ width:40px; height:40px; border-radius:10px; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+  .app-header h1{ font-size:16px; margin:0; }
+  .app-header p{ font-size:11.5px; margin:2px 0 0; opacity:0.9; }
+
+  .app-shell{ flex:1; display:flex; overflow:hidden; }
+  .app-nav{ width:280px; flex-shrink:0; background:#fafafa; border-right:1px solid #e2e2e2; overflow-y:auto; padding:10px 0 20px; }
+  .nav-group-title{ font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:#888; font-weight:700; padding:14px 16px 6px; }
+  .nav-item{ display:flex; align-items:center; gap:10px; padding:8px 16px; font-size:12.5px; cursor:pointer; color:#222; }
+  .nav-item .ni-num{ width:20px; height:20px; border-radius:50%; background:#e2e2e2; color:#666; font-size:10.5px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:700; }
+  .nav-item:hover{ background:#eef4fb; }
+  .nav-item.active{ background:#dceafb; font-weight:600; }
+  .nav-item.active .ni-num{ background:var(--accent); color:#fff; }
+
+  .app-main{ flex:1; overflow-y:auto; padding:26px 30px; background:#fff; }
+  .topic-title{ font-size:19px; margin:0 0 4px; display:flex; align-items:center; gap:10px; }
+  .topic-kicker{ font-size:11px; color:#888; text-transform:uppercase; letter-spacing:.05em; margin-bottom:14px; }
+  .topic-lede{ color:#555; font-size:13px; line-height:1.55; margin-bottom:20px; max-width:780px; }
+
+  .card{ border:1px solid #e2e2e2; border-radius:10px; padding:16px 18px; margin-bottom:16px; background:#fcfcfd; max-width:780px; }
+  .card h4{ margin:0 0 10px; font-size:12.5px; text-transform:uppercase; letter-spacing:.03em; color:#666; }
+  .row2{ display:flex; gap:16px; flex-wrap:wrap; }
+  .choice-card{ flex:1; min-width:220px; border:2px solid #e2e2e2; border-radius:10px; padding:14px 16px; cursor:pointer; transition:border-color .15s, background .15s; }
+  .choice-card:hover{ border-color:var(--accent-light); }
+  .choice-card.selected{ border-color:var(--accent); background:#eef6fd; }
+  .choice-card .cc-title{ font-weight:700; font-size:13px; margin-bottom:4px; }
+  .choice-card .cc-desc{ font-size:11.5px; color:#666; line-height:1.5; }
+
+  .field-row{ display:flex; align-items:center; gap:12px; margin-bottom:12px; font-size:12.5px; flex-wrap:wrap; }
+  .field-row label{ min-width:190px; flex-shrink:0; font-weight:500; }
+  .field-row input[type=range]{ flex:1; max-width:260px; }
+  .range-val{ font-weight:700; color:var(--accent); min-width:100px; }
+  select, input[type=text], input[type=password]{ border:1px solid #ccc; border-radius:5px; padding:6px 8px; font-size:12.5px; }
+
+  .btn{ border:1px solid #c8c8c8; background:#fff; border-radius:5px; padding:7px 14px; font-size:12.5px; cursor:pointer; }
+  .btn:hover{ background:#f0f6fc; border-color:var(--accent-light); }
+  .btn.primary{ background:var(--accent); color:#fff; border-color:var(--accent); }
+  .btn.primary:hover{ background:var(--accent-light); }
+  .btn.danger{ background:#fff; border-color:#d0362b; color:#c0271b; }
+  .btn.danger:hover{ background:#fdecea; }
+
+  .badge{ display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:20px; font-size:12px; font-weight:700; }
+  .badge.good{ background:#e6f6ee; color:var(--good); }
+  .badge.warn{ background:#fdf2e3; color:var(--warn); }
+  .badge.bad{ background:#fbe9e7; color:var(--bad); }
+  .badge .dot{ width:8px; height:8px; border-radius:50%; background:currentColor; }
+
+  table.dtable{ width:100%; border-collapse:collapse; font-size:12px; max-width:780px; }
+  table.dtable th{ text-align:left; padding:7px 9px; background:#f4f4f5; color:#444; font-weight:600; border-bottom:1px solid #e2e2e2; }
+  table.dtable td{ padding:6px 9px; border-bottom:1px solid #eee; vertical-align:middle; }
+  table.dtable th.hl, table.dtable td.hl{ background:#eaf3fc; }
+  table.dtable tr:hover td{ background:#f5f9fd; }
+
+  .checklist-row{ display:flex; align-items:flex-start; gap:10px; padding:9px 0; border-bottom:1px solid #f0f0f0; font-size:12.5px; }
+  .checklist-row:last-child{ border-bottom:none; }
+  .checklist-row input{ margin-top:2px; }
+
+  .banner{ display:flex; gap:10px; align-items:flex-start; background:#fff4e5; border:1px solid #f0c986; color:#7a4b00; padding:10px 12px; border-radius:6px; font-size:12px; margin-bottom:14px; max-width:780px; }
+  .banner.danger{ background:#fdecea; border-color:#f0a9a2; color:#7a1c14; }
+  .banner.good{ background:#eafaf1; border-color:#a9e0c0; color:#0f5c37; }
+
+  .log-box{ background:#111; color:#c8e6ff; font-family:var(--mono); font-size:11.5px; border-radius:8px; padding:12px 14px; max-width:780px; min-height:50px; white-space:pre-wrap; line-height:1.6; }
+
+  .toggle{ width:36px; height:20px; border-radius:12px; background:#c6c6c6; position:relative; cursor:pointer; flex-shrink:0; transition:background .15s; }
+  .toggle.on{ background:var(--accent); }
+  .toggle .knob{ position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:#fff; transition:left .15s; }
+  .toggle.on .knob{ left:18px; }
+  .settings-row{ display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid #ececec; font-size:12.5px; gap:14px; max-width:780px; }
+  .settings-row:last-child{ border-bottom:none; }
+
+  .icon-tile{ width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; background:#eef3f8; flex-shrink:0; }
+  .flow-row{ display:flex; align-items:center; gap:10px; font-size:12.5px; flex-wrap:wrap; }
+  .flow-arrow{ color:#aaa; font-size:16px; }
+  .file-chip{ display:inline-flex; align-items:center; gap:6px; border:1px solid #ddd; border-radius:6px; padding:6px 10px; font-size:12px; background:#fafafa; }
+
+  .ou-col{ flex:1; min-width:200px; border:1px dashed #ccc; border-radius:8px; padding:12px; min-height:120px; }
+  .ou-col h5{ margin:0 0 8px; font-size:11.5px; text-transform:uppercase; color:#777; }
+  .ou-obj{ display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:6px; background:#eef6fd; font-size:12.5px; }
+
+  /* Reference panel */
+  .reference{ width:420px; max-width:100%; height:100%; background:#181818; border-radius:14px; box-shadow:0 25px 70px rgba(0,0,0,0.5); display:flex; flex-direction:column; overflow:hidden; flex-shrink:0; color:#ddd; }
+  .ref-titlebar{ background:#242424; padding:10px 14px; font-size:13px; border-bottom:1px solid #333; display:flex; align-items:center; gap:8px; }
+  .ref-titlebar .dot{ width:8px; height:8px; border-radius:50%; background:#1f8f5f; }
+  .ref-search{ padding:10px 12px; border-bottom:1px solid #2e2e2e; background:#151515; }
+  .ref-search input{ width:100%; box-sizing:border-box; background:#0f0f0f; border:1px solid #333; color:#eee; font-size:12.5px; padding:8px 10px; border-radius:6px; outline:none; }
+  .ref-search input:focus{ border-color:#1f8f5f; }
+  .ref-list{ flex:1; overflow-y:auto; padding:4px 0 12px; }
+  .ref-item{ padding:10px 14px; border-bottom:1px solid #232323; cursor:pointer; }
+  .ref-item:hover{ background:#212121; }
+  .ref-item .ref-name{ font-size:13px; color:#5ac8fa; font-weight:700; }
+  .ref-item .ref-tag{ font-size:10px; color:#8adf9e; margin-top:2px; text-transform:uppercase; letter-spacing:.04em; }
+  .ref-item .ref-desc{ font-size:11.5px; color:#aaa; margin-top:5px; line-height:1.45; }
+  .ref-empty{ padding:24px 14px; color:#777; font-size:12.5px; text-align:center; }
+
+  @media (max-width:1100px){
+    .layout{ flex-direction:column; height:auto; }
+    .app-frame, .reference{ width:100%; max-width:100%; height:680px; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+  <div class="app-frame">
+    <div class="app-header">
+      <div class="hicon">🛡️</div>
+      <div><h1>Configure and Apply Basic Microsoft Windows OS Security Settings</h1><p>36 interactive concepts — Defender, Firewall, accounts, sign-in, permissions, encryption, and Active Directory</p></div>
+    </div>
+    <div class="app-shell">
+      <div class="app-nav" id="appNav"></div>
+      <div class="app-main" id="appMain"></div>
+    </div>
+  </div>
+
+  <div class="reference">
+    <div class="ref-titlebar"><span class="dot"></span><span>Concept Index</span></div>
+    <div class="ref-search"><input type="text" id="refSearchInput" placeholder="Filter concepts..."></div>
+    <div class="ref-list" id="refList"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  function elc(html){ const t=document.createElement('template'); t.innerHTML=html.trim(); return t.content.firstChild; }
+  function escFix(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function badge(kind, text){ return `<span class="badge ${kind}"><span class="dot"></span>${escFix(text)}</span>`; }
+  function h4(t){ return `<h4 style="text-transform:none; letter-spacing:0; color:#333; font-size:13.5px; margin:20px 0 10px;">${escFix(t)}</h4>`; }
+  function toggleRow(label, desc, on, key){
+    return `<div class="settings-row"><div style="flex:1;"><div style="font-weight:600;">${escFix(label)}</div>${desc?`<div style="color:#666; font-size:11.5px; margin-top:2px;">${escFix(desc)}</div>`:''}</div><div class="toggle ${on?'on':''}" data-key="${key||''}"><div class="knob"></div></div></div>`;
+  }
+  function table(columns, rows, hlIdx){
+    return `<table class="dtable"><thead><tr>${columns.map((c,i)=>`<th class="${i===hlIdx?'hl':''}">${c}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`;
+  }
+
+  function mountGeneric(panel){
+    panel.addEventListener('click', (e)=>{
+      const tg = e.target.closest('.toggle');
+      if(tg){ tg.classList.toggle('on'); tg.dispatchEvent(new CustomEvent('toggled', {bubbles:true})); }
+      const cc = e.target.closest('.choice-card');
+      if(cc && cc.parentElement.classList.contains('row2')){
+        cc.parentElement.querySelectorAll('.choice-card').forEach(c=>c.classList.remove('selected'));
+        cc.classList.add('selected');
+        cc.dispatchEvent(new CustomEvent('picked', {bubbles:true}));
+      }
+    });
+    panel.addEventListener('input', (e)=>{
+      if(e.target.type==='range'){
+        const out = e.target.parentElement.querySelector('.range-val');
+        if(out) out.textContent = e.target.dataset.fmt ? e.target.dataset.fmt.replace('{v}', e.target.value) : e.target.value;
+      }
+    });
+  }
+
+  /* ============================================================
+     Shared: account permission matrix
+  ============================================================ */
+  const matrixRows = [
+    { action:'Run installed applications', Standard:'yes', Administrator:'yes', Guest:'limited', 'Power User':'yes' },
+    { action:'Change personal settings (wallpaper, preferences)', Standard:'yes', Administrator:'yes', Guest:'no', 'Power User':'yes' },
+    { action:'Install or remove system-wide software', Standard:'no', Administrator:'yes', Guest:'no', 'Power User':'legacy' },
+    { action:'Modify critical security settings', Standard:'no', Administrator:'yes', Guest:'no', 'Power User':'no' },
+    { action:"Access other users' private files", Standard:'no', Administrator:'override', Guest:'no', 'Power User':'no' },
+    { action:'Run legacy administrative tools', Standard:'no', Administrator:'yes', Guest:'no', 'Power User':'yes' },
+  ];
+  const symMap = { yes:'✅', no:'⛔', limited:'➖ limited', legacy:'✅ legacy apps only', override:'✅ (admin override)' };
+  function permMatrixHTML(highlight){
+    const cols = ['Standard','Administrator','Guest','Power User'];
+    const hlIdx = cols.indexOf(highlight) + 1;
+    const rows = matrixRows.map(r=>`<tr><td>${escFix(r.action)}</td>${cols.map((c,i)=>`<td class="${i+1===hlIdx?'hl':''}">${symMap[r[c]]}</td>`).join('')}</tr>`);
+    return `<div class="card"><h4>Local account permission matrix</h4>${table(['Action',...cols], rows, hlIdx)}</div>`;
+  }
+
+  /* ============================================================
+     Topics
+  ============================================================ */
+  const topics = [
+    /* ---------------- Windows Defender Antivirus ---------------- */
+    { id:'defender-overview', group:'Windows Defender Antivirus', name:'Defender Antivirus', emoji:'🦠',
+      desc:'The built-in antivirus for Windows — no additional third-party product is required. It lives inside the Windows Security app under Virus & threat protection. The exact label may not read "Defender Antivirus"; the name has changed over time (Windows Defender → Windows Defender Antivirus → Microsoft Defender Antivirus).',
+      render:()=>`<div class="card"><h4>Windows Security — Virus &amp; threat protection</h4>
+        <div style="display:flex; align-items:center; gap:14px;"><div class="icon-tile" style="background:#e6f6ee; color:#1f8f5f; font-size:26px;">🛡️</div>
+          <div><div style="font-weight:700;">Protected</div><div style="color:#666; font-size:12px;">No action needed.</div></div></div>
+        <h4 style="margin-top:18px;">Name history</h4>
+        <div class="flow-row"><span class="file-chip">Windows Defender</span><span class="flow-arrow">→</span><span class="file-chip">Windows Defender Antivirus</span><span class="flow-arrow">→</span><span class="file-chip">Microsoft Defender Antivirus (current)</span></div>
+      </div>` },
+
+    { id:'defender-toggle', group:'Windows Defender Antivirus', name:'Activate/deactivate', emoji:'🔛',
+      desc:'Don\u2019t disable your security protection except for temporary troubleshooting — it increases risk, so make sure you know what you\u2019re doing. Defender Antivirus operates in real time. Path: Windows Security app → Virus & threat protection settings → Manage settings → Real-time protection.',
+      render:()=>`<div class="card"><h4>Virus &amp; threat protection settings → Manage settings</h4>
+        ${toggleRow('Real-time protection', 'Locates and stops malware from installing or running on your device', true, 'rtp')}
+        <div id="defToggleResult" style="margin-top:12px;"></div>
+      </div>`,
+      init:(panel)=>{
+        function paint(){
+          const on = panel.querySelector('.toggle[data-key=rtp]').classList.contains('on');
+          panel.querySelector('#defToggleResult').innerHTML = on
+            ? badge('good','Protected — real-time protection is on')
+            : badge('bad','At risk — real-time protection is off') + `<div class="banner danger" style="margin-top:10px;">This should only be off temporarily for troubleshooting. Turn it back on as soon as you\u2019re done — leaving it off increases your exposure to malware.</div>`;
+        }
+        panel.querySelector('.toggle').addEventListener('toggled', paint); paint();
+      } },
+
+    { id:'defender-updates', group:'Windows Defender Antivirus', name:'Update definitions', emoji:'🔄',
+      desc:'Antivirus is only as good as its latest signatures, so staying up to date matters. Go to Virus & threat protection → Protection updates, and click "Check for updates." Automatic updates are normally configured by default.',
+      render:()=>`<div class="card"><h4>Virus &amp; threat protection updates</h4>
+        <div class="kv" style="font-size:12.5px; line-height:1.9;"><div>Definition version:</div><div id="defVer">1.423.118.0</div><div>Last updated:</div><div id="defDate">2 days ago</div></div>
+        ${toggleRow('Automatic updates', 'Normally configured to keep definitions current without user action', true)}
+        <button class="btn primary" id="defCheck" style="margin-top:10px;">Check for updates</button>
+        <div id="defProgress" style="display:none; margin-top:10px;"><div style="background:#e6e6e6; border-radius:4px; height:8px; overflow:hidden;"><div id="defBar" style="background:var(--accent); height:100%; width:0%;"></div></div></div>
+      </div>`,
+      init:(panel)=>{
+        panel.querySelector('#defCheck').addEventListener('click', ()=>{
+          const wrap = panel.querySelector('#defProgress'); const bar = panel.querySelector('#defBar');
+          wrap.style.display='block'; let p=0;
+          const t = setInterval(()=>{ if(!bar.isConnected){clearInterval(t); return;} p+=Math.random()*30; bar.style.width=Math.min(p,100)+'%';
+            if(p>=100){ clearInterval(t); panel.querySelector('#defVer').textContent='1.423.119.0'; panel.querySelector('#defDate').textContent='Just now'; }
+          }, 180);
+        });
+      } },
+
+    /* ---------------- Windows Firewall ---------------- */
+    { id:'firewall-overview', group:'Windows Firewall', name:'Firewall', emoji:'🧱',
+      desc:'Windows Firewall monitors inbound and outbound network traffic and blocks anything that doesn\u2019t match an allowed rule, forming the first line of defense between this PC and the network.',
+      render:()=>`<div class="card"><h4>What a firewall does</h4>
+        <div class="flow-row"><span class="file-chip">🌐 Network traffic</span><span class="flow-arrow">→</span><span class="file-chip">🧱 Firewall rules</span><span class="flow-arrow">→</span><span class="file-chip">✅ Allowed</span></div>
+        <div class="flow-row" style="margin-top:8px;"><span class="file-chip">🌐 Network traffic</span><span class="flow-arrow">→</span><span class="file-chip">🧱 Firewall rules</span><span class="flow-arrow">→</span><span class="file-chip" style="border-color:#f0a9a2; color:#c0271b;">⛔ Blocked</span></div>
+      </div>` },
+
+    { id:'firewall-toggle', group:'Windows Firewall', name:'Activate/deactivate', emoji:'🔛',
+      desc:'Activating or deactivating a firewall toggles its ability to monitor traffic — turning it off removes protection and leaves the system vulnerable to unauthorized network connections.',
+      render:()=>`<div class="card"><h4>Firewall state by network profile</h4>
+        ${toggleRow('Domain network firewall', '', true, 'dom')}
+        ${toggleRow('Private network firewall', '', true, 'priv')}
+        ${toggleRow('Public network firewall', '', true, 'pub')}
+        <div id="fwResult" style="margin-top:12px;"></div>
+      </div>`,
+      init:(panel)=>{
+        function paint(){
+          const offCount = ['dom','priv','pub'].filter(k=>!panel.querySelector(`.toggle[data-key=${k}]`).classList.contains('on')).length;
+          const out = panel.querySelector('#fwResult');
+          if(offCount===0) out.innerHTML = badge('good','All profiles protected');
+          else out.innerHTML = badge('bad', offCount+' profile(s) unprotected') + `<div class="banner danger" style="margin-top:10px;">Any profile with the firewall off accepts unsolicited inbound connections — this leaves the system open to unauthorized network access on that network type.</div>`;
+        }
+        panel.querySelectorAll('.toggle').forEach(t=> t.addEventListener('toggled', paint)); paint();
+      } },
+
+    { id:'firewall-ports', group:'Windows Firewall', name:'Port security', emoji:'🔌',
+      desc:'Port security controls network traffic by selectively opening or closing specific communication ports, to block unauthorized entry and restrict unnecessary network protocols.',
+      render:()=>`<div class="card"><h4>Inbound port rules</h4>
+        ${[['3389','Remote Desktop (RDP)',false],['445','File & Printer Sharing (SMB)',true],['80','HTTP (web server)',false],['23','Telnet (legacy)',false]].map(([port,name,open])=>
+          toggleRow(`Port ${port} — ${name}`, open?'Currently open':'Currently closed', open, 'port'+port)).join('')}
+        <div id="portSummary" style="margin-top:12px; font-size:12px; color:#666;"></div>
+      </div>`,
+      init:(panel)=>{
+        function paint(){
+          const open = Array.from(panel.querySelectorAll('.toggle')).filter(t=>t.classList.contains('on')).length;
+          panel.querySelector('#portSummary').textContent = `${open} of 4 ports open to inbound traffic. Every open port is a potential entry point — close anything not actively needed.`;
+        }
+        panel.querySelectorAll('.toggle').forEach(t=> t.addEventListener('toggled', paint)); paint();
+      } },
+
+    { id:'firewall-appsec', group:'Windows Firewall', name:'Application security', emoji:'📛',
+      desc:'Application security allows or blocks specific programs from sending or receiving data across the network — regardless of which port they use.',
+      render:()=>`<div class="card"><h4>Allowed apps</h4>
+        ${[['Microsoft Edge',true],['Slack',true],['Unknown Installer.exe',false],['Remote Access Tool',false]].map(([app,allowed])=> toggleRow(app,'',allowed,'app-'+app.replace(/\\s/g,''))).join('')}
+        <p style="color:#666; font-size:11.5px; margin-top:10px;">Blocking an app here stops its network traffic even if it tries to use an allowed port like 443 (HTTPS).</p>
+      </div>` },
+
+    /* ---------------- Users & Groups ---------------- */
+    { id:'ug-overview', group:'Users & Groups', name:'User and groups', emoji:'👥',
+      desc:'Windows controls what a person can do through their account type and group memberships — from a fully locked-down Guest to an unrestricted Administrator.',
+      render:()=>permMatrixHTML(null) },
+
+    { id:'ug-localms', group:'Users & Groups', name:'Local vs. Microsoft account', emoji:'☁️',
+      desc:'A local account stores credentials offline on a single PC and only grants access to that device. A Microsoft account connects your sign-in to cloud services, syncing settings, files, and credentials across multiple devices.',
+      render:()=>`<div class="row2">
+        <div class="choice-card selected" data-kind="local"><div class="cc-title">💻 Local account</div><div class="cc-desc">Credentials stored only on this PC. Access is limited to this single device. No cloud sync.</div></div>
+        <div class="choice-card" data-kind="ms"><div class="cc-title">☁️ Microsoft account</div><div class="cc-desc">Sign-in tied to Microsoft's cloud. Settings, files, and credentials sync across every device you sign into.</div></div>
+      </div>
+      <div class="card" style="margin-top:16px;"><h4>What syncs</h4><div id="acctSyncDetail"></div></div>`,
+      init:(panel)=>{
+        function paint(kind){
+          const d = panel.querySelector('#acctSyncDetail');
+          d.innerHTML = kind==='local'
+            ? `<div style="font-size:12.5px; line-height:1.9;">🔒 Credentials: stored only in this PC's SAM database<br>🖥️ Access: this device only<br>☁️ Sync: none — settings and files stay local</div>`
+            : `<div style="font-size:12.5px; line-height:1.9;">🔒 Credentials: managed by Microsoft's cloud identity service<br>🖥️ Access: any device you sign into<br>☁️ Sync: theme, passwords, some app settings, and OneDrive files follow you</div>`;
+        }
+        panel.querySelectorAll('.choice-card').forEach(cc=> cc.addEventListener('click', ()=> paint(cc.dataset.kind)));
+        paint('local');
+      } },
+
+    { id:'ug-standard', group:'Users & Groups', name:'Standard account', emoji:'🙂',
+      desc:'A Standard account can run applications and change personal settings, but is blocked from installing system-wide software or modifying critical security settings without administrator approval.',
+      render:()=>permMatrixHTML('Standard') },
+
+    { id:'ug-admin', group:'Users & Groups', name:'Administrator', emoji:'👑',
+      desc:'An Administrator account has full, unrestricted control over the operating system — installing software, changing system configuration, and managing permissions for every other user.',
+      render:()=>permMatrixHTML('Administrator') },
+
+    { id:'ug-guest', group:'Users & Groups', name:'Guest user', emoji:'🚶',
+      desc:'A Guest account is a restricted, temporary account for casual access. It prevents installing software, changing system settings, or accessing other users\u2019 private files.',
+      render:()=>permMatrixHTML('Guest') },
+
+    { id:'ug-poweruser', group:'Users & Groups', name:'Power user', emoji:'⚡',
+      desc:'Power User is a legacy Windows group with elevated permissions — such as installing legacy applications and running some administrative tools — without full administrator control over the system.',
+      render:()=>permMatrixHTML('Power User') },
+
+    /* ---------------- Log-in OS Options ---------------- */
+    { id:'signin-overview', group:'Sign-in Options', name:'Log-in OS options', emoji:'🔐',
+      desc:'Windows supports several ways to prove who you are before letting you in — from a classic password to biometrics and passwordless hardware-backed sign-in.',
+      render:()=>`<div class="row2">
+        ${[['🔤','Password'],['🔢','PIN'],['👆','Fingerprint'],['🙂','Face'],['🔗','SSO'],['✨','Hello']].map(([em,n])=>`<div class="choice-card" style="text-align:center; flex:0 0 110px;"><div style="font-size:26px;">${em}</div><div class="cc-title" style="margin-top:6px; font-size:12px;">${n}</div></div>`).join('')}
+      </div>
+      <p style="color:#666; font-size:12px; margin-top:14px;">Explore each method using the nav on the left.</p>` },
+
+    { id:'signin-password', group:'Sign-in Options', name:'Username and password', emoji:'🔤',
+      desc:'The traditional authentication method: type a secret string of characters associated with your account name to verify your identity.',
+      render:()=>`<div class="card"><h4>Sign-in</h4>
+        <div class="field-row"><label>Username</label><input type="text" value="jsmith" style="flex:1;"></div>
+        <div class="field-row"><label>Password</label><input type="password" value="••••••••••" style="flex:1;"></div>
+        <button class="btn primary" data-key="pwlogin">Sign in</button>
+        <div id="pwResult" style="margin-top:12px;"></div>
+      </div>`,
+      init:(panel)=>{ panel.querySelector('[data-key=pwlogin]').addEventListener('click', ()=>{ panel.querySelector('#pwResult').innerHTML = badge('good','Identity verified — credentials matched the account.'); }); } },
+
+    { id:'signin-pin', group:'Sign-in Options', name:'Personal identification number (PIN)', emoji:'🔢',
+      desc:'A short, device-bound numerical code tied specifically to your physical machine — it allows fast login without ever transmitting your main account password over the network.',
+      render:()=>`<div class="card"><h4>Enter PIN</h4>
+        <div class="field-row"><label>PIN</label><input type="password" maxlength="6" value="••••" style="width:100px;"></div>
+        <button class="btn primary" data-key="pinlogin">Unlock</button>
+        <div id="pinResult" style="margin-top:12px;"></div>
+      </div>
+      <div class="banner good">Because the PIN is validated locally against this device\u2019s hardware security chip, it never travels over the network — even if intercepted, it's useless on any other machine.</div>`,
+      init:(panel)=>{ panel.querySelector('[data-key=pinlogin]').addEventListener('click', ()=>{ panel.querySelector('#pinResult').innerHTML = badge('good','Unlocked — PIN validated locally on this device.'); }); } },
+
+    { id:'signin-fingerprint', group:'Sign-in Options', name:'Fingerprint', emoji:'👆',
+      desc:'A biometric authentication feature that scans the unique ridges of your finger to quickly verify your identity and unlock your device.',
+      render:()=>`<div class="card" style="text-align:center;"><h4 style="text-align:left;">Fingerprint sensor</h4>
+        <div id="fpIcon" style="font-size:54px; margin:14px 0; transition:transform .2s;">👆</div>
+        <button class="btn primary" id="fpScan">Scan finger</button>
+        <div id="fpResult" style="margin-top:14px;"></div>
+      </div>`,
+      init:(panel)=>{
+        panel.querySelector('#fpScan').addEventListener('click', ()=>{
+          const icon = panel.querySelector('#fpIcon'); icon.style.transform='scale(1.2)';
+          setTimeout(()=>{ if(icon.isConnected) icon.style.transform='scale(1)'; }, 200);
+          panel.querySelector('#fpResult').innerHTML = badge('good','Fingerprint matched — welcome back.');
+        });
+      } },
+
+    { id:'signin-face', group:'Sign-in Options', name:'Facial recognition', emoji:'🙂',
+      desc:'A biometric security system that scans your face using specialized infrared or 3D cameras to instantly confirm your identity and grant access.',
+      render:()=>`<div class="card" style="text-align:center;"><h4 style="text-align:left;">Facial recognition</h4>
+        <div id="faceIcon" style="font-size:54px; margin:14px 0;">🙂</div>
+        ${toggleRow('Compatible IR / 3D camera present', '', true, 'faceCam')}
+        <button class="btn primary" id="faceScan" style="margin-top:10px;">Scan face</button>
+        <div id="faceResult" style="margin-top:14px;"></div>
+      </div>`,
+      init:(panel)=>{
+        panel.querySelector('#faceScan').addEventListener('click', ()=>{
+          const ok = panel.querySelector('.toggle[data-key=faceCam]').classList.contains('on');
+          panel.querySelector('#faceResult').innerHTML = ok ? badge('good','Face matched — welcome back.') : badge('bad','No compatible camera found — cannot use facial recognition.');
+        });
+      } },
+
+    { id:'signin-sso', group:'Sign-in Options', name:'SSO', emoji:'🔗',
+      desc:'Single sign-on lets you log in once with a single set of credentials and automatically gain access to multiple related applications and websites — no need to type your password again for each one.',
+      render:()=>`<div class="card"><h4>Single sign-on</h4>
+        <button class="btn primary" id="ssoLogin">Sign in once</button>
+        <div class="row2" style="margin-top:16px;">
+          ${['Email','Calendar','Team Chat','File Storage'].map(a=>`<div class="choice-card" data-app="${a}" style="text-align:center; flex:0 0 140px; opacity:0.4;"><div class="cc-title">${a}</div><div class="cc-desc" id="sso-${a.replace(/\\s/g,'')}">Locked</div></div>`).join('')}
+        </div>
+      </div>`,
+      init:(panel)=>{
+        panel.querySelector('#ssoLogin').addEventListener('click', ()=>{
+          panel.querySelectorAll('.choice-card').forEach((c,i)=>{
+            setTimeout(()=>{ if(!c.isConnected) return; c.style.opacity='1'; c.querySelector('.cc-desc').textContent='✅ Access granted'; }, i*180);
+          });
+        });
+      } },
+
+    { id:'signin-hello', group:'Sign-in Options', name:'Passwordless/Windows Hello', emoji:'✨',
+      desc:'Windows Hello enables passwordless sign-in by replacing text passwords with secure biometrics (facial recognition or fingerprint) or a device-bound PIN, backed by the computer\u2019s hardware security chip.',
+      render:()=>`<div class="card"><h4>Set up Windows Hello</h4>
+        <div class="field-row"><label>Preferred method</label><select id="helloMethod"><option value="face">Face recognition</option><option value="finger">Fingerprint</option><option value="pin">PIN</option></select></div>
+        <button class="btn primary" id="helloSetup">Set up</button>
+        <div id="helloResult" style="margin-top:12px;"></div>
+      </div>`,
+      init:(panel)=>{
+        panel.querySelector('#helloSetup').addEventListener('click', ()=>{
+          const m = panel.querySelector('#helloMethod').value;
+          const label = {face:'Face recognition', finger:'Fingerprint', pin:'PIN'}[m];
+          panel.querySelector('#helloResult').innerHTML = badge('good', label + ' enrolled') + `<p style="margin-top:8px; font-size:12px; color:#666;">Your password is no longer needed to sign in — ${label} is now verified locally against the hardware security chip (TPM).</p>`;
+        });
+      } },
+
+    /* ---------------- File & Folder Permissions ---------------- */
+    { id:'perm-ntfsshare', group:'File & Folder Permissions', name:'NTFS vs. share permissions', emoji:'🗝️',
+      desc:'Share permissions act like a guard at the front gate, controlling who gets in through the network. NTFS permissions act like individual lockboxes inside the house, controlling access to specific files and subfolders. If either one denies you, you can\u2019t get in.',
+      render:()=>`<div class="card"><h4>Effective access calculator</h4>
+        <div class="field-row"><label>Share permission</label><select id="sharePerm"><option value="allow">Allow</option><option value="deny">Deny</option></select></div>
+        <div class="field-row"><label>NTFS permission</label><select id="ntfsPerm"><option value="allow">Allow</option><option value="deny">Deny</option></select></div>
+        <div id="effResult" style="margin-top:12px;"></div>
+      </div>`,
+      init:(panel)=>{
+        function compute(){
+          const s = panel.querySelector('#sharePerm').value, n = panel.querySelector('#ntfsPerm').value;
+          const out = panel.querySelector('#effResult');
+          if(s==='deny' || n==='deny') out.innerHTML = badge('bad','Access denied') + `<p style="margin-top:8px; font-size:12px; color:#666;">${s==='deny'?'The share-level "guard at the gate" ':'The NTFS "lockbox" '}denies access — a single Deny anywhere overrides any Allow.</p>`;
+          else out.innerHTML = badge('good','Access granted') + `<p style="margin-top:8px; font-size:12px; color:#666;">Both the share gate and the NTFS lockbox allow it, so the user gets in.</p>`;
+        }
+        panel.querySelectorAll('select').forEach(s=> s.addEventListener('change', compute)); compute();
+      } },
+
+    { id:'perm-attributes', group:'File & Folder Permissions', name:'File and folder attributes', emoji:'🏷️',
+      desc:'File and folder attributes are metadata flags stored by the file system that define specific operating behaviors and access characteristics — such as read-only, hidden, archived, or encrypted.',
+      render:()=>`<div class="card"><h4>report.docx</h4>
+        <div id="attrFileChip" class="file-chip" style="font-size:14px; padding:10px 14px; margin-bottom:14px;">📄 report.docx</div>
+        ${toggleRow('Read-only', 'Prevents accidental edits or deletion', false, 'ro')}
+        ${toggleRow('Hidden', 'File does not appear in normal folder views', false, 'hid')}
+        ${toggleRow('Archive', 'Marked as changed since the last backup', true, 'arc')}
+        ${toggleRow('Encrypted (EFS)', 'Contents are unreadable without the owning user\u2019s key', false, 'enc')}
+      </div>`,
+      init:(panel)=>{
+        function paint(){
+          const ro = panel.querySelector('.toggle[data-key=ro]').classList.contains('on');
+          const hid = panel.querySelector('.toggle[data-key=hid]').classList.contains('on');
+          const enc = panel.querySelector('.toggle[data-key=enc]').classList.contains('on');
+          const chip = panel.querySelector('#attrFileChip');
+          chip.style.opacity = hid ? '0.4' : '1';
+          chip.style.color = enc ? '#1f8f5f' : '#111';
+          chip.innerHTML = `📄 report.docx ${ro?'🔒':''} ${hid?'(hidden)':''}`;
+        }
+        panel.querySelectorAll('.toggle').forEach(t=> t.addEventListener('toggled', paint)); paint();
+      } },
+
+    { id:'perm-inheritance', group:'File & Folder Permissions', name:'Inheritance', emoji:'🌳',
+      desc:'Permission inheritance is a mechanism where files and subfolders automatically receive (inherit) the access permissions of their parent folder.',
+      render:()=>`<div class="card"><h4>Permission flow</h4>
+        ${toggleRow('Inheritance enabled', 'Subfolders and files automatically pick up the parent\u2019s permissions', true, 'inh')}
+        <div id="inhTree" style="margin-top:14px; font-size:12.5px; line-height:2.2;"></div>
+      </div>`,
+      init:(panel)=>{
+        function paint(){
+          const on = panel.querySelector('.toggle').classList.contains('on');
+          panel.querySelector('#inhTree').innerHTML = `
+            <div>📁 Projects (Sales-Team: Read/Write)</div>
+            <div>&nbsp;&nbsp;→ 📁 Q3 Reports — ${on?'✅ inherits Sales-Team: Read/Write':'⛔ explicit permissions only (blank until set)'}</div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;→ 📄 summary.xlsx — ${on?'✅ inherits Sales-Team: Read/Write':'⛔ explicit permissions only (blank until set)'}</div>`;
+        }
+        panel.querySelector('.toggle').addEventListener('toggled', paint); paint();
+      } },
+
+    { id:'perm-runas', group:'File & Folder Permissions', name:'Run as administrator vs. standard user', emoji:'🏃',
+      desc:'Running as an administrator grants full, unrestricted access to modify system files and settings. A standard user account operates with restricted permissions to prevent unauthorized system-wide changes and protect against malware.',
+      render:()=>`<div class="card"><h4>Attempt an action</h4>
+        <div class="field-row"><label>Run as</label><select id="runasMode"><option value="std">Standard user</option><option value="admin">Administrator</option></select></div>
+        ${table(['Action','Result'], [
+          `<tr data-a="wallpaper"><td>Change desktop wallpaper</td><td class="res"></td></tr>`,
+          `<tr data-a="software"><td>Install new software</td><td class="res"></td></tr>`,
+          `<tr data-a="sysfile"><td>Edit a protected system file</td><td class="res"></td></tr>`,
+        ])}
+      </div>`,
+      init:(panel)=>{
+        function paint(){
+          const admin = panel.querySelector('#runasMode').value==='admin';
+          const results = { wallpaper:true, software:admin, sysfile:admin };
+          Object.keys(results).forEach(k=>{
+            panel.querySelector(`tr[data-a=${k}] .res`).innerHTML = results[k] ? badge('good','Succeeds') : badge('bad','Blocked');
+          });
+        }
+        panel.querySelector('#runasMode').addEventListener('change', paint); paint();
+      } },
+
+    { id:'perm-uac', group:'File & Folder Permissions', name:'User Account Control (UAC)', emoji:'🛑',
+      desc:'A Windows security feature that prevents unauthorized system changes by asking for your permission — or an administrator password — before running programs or making settings changes.',
+      render:()=>`<div class="card"><h4>UAC notification level</h4>
+        <input type="range" min="0" max="3" value="2" id="uacSlider" data-fmt="{v}"><div class="range-val" id="uacLabel" style="margin-top:6px;">Notify only when apps try to make changes</div>
+        <button class="btn primary" id="uacTrigger" style="margin-top:10px;">Run an app that needs admin rights</button>
+        <div id="uacPrompt" style="margin-top:14px;"></div>
+      </div>`,
+      init:(panel)=>{
+        const labels = ['Never notify','Notify me only when apps try to make changes (don\u2019t dim my desktop)','Always notify','Always notify and wait for a response'];
+        const slider = panel.querySelector('#uacSlider');
+        function paintLabel(){ panel.querySelector('#uacLabel').textContent = labels[slider.value]; }
+        slider.addEventListener('input', paintLabel); paintLabel();
+        panel.querySelector('#uacTrigger').addEventListener('click', ()=>{
+          const level = parseInt(slider.value);
+          const out = panel.querySelector('#uacPrompt');
+          if(level===0){ out.innerHTML = badge('bad','No prompt — change applied silently (risky).'); }
+          else { out.innerHTML = `<div class="banner"><b>User Account Control</b><br>Do you want to allow this app to make changes to your device?<br><button class="btn primary" style="margin-top:8px;" data-toast>Yes</button> <button class="btn" style="margin-left:6px;">No</button></div>`; }
+        });
+      } },
+
+    /* ---------------- Encryption ---------------- */
+    { id:'enc-bitlocker', group:'Encryption', name:'BitLocker', emoji:'🔒',
+      desc:'BitLocker encrypts an entire volume, protecting all of your data including the OS. It\u2019s supported on all Windows editions except Home. If you lose your laptop, it doesn\u2019t matter without the password — data stays protected even if the physical drive is moved to another computer.',
+      render:()=>`<div class="card"><h4>Drive C: encryption</h4>
+        ${toggleRow('BitLocker', 'Encrypt this entire volume', false, 'bl')}
+        <div class="field-row" style="margin-top:10px;"><label>Scenario</label><select id="blScenario"><option value="stolen">Laptop is stolen (no password)</option><option value="moved">Drive removed and installed in another PC</option></select></div>
+        <div id="blResult" style="margin-top:12px;"></div>
+      </div>`,
+      init:(panel)=>{
+        function compute(){
+          const on = panel.querySelector('.toggle').classList.contains('on');
+          const out = panel.querySelector('#blResult');
+          out.innerHTML = on ? badge('good','Data remains protected — unreadable without the recovery key or password') : badge('bad','Data is fully readable by anyone with the drive');
+        }
+        panel.querySelector('.toggle').addEventListener('toggled', compute);
+        panel.querySelector('#blScenario').addEventListener('change', compute);
+        compute();
+      } },
+
+    { id:'enc-bitlockertogo', group:'Encryption', name:'BitLocker-To-Go', emoji:'💾',
+      desc:'The same BitLocker protection, applied to encrypt removable USB flash drives.',
+      render:()=>`<div class="card"><h4>USB flash drive (E:)</h4>
+        ${toggleRow('BitLocker To Go', 'Encrypt this removable drive', false, 'blg')}
+        <div id="blgResult" style="margin-top:12px;"></div>
+      </div>`,
+      init:(panel)=>{
+        function paint(){
+          const on = panel.querySelector('.toggle').classList.contains('on');
+          panel.querySelector('#blgResult').innerHTML = on ? badge('good','Drive E: is encrypted — a password is required on any PC before its files can be read') : badge('warn','Drive E: is unencrypted — anyone who plugs it in can read every file');
+        }
+        panel.querySelector('.toggle').addEventListener('toggled', paint); paint();
+      } },
+
+    { id:'enc-efs', group:'Encryption', name:'Encrypting File System (EFS)', emoji:'📗',
+      desc:'EFS encrypts at the file-system level and requires NTFS. It\u2019s supported on all Windows editions except Home. It uses your username and password to derive the encryption key — so an administrator password reset will make EFS-encrypted files inaccessible.',
+      render:()=>`<div class="card"><h4>budget.xlsx</h4>
+        ${toggleRow('Encrypt with EFS', 'Requires NTFS. Tied to jsmith\u2019s Windows credentials', false, 'efs')}
+        ${toggleRow('Administrator resets jsmith\u2019s password', '', false, 'reset')}
+        <div id="efsResult" style="margin-top:12px;"></div>
+      </div>`,
+      init:(panel)=>{
+        function paint(){
+          const enc = panel.querySelector('.toggle[data-key=efs]').classList.contains('on');
+          const reset = panel.querySelector('.toggle[data-key=reset]').classList.contains('on');
+          const out = panel.querySelector('#efsResult');
+          if(!enc) out.innerHTML = badge('warn','Not encrypted — readable by anyone with file access');
+          else if(enc && reset) out.innerHTML = badge('bad','File is now inaccessible') + `<p style="margin-top:8px; font-size:12px; color:#666;">The EFS key was derived from jsmith's original password. An administrator password reset breaks that key chain, locking even jsmith out of the file.</p>`;
+          else out.innerHTML = badge('good','Encrypted and accessible to jsmith');
+        }
+        panel.querySelectorAll('.toggle').forEach(t=> t.addEventListener('toggled', paint)); paint();
+      } },
+
+    /* ---------------- Active Directory ---------------- */
+    { id:'ad-overview', group:'Active Directory', name:'Active Directory', emoji:'🏛️',
+      desc:'Active Directory is a central directory service that lets an organization manage user accounts, computers, and policy from one place, instead of configuring every machine by hand.',
+      render:()=>`<div class="card"><h4>Domain topology</h4>
+        <div class="flow-row"><span class="file-chip">🖥️ Domain Controller</span><span class="flow-arrow">↔</span><span class="file-chip">💻 PC-01</span><span class="flow-arrow">↔</span><span class="file-chip">💻 PC-02</span><span class="flow-arrow">↔</span><span class="file-chip">💻 PC-03</span></div>
+        <p style="color:#666; font-size:12px; margin-top:12px;">Every domain-joined PC trusts the Domain Controller to authenticate users and to hand down policy, scripts, and permissions centrally.</p>
+      </div>` },
+
+    { id:'ad-join', group:'Active Directory', name:'Joining domain', emoji:'🔗',
+      desc:'Registering a local computer with a central Active Directory domain controller so it can be managed globally and allow users to sign in with domain credentials.',
+      render:()=>`<div class="card"><h4>Computer Name/Domain Changes</h4>
+        <div class="field-row"><label>Computer name</label><input type="text" value="DESKTOP-7QX2K1" style="flex:1;"></div>
+        <label class="field-row"><input type="radio" name="joinmode"> Workgroup</label>
+        <label class="field-row"><input type="radio" name="joinmode" checked> Domain</label>
+        <div class="field-row"><label>Domain</label><input type="text" value="corp.local" style="flex:1;"></div>
+        <button class="btn primary" id="joinBtn">Join</button>
+        <div class="log-box" id="joinLog" style="margin-top:12px;">Ready.</div>
+      </div>`,
+      init:(panel)=>{
+        panel.querySelector('#joinBtn').addEventListener('click', ()=>{
+          const log = panel.querySelector('#joinLog');
+          log.textContent = 'Contacting domain controller for corp.local…';
+          setTimeout(()=>{ if(log.isConnected) log.textContent += '\nCredentials verified. Creating computer account…'; }, 500);
+          setTimeout(()=>{ if(log.isConnected) log.textContent += '\nJoined corp.local. A restart is required to apply changes.'; }, 1200);
+        });
+      } },
+
+    { id:'ad-loginscript', group:'Active Directory', name:'Assigning log-in script', emoji:'📜',
+      desc:'Specifying an executable file or script that runs automatically whenever a user signs into the domain, to automate tasks like mapping drives or setting environment variables.',
+      render:()=>`<div class="card"><h4>User properties → Profile</h4>
+        <div class="field-row"><label>Logon script</label><input type="text" value="mapdrives.bat" style="flex:1;"></div>
+        <button class="btn primary" id="lsSave">Save</button>
+        <div id="lsResult" style="margin-top:12px;"></div>
+        <h4 style="margin-top:16px;">What it typically does</h4>
+        <label class="checklist-row"><input type="checkbox" checked disabled> Map network drive Z: to \\\\fileserver\\dept</label>
+        <label class="checklist-row"><input type="checkbox" checked disabled> Set environment variable DEPT=Sales</label>
+        <label class="checklist-row"><input type="checkbox" checked disabled> Sync the local clock with the domain controller</label>
+      </div>`,
+      init:(panel)=>{ panel.querySelector('#lsSave').addEventListener('click', ()=>{ panel.querySelector('#lsResult').innerHTML = badge('good','Logon script assigned — it will run at every sign-in for this user.'); }); } },
+
+    { id:'ad-moveou', group:'Active Directory', name:'Moving objects within organizational units', emoji:'📂',
+      desc:'Relocating user accounts, computers, or groups between organizational units (OUs) to reorganize administrative structure — and change which group policies automatically apply to them.',
+      render:()=>`<div class="row2">
+        <div class="ou-col" id="ouSales"><h5>Sales OU</h5><div id="ouSalesObj"><div class="ou-obj">👤 jsmith</div></div></div>
+        <div class="ou-col" id="ouMarketing"><h5>Marketing OU</h5><div id="ouMarketingObj"></div></div>
+      </div>
+      <button class="btn primary" id="ouMove" style="margin-top:14px;">Move jsmith → Marketing OU</button>
+      <div id="ouResult" style="margin-top:12px;"></div>`,
+      init:(panel)=>{
+        panel.querySelector('#ouMove').addEventListener('click', (e)=>{
+          const src = panel.querySelector('#ouSalesObj'); const dst = panel.querySelector('#ouMarketingObj');
+          if(!src.querySelector('.ou-obj')) return;
+          dst.appendChild(src.querySelector('.ou-obj'));
+          e.target.disabled = true;
+          panel.querySelector('#ouResult').innerHTML = badge('good','jsmith moved to Marketing OU') + `<p style="margin-top:8px; font-size:12px; color:#666;">jsmith now automatically receives Marketing OU\u2019s Group Policy Objects instead of Sales OU\u2019s — no per-user policy edits needed.</p>`;
+        });
+      } },
+
+    { id:'ad-homefolder', group:'Active Directory', name:'Assigning home folders', emoji:'🏠',
+      desc:'Configuring a dedicated private network storage path in a user\u2019s account properties, which automatically mounts as a personal drive on logon.',
+      render:()=>`<div class="card"><h4>User properties → Profile → Home folder</h4>
+        <div class="field-row"><label>Connect drive</label><select><option>Z:</option><option>H:</option></select></div>
+        <div class="field-row"><label>To path</label><input type="text" value="\\\\fileserver\\home\\%username%" style="flex:1;"></div>
+        <button class="btn primary" id="hfSave">Apply</button>
+        <div id="hfResult" style="margin-top:12px;"></div>
+      </div>`,
+      init:(panel)=>{
+        panel.querySelector('#hfSave').addEventListener('click', ()=>{
+          panel.querySelector('#hfResult').innerHTML = `<div class="card" style="margin-top:0;"><h4>This PC (after next logon)</h4>
+            <div class="flow-row"><span class="file-chip">💽 Local Disk (C:)</span><span class="file-chip">🌐 Z: home (\\\\fileserver\\home\\jsmith)</span></div></div>`;
+        });
+      } },
+
+    { id:'ad-grouppolicy', group:'Active Directory', name:'Applying Group Policy', emoji:'🏛️',
+      desc:'Enforcing centralized security settings, software deployments, and system configurations across domain users and computers using Group Policy Objects (GPOs).',
+      render:()=>`<div class="card"><h4>Sales OU — Group Policy Object</h4>
+        ${table(['Setting','State'], [
+          `<tr data-p="lock"><td>Lock screen after 10 minutes idle</td><td class="gpstate">Not Configured</td></tr>`,
+          `<tr data-p="usb"><td>Block USB storage devices</td><td class="gpstate">Not Configured</td></tr>`,
+        ])}
+        <div class="field-row" style="margin-top:12px;"><label>Set "Block USB storage devices" to</label><select id="gpSet"><option>Not Configured</option><option>Enabled</option><option>Disabled</option></select></div>
+        <button class="btn primary" id="gpApply">Apply GPO</button>
+        <div id="gpResult" style="margin-top:12px;"></div>
+      </div>`,
+      init:(panel)=>{
+        panel.querySelector('#gpApply').addEventListener('click', ()=>{
+          const v = panel.querySelector('#gpSet').value;
+          panel.querySelector('tr[data-p=usb] .gpstate').textContent = v;
+          panel.querySelector('#gpResult').innerHTML = badge('good','GPO updated') + `<p style="margin-top:8px; font-size:12px; color:#666;">Every computer and user in the Sales OU will pick up this setting on their next policy refresh — no need to touch each machine.</p>`;
+        });
+      } },
+
+    { id:'ad-secgroups', group:'Active Directory', name:'Selecting security groups', emoji:'👨‍👩‍👧',
+      desc:'Adding user or computer objects to specific Active Directory security groups, to streamline granting permissions to network resources like shared folders and printers.',
+      render:()=>`<div class="card"><h4>jsmith — Member Of</h4>
+        <label class="checklist-row"><input type="checkbox" checked class="sg"> Sales-Team</label>
+        <label class="checklist-row"><input type="checkbox" class="sg"> Marketing-Team</label>
+        <label class="checklist-row"><input type="checkbox" class="sg"> IT-Admins</label>
+        <label class="checklist-row"><input type="checkbox" checked class="sg"> Domain Users</label>
+        <h4 style="margin-top:16px;">Resulting access</h4>
+        <div id="sgResult" style="font-size:12.5px; line-height:1.9;"></div>
+      </div>`,
+      init:(panel)=>{
+        function paint(){
+          const memberOf = Array.from(panel.querySelectorAll('.sg:checked')).map(c=>c.closest('label').textContent.trim());
+          const rows = [
+            ['\\\\fileserver\\sales', 'Sales-Team'], ['\\\\fileserver\\marketing', 'Marketing-Team'],
+            ['Domain Controller admin console', 'IT-Admins'], ['General file share (\\\\fileserver\\public)', 'Domain Users'],
+          ];
+          panel.querySelector('#sgResult').innerHTML = rows.map(([res,grp])=> `${memberOf.includes(grp)?'✅':'⛔'} ${res} <span style="color:#999;">(needs ${grp})</span>`).join('<br>');
+        }
+        panel.querySelectorAll('.sg').forEach(c=> c.addEventListener('change', paint)); paint();
+      } },
+
+    { id:'ad-folderredirect', group:'Active Directory', name:'Configuring folder redirection', emoji:'📁',
+      desc:'Diverting standard local user-profile folders (such as Documents or Desktop) to a central network share, so user files are automatically backed up and accessible from any domain machine.',
+      render:()=>`<div class="card"><h4>Folder redirection — Documents</h4>
+        ${toggleRow('Redirect Documents to network share', '', false, 'fr')}
+        <div id="frDiagram" style="margin-top:14px;"></div>
+      </div>`,
+      init:(panel)=>{
+        function paint(){
+          const on = panel.querySelector('.toggle').classList.contains('on');
+          panel.querySelector('#frDiagram').innerHTML = on
+            ? `<div class="flow-row">📁 Documents <span class="flow-arrow">→</span> <span class="file-chip">🌐 \\\\fileserver\\Users\\jsmith\\Documents</span></div><p style="color:#666; font-size:12px; margin-top:8px;">Files now live on the server — automatically backed up, and available from any domain machine jsmith logs into.</p>`
+            : `<div class="flow-row">📁 Documents <span class="flow-arrow">→</span> <span class="file-chip">💽 C:\\Users\\jsmith\\Documents</span></div><p style="color:#666; font-size:12px; margin-top:8px;">Files stay local to this one PC — no automatic backup, and unavailable from any other machine.</p>`;
+        }
+        panel.querySelector('.toggle').addEventListener('toggled', paint); paint();
+      } },
+  ];
+
+  /* ============================================================
+     Layout: nav + main
+  ============================================================ */
+  const nav = document.getElementById('appNav');
+  const main = document.getElementById('appMain');
+  const groups = ['Windows Defender Antivirus','Windows Firewall','Users & Groups','Sign-in Options','File & Folder Permissions','Encryption','Active Directory'];
+  let counter = 0;
+  nav.innerHTML = groups.map(g=>{
+    const items = topics.filter(t=>t.group===g);
+    return `<div class="nav-group-title">${escFix(g)}</div>` + items.map(t=>{
+      counter++;
+      return `<div class="nav-item" data-id="${t.id}"><span class="ni-num">${counter}</span><span>${escFix(t.name)}</span></div>`;
+    }).join('');
+  }).join('');
+
+  function showTopic(id){
+    const t = topics.find(x=>x.id===id);
+    if(!t) return;
+    nav.querySelectorAll('.nav-item').forEach(n=> n.classList.toggle('active', n.dataset.id===id));
+    main.innerHTML = `<div class="topic-kicker">${escFix(t.group)}</div>
+      <h2 class="topic-title">${t.emoji} ${escFix(t.name)}</h2>
+      <p class="topic-lede">${escFix(t.desc)}</p>
+      ${t.render()}`;
+    if(t.init) t.init(main);
+  }
+  mountGeneric(main);
+  nav.addEventListener('click', (e)=>{ const item = e.target.closest('.nav-item'); if(item) showTopic(item.dataset.id); });
+
+  /* ============================================================
+     Reference panel
+  ============================================================ */
+  function renderReference(filter){
+    const list = document.getElementById('refList');
+    list.innerHTML = '';
+    const f = (filter||'').trim().toLowerCase();
+    const items = topics.filter(t => !f || t.name.toLowerCase().includes(f) || t.desc.toLowerCase().includes(f));
+    if(items.length===0){ list.innerHTML = '<div class="ref-empty">No matching concepts.</div>'; return; }
+    items.forEach(t=>{
+      const item = elc(`<div class="ref-item"><div class="ref-name">${t.emoji} ${escFix(t.name)}</div><div class="ref-tag">${escFix(t.group)}</div><div class="ref-desc">${escFix(t.desc)}</div></div>`);
+      item.addEventListener('click', ()=> showTopic(t.id));
+      list.appendChild(item);
+    });
+  }
+  document.getElementById('refSearchInput').addEventListener('input', e=> renderReference(e.target.value));
+  renderReference('');
+
+  showTopic(topics[0].id);
+})();
+</script>
+</body>
+</html>

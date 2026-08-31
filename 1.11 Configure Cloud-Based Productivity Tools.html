@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>1.11 Configure Cloud-Based Productivity Tools</title>
+<style>
+  :root{ --accent:#5b5fc7; --bg:#faf9f8; --border:#e1dfdd; --text:#242424; }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; margin:0; font-family:"Segoe UI",Tahoma,Arial,sans-serif; overflow:auto; color:var(--text); }
+  body{ background:#242424; }
+  .app-root{ position:relative; width:100%; height:100%; overflow:hidden; display:flex; flex-direction:column; background:#fff; }
+
+  /* ---------------- Browser chrome ---------------- */
+  .browser-tabs{ display:flex; align-items:flex-end; background:#dee1e6; padding:6px 6px 0; gap:3px; flex-shrink:0; }
+  .browser-tab{ display:flex; align-items:center; gap:6px; background:#f1f3f4; padding:7px 10px; border-radius:8px 8px 0 0; font-size:11.5px; cursor:pointer; max-width:170px; }
+  .browser-tab.active{ background:#fff; font-weight:600; }
+  .browser-tab .bt-close{ margin-left:auto; opacity:.5; padding:0 3px; }
+  .browser-tab .bt-close:hover{ opacity:1; }
+  .addr-row{ display:flex; align-items:center; gap:8px; background:#fff; border-bottom:1px solid var(--border); padding:7px 10px; flex-shrink:0; }
+  .waffle{ width:30px; height:30px; border-radius:6px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:15px; position:relative; }
+  .waffle:hover{ background:#f0f0f0; }
+  .addr-box{ flex:1; background:#f1f3f4; border-radius:16px; padding:6px 14px; font-size:12px; color:#555; font-family:Consolas,monospace; }
+  .suite-brand{ font-size:13px; font-weight:700; color:var(--accent); }
+
+  .launcher{ position:absolute; top:70px; left:10px; width:300px; background:#fff; border-radius:8px; box-shadow:0 15px 40px rgba(0,0,0,0.3); border:1px solid var(--border); display:none; z-index:5000; padding:14px; }
+  .launcher.open{ display:block; }
+  .launcher .l-title{ font-size:12.5px; color:#666; margin-bottom:10px; }
+  .launcher-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+  .launcher-tile{ text-align:center; padding:12px 4px; border-radius:6px; cursor:pointer; font-size:11px; }
+  .launcher-tile:hover{ background:#f5f5f5; }
+  .launcher-tile .lt-glyph{ font-size:26px; display:block; margin-bottom:4px; }
+
+  .content-area{ flex:1; overflow:hidden; display:flex; }
+  .empty-state{ margin:auto; text-align:center; color:#999; }
+  .empty-state .es-glyph{ font-size:50px; }
+
+  /* ---------------- Generic app chrome ---------------- */
+  .app-shell{ display:flex; width:100%; height:100%; }
+  .rail{ width:64px; background:#f5f5f5; border-right:1px solid var(--border); display:flex; flex-direction:column; align-items:center; padding-top:12px; gap:4px; flex-shrink:0; }
+  .rail-item{ width:44px; height:44px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:19px; cursor:pointer; color:#555; }
+  .rail-item:hover{ background:#eaeaea; }
+  .rail-item.active{ background:#e3e1ff; color:var(--accent); }
+  .side{ width:230px; background:#faf9f8; border-right:1px solid var(--border); overflow-y:auto; flex-shrink:0; }
+  .side-item{ padding:10px 14px; font-size:12.5px; cursor:pointer; border-bottom:1px solid #f0f0f0; }
+  .side-item:hover{ background:#f0f0f0; }
+  .side-item.active{ background:#e3e1ff; font-weight:600; }
+  .side-item .si-sub{ font-size:11px; color:#888; margin-top:2px; }
+  .main{ flex:1; overflow-y:auto; display:flex; flex-direction:column; }
+  .toolbar{ display:flex; gap:6px; padding:8px 14px; border-bottom:1px solid var(--border); align-items:center; flex-wrap:wrap; background:#fff; flex-shrink:0; }
+  .toolbar button{ padding:6px 12px; font-size:12px; border:1px solid #ccc; background:#fff; border-radius:4px; cursor:pointer; }
+  .toolbar button:hover{ background:#f5f5f5; }
+  .toolbar button.primary{ background:var(--accent); color:#fff; border-color:var(--accent); }
+  .toolbar button.primary:hover{ opacity:.9; }
+
+  table.wtable{ width:100%; border-collapse:collapse; font-size:12.5px; }
+  table.wtable th{ text-align:left; background:#f7f7f8; border-bottom:1px solid var(--border); padding:8px 12px; color:#555; }
+  table.wtable td{ padding:8px 12px; border-bottom:1px solid #f0f0f0; }
+  table.wtable tr:hover td{ background:#f8f8ff; }
+
+  .grid-files{ padding:14px; display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:14px; }
+  .file-tile{ text-align:center; padding:10px 6px; border-radius:6px; cursor:pointer; position:relative; }
+  .file-tile:hover, .file-tile.selected{ background:#f0f0ff; }
+  .file-tile .ft-icon{ font-size:34px; }
+  .file-tile .ft-name{ font-size:11px; margin-top:4px; word-break:break-word; }
+  .file-tile .ft-sync{ position:absolute; top:2px; right:14px; font-size:11px; }
+
+  .modal-overlay{ position:absolute; inset:0; background:rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; z-index:6000; }
+  .modal-box{ background:#fff; border-radius:8px; box-shadow:0 20px 50px rgba(0,0,0,0.4); width:380px; max-width:90%; padding:20px; font-size:12.5px; max-height:80%; overflow-y:auto; }
+  .modal-box h4{ margin:0 0 12px; font-size:15px; }
+  .modal-btns{ display:flex; justify-content:flex-end; gap:8px; margin-top:16px; }
+  .modal-btns button{ padding:6px 16px; border:1px solid #999; background:#eee; border-radius:4px; cursor:pointer; font-size:12px; }
+  .modal-btns button.primary{ background:var(--accent); color:#fff; border-color:var(--accent); }
+  .field-row{ display:flex; flex-direction:column; gap:4px; margin:10px 0; }
+  .field-row label{ font-size:11.5px; color:#555; }
+  .field-row input, .field-row select, .field-row textarea{ padding:6px 8px; border:1px solid #bbb; font-size:12.5px; border-radius:4px; }
+
+  .status-dot{ width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:5px; }
+  .status-available{ background:#57a300; } .status-away{ background:#e8a80c; } .status-busy{ background:#d13438; } .status-offline{ background:#999; }
+
+  .chat-list-item{ display:flex; align-items:center; gap:8px; padding:9px 12px; cursor:pointer; border-bottom:1px solid #f0f0f0; }
+  .chat-list-item:hover, .chat-list-item.active{ background:#eef; }
+  .avatar{ width:32px; height:32px; border-radius:50%; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; }
+  .avatar.small{ width:22px; height:22px; font-size:10px; margin-left:-6px; border:2px solid #fff; }
+
+  .msg-bubble{ background:#f0f0f0; padding:8px 12px; border-radius:8px; margin:6px 0; font-size:12.5px; max-width:70%; }
+  .msg-row{ display:flex; gap:8px; align-items:flex-start; }
+  .msg-meta{ font-size:10.5px; color:#888; margin-bottom:2px; }
+
+  .meeting-view{ background:#1c1c1c; color:#fff; flex:1; display:flex; flex-direction:column; }
+  .meeting-grid{ flex:1; display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; padding:16px; align-content:center; }
+  .participant-tile{ background:#333; border-radius:8px; aspect-ratio:16/10; display:flex; align-items:center; justify-content:center; position:relative; }
+  .participant-tile .pt-name{ position:absolute; bottom:6px; left:8px; font-size:11px; background:rgba(0,0,0,0.5); padding:2px 6px; border-radius:4px; }
+  .meeting-controls{ display:flex; justify-content:center; gap:10px; padding:14px; background:#111; }
+  .mc-btn{ width:42px; height:42px; border-radius:50%; background:#3a3a3a; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; }
+  .mc-btn.active{ background:var(--accent); }
+  .mc-btn.danger{ background:#d13438; }
+
+  .doc-editor{ flex:1; display:flex; }
+  .doc-page{ flex:1; padding:30px 50px; overflow-y:auto; }
+  .doc-page [contenteditable]{ outline:none; line-height:1.6; font-size:13.5px; }
+  .comments-side{ width:220px; background:#faf9f8; border-left:1px solid var(--border); padding:10px; overflow-y:auto; flex-shrink:0; }
+  .comment-card{ background:#fff; border:1px solid var(--border); border-radius:6px; padding:8px; margin-bottom:8px; font-size:11.5px; }
+  .comment-card button{ margin-top:6px; font-size:10.5px; padding:3px 8px; border:1px solid #ccc; background:#fff; border-radius:3px; cursor:pointer; }
+
+  .xl-grid{ overflow:auto; flex:1; }
+  table.xl-table{ border-collapse:collapse; font-size:11.5px; }
+  table.xl-table th{ background:#f7f7f8; border:1px solid var(--border); padding:4px 10px; min-width:70px; position:sticky; top:0; }
+  table.xl-table td{ border:1px solid #ececec; padding:4px 10px; min-width:70px; height:22px; }
+  table.xl-table td[contenteditable]:focus{ outline:2px solid var(--accent); }
+  table.xl-table td.hl-other{ background:#fff2cc; outline:1px solid #e8a80c; }
+
+  .slide-strip{ width:150px; background:#f5f5f5; border-right:1px solid var(--border); overflow-y:auto; padding:10px 8px; flex-shrink:0; }
+  .slide-thumb{ background:#fff; border:2px solid var(--border); border-radius:4px; aspect-ratio:16/9; margin-bottom:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:10px; color:#999; position:relative; }
+  .slide-thumb.active{ border-color:var(--accent); }
+  .slide-thumb .st-num{ position:absolute; top:2px; left:4px; font-size:9px; color:#aaa; }
+  .slide-canvas{ flex:1; display:flex; align-items:center; justify-content:center; background:#eee; padding:20px; }
+  .slide-page{ width:640px; aspect-ratio:16/9; background:#fff; box-shadow:0 4px 14px rgba(0,0,0,.15); padding:40px; display:flex; flex-direction:column; justify-content:center; gap:12px; }
+  .slide-page [contenteditable]{ outline:none; border:1px dashed transparent; padding:4px; }
+  .slide-page [contenteditable]:hover{ border-color:#ccc; }
+  .present-overlay{ position:absolute; inset:0; background:#000; z-index:7000; display:flex; align-items:center; justify-content:center; flex-direction:column; }
+  .present-slide{ width:80%; aspect-ratio:16/9; background:#fff; padding:50px; display:flex; flex-direction:column; justify-content:center; gap:14px; }
+  .present-controls{ margin-top:16px; display:flex; gap:10px; }
+  .present-controls button{ padding:8px 16px; border:none; background:#333; color:#fff; border-radius:20px; cursor:pointer; }
+
+  .desc-box{ background:#eef0ff; border:1px solid #d6d9f5; padding:10px 12px; border-radius:6px; font-size:12px; margin:12px 0; color:#33357a; }
+  .kv-row{ display:flex; padding:5px 0; border-bottom:1px solid #f0f0f0; font-size:12px; }
+  .kv-row .k{ width:190px; color:#555; }
+  .progress-track{ height:9px; background:#e2e2e2; border-radius:5px; overflow:hidden; margin:8px 0; }
+  .progress-fill{ height:100%; background:var(--accent); width:0%; transition:width .2s; }
+
+  .toast-wrap{ position:absolute; bottom:14px; right:14px; z-index:9500; display:flex; flex-direction:column; gap:8px; align-items:flex-end; }
+  .toast{ background:rgba(20,20,20,0.92); color:#fff; padding:10px 16px; border-radius:6px; font-size:12.5px; max-width:320px; box-shadow:0 10px 25px rgba(0,0,0,.35); animation:toastIn .18s ease; }
+  @keyframes toastIn{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+  .layout{ display:flex; gap:16px; align-items:flex-start; justify-content:center; padding:20px; box-sizing:border-box; min-height:100vh; background:#242424; }
+  .screen-frame{ width:1060px; max-width:70%; min-width:680px; height:680px; max-height:82vh; border-radius:10px; overflow:hidden; box-shadow:0 25px 70px rgba(0,0,0,0.5); flex-shrink:0; position:relative; }
+  .reference{ width:410px; max-width:100%; height:680px; max-height:82vh; background:#181818; border-radius:10px; box-shadow:0 25px 70px rgba(0,0,0,0.5); display:flex; flex-direction:column; overflow:hidden; flex-shrink:0; color:#ddd; }
+  .ref-titlebar{ background:#242424; padding:10px 14px; font-size:13px; border-bottom:1px solid #333; display:flex; align-items:center; gap:8px; }
+  .ref-titlebar .dot{ width:8px; height:8px; border-radius:50%; background:var(--accent); }
+  .ref-search{ padding:10px 12px; border-bottom:1px solid #2e2e2e; background:#151515; }
+  .ref-search input{ width:100%; box-sizing:border-box; background:#0f0f0f; border:1px solid #333; color:#eee; font-size:12.5px; padding:8px 10px; border-radius:5px; outline:none; }
+  .ref-search input:focus{ border-color:var(--accent); }
+  .ref-list{ flex:1; overflow-y:auto; padding:4px 0 12px; }
+  .ref-item{ padding:11px 14px; border-bottom:1px solid #232323; cursor:pointer; }
+  .ref-item:hover{ background:#212121; }
+  .ref-item .ref-name{ font-size:13.5px; color:#8f93ff; font-weight:700; }
+  .ref-item .ref-action{ font-size:11.5px; color:#f4c95d; margin-top:3px; }
+  .ref-item .ref-action::before{ content:"↳ "; color:#666; }
+  .ref-item .ref-desc{ font-size:12px; color:#aaa; margin-top:5px; line-height:1.45; }
+  .ref-empty{ padding:24px 14px; color:#777; font-size:12.5px; text-align:center; }
+  @media (max-width:1140px){
+    .layout{ flex-direction:column; }
+    .screen-frame, .reference{ width:100%; max-width:100%; height:640px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <div class="screen-frame">
+    <div class="app-root" id="appRoot">
+      <div class="browser-tabs" id="browserTabs"></div>
+      <div class="addr-row">
+        <div class="waffle" id="waffleBtn">⊞</div>
+        <span class="suite-brand" id="brandLabel">Cloud Suite</span>
+        <div class="addr-box" id="addrBox">portal.cloudsuite.example.com</div>
+      </div>
+      <div class="launcher" id="launcher">
+        <div class="l-title">Apps</div>
+        <div class="launcher-grid" id="launcherGrid"></div>
+      </div>
+      <div class="content-area" id="contentArea">
+        <div class="empty-state"><div class="es-glyph">⊞</div><p>Pick an app from the launcher (⊞) to get started.</p></div>
+      </div>
+      <div class="toast-wrap" id="toastWrap"></div>
+    </div>
+  </div>
+
+  <div class="reference">
+    <div class="ref-titlebar"><span class="dot"></span><span>Cloud &amp; Collaboration Index</span></div>
+    <div class="ref-search"><input type="text" id="refSearchInput" placeholder="Filter concepts..."></div>
+    <div class="ref-list" id="refList"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const contentArea = document.getElementById('contentArea');
+  const browserTabs = document.getElementById('browserTabs');
+  const addrBox = document.getElementById('addrBox');
+  const brandLabel = document.getElementById('brandLabel');
+
+  function toast(msg, ms){
+    const wrap = document.getElementById('toastWrap');
+    const t = document.createElement('div'); t.className='toast'; t.textContent=msg;
+    wrap.appendChild(t);
+    setTimeout(()=>{ t.style.opacity='0'; t.style.transition='opacity .3s'; setTimeout(()=>t.remove(),300); }, ms||3400);
+  }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function renderTable(container, columns, rows, opts){
+    opts = opts||{};
+    container.innerHTML = `<table class="wtable"><thead><tr>${columns.map(c=>`<th>${c}</th>`).join('')}</tr></thead>
+      <tbody>${rows.map((r,ri)=>`<tr data-ri="${ri}">${r.map(v=>`<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+    if(opts.onRowClick){
+      container.querySelectorAll('tbody tr').forEach(tr=>{
+        tr.addEventListener('click', ()=> opts.onRowClick(rows[parseInt(tr.dataset.ri)], tr));
+      });
+    }
+  }
+  function openModal(html, wire){
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.innerHTML = `<div class="modal-box">${html}</div>`;
+    document.getElementById('appRoot').appendChild(overlay);
+    if(wire) wire(overlay);
+    return overlay;
+  }
+
+  // ============== Tab manager (single-pane "browser tabs") ==============
+  const APPS = {
+    outlook: { icon:'📧', name:'Outlook', url:'outlook.office.com/mail', render: renderOutlook },
+    onedrive: { icon:'☁️', name:'OneDrive', url:'onedrive.live.com/browse', render: renderOneDrive },
+    teams: { icon:'👥', name:'Teams', url:'teams.microsoft.com', render: renderTeams },
+    word: { icon:'📝', name:'Word', url:'word.office.com', render: renderWord },
+    excel: { icon:'📊', name:'Excel', url:'excel.office.com', render: renderExcel },
+    powerpoint: { icon:'📽️', name:'PowerPoint', url:'powerpoint.office.com', render: renderPowerPoint },
+    admin: { icon:'🛠️', name:'Admin Center', url:'admin.cloudsuite.example.com', render: renderAdmin },
+  };
+  let tabs = []; // {id, appKey}
+  let activeTabId = null;
+  let tabSeq = 1;
+
+  function openApp(appKey, opts){
+    let tab = tabs.find(t=>t.appKey===appKey);
+    if(!tab){
+      tab = { id: 'tab'+(tabSeq++), appKey };
+      tabs.push(tab);
+    }
+    activeTabId = tab.id;
+    drawTabs();
+    drawContent(opts);
+    document.getElementById('launcher').classList.remove('open');
+  }
+  function closeTab(id, e){
+    if(e) e.stopPropagation();
+    tabs = tabs.filter(t=>t.id!==id);
+    if(activeTabId===id) activeTabId = tabs.length ? tabs[tabs.length-1].id : null;
+    drawTabs(); drawContent();
+  }
+  function drawTabs(){
+    browserTabs.innerHTML = tabs.map(t=>{
+      const app = APPS[t.appKey];
+      return `<div class="browser-tab ${t.id===activeTabId?'active':''}" data-id="${t.id}">
+        <span>${app.icon}</span><span>${app.name}</span><span class="bt-close" data-close="${t.id}">✕</span>
+      </div>`;
+    }).join('');
+    browserTabs.querySelectorAll('.browser-tab').forEach(el=>{
+      el.addEventListener('click', (e)=>{
+        if(e.target.dataset.close){ closeTab(e.target.dataset.close, e); return; }
+        activeTabId = el.dataset.id; drawTabs(); drawContent();
+      });
+    });
+  }
+  function drawContent(opts){
+    contentArea.innerHTML = '';
+    const tab = tabs.find(t=>t.id===activeTabId);
+    if(!tab){
+      contentArea.innerHTML = `<div class="empty-state"><div class="es-glyph">⊞</div><p>Pick an app from the launcher (⊞) to get started.</p></div>`;
+      brandLabel.textContent = 'Cloud Suite'; addrBox.textContent = 'portal.cloudsuite.example.com';
+      return;
+    }
+    const app = APPS[tab.appKey];
+    brandLabel.textContent = app.name;
+    addrBox.textContent = app.url;
+    const shell = document.createElement('div');
+    shell.className = 'app-shell';
+    shell.id = tab.appKey+'-shell';
+    contentArea.appendChild(shell);
+    app.render(shell, opts||{});
+  }
+
+  // ============== App launcher (waffle) ==============
+  const launcher = document.getElementById('launcher');
+  const waffleBtn = document.getElementById('waffleBtn');
+  const launcherGrid = document.getElementById('launcherGrid');
+  Object.entries(APPS).forEach(([key,app])=>{
+    const tile = document.createElement('div');
+    tile.className = 'launcher-tile';
+    tile.innerHTML = `<span class="lt-glyph">${app.icon}</span>${app.name}`;
+    tile.addEventListener('click', ()=> openApp(key));
+    launcherGrid.appendChild(tile);
+  });
+  waffleBtn.addEventListener('click', e=>{ e.stopPropagation(); launcher.classList.toggle('open'); });
+  document.addEventListener('click', e=>{ if(!launcher.contains(e.target) && e.target!==waffleBtn) launcher.classList.remove('open'); });
+
+  // ============== Shared fake data ==============
+  const domainState = { name:'contoso.com', verified:true, mx:'contoso-com.mail.protection.outlook.com', priority:0, txt:'MS=ms12345678' };
+  const users = [
+    { name:'J. Smith', email:'jsmith@contoso.com', license:'Microsoft 365 E3', status:'Active' },
+    { name:'A. Lee', email:'alee@contoso.com', license:'Microsoft 365 E3', status:'Active' },
+    { name:'R. Patel', email:'rpatel@contoso.com', license:'Unlicensed', status:'Active' },
+  ];
+  const licenseSkus = [
+    { name:'Microsoft 365 E3', total:50, assigned:2 },
+    { name:'Microsoft 365 E5', total:10, assigned:0 },
+    { name:'Teams Essentials', total:25, assigned:0 },
+    { name:'Exchange Online Plan 1', total:20, assigned:0 },
+  ];
+  const identityState = { lastSync:'12 minutes ago', status:'Healthy' };
+
+  // ============== Outlook (Email Systems) ==============
+  let mailFolders = {
+    Inbox: [
+      { from:'A. Lee', subject:'Q3 planning doc', preview:'Can you review the attached before Thursday…', time:'9:14 AM', body:'Hi J. Smith,\n\nCan you review the attached planning doc before Thursday\'s meeting? Let me know if the budget numbers look right.\n\nThanks,\nA. Lee' },
+      { from:'IT Notifications', subject:'Your mailbox is 82% full', preview:'Consider archiving old items…', time:'8:02 AM', body:'Your mailbox (jsmith@contoso.com) has used 41 GB of 50 GB. Consider archiving old items or emptying Deleted Items.' },
+      { from:'R. Patel', subject:'RE: Server maintenance window', preview:'Confirmed for Saturday 10pm-2am…', time:'Yesterday', body:'Confirmed for Saturday 10pm-2am. I\'ll send the change ticket number shortly.' },
+    ],
+    Sent: [],
+    Drafts: [ { from:'Me', subject:'(Draft) Vendor renewal', preview:'Just a placeholder…', time:'Mon', body:'' } ],
+    'Deleted Items': [],
+  };
+  function renderOutlook(shell){
+    let folder = 'Inbox';
+    let openMsg = mailFolders[folder][0] || null;
+    function draw(){
+      shell.innerHTML = `
+        <div class="side">
+          ${Object.keys(mailFolders).map(f=>`<div class="side-item ${f===folder?'active':''}" data-f="${f}">${f} ${mailFolders[f].length?`(${mailFolders[f].length})`:''}</div>`).join('')}
+          <div class="side-item" data-mbsetup="1">⚙️ Mailbox setup</div>
+          <div class="side-item" data-mailflow="1">🌐 Mail flow (MX records)</div>
+        </div>
+        <div style="width:280px;border-right:1px solid var(--border);overflow-y:auto;flex-shrink:0;" id="mail-list"></div>
+        <div class="main" id="mail-reading"></div>`;
+      const toolbarHtml = `<div class="toolbar"><button class="primary" id="mail-new">+ New email</button></div>`;
+      const list = shell.querySelector('#mail-list');
+      list.innerHTML = mailFolders[folder].map((m,i)=>`
+        <div class="chat-list-item" data-i="${i}" style="align-items:flex-start;">
+          <div class="avatar">${m.from.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:12px;font-weight:600;">${esc(m.from)}</div>
+            <div style="font-size:11.5px;">${esc(m.subject)}</div>
+            <div style="font-size:10.5px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(m.preview)}</div>
+          </div>
+          <div style="font-size:10px;color:#999;">${m.time}</div>
+        </div>`).join('') || '<div style="padding:14px;color:#999;">No messages.</div>';
+      const reading = shell.querySelector('#mail-reading');
+      reading.innerHTML = toolbarHtml + (openMsg ? `<div style="padding:16px;"><h3 style="margin-top:0;">${esc(openMsg.subject)}</h3><p style="color:#666;font-size:11.5px;">From: ${esc(openMsg.from)} — ${openMsg.time}</p><div style="white-space:pre-wrap;font-size:12.5px;line-height:1.6;">${esc(openMsg.body)}</div></div>` : '<div style="padding:16px;color:#999;">Select a message to read it.</div>');
+      shell.querySelectorAll('[data-f]').forEach(n=> n.addEventListener('click', ()=>{ folder=n.dataset.f; openMsg=mailFolders[folder][0]||null; draw(); }));
+      list.querySelectorAll('[data-i]').forEach(n=> n.addEventListener('click', ()=>{ openMsg = mailFolders[folder][parseInt(n.dataset.i)]; draw(); }));
+      shell.querySelector('#mail-new').addEventListener('click', composeEmail);
+      const mb = shell.querySelector('[data-mbsetup]'); if(mb) mb.addEventListener('click', mailboxSetup);
+      const mf = shell.querySelector('[data-mailflow]'); if(mf) mf.addEventListener('click', mailFlowInfo);
+    }
+    draw();
+  }
+  function composeEmail(){
+    openModal(`<h4>New email</h4>
+      <div class="field-row"><label>To</label><input id="cm-to" placeholder="name@contoso.com"></div>
+      <div class="field-row"><label>Subject</label><input id="cm-subj"></div>
+      <div class="field-row"><label>Body</label><textarea id="cm-body" rows="5"></textarea></div>
+      <div class="modal-btns"><button data-a="cancel">Discard</button><button class="primary" data-a="send">Send</button></div>`,
+      (overlay)=>{
+        overlay.querySelector('[data-a="cancel"]').onclick = ()=> overlay.remove();
+        overlay.querySelector('[data-a="send"]').onclick = ()=>{
+          const to = overlay.querySelector('#cm-to').value || 'someone@contoso.com';
+          const subj = overlay.querySelector('#cm-subj').value || '(no subject)';
+          mailFolders.Sent.unshift({ from:'Me', subject:subj, preview:'To: '+to, time:'Just now', body:overlay.querySelector('#cm-body').value });
+          overlay.remove();
+          toast(`Email sent to ${to}.`);
+        };
+      });
+  }
+  function mailboxSetup(){
+    openModal(`<h4>Mailbox setup — jsmith@contoso.com</h4>
+      <div class="kv-row"><span class="k">Mailbox type</span><span>User mailbox</span></div>
+      <div class="kv-row"><span class="k">Primary SMTP address</span><span>jsmith@contoso.com</span></div>
+      <div class="kv-row"><span class="k">Aliases</span><span>j.smith@contoso.com</span></div>
+      <div class="kv-row"><span class="k">Storage quota</span><span>50 GB</span></div>
+      <div class="kv-row"><span class="k">Archive mailbox</span><span>Enabled</span></div>
+      <div class="modal-btns"><button data-a="close">Close</button></div>`,
+      (overlay)=>{ overlay.querySelector('[data-a="close"]').onclick = ()=> overlay.remove(); });
+  }
+  function mailFlowInfo(){
+    openModal(`<h4>Mail flow — ${esc(domainState.name)}</h4>
+      <p style="color:#555;">Cloud email providers route inbound mail using DNS MX records that point to their servers.</p>
+      <div class="kv-row"><span class="k">MX record</span><span>${esc(domainState.mx)}</span></div>
+      <div class="kv-row"><span class="k">Priority</span><span>${domainState.priority}</span></div>
+      <div class="kv-row"><span class="k">Domain status</span><span>${domainState.verified?'✅ Verified':'⚠️ Unverified'}</span></div>
+      <div class="modal-btns"><button data-a="admin">Open in Admin Center</button><button data-a="close">Close</button></div>`,
+      (overlay)=>{
+        overlay.querySelector('[data-a="close"]').onclick = ()=> overlay.remove();
+        overlay.querySelector('[data-a="admin"]').onclick = ()=>{ overlay.remove(); openApp('admin', {pane:'domains'}); };
+      });
+  }
+
+  // ============== OneDrive (Cloud Storage) ==============
+  let odFiles = [
+    { name:'Policies.docx', type:'file', sync:'✅' },
+    { name:'Org Chart.pdf', type:'file', sync:'✅' },
+    { name:'Team Photos', type:'folder', sync:'☁️' },
+    { name:'Budget 2026.xlsx', type:'file', sync:'✅' },
+    { name:'Onboarding Guide.pptx', type:'file', sync:'☁️' },
+  ];
+  function renderOneDrive(shell){
+    let selected = null;
+    function draw(){
+      shell.innerHTML = `
+        <div class="side">
+          <div class="side-item active">📁 My files</div>
+          <div class="side-item" data-shared="1">👥 Shared with me</div>
+          <div class="side-item" data-sync="1">⚙️ Sync settings</div>
+        </div>
+        <div class="main">
+          <div class="toolbar">
+            <button class="primary">↑ Upload</button>
+            <button>+ New folder</button>
+            <button id="od-share" ${selected?'':'disabled'}>Share</button>
+            <button id="od-hist" ${selected?'':'disabled'}>Version history</button>
+          </div>
+          <div class="grid-files" id="od-grid"></div>
+          <div class="desc-box" style="margin:0 14px 14px;">✅ = synced locally · ☁️ = online-only (Files On-Demand). Sharing permissions and version history keep files accessible and recoverable across the team.</div>
+        </div>`;
+      const grid = shell.querySelector('#od-grid');
+      grid.innerHTML = '';
+      odFiles.forEach((f,i)=>{
+        const div = document.createElement('div');
+        div.className = 'file-tile' + (selected===i?' selected':'');
+        div.innerHTML = `<div class="ft-sync">${f.sync}</div><div class="ft-icon">${f.type==='folder'?'📁':'📄'}</div><div class="ft-name">${esc(f.name)}</div>`;
+        div.addEventListener('click', ()=>{ selected = i; draw(); });
+        grid.appendChild(div);
+      });
+      shell.querySelector('#od-share').addEventListener('click', ()=> shareDialog(odFiles[selected].name));
+      shell.querySelector('#od-hist').addEventListener('click', ()=> versionHistory(odFiles[selected].name));
+      shell.querySelector('[data-sync]').addEventListener('click', syncSettingsDialog);
+      shell.querySelector('[data-shared]').addEventListener('click', ()=> toast('Shared with me shows files others have shared with you — not populated in this demo.'));
+    }
+    draw();
+  }
+  function shareDialog(name){
+    openModal(`<h4>Share "${esc(name)}"</h4>
+      <div class="field-row"><label>Link access</label><select id="sh-access"><option>Anyone with the link</option><option>People in your organization</option><option>Specific people</option></select></div>
+      <div class="field-row"><label>Permission</label><select id="sh-perm"><option>Can view</option><option>Can edit</option></select></div>
+      <div class="field-row"><input readonly value="https://contoso-my.sharepoint.com/:x:/g/personal/jsmith_..." style="font-size:11px;"></div>
+      <div class="modal-btns"><button data-a="cancel">Cancel</button><button class="primary" data-a="copy">Copy link</button></div>`,
+      (overlay)=>{
+        overlay.querySelector('[data-a="cancel"]').onclick=()=>overlay.remove();
+        overlay.querySelector('[data-a="copy"]').onclick=()=>{ overlay.remove(); toast(`Link copied — ${overlay?.querySelector?.('#sh-perm')?.value||'Can view'} access.`); };
+      });
+  }
+  function versionHistory(name){
+    openModal(`<h4>Version history — ${esc(name)}</h4>
+      <table class="wtable"><tr><th>Modified</th><th>By</th><th></th></tr>
+      <tr><td>Today, 9:40 AM</td><td>J. Smith</td><td><button style="font-size:11px;">Restore</button></td></tr>
+      <tr><td>Yesterday, 4:12 PM</td><td>A. Lee</td><td><button style="font-size:11px;">Restore</button></td></tr>
+      <tr><td>Aug 20, 2:03 PM</td><td>J. Smith</td><td><button style="font-size:11px;">Restore</button></td></tr></table>
+      <div class="modal-btns"><button data-a="close">Close</button></div>`,
+      (overlay)=> overlay.querySelector('[data-a="close"]').onclick=()=>overlay.remove());
+  }
+  function syncSettingsDialog(){
+    let bwUp = 'Auto', bwDown = 'Auto', onDemand = true;
+    const folders = { Documents:true, Pictures:true, Desktop:false, Projects:true };
+    function draw(overlay){
+      overlay.querySelector('.modal-box').innerHTML = `<h4>OneDrive sync settings</h4>
+        <div class="tabbar" style="display:flex;border-bottom:1px solid #eee;margin-bottom:10px;">
+          <div style="padding:6px 10px;font-weight:600;border-bottom:2px solid var(--accent);">Account</div>
+        </div>
+        <p style="font-size:11.5px;color:#666;">Choose folders to sync from contoso.com:</p>
+        ${Object.keys(folders).map(f=>`<label style="display:block;margin:4px 0;"><input type="checkbox" data-f="${f}" ${folders[f]?'checked':''}> ${f}</label>`).join('')}
+        <hr style="margin:12px 0;border:none;border-top:1px solid #eee;">
+        <div class="field-row"><label>Upload bandwidth limit</label><select id="ss-up"><option ${bwUp==='Auto'?'selected':''}>Auto</option><option>500 Kbps</option><option>1000 Kbps</option></select></div>
+        <div class="field-row"><label>Download bandwidth limit</label><select id="ss-down"><option ${bwDown==='Auto'?'selected':''}>Auto</option><option>500 Kbps</option><option>1000 Kbps</option></select></div>
+        <label style="display:block;margin-top:8px;"><input type="checkbox" id="ss-ondemand" ${onDemand?'checked':''}> Files On-Demand — save space, download files as you use them</label>
+        <div class="modal-btns"><button data-a="cancel">Cancel</button><button class="primary" data-a="save">Save</button></div>`;
+      overlay.querySelector('[data-a="cancel"]').onclick=()=>overlay.remove();
+      overlay.querySelectorAll('[data-f]').forEach(cb=> cb.addEventListener('change', ()=>{ folders[cb.dataset.f]=cb.checked; }));
+      overlay.querySelector('[data-a="save"]').onclick=()=>{
+        bwUp = overlay.querySelector('#ss-up').value; bwDown = overlay.querySelector('#ss-down').value; onDemand = overlay.querySelector('#ss-ondemand').checked;
+        overlay.remove();
+        toast(`Sync settings saved. Selective sync, ${bwUp}/${bwDown} bandwidth, Files On-Demand ${onDemand?'on':'off'}.`);
+      };
+    }
+    const overlay = openModal('', ()=>{});
+    draw(overlay);
+  }
+  function openSyncSettings(){ openApp('onedrive'); setTimeout(syncSettingsDialog, 60); }
+
+  // ============== Teams (Collaboration / Videoconferencing / IM) ==============
+  const teamChats = [
+    { name:'A. Lee', status:'available', messages:[ {who:'A. Lee', text:'Got a minute to review the deck?', time:'9:02 AM'}, {who:'Me', text:'Sure, send it over.', time:'9:03 AM'} ] },
+    { name:'R. Patel', status:'busy', messages:[ {who:'R. Patel', text:'Maintenance window confirmed for Saturday.', time:'Yesterday'} ] },
+    { name:'IT Support', status:'away', messages:[ {who:'IT Support', text:'Ticket #4021 has been resolved.', time:'Mon'} ] },
+  ];
+  const teamsOrgs = {
+    'Marketing': ['General','Announcements','Campaigns'],
+    'IT Support': ['General','Incidents','Change Requests'],
+  };
+  function renderTeams(shell, opts){
+    let view = (opts && opts.view) || 'chat';
+    let activeChat = 0;
+    let activeTeam = 'Marketing', activeChannel = 'General';
+    function drawRail(){
+      return `<div class="rail">
+        <div class="rail-item ${view==='activity'?'active':''}" data-v="activity" title="Activity">🔔</div>
+        <div class="rail-item ${view==='chat'?'active':''}" data-v="chat" title="Chat">💬</div>
+        <div class="rail-item ${view==='teams'?'active':''}" data-v="teams" title="Teams">👥</div>
+        <div class="rail-item ${view==='calendar'?'active':''}" data-v="calendar" title="Calendar">📅</div>
+        <div class="rail-item ${view==='meet'?'active':''}" data-v="meet" title="Meet now">🎥</div>
+      </div>`;
+    }
+    function draw(){
+      shell.innerHTML = drawRail() + `<div id="teams-body" style="flex:1;display:flex;overflow:hidden;"></div>`;
+      shell.querySelectorAll('.rail-item').forEach(r=> r.addEventListener('click', ()=>{ view=r.dataset.v; draw(); }));
+      const body = shell.querySelector('#teams-body');
+      if(view==='chat') drawChat(body);
+      else if(view==='teams') drawChannels(body);
+      else if(view==='calendar') drawCalendar(body);
+      else if(view==='meet') drawMeeting(body);
+      else drawActivity(body);
+    }
+    function drawActivity(body){
+      body.innerHTML = `<div class="main" style="padding:16px;"><h3 style="margin-top:0;">Activity</h3>
+        <p style="font-size:12.5px;">🔔 A. Lee mentioned you in "Marketing" — General</p>
+        <p style="font-size:12.5px;">🔔 R. Patel replied to your message</p></div>`;
+    }
+    function drawChat(body){
+      body.innerHTML = `<div class="side" style="width:230px;">${teamChats.map((c,i)=>`
+        <div class="chat-list-item ${i===activeChat?'active':''}" data-i="${i}">
+          <div class="avatar">${c.name.split(' ').map(w=>w[0]).join('')}</div>
+          <div><div style="font-size:12px;font-weight:600;">${c.name}</div><div style="font-size:10.5px;"><span class="status-dot status-${c.status}"></span>${c.status}</div></div>
+        </div>`).join('')}</div>
+        <div class="main" id="chat-thread"></div>`;
+      body.querySelectorAll('[data-i]').forEach(n=> n.addEventListener('click', ()=>{ activeChat=parseInt(n.dataset.i); drawThread(); }));
+      function drawThread(){
+        const c = teamChats[activeChat];
+        const thread = body.querySelector('#chat-thread');
+        thread.innerHTML = `<div style="flex:1;overflow-y:auto;padding:14px;">${c.messages.map(m=>`
+          <div class="msg-row" style="${m.who==='Me'?'flex-direction:row-reverse;':''}">
+            <div class="avatar" style="width:26px;height:26px;font-size:10px;">${m.who==='Me'?'Me':m.who.split(' ').map(w=>w[0]).join('')}</div>
+            <div><div class="msg-meta">${m.who} · ${m.time}</div><div class="msg-bubble">${esc(m.text)}</div></div>
+          </div>`).join('')}</div>
+          <div style="display:flex;gap:8px;padding:10px;border-top:1px solid var(--border);">
+            <input id="chat-input" placeholder="Type a message" style="flex:1;padding:8px;border:1px solid #ccc;border-radius:16px;">
+            <button class="primary" id="chat-send" style="border-radius:16px;">Send</button>
+          </div>`;
+        thread.querySelector('#chat-send').addEventListener('click', ()=>{
+          const val = thread.querySelector('#chat-input').value.trim();
+          if(!val) return;
+          c.messages.push({who:'Me', text:val, time:'Just now'});
+          drawThread();
+        });
+        thread.querySelector('#chat-input').addEventListener('keydown', e=>{ if(e.key==='Enter') thread.querySelector('#chat-send').click(); });
+      }
+      drawThread();
+    }
+    function drawChannels(body){
+      body.innerHTML = `<div class="side" style="width:230px;">${Object.keys(teamsOrgs).map(t=>`
+        <div class="side-item" style="font-weight:600;">${t}</div>
+        ${teamsOrgs[t].map(ch=>`<div class="side-item" style="padding-left:26px;${t===activeTeam&&ch===activeChannel?'background:#e3e1ff;':''}" data-t="${t}" data-c="${ch}"># ${ch}</div>`).join('')}
+      `).join('')}</div>
+      <div class="main" style="padding:16px;">
+        <h3 style="margin-top:0;">${activeTeam} › ${activeChannel}</h3>
+        <div class="msg-bubble">Welcome to the ${esc(activeChannel)} channel of ${esc(activeTeam)}!</div>
+        <div class="msg-bubble">Reminder: sprint review is Friday at 2pm.</div>
+      </div>`;
+      body.querySelectorAll('[data-t]').forEach(n=> n.addEventListener('click', ()=>{ activeTeam=n.dataset.t; activeChannel=n.dataset.c; drawChannels(body); }));
+    }
+    function drawCalendar(body){
+      body.innerHTML = `<div class="main" style="padding:16px;"><h3 style="margin-top:0;">Calendar</h3>
+        <div class="kv-row"><span class="k">10:00 AM</span><span>Sprint standup (Teams meeting)</span></div>
+        <div class="kv-row"><span class="k">2:00 PM</span><span>Sprint review — Marketing team</span></div>
+        <div class="kv-row"><span class="k">4:00 PM</span><span>1:1 with A. Lee</span></div></div>`;
+    }
+    let recording = false, muted=false, camOff=false;
+    function drawMeeting(body){
+      body.innerHTML = `<div class="meeting-view">
+        <div style="padding:8px 14px;font-size:12px;display:flex;justify-content:space-between;align-items:center;">
+          <span>${recording?'🔴 Recording':'Team standup — live'}</span>
+          <button style="padding:4px 10px;font-size:11px;border:none;background:#3a3a3a;color:#fff;border-radius:4px;cursor:pointer;" id="mt-breakout">Breakout rooms</button>
+        </div>
+        <div class="meeting-grid">
+          ${['J. Smith (You)','A. Lee','R. Patel','IT Support'].map(n=>`<div class="participant-tile"><span style="font-size:26px;">${camOff && n.includes('You') ? '🚫' : '🙂'}</span><div class="pt-name">${n}</div></div>`).join('')}
+        </div>
+        <div class="meeting-controls">
+          <div class="mc-btn ${muted?'active':''}" id="mt-mute" title="Mute">${muted?'🔇':'🎤'}</div>
+          <div class="mc-btn ${camOff?'active':''}" id="mt-cam" title="Camera">${camOff?'🚫':'📹'}</div>
+          <div class="mc-btn" id="mt-share" title="Share screen">🖥️</div>
+          <div class="mc-btn ${recording?'active':''}" id="mt-rec" title="Record">⏺️</div>
+          <div class="mc-btn danger" id="mt-leave" title="Leave">📞</div>
+        </div>
+      </div>`;
+      body.querySelector('#mt-mute').addEventListener('click', ()=>{ muted=!muted; drawMeeting(body); });
+      body.querySelector('#mt-cam').addEventListener('click', ()=>{ camOff=!camOff; drawMeeting(body); });
+      body.querySelector('#mt-share').addEventListener('click', ()=> toast('Screen sharing simulated — your screen would now be visible to participants.'));
+      body.querySelector('#mt-rec').addEventListener('click', ()=>{ recording=!recording; drawMeeting(body); toast(recording?'Recording started.':'Recording saved to OneDrive.'); });
+      body.querySelector('#mt-leave').addEventListener('click', ()=>{ view='chat'; draw(); });
+      body.querySelector('#mt-breakout').addEventListener('click', ()=>{
+        openModal(`<h4>Breakout rooms</h4>
+          <div class="kv-row"><span class="k">Room 1</span><span>A. Lee, R. Patel</span></div>
+          <div class="kv-row"><span class="k">Room 2</span><span>IT Support</span></div>
+          <div class="modal-btns"><button class="primary" data-a="open">Open rooms</button><button data-a="cancel">Cancel</button></div>`,
+          (overlay)=>{ overlay.querySelector('[data-a="cancel"]').onclick=()=>overlay.remove(); overlay.querySelector('[data-a="open"]').onclick=()=>{ overlay.remove(); toast('Breakout rooms opened — participants have been moved.'); }; });
+      });
+    }
+    draw();
+  }
+
+  // ============== Word Online ==============
+  let wordComments = [
+    { who:'A. Lee', text:'Can we tighten this paragraph?', resolved:false },
+    { who:'R. Patel', text:'Numbers match the latest budget ✅', resolved:false },
+  ];
+  let trackChanges = true;
+  function renderWord(shell){
+    function draw(){
+      shell.innerHTML = `
+        <div style="width:100%;display:flex;flex-direction:column;">
+          <div class="toolbar">
+            <button><b>B</b></button><button><i>I</i></button><button><u>U</u></button>
+            <span style="margin-left:10px;">Track Changes: <button id="tc-toggle">${trackChanges?'On':'Off'}</button></span>
+            <span style="margin-left:auto;display:flex;align-items:center;">
+              <span class="avatar small">JS</span><span class="avatar small">AL</span>
+              <span style="margin-left:10px;font-size:11.5px;color:#666;">2 people editing</span>
+            </span>
+          </div>
+          <div class="doc-editor">
+            <div class="doc-page">
+              <div contenteditable="true" style="max-width:640px;margin:0 auto;">
+                <h2>Q3 Planning Overview</h2>
+                <p>This document outlines the proposed roadmap for Q3, including budget allocation, staffing changes, and key milestones for the Marketing team.</p>
+                <p>Multiple users can co-author this document in real time — edits from teammates appear instantly, inline comments can be left on any passage, and Track Changes records who changed what.</p>
+                <p>Please review the attached numbers before Thursday's planning meeting.</p>
+              </div>
+            </div>
+            <div class="comments-side" id="word-comments"></div>
+          </div>
+        </div>`;
+      const cSide = shell.querySelector('#word-comments');
+      cSide.innerHTML = `<div style="font-size:12px;font-weight:600;margin-bottom:8px;">Comments</div>` +
+        wordComments.map((c,i)=> c.resolved ? '' : `<div class="comment-card"><b>${esc(c.who)}</b><br>${esc(c.text)}<br><button data-i="${i}">Resolve</button></div>`).join('');
+      cSide.querySelectorAll('[data-i]').forEach(b=> b.addEventListener('click', ()=>{ wordComments[parseInt(b.dataset.i)].resolved=true; draw(); }));
+      shell.querySelector('#tc-toggle').addEventListener('click', ()=>{ trackChanges=!trackChanges; draw(); });
+    }
+    draw();
+  }
+
+  // ============== Excel Online ==============
+  function renderExcel(shell){
+    const cols = ['A','B','C','D','E'];
+    const initial = {
+      A1:'Category', B1:'Q1', C1:'Q2', D1:'Q3', E1:'Total',
+      A2:'Marketing', B2:'12000', C2:'14500', D2:'',
+      A3:'Engineering', B3:'32000', C3:'31000', D3:'',
+      A4:'Support', B4:'9000', C4:'9800', D4:'',
+    };
+    function draw(){
+      let rowsHtml = '';
+      for(let r=1;r<=12;r++){
+        rowsHtml += `<tr><th>${r}</th>${cols.map(c=>{
+          const key = c+r;
+          const highlighted = key==='D2';
+          return `<td contenteditable="true" data-cell="${key}" class="${highlighted?'hl-other':''}">${initial[key]||''}</td>`;
+        }).join('')}</tr>`;
+      }
+      shell.innerHTML = `<div style="width:100%;display:flex;flex-direction:column;">
+        <div class="toolbar">
+          <span id="fx-ref" style="font-family:Consolas,monospace;background:#f5f5f5;padding:4px 8px;border-radius:3px;">A1</span>
+          <input id="fx-bar" style="flex:1;padding:5px 8px;border:1px solid #ccc;" placeholder="Formula bar">
+          <button id="fx-autosum">∑ AutoSum</button>
+          <span style="font-size:11px;color:#e8a80c;margin-left:8px;">🟡 A. Lee is editing D2</span>
+        </div>
+        <div class="xl-grid"><table class="xl-table"><tr><th></th>${cols.map(c=>`<th>${c}</th>`).join('')}</tr>${rowsHtml}</table></div>
+      </div>`;
+      const bar = shell.querySelector('#fx-bar');
+      const ref = shell.querySelector('#fx-ref');
+      shell.querySelectorAll('[data-cell]').forEach(td=>{
+        td.addEventListener('focus', ()=>{ ref.textContent = td.dataset.cell; bar.value = td.textContent; });
+        td.addEventListener('input', ()=>{ initial[td.dataset.cell] = td.textContent; bar.value = td.textContent; });
+      });
+      bar.addEventListener('input', ()=>{
+        const td = shell.querySelector(`[data-cell="${ref.textContent}"]`);
+        if(td){ td.textContent = bar.value; initial[ref.textContent] = bar.value; }
+      });
+      shell.querySelector('#fx-autosum').addEventListener('click', ()=>{
+        const b = parseFloat(initial.B2)+parseFloat(initial.B3)+parseFloat(initial.B4);
+        const td = shell.querySelector('[data-cell="B5"]') || (()=>{ initial.A5='Total'; return null; })();
+        initial.B5 = b;
+        draw();
+        toast('AutoSum inserted at B5 — live formulas recalculate for every co-author automatically.');
+      });
+    }
+    draw();
+  }
+
+  // ============== PowerPoint Online ==============
+  const slides = [
+    { title:'Q3 Marketing Plan', body:'Presented by J. Smith' },
+    { title:'Goals', body:'• Grow signups 15%\n• Launch new landing page\n• Expand paid social' },
+    { title:'Budget', body:'Q3 spend: $46,300 across channels' },
+    { title:'Timeline', body:'Kickoff → Mid-quarter review → Launch' },
+  ];
+  function renderPowerPoint(shell){
+    let active = 0;
+    function draw(){
+      shell.innerHTML = `
+        <div class="slide-strip" id="pp-strip"></div>
+        <div style="flex:1;display:flex;flex-direction:column;">
+          <div class="toolbar">
+            <button class="primary" id="pp-present">▶ Present</button>
+            <span style="margin-left:auto;display:flex;align-items:center;"><span class="avatar small">JS</span><span class="avatar small">AL</span><span style="margin-left:10px;font-size:11.5px;color:#666;">co-authoring</span></span>
+          </div>
+          <div class="slide-canvas" id="pp-canvas"></div>
+        </div>`;
+      const strip = shell.querySelector('#pp-strip');
+      strip.innerHTML = slides.map((s,i)=>`<div class="slide-thumb ${i===active?'active':''}" data-i="${i}"><span class="st-num">${i+1}</span>${esc(s.title)}</div>`).join('');
+      strip.querySelectorAll('[data-i]').forEach(n=> n.addEventListener('click', ()=>{ active=parseInt(n.dataset.i); draw(); }));
+      const canvas = shell.querySelector('#pp-canvas');
+      const s = slides[active];
+      canvas.innerHTML = `<div class="slide-page">
+        <div contenteditable="true" style="font-size:26px;font-weight:700;" data-f="title">${esc(s.title)}</div>
+        <div contenteditable="true" style="font-size:15px;white-space:pre-wrap;color:#444;" data-f="body">${esc(s.body)}</div>
+      </div>`;
+      canvas.querySelector('[data-f="title"]').addEventListener('input', e=>{ s.title = e.target.textContent; strip.children[active].lastChild ? null:null; strip.children[active].innerHTML = `<span class="st-num">${active+1}</span>${esc(s.title)}`; });
+      canvas.querySelector('[data-f="body"]').addEventListener('input', e=>{ s.body = e.target.textContent; });
+      shell.querySelector('#pp-present').addEventListener('click', ()=> presentMode());
+    }
+    function presentMode(){
+      let idx = active;
+      const overlay = document.createElement('div');
+      overlay.className = 'present-overlay';
+      function drawSlide(){
+        const s = slides[idx];
+        overlay.innerHTML = `<div class="present-slide"><div style="font-size:30px;font-weight:700;">${esc(s.title)}</div><div style="font-size:16px;white-space:pre-wrap;color:#444;">${esc(s.body)}</div></div>
+          <div class="present-controls"><button id="pr-prev">◀ Prev</button><button id="pr-exit">Exit</button><button id="pr-next">Next ▶</button></div>`;
+        overlay.querySelector('#pr-prev').onclick = ()=>{ idx=Math.max(0,idx-1); drawSlide(); };
+        overlay.querySelector('#pr-next').onclick = ()=>{ idx=Math.min(slides.length-1,idx+1); drawSlide(); };
+        overlay.querySelector('#pr-exit').onclick = ()=> overlay.remove();
+      }
+      drawSlide();
+      document.getElementById('appRoot').appendChild(overlay);
+    }
+    draw();
+  }
+
+  // ============== Admin Center ==============
+  function renderAdmin(shell, opts){
+    let pane = (opts && opts.pane) || 'users';
+    function draw(){
+      shell.innerHTML = `<div class="side">
+          ${[['users','👤','Users'],['licenses','🎫','Licenses'],['identity','🔗','Identity'],['domains','🌐','Domains']].map(([k,i,l])=>`<div class="side-item ${pane===k?'active':''}" data-p="${k}">${i} ${l}</div>`).join('')}
+        </div>
+        <div class="main" id="admin-main"></div>`;
+      shell.querySelectorAll('[data-p]').forEach(n=> n.addEventListener('click', ()=>{ pane=n.dataset.p; draw(); }));
+      const main = shell.querySelector('#admin-main');
+      if(pane==='users') drawUsers(main);
+      else if(pane==='licenses') drawLicenses(main);
+      else if(pane==='identity') drawIdentity(main);
+      else if(pane==='domains') drawDomains(main);
+    }
+    function drawUsers(main){
+      main.innerHTML = `<div class="toolbar"><button class="primary" id="au-add">+ Add user</button></div><div id="au-table"></div>`;
+      renderTable(main.querySelector('#au-table'), ['Name','Email','License','Status'], users.map(u=>[u.name,u.email,u.license,u.status]));
+      main.querySelector('#au-add').addEventListener('click', ()=>{
+        openModal(`<h4>Add user</h4>
+          <div class="field-row"><label>Display name</label><input id="au-name"></div>
+          <div class="field-row"><label>Email</label><input id="au-email" placeholder="name@contoso.com"></div>
+          <div class="field-row"><label>License</label><select id="au-lic"><option>Unlicensed</option>${licenseSkus.map(l=>`<option>${l.name}</option>`).join('')}</select></div>
+          <div class="modal-btns"><button data-a="cancel">Cancel</button><button class="primary" data-a="save">Create user</button></div>`,
+          (overlay)=>{
+            overlay.querySelector('[data-a="cancel"]').onclick=()=>overlay.remove();
+            overlay.querySelector('[data-a="save"]').onclick=()=>{
+              const name = overlay.querySelector('#au-name').value || 'New User';
+              const email = overlay.querySelector('#au-email').value || 'newuser@contoso.com';
+              const lic = overlay.querySelector('#au-lic').value;
+              users.push({name,email,license:lic,status:'Active'});
+              if(lic!=='Unlicensed'){ const sku=licenseSkus.find(s=>s.name===lic); if(sku) sku.assigned++; }
+              overlay.remove(); draw();
+              toast(`User ${name} created and provisioned.`);
+            };
+          });
+      });
+    }
+    function drawLicenses(main){
+      main.innerHTML = `<div class="toolbar"><button class="primary" id="al-assign">Assign licenses</button></div><div id="al-table"></div>
+        <div class="desc-box" style="margin:14px;">Licensing assignment provisions, purchases, and revokes subscription access (Microsoft 365, Google Workspace, etc.) for managed user accounts.</div>`;
+      renderTable(main.querySelector('#al-table'), ['License','Assigned','Available'], licenseSkus.map(l=>[l.name, l.assigned, l.total-l.assigned]));
+      main.querySelector('#al-assign').addEventListener('click', ()=>{
+        openModal(`<h4>Assign licenses</h4>
+          <div class="field-row"><label>User</label><select id="al-user">${users.map(u=>`<option>${u.email}</option>`).join('')}</select></div>
+          ${licenseSkus.map((l,i)=>`<label style="display:block;margin:4px 0;"><input type="checkbox" data-l="${i}"> ${l.name} (${l.total-l.assigned} available)</label>`).join('')}
+          <div class="modal-btns"><button data-a="cancel">Cancel</button><button class="primary" data-a="save">Save changes</button></div>`,
+          (overlay)=>{
+            overlay.querySelector('[data-a="cancel"]').onclick=()=>overlay.remove();
+            overlay.querySelector('[data-a="save"]').onclick=()=>{
+              const email = overlay.querySelector('#al-user').value;
+              const u = users.find(x=>x.email===email);
+              overlay.querySelectorAll('[data-l]:checked').forEach(cb=>{
+                const sku = licenseSkus[parseInt(cb.dataset.l)];
+                sku.assigned++; if(u) u.license = sku.name;
+              });
+              overlay.remove(); draw();
+              toast(`Licenses updated for ${email}.`);
+            };
+          });
+      });
+    }
+    function drawIdentity(main){
+      main.innerHTML = `<div style="padding:16px;">
+        <h3 style="margin-top:0;">Identity Synchronization</h3>
+        <div class="card" style="border:1px solid var(--border);border-radius:8px;padding:14px;">
+          <div class="kv-row"><span class="k">Sync tool</span><span>Entra ID Connect</span></div>
+          <div class="kv-row"><span class="k">Status</span><span>✅ ${identityState.status}</span></div>
+          <div class="kv-row"><span class="k">Last sync</span><span id="id-lastsync">${identityState.lastSync}</span></div>
+          <button style="margin-top:10px;padding:6px 14px;border:1px solid #ccc;background:#fff;border-radius:4px;cursor:pointer;" id="id-sync-now">Run sync now</button>
+          <div id="id-progress"></div>
+        </div>
+        <div class="desc-box">Entra ID Connect mirrors local Active Directory users and credentials to the cloud identity provider, enabling single sign-on (SSO) and hybrid user access across on-prem and cloud apps.</div>
+      </div>`;
+      main.querySelector('#id-sync-now').addEventListener('click', async ()=>{
+        const holder = main.querySelector('#id-progress');
+        holder.innerHTML = `<div class="progress-track"><div class="progress-fill" id="id-fill"></div></div>`;
+        const fill = holder.querySelector('#id-fill');
+        for(let p=0;p<=100;p+=25){ fill.style.width=p+'%'; await new Promise(r=>setTimeout(r,180)); }
+        identityState.lastSync = 'just now';
+        main.querySelector('#id-lastsync').textContent = identityState.lastSync;
+        toast('Directory sync completed — 3 users updated.');
+      });
+    }
+    function drawDomains(main){
+      main.innerHTML = `<div class="toolbar"><button class="primary" id="ad-add">+ Add domain</button></div><div id="ad-table"></div>`;
+      renderTable(main.querySelector('#ad-table'), ['Domain','Status','MX record','TXT record'],
+        [[domainState.name, domainState.verified?'✅ Verified':'⚠️ Unverified', domainState.mx, domainState.txt]]);
+      main.querySelector('#ad-add').addEventListener('click', ()=>{
+        openModal(`<h4>Add domain</h4>
+          <div class="field-row"><label>Domain name</label><input id="ad-name" placeholder="fabrikam.com"></div>
+          <div class="desc-box">After adding, create these DNS records with your registrar:<br>
+          MX → fabrikam-com.mail.protection.outlook.com (priority 0)<br>
+          TXT → MS=ms + verification code<br>
+          CNAME → autodiscover.fabrikam.com</div>
+          <div class="modal-btns"><button data-a="cancel">Cancel</button><button class="primary" data-a="verify">Verify DNS</button></div>`,
+          (overlay)=>{
+            overlay.querySelector('[data-a="cancel"]').onclick=()=>overlay.remove();
+            overlay.querySelector('[data-a="verify"]').onclick=async ()=>{
+              overlay.querySelector('[data-a="verify"]').textContent = 'Checking…';
+              await new Promise(r=>setTimeout(r,900));
+              overlay.remove();
+              toast('Domain verified — MX and TXT records found and matched.');
+            };
+          });
+      });
+    }
+    draw();
+  }
+
+  // ============== Reference index ==============
+  const reference = [
+    { name:'Email Systems', action:'Outlook → Mail flow (MX records)', desc:'Cloud-based communication infrastructure (e.g., Exchange Online, Gmail) providing business email hosting, domain routing, MX record configuration, and mailbox setup.', run:()=>{ openApp('outlook'); setTimeout(mailFlowInfo, 60); } },
+    { name:'Cloud Storage', action:'Open OneDrive', desc:'Centralized online repositories (e.g., OneDrive, Google Drive) enabling secure file storage, file sharing permissions, version control, and cloud accessibility.', run:()=> openApp('onedrive') },
+    { name:'Sync and Folder Settings', action:'OneDrive → Sync settings', desc:'Configuration rules controlling how local directories synchronize with cloud storage, including selective sync, bandwidth limits, and sync options.', run: openSyncSettings },
+    { name:'Collaboration Tools', action:'Open Teams', desc:'Integrated cloud application suites designed for multi-user real-time document editing, project management, and team communication.', run:()=> openApp('teams', {view:'teams'}) },
+    { name:'Spreadsheets', action:'Open Excel Online', desc:'Cloud-based data tools (e.g., Excel Online, Google Sheets) enabling multi-user data analysis, simultaneous cell editing, automated calculations, and live version tracking.', run:()=> openApp('excel') },
+    { name:'Videoconferencing', action:'Teams → Meet now', desc:'Real-time virtual meeting software (e.g., Microsoft Teams, Zoom, Google Meet) facilitating remote video calls, screen sharing, meeting recordings, and breakout rooms.', run:()=> openApp('teams', {view:'meet'}) },
+    { name:'Presentation Tools', action:'Open PowerPoint Online', desc:'Cloud applications (e.g., PowerPoint Online, Google Slides) allowing teams to remotely co-author, present, and update digital slide decks.', run:()=> openApp('powerpoint') },
+    { name:'Word Processing Tools', action:'Open Word Online', desc:'Online document platforms (e.g., Word Online, Google Docs) allowing multiple users to edit text, leave inline comments, and track changes in real time.', run:()=> openApp('word') },
+    { name:'Instant Messaging', action:'Teams → Chat', desc:'Real-time chat systems (e.g., Slack, Microsoft Teams, Google Chat) providing direct messaging, topic-based channels, file attachments, and status indicators.', run:()=> openApp('teams', {view:'chat'}) },
+    { name:'Identity Synchronization', action:'Admin Center → Identity', desc:'Process of mirroring local Active Directory users and credentials to cloud identity providers (e.g., Entra ID Connect) for single sign-on (SSO) and hybrid user access.', run:()=> openApp('admin', {pane:'identity'}) },
+    { name:'Licensing Assignment', action:'Admin Center → Licenses', desc:'Administrative process of provisioning, purchasing, and revoking subscription licenses (e.g., Microsoft 365, Google Workspace) to managed user accounts.', run:()=> openApp('admin', {pane:'licenses'}) },
+  ];
+  function renderReference(filter){
+    const list = document.getElementById('refList');
+    list.innerHTML = '';
+    const f = (filter||'').trim().toLowerCase();
+    const items = reference.filter(r=> !f || r.name.toLowerCase().includes(f) || r.desc.toLowerCase().includes(f));
+    if(items.length===0){ list.innerHTML = '<div class="ref-empty">No matching concepts.</div>'; return; }
+    items.forEach(r=>{
+      const item = document.createElement('div'); item.className='ref-item';
+      item.innerHTML = `<div class="ref-name">${r.name}</div><div class="ref-action">${r.action}</div><div class="ref-desc">${r.desc}</div>`;
+      item.addEventListener('click', ()=> r.run());
+      list.appendChild(item);
+    });
+  }
+  document.getElementById('refSearchInput').addEventListener('input', e=> renderReference(e.target.value));
+  renderReference('');
+
+  // Boot
+  openApp('outlook');
+})();
+</script>
+</body>
+</html>

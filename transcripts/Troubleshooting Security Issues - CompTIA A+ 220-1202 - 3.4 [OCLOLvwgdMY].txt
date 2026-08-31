@@ -1,0 +1,159 @@
+When you're using your laptop or your desktop computer,
+you may find at times that you are unable to access the network.
+If this is because malware is installed on your system,
+the malware itself may be causing this problem,
+either intentionally preventing your access to the network
+or unintentionally causing problems
+with network connectivity.
+Malware likes to control where you go on the network
+because it knows that if you download anti-malware software,
+you'll probably remove it from your system.
+And very often, malware is using a known vulnerability
+in your operating system to gain access to your data.
+And if you were to download the latest OS patch,
+you would be closing that vulnerability
+and effectively preventing malware from gaining access
+to that information.
+If this is related to malware, then your best course of action
+would be to use a malware cleaner, or even better,
+remove everything on the system and restore
+from a known good backup.
+Many browsers will show messages that have been pushed
+from a third-party website onto your main browser screen.
+And often, these might be websites that are not legitimate.
+For example, they might show that your antivirus subscription
+has expired and you have to renew it by clicking
+on the buttons in that message.
+In reality, of course, these messages are not legitimate.
+And by installing anything from these links,
+you're effectively infecting your system further.
+Most browsers provide options in the security settings so that you
+can define how notifications are brought to the screen.
+And you can block or allow certain sites from showing those
+notifications on your browser.
+Very often, ignoring these notifications is the best way to proceed.
+But if you are concerned that malware might have been installed onto
+your computer, it's always a good idea to run a scan just to make sure
+nothing unusual is installed.
+Here's a fake antivirus message that was received on a family member's computer.
+It all looks very legitimate.
+It tells you at the top that you must contact us immediately so that our engineers
+can walk you through the removal process over the phone.
+Your computer is disabled and then it gives information about the problem.
+It talks about what virus is identified and gives you a phone number to call to solve this
+problem.
+In reality, of course, this is not a legitimate virus.
+This is a complete hoax and no software has been installed onto your computer.
+In reality, of course, the only thing this malware is doing is displaying this message
+on your screen.
+If you were to delete this executable, you would effectively be removing this so-called malware
+from your system.
+But if you call the number, they will entice you to give them money to unlock your computer
+or to subscribe to whatever service they are supposedly offering.
+This often requires some specialized removal techniques to be able to get rid of this from
+your computer completely.
+In this example, the best solution might be to delete everything on your computer and restore
+it from a known good backup.
+Here's a better view of this fake antivirus alert.
+You can see that it looks legitimate and it tells you that it has found a number of different
+viruses.
+This one has detected Trojan spyware known as financetrack2.dll.
+Normally, the information that we are storing on our computer is safe from being changed or modified
+when we are not using our PC.
+But unfortunately, you might find cases where system files might be renamed or files that
+you've previously saved are suddenly not available where you left them.
+There might also be cases where files that were assigned to only you now have different permissions
+associated with them.
+Or you may try to access one of your previous documents and find that the access is now denied.
+All of these are highly unusual, should not be occurring on a normally running system and
+are almost certainly the case of malware being installed on this computer.
+The best practice, of course, is to use a malware cleaner or delete everything and restore from
+a known good backup.
+It seems that our newest operating systems are showing us more and more notifications.
+Most operating systems give you a bit of control over what's shown and you may be able
+to modify the notification options on your operating system.
+On Windows, you'll find these in the system app under the notifications option and you have
+the choice to enable or disable all notifications or go into individual applications and choose
+which apps you would like to receive notifications from.
+If you turn off all notifications, you might be missing important information from your system
+services.
+So it might make more sense to control this on an app by app basis to enable or disable
+exactly what notifications you'd like to see.
+By default, most operating systems will download updates and install them automatically when needed.
+But if you were to look at Windows Update on your computer and find that it was not updating
+things properly, then you'll have to do a bit more troubleshooting.
+Since all of these are being downloaded from the cloud, our first step will be to look at
+our network connectivity.
+Do we have a good connection to the internet and are we able to download files from other
+third-party websites?
+We might also want to look at any firewalls or filtering that might be in place just in
+case someone has added a new rule to the firewall that is preventing access to Windows Update.
+And some environments are limiting the amount of bandwidth you're able to transfer through
+the network, so you may find that the updates for the operating system are simply too large
+for your existing network connection.
+Windows does include a troubleshooter to look for network connectivity for Windows Update.
+You can find this under the Settings System Troubleshoot and choose the option for Other Troubleshooters
+to find out what is happening with your Windows Update process.
+If it's able to find any problems, it will identify that it has detected an issue with
+Windows Update, and it will try to resolve that problem automatically in the Windows Update
+troubleshooter.
+Pop-up messages in a browser can look as if a legitimate application is asking you to
+perform a function.
+This is a very easy way for malware authors to get their malicious software onto your computer.
+Most new browsers will prevent these random pop-ups by having a pop-up block feature built
+into the browser itself.
+You could, of course, disable that feature, but most browsers will have that capability
+turned on by default.
+But if you are using a modern browser and still seeing these messages, this might indicate
+malware, so you might want to perform a scan or delete everything and restore from a known
+good backup.
+You've probably found yourself surfing around the internet and received a message in your
+browser that says, your connection is not private, or something very similar to that.
+This indicates some type of certificate problem, so we might have to do a bit more research
+to determine why this is occurring.
+Most browsers allow you to click or right-mouse click on the lock icon associated with that
+HTTPS connection, and this will bring up a view of the certificate on that system.
+This provides us with additional details about this certificate, for example, who issued the
+certificate, when it expires, and more details about how this certificate was originally created.
+It may be that we are using a different fully qualified domain name than this certificate was
+created for, and that creates a mismatch when you connect to that site.
+Or it may be that the digital signature on this certificate is not from a trusted certificate
+authority.
+And since the browser doesn't recognize the certificate authority, it presents you with a message
+saying that this is an untrusted connection.
+And because the date and time is important in these certificates, you have to make sure
+that your local computer is also set to the right date and time to prevent any type of mismatch
+between your computer and the certificate.
+A very common problem you might see is someone who is typing in a Google search into their browser,
+but the results that come up on the next page are not from Google.
+This is referred to as a browser redirection, where you are expecting to go to one website,
+and you end up being redirected to a completely different website.
+This could certainly be related to a website misconfiguration, but almost always this is related to some type
+of malware.
+The malware authors are redirecting you to a site where they are expecting you to either
+download additional malware or present advertising that they can use to make even more money.
+The process for cleaning this is the same as any other malware infection.
+We can use an anti-malware or antivirus cleaner.
+Or even better, we can delete everything and restore from a known good backup.
+One of the most challenging problems to troubleshoot is someone saying their system is slow.
+This could be a problem with many different resources on this computer, so it might take some
+time to perform troubleshooting.
+If the issue is related to browser performance, we might want to confirm that we are using
+the latest browser and that we're up to date with the latest versions.
+You might also want to see how many tabs are open in any particular browser.
+The browser on this screen has almost 30 different sites that are open, and there are so many that
+they're now just a single icon at the top of the screen in each one of the tabs.
+Sometimes cleaning out your browser can resolve a number of these performance problems.
+So you might want to go into the cache and the cookies inside of your browser, clean
+those out, delete any of the temporary files that are in the browser, and then restart the
+browser session.
+You might also want to look at your task manager to see the performance of your browser, how
+much CPU it's using, how much memory, and if it's accessing any of your disk, which certainly
+could be slowing down the performance.
+I visited sites before that suddenly slowed down my browser to a crawl, and when I brought
+up my task manager, I saw that my CPU utilization for the browser was at 100%.
+This was because this website had a crypto miner running in JavaScript.
+When I left that website page, suddenly my CPU dropped back down to zero.
+And it could be that the issue is related to this specific type of browser.
+You might want to have different browsers installed on your system so that you could try different
+browsers against the same website and see if you get the same performance issues.
