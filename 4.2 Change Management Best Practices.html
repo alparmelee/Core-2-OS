@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4.2 Change Management Best Practices</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101820;
+    --muted:#4b5563;
+    --paper:#eef6f3;
+    --line:rgba(16,24,32,0.12);
+    --accent:#0f766e;
+    --accent-soft:#ccfbf1;
+    --good:#166534;
+    --warn:#9a3412;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+    --highlight:#0d9488;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(15,118,110,0.12), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(13,148,136,0.06), transparent 50%),
+      linear-gradient(180deg, #e4f0ec 0%, var(--paper) 40%, #e8f4f0 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--highlight); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#f0fdfa;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,24,22,0.55) 0%, rgba(8,24,22,0.78) 52%, rgba(8,24,22,0.94) 100%),
+      url("https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1600&q=80") center/cover no-repeat;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:38ch;
+    color:#ccfbf1;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:52ch;
+    color:#94a3b8;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#ccfbf1;
+    color:#115e59;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#ccfbf1;
+    border:1px solid rgba(204,251,241,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(238,246,243,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+  .visual.icon{ font-size:3.6rem; line-height:1; }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .body h4{
+    font-size:0.95rem;
+    font-weight:700;
+    margin:0.85rem 0 0.35rem;
+    color:var(--ink);
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body ul{
+    margin:0.5rem 0 0.7rem;
+    padding-left:1.2rem;
+  }
+  .body li{ margin-bottom:0.35rem; }
+
+  .split{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:0.65rem;
+    margin-top:0.75rem;
+  }
+  @media (min-width:640px){
+    .split.cols-3{ grid-template-columns:repeat(3, 1fr); }
+    .split.cols-2{ grid-template-columns:1fr 1fr; }
+  }
+  .pill{
+    padding:0.85rem 1rem;
+    border-radius:12px;
+    font-size:0.9rem;
+    border:1px solid var(--line);
+    background:#fafbfd;
+  }
+  .pill strong{
+    display:block;
+    font-size:0.82rem;
+    margin-bottom:0.35rem;
+    color:var(--accent);
+  }
+  .pill p{ margin:0; font-size:0.88rem; color:var(--muted); }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(15,118,110,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">4.2</p>
+    <h1>Change Management Best Practices</h1>
+    <p>Formal change management brings standardized procedures to system updates — avoiding unexpected downtime, mistakes, and scheduling conflicts.</p>
+    <div class="hero-cta">
+      <a href="#business-processes">Business processes</a>
+      <a class="ghost" href="#procedures">Procedures</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#rollback">Rollback</a>
+    <a href="#backup-plan">Backup plan</a>
+    <a href="#sandbox">Sandbox</a>
+    <a href="#staff">Staff roles</a>
+    <a href="#request-forms">Request forms</a>
+    <a href="#purpose">Purpose</a>
+    <a href="#scope">Scope</a>
+    <a href="#change-type">Change types</a>
+    <a href="#scheduling">Scheduling</a>
+    <a href="#impact">Impact</a>
+    <a href="#risk">Risk</a>
+    <a href="#ccb">CCB</a>
+    <a href="#implementation">Implementation</a>
+    <a href="#peer-review">Peer review</a>
+    <a href="#acceptance">Acceptance</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="business-processes">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Documented business processes</h2>
+        <p>Plans, testing, and roles that protect production systems before and during a change.</p>
+      </div>
+
+      <article class="term" id="rollback">
+        <div class="visual photo">
+          <img src="4.2/Rollback plan.jfif" alt="Rollback plan" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Rollback plan</h3>
+          <p>A defined set of procedures to return a system to its original configuration if an update fails.</p>
+          <p>This can range from restoring a virtual machine snapshot to physically swapping out hardware if firmware cannot be downgraded. Every normal and emergency change should document how to undo the change before execution begins.</p>
+        </div>
+      </article>
+
+      <article class="term" id="backup-plan">
+        <div class="visual photo">
+          <img src="4.2/Backup plan.jfif" alt="Backup plan" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Backup plan</h3>
+          <p>Alternate steps (Plan B, Plan C, etc.) to execute if issues arise during implementation — such as using local installation files on a flash drive if internet downloads fail.</p>
+          <p>Includes a complete system backup to restore from if necessary. The backup plan covers contingencies <em>during</em> the change; the rollback plan covers reverting after a failed change.</p>
+        </div>
+      </article>
+
+      <article class="term" id="sandbox">
+        <div class="visual photo">
+          <img src="4.2/Sandbox testing.webp" alt="Sandbox testing" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Sandbox testing</h3>
+          <p>Executing and verifying changes in an isolated, self-contained test environment to validate stability and test rollback procedures without risking production uptime.</p>
+          <p>Sandbox environments should mirror production as closely as practical — same OS versions, patch levels, and representative data volumes.</p>
+        </div>
+      </article>
+
+      <article class="term" id="staff">
+        <div class="visual photo">
+          <img src="4.2/Responsible staff members.jfif" alt="Responsible staff members" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Responsible staff members</h3>
+          <p>Clear division of responsibilities across:</p>
+          <ul>
+            <li><strong>IT staff</strong> — Executing the technical upgrade and documenting results</li>
+            <li><strong>Business customers</strong> — End users who operate the software and validate it meets their needs</li>
+            <li><strong>Sponsors</strong> — Stakeholders funding the initiative and accountable for business outcomes</li>
+          </ul>
+          <p>Everyone should know their role before the change window opens.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="procedures">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Change management procedures</h2>
+        <p>The lifecycle from change request through approval, execution, and sign-off.</p>
+      </div>
+
+      <article class="term" id="request-forms">
+        <div class="visual photo">
+          <img src="4.2/Request forms.webp" alt="Request forms" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Request forms</h3>
+          <p>Standardized digital forms that capture necessary details — including risk evaluations, scope, purpose, and rollback plans — for submission, tracking, and auditing.</p>
+          <p>Forms ensure no critical information is missed and provide a single record for the Change Control Board to review.</p>
+        </div>
+      </article>
+
+      <article class="term" id="purpose">
+        <div class="visual photo">
+          <img src="4.2/Purpose of the change.jfif" alt="Purpose of the change" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Purpose of the change</h3>
+          <p>Clear business justification for the modification, such as:</p>
+          <ul>
+            <li>Adding new features</li>
+            <li>Resolving software bugs</li>
+            <li>Enhancing performance</li>
+            <li>Deploying security patches</li>
+          </ul>
+          <p>Without a documented purpose, the CCB cannot weigh the change against business priorities.</p>
+        </div>
+      </article>
+
+      <article class="term" id="scope">
+        <div class="visual photo">
+          <img src="4.2/Scope of the change.jfif" alt="Scope of the change" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Scope of the change</h3>
+          <p>Defining the boundary of the update to determine whether it affects a tiny group of users or the core infrastructure of the entire organization.</p>
+          <p>Scope drives scheduling, communication, and how broadly rollback and testing must be planned.</p>
+        </div>
+      </article>
+
+      <article class="term" id="change-type">
+        <div class="visual photo">
+          <img src="4.2/Change type.jfif" alt="Change type" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Change type</h3>
+          <div class="split cols-3">
+            <div class="pill">
+              <strong>Standard change</strong>
+              <p>Low-risk, routine, and pre-approved modifications (e.g., replacing a user&rsquo;s broken monitor) that do not require formal board review.</p>
+            </div>
+            <div class="pill">
+              <strong>Normal change</strong>
+              <p>Medium-risk, non-urgent modifications (e.g., modifying firewall rules or updating a database engine) requiring full change management review.</p>
+            </div>
+            <div class="pill">
+              <strong>Emergency change</strong>
+              <p>High-risk, urgent implementations executed with top priority to address critical threats, such as zero-day vulnerabilities.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="term" id="scheduling">
+        <div class="visual photo">
+          <img src="4.2/Date and time of change.jfif" alt="Date and time of change" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Date and time of change</h3>
+          <h4>Maintenance windows</h4>
+          <p>Designated, pre-approved time slots (e.g., off-peak hours such as Sundays at 2 a.m.) set aside for system changes when user impact is minimized.</p>
+          <h4>Change freeze</h4>
+          <p>Strictly enforced periods (e.g., retail peak seasons between November 15 and January 5) where non-emergency system changes are blocked to protect business-critical operations.</p>
+        </div>
+      </article>
+
+      <article class="term" id="impact">
+        <div class="visual photo">
+          <img src="4.2/Affected systems  impact.jfif" alt="Affected systems and impact" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Affected systems / impact</h3>
+          <p>Identification of all hardware, applications, and services impacted by the update.</p>
+          <p>Example: Recognizing that rebooting a core firewall interrupts internet connectivity for all users. Document downstream dependencies so stakeholders know what to expect during and after the change.</p>
+        </div>
+      </article>
+
+      <article class="term" id="risk">
+        <div class="visual photo">
+          <img src="4.2/Risk analysis and risk level.png" alt="Risk analysis and risk level" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Risk analysis and risk level</h3>
+          <p>Evaluating the technical risk of <strong>executing</strong> the change — e.g., unbootable operating systems, non-functional patches, or data loss.</p>
+          <p>Weighed against the risk of <strong>not</strong> making the change — e.g., ongoing application instability or security exposures.</p>
+          <div class="note">The CCB uses risk level to decide whether to approve, defer, or require additional safeguards before proceeding.</div>
+        </div>
+      </article>
+
+      <article class="term" id="ccb">
+        <div class="visual photo">
+          <img src="4.2/Change board approvals.png" alt="Change board approvals" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Change board approvals</h3>
+          <span class="aka">Change Control Board (CCB)</span>
+          <p>Review and authorization by a CCB representing multiple departments to evaluate risks, prioritize changes, and prevent scheduling conflicts.</p>
+          <p>Normal changes require CCB approval before implementation. Emergency changes may use expedited review but are still documented after the fact.</p>
+        </div>
+      </article>
+
+      <article class="term" id="implementation">
+        <div class="visual photo">
+          <img src="4.2/Implementation.jfif" alt="Implementation" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Implementation</h3>
+          <p>Carrying out the approved change according to the defined steps and schedule during the approved maintenance window.</p>
+          <p>Document each step, any deviations, and results in real time so rollback can be triggered quickly if something goes wrong.</p>
+        </div>
+      </article>
+
+      <article class="term" id="peer-review">
+        <div class="visual photo">
+          <img src="4.2/Peer review.png" alt="Peer review" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Peer review</h3>
+          <p>Reviewing implementation, rollback, and backup plans with experienced IT peers and subject matter experts before execution.</p>
+          <p>A second set of eyes catches gaps in the plan — missing dependencies, untested rollback steps, or steps that require elevated privileges not yet arranged.</p>
+        </div>
+      </article>
+
+      <article class="term" id="acceptance">
+        <div class="visual photo">
+          <img src="4.2/End-user acceptance.jfif" alt="End-user acceptance" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>End-user acceptance</h3>
+          <p>The final phase where end users test the updated software or system to confirm that it functions properly and meets business needs.</p>
+          <p>Formal sign-off closes the change record. If acceptance fails, the rollback plan may be invoked and the change reopened.</p>
+          <ul class="tags">
+            <li>UAT</li>
+            <li>Sign-off</li>
+            <li>Close change record</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Study notes for Core 2 objective 4.2 — Change Management Best Practices.
+  </div>
+</footer>
+
+<script src="study-lightbox.js"></script>
+</body>
+</html>

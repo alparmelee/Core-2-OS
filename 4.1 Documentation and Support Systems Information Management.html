@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4.1 Documentation and Support Systems Information Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101820;
+    --muted:#4b5563;
+    --paper:#eef1f6;
+    --line:rgba(16,24,32,0.12);
+    --accent:#334155;
+    --accent-soft:#e2e8f0;
+    --good:#166534;
+    --warn:#9a3412;
+    --sky:#0e4d7b;
+    --highlight:#1d4ed8;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(51,65,85,0.12), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(29,78,216,0.06), transparent 50%),
+      linear-gradient(180deg, #e6eaef 0%, var(--paper) 40%, #eceff4 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--highlight); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#f8fafc;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(12,18,28,0.55) 0%, rgba(12,18,28,0.78) 52%, rgba(12,18,28,0.94) 100%),
+      url("https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1600&q=80") center/cover no-repeat;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:42ch;
+    color:#e2e8f0;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:52ch;
+    color:#94a3b8;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#e2e8f0;
+    color:#1e293b;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#e2e8f0;
+    border:1px solid rgba(226,232,240,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(238,241,246,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--highlight);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+  .visual.icon{ font-size:3.6rem; line-height:1; }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body ul{
+    margin:0.5rem 0 0.7rem;
+    padding-left:1.2rem;
+  }
+  .body li{ margin-bottom:0.35rem; }
+
+  .split{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0.75rem;
+    margin-top:0.75rem;
+  }
+  .pill{
+    padding:0.85rem 1rem;
+    border-radius:12px;
+    font-size:0.9rem;
+    border:1px solid var(--line);
+    background:#fafbfd;
+  }
+  .pill strong{
+    display:block;
+    font-size:0.82rem;
+    margin-bottom:0.35rem;
+    color:var(--accent);
+  }
+  .pill p{ margin:0; font-size:0.88rem; color:var(--muted); }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--highlight);
+    background:rgba(29,78,216,0.06);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .split{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">4.1</p>
+    <h1>Documentation and Support Systems Information Management</h1>
+    <p>Ticketing systems, asset management, and the documents that keep IT support organized, auditable, and consistent.</p>
+    <div class="hero-cta">
+      <a href="#ticketing">Ticketing</a>
+      <a class="ghost" href="#asset-management">Asset management</a>
+      <a class="ghost" href="#documents">Documents</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#ticketing-systems">Ticketing</a>
+    <a href="#user-info">User info</a>
+    <a href="#device-info">Device info</a>
+    <a href="#severity">Severity</a>
+    <a href="#escalation">Escalation</a>
+    <a href="#written-communication">Communication</a>
+    <a href="#inventory">Inventory</a>
+    <a href="#cmdb">CMDB</a>
+    <a href="#procurement">Procurement</a>
+    <a href="#incident-reports">Incidents</a>
+    <a href="#sops">SOPs</a>
+    <a href="#slas">SLAs</a>
+    <a href="#knowledge-base">Knowledge base</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="ticketing">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Ticketing systems</h2>
+        <p>Centralized tools for logging, tracking, prioritizing, and resolving support requests.</p>
+      </div>
+
+      <article class="term" id="ticketing-systems">
+        <div class="visual photo">
+          <img src="4.1/Ticketing systems.jfif" alt="Ticketing systems" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Ticketing systems</h3>
+          <p>A centralized platform (e.g., ServiceNow, Jira Service Management, Zendesk) used to create, assign, track, and close support incidents and service requests. Tickets provide an audit trail, prevent issues from being lost, and enable reporting on response times and recurring problems.</p>
+          <ul class="tags">
+            <li>Help desk</li>
+            <li>Service desk</li>
+            <li>Audit trail</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="user-info">
+        <div class="visual photo">
+          <img src="4.1/User information.jfif" alt="User information" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>User information</h3>
+          <p>Identify who is affected and how to reach them. Standard fields include name, employee ID, department, location, phone number, email, and manager.</p>
+          <p>Accurate user data ensures callbacks, approvals, and follow-up reach the right person — especially when tickets are reassigned between shifts or tiers.</p>
+        </div>
+      </article>
+
+      <article class="term" id="device-info">
+        <div class="visual photo">
+          <img src="4.1/Device information.png" alt="Device information" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Device information</h3>
+          <p>Record the hardware or system involved: hostname, asset tag, serial number, model, OS version, IP address, and physical location.</p>
+          <p>Linking a ticket to a specific device speeds troubleshooting and ties the issue to warranty, configuration, and change history.</p>
+        </div>
+      </article>
+
+      <article class="term" id="issue-description">
+        <div class="visual photo">
+          <img src="4.1/Description of issues.jfif" alt="Description of issues" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Description of issues</h3>
+          <p>The initial report of what the user is experiencing — symptoms, error messages, when it started, and what changed recently.</p>
+          <p>Capture enough detail to reproduce or diagnose without requiring an immediate callback. Include exact error text, affected applications, and frequency.</p>
+        </div>
+      </article>
+
+      <article class="term" id="categories">
+        <div class="visual photo">
+          <img src="4.1/Categories.jfif" alt="Categories" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Categories</h3>
+          <p>Classify tickets by type so they route to the correct team and appear in meaningful reports. Examples: hardware, software, network, access/permissions, email, printing, mobile, security.</p>
+          <p>Consistent categorization improves trend analysis — e.g., spotting a spike in VPN tickets after a firewall change.</p>
+        </div>
+      </article>
+
+      <article class="term" id="severity">
+        <div class="visual photo">
+          <img src="4.1/Severity.jfif" alt="Severity" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Severity</h3>
+          <p>Indicates business impact and urgency — how badly operations are affected and how quickly a response is required.</p>
+          <p>Common levels: <strong>Critical</strong> (major outage, many users down), <strong>High</strong> (significant impact, workaround may exist), <strong>Medium</strong> (limited impact), <strong>Low</strong> (minor inconvenience, cosmetic).</p>
+          <div class="note">Severity measures <em>impact</em>. Priority often combines severity with SLA deadlines and may change as context evolves.</div>
+        </div>
+      </article>
+
+      <article class="term" id="escalation">
+        <div class="visual photo">
+          <img src="4.1/Escalation levels.jfif" alt="Escalation levels" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Escalation levels</h3>
+          <p>Define when and how a ticket moves to a higher tier of support — Tier 1 (help desk) → Tier 2 (specialists) → Tier 3 (engineers/vendors).</p>
+          <p>Escalation triggers include SLA breach risk, required expertise, management approval, or vendor involvement. Document the reason and hand off all notes when escalating.</p>
+        </div>
+      </article>
+
+      <article class="term" id="written-communication">
+        <div class="visual photo">
+          <img src="4.1/Clear, concise written communication.jfif" alt="Clear, concise written communication" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Clear, concise written communication</h3>
+          <p>Ticket notes should be professional, factual, and readable by anyone who picks up the ticket later. Avoid jargon the user may not understand in customer-facing replies; use precise technical terms in internal notes.</p>
+          <p><strong>Three essential note types:</strong></p>
+          <ul>
+            <li><strong>Issue description</strong> — What was reported, including symptoms, scope, and environment at the time of the call</li>
+            <li><strong>Progress notes</strong> — Chronological log of troubleshooting steps taken, tests run, results, and pending actions</li>
+            <li><strong>Issue resolution</strong> — Final fix applied, root cause (if known), verification steps, and any follow-up or preventive measures</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="asset-management">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Asset management</h2>
+        <p>Tracking hardware, software, ownership, and lifecycle from purchase through retirement.</p>
+      </div>
+
+      <article class="term" id="inventory">
+        <div class="visual photo">
+          <img src="4.1/Inventory lists.webp" alt="Inventory lists" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Inventory lists</h3>
+          <p>A complete record of organizational assets — desktops, laptops, monitors, printers, mobile devices, servers, and peripherals. Lists typically include make, model, serial number, location, status (in use, spare, retired), and purchase date.</p>
+          <p>Inventory supports audits, insurance claims, budgeting, and knowing what is deployed before approving new purchases.</p>
+        </div>
+      </article>
+
+      <article class="term" id="cmdb">
+        <div class="visual photo">
+          <img src="4.1/Configuration management database (CMDB).avif" alt="Configuration management database (CMDB)" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Configuration management database (CMDB)</h3>
+          <p>A structured repository that stores configuration items (CIs) and their relationships — not just what you own, but how components connect. A laptop CI might link to its installed OS, software licenses, network segment, and assigned user.</p>
+          <p>CMDBs support change management, impact analysis, and faster root-cause investigation when a shared dependency fails.</p>
+        </div>
+      </article>
+
+      <article class="term" id="asset-tags">
+        <div class="visual photo">
+          <img src="4.1/Asset tags and IDs.jpg" alt="Asset tags and IDs" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Asset tags and IDs</h3>
+          <p>Unique identifiers (barcode labels, QR codes, or RFID tags) physically affixed to equipment and mirrored in inventory systems.</p>
+          <p>Asset tags tie a physical device to its digital record for checkout, repair, disposal, and help-desk tickets without relying on serial numbers alone.</p>
+        </div>
+      </article>
+
+      <article class="term" id="procurement">
+        <div class="visual photo">
+          <img src="4.1/Procurement life cycle.avif" alt="Procurement life cycle" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Procurement life cycle</h3>
+          <p>The end-to-end process of acquiring IT assets: identify need → request approval → purchase → receive and tag → deploy → maintain → retire/dispose.</p>
+          <p>Document each stage for budget tracking, compliance, and ensuring retired devices are wiped and disposed of securely.</p>
+        </div>
+      </article>
+
+      <article class="term" id="warranty-licensing">
+        <div class="visual photo">
+          <img src="4.1/Warranty and licensing.jfif" alt="Warranty and licensing" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Warranty and licensing</h3>
+          <p><strong>Warranty</strong> — Manufacturer coverage for repair or replacement; track start/end dates and support contract numbers.</p>
+          <p><strong>Licensing</strong> — Legal entitlement to use software (OEM, volume, subscription). Track license keys, seat counts, expiration, and compliance to avoid audits and unexpected true-up costs.</p>
+        </div>
+      </article>
+
+      <article class="term" id="assigned-users">
+        <div class="visual photo">
+          <img src="4.1/Assigned users.webp" alt="Assigned users" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Assigned users</h3>
+          <p>Record which employee, department, or shared resource currently has custody of each asset. Critical for accountability, off-boarding (reclaiming equipment), and locating devices during incidents.</p>
+          <p>Update assignments promptly when hardware is reissued, pooled, or returned to stock.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="documents">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Types of documents</h2>
+        <p>Standardized documentation that supports consistency, compliance, and self-service.</p>
+      </div>
+
+      <article class="term" id="incident-reports">
+        <div class="visual photo">
+          <img src="4.1/Incident reports.jfif" alt="Incident reports" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Incident reports</h3>
+          <p>Formal documentation of a security or operational incident: what happened, when, systems affected, actions taken, root cause, and lessons learned.</p>
+          <p>Used for compliance, management review, and improving future response. More detailed than a closed ticket when regulatory or legal review is required.</p>
+        </div>
+      </article>
+
+      <article class="term" id="sops">
+        <div class="visual photo">
+          <img src="4.1/Standard operating procedures (SOPs).webp" alt="Standard operating procedures (SOPs)" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Standard operating procedures (SOPs)</h3>
+          <p>Step-by-step instructions for recurring IT tasks so any qualified technician performs them the same way every time.</p>
+          <p><strong>Example — software package custom installation procedure:</strong> Documents prerequisites, silent install switches, post-install configuration, verification steps, and rollback if the deployment fails. Ensures consistent deployments across many machines.</p>
+          <ul class="tags">
+            <li>Repeatable</li>
+            <li>Version-controlled</li>
+            <li>Training resource</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="onboarding">
+        <div class="visual photo">
+          <img src="4.1/New user  onboarding setup checklist.png" alt="New user onboarding setup checklist" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>New user / onboarding setup checklist</h3>
+          <p>A ordered list of provisioning tasks for new hires: create AD/Entra account, assign groups, configure email, deploy hardware, install required software, set up MFA, grant building access, and schedule orientation.</p>
+          <p>Checklists reduce missed steps and speed time-to-productivity. Each item should be checkable with an owner and completion date.</p>
+        </div>
+      </article>
+
+      <article class="term" id="offboarding">
+        <div class="visual photo">
+          <img src="4.1/User off-boarding checklist.jfif" alt="User off-boarding checklist" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>User off-boarding checklist</h3>
+          <p>Security-focused teardown when an employee leaves: disable accounts, revoke licenses, collect hardware, forward email, remove from groups, wipe mobile devices, rotate shared passwords they knew, and archive data per policy.</p>
+          <div class="note">Off-boarding should be timed with HR — disable access promptly on the last working day or immediately upon termination.</div>
+        </div>
+      </article>
+
+      <article class="term" id="slas">
+        <div class="visual photo">
+          <img src="4.1/Service-level agreements (SLAs).png" alt="Service-level agreements (SLAs)" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Service-level agreements (SLAs)</h3>
+          <p>Formal commitments defining expected service quality — response time, resolution time, uptime percentage, and support hours.</p>
+          <div class="split">
+            <div class="pill">
+              <strong>Internal SLAs</strong>
+              <p>Between IT and other departments inside the organization. Example: help desk responds to P1 tickets within 15 minutes during business hours.</p>
+            </div>
+            <div class="pill">
+              <strong>External / third-party SLAs</strong>
+              <p>Between the organization and vendors (ISP, cloud provider, hardware support). Define penalties or credits when uptime or response targets are missed.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="term" id="knowledge-base">
+        <div class="visual photo">
+          <img src="4.1/Knowledge base  articles.png" alt="Knowledge base articles" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Knowledge base / articles</h3>
+          <p>A searchable library of solutions, how-to guides, and FAQs — often linked directly from the ticketing system. Reduces repeat tickets by enabling users and Tier 1 staff to self-resolve common issues.</p>
+          <p>Good articles include symptoms, cause, step-by-step resolution, screenshots, and the date last verified. Review and update when software or policies change.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Study notes for Core 2 objective 4.1 — Documentation and Support Systems Information Management.
+  </div>
+</footer>
+
+<script src="study-lightbox.js"></script>
+</body>
+</html>

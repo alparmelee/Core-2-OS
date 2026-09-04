@@ -1,0 +1,1035 @@
+{
+  "chapter": 4,
+  "title": "Chapter 4 — Operational Procedures",
+  "sections": [
+    {
+      "id": "4.1",
+      "title": "Documentation and Support Systems",
+      "file": "4.1 Documentation and Support Systems Information Management.html",
+      "count": 20
+    },
+    {
+      "id": "4.2",
+      "title": "Change Management Best Practices",
+      "file": "4.2 Change Management Best Practices.html",
+      "count": 15
+    },
+    {
+      "id": "4.3",
+      "title": "Backup and Recovery Best Practices",
+      "file": "4.3 Backup and Recovery Best Practices.html",
+      "count": 10
+    },
+    {
+      "id": "4.4",
+      "title": "Safety and Environmental Controls",
+      "file": "4.4 Safety and Environmental Controls.html",
+      "count": 11
+    },
+    {
+      "id": "4.5",
+      "title": "MSDS, Disposal, and Power Protection",
+      "file": "4.5 MSDS, Disposal, and Power Protection.html",
+      "count": 9
+    },
+    {
+      "id": "4.6",
+      "title": "Incident Response, Licensing, and Compliance",
+      "file": "4.6 Incident Response, Licensing, and Compliance.html",
+      "count": 18
+    },
+    {
+      "id": "4.7",
+      "title": "Professionalism and Customer Service",
+      "file": "4.7 Professionalism and Customer Service.html",
+      "count": 16
+    },
+    {
+      "id": "4.8",
+      "title": "Scripting Basics and Use Cases",
+      "file": "4.8 Scripting Basics and Use Cases.html",
+      "count": 16
+    },
+    {
+      "id": "4.9",
+      "title": "Remote Access Tools and Security",
+      "file": "4.9 Remote Access Tools and Security.html",
+      "count": 15
+    },
+    {
+      "id": "4.10",
+      "title": "AI Tools, Policy, and Limitations",
+      "file": "4.10 AI Tools, Policy, and Limitations.html",
+      "count": 8
+    }
+  ],
+  "terms": [
+    {
+      "id": "4.1-0",
+      "section": "4.1",
+      "sectionTitle": "Documentation and Support Systems",
+      "name": "Ticketing systems",
+      "definition": "A centralized platform (e.g., ServiceNow, Jira Service Management, Zendesk) used to create, assign, track, and close support incidents and service requests. Tickets provide an audit trail, prevent issues from being lost, and enable reporting on response times and recurring problems."
+    },
+    {
+      "id": "4.1-1",
+      "section": "4.1",
+      "sectionTitle": "Documentation and Support Systems",
+      "name": "User information",
+      "definition": "Identify who is affected and how to reach them. Standard fields include name, employee ID, department, location, phone number, email, and manager."
+    },
+    {
+      "id": "4.1-2",
+      "section": "4.1",
+      "sectionTitle": "Documentation and Support Systems",
+      "name": "Device information",
+      "definition": "Record the hardware or system involved: hostname, asset tag, serial number, model, OS version, IP address, and physical location."
+    },
+    {
+      "id": "4.1-3",
+      "section": "4.1",
+      "sectionTitle": "Documentation and Support Systems",
+      "name": "Description of issues",
+      "definition": "The initial report of what the user is experiencing — symptoms, error messages, when it started, and what changed recently."
+    },
+    {
+      "id": "4.1-4",
+      "section": "4.1",
+      "sectionTitle": "Documentation and Support Systems",
+      "name": "Categories",
+      "definition": "Classify tickets by type so they route to the correct team and appear in meaningful reports. Examples: hardware, software, network, access/permissions, email, printing, mobile, security."
+    },
+    {
+      "id": "4.1-5",
+      "section": "4.1",
+      "sectionTitle": "Documentation and Support Systems",
+      "name": "Severity",
+      "definition": "Indicates business impact and urgency — how badly operations are affected and how quickly a response is required."
+    },
+    {
+      "id": "4.1-6",
+      "section": "4.1",
+      "sectionTitle": "Documentation and Support Systems",
+      "name": "Escalation levels",
+      "definition": "Define when and how a ticket moves to a higher tier of support — Tier 1 (help desk) → Tier 2 (specialists) → Tier 3 (engineers/vendors)."
+    },
+    {
+      "id": "4.1-7",
+      "section": "4.1",
+      "sectionTitle": "Documentation and Support Systems",
+      "name": "Clear, concise written communication",
+      "definition": "Ticket notes should be professional, factual, and readable by anyone who picks up the ticket later. Avoid jargon the user may not understand in customer-facing replies; use precise technical terms in internal notes."
+    },
+    {
+      "id": "4.1-8",
+      "section": "4.1",
+      "sectionTitle": "Documentation and Support Systems",
+      "name": "Inventory lists",
+      "definition": "A complete record of organizational assets — desktops, laptops, monitors, printers, mobile devices, servers, and peripherals. Lists typically include make, model, serial number, location, status (in use, spare, retired), and purchase date."
+    },
+    {
+      "id": "4.1-9",
+      "section": "4.1",
+      "sectionTitle": "Documentation and Support Systems",
+      "name": "Configuration management database (CMDB)",
+      "definition": "A structured repository that stores configuration items (CIs) and their relationships — not just what you own, but how components connect. A laptop CI might link to its installed OS, software licenses, network segment, and assigned user."
+    },
+    {
+      "id": "4.1-10",
+      "section": "4.1",
+      "sectionTitle": "Documentation and Support Systems",
+      "name": "Asset tags and IDs",
+      "definition": "Unique identifiers (barcode labels, QR codes, or RFID tags) physically affixed to equipment and mirrored in inventory systems."
+    },
+    {
+      "id": "4.1-11",
+      "section": "4.1",
+      "sectionTitle": "Documentation and Support Systems",
+      "name": "Procurement life cycle",
+      "definition": "The end-to-end process of acquiring IT assets: identify need → request approval → purchase → receive and tag → deploy → maintain → retire/dispose."
+    },
+    {
+      "id": "4.1-12",
+      "section": "4.1",
+      "sectionTitle": "Documentation and Support Systems",
+      "name": "Warranty and licensing",
+      "definition": "Warranty — Manufacturer coverage for repair or replacement; track start/end dates and support contract numbers."
+    },
+    {
+      "id": "4.1-13",
+      "section": "4.1",
+      "sectionTitle": "Documentation and Support Systems",
+      "name": "Assigned users",
+      "definition": "Record which employee, department, or shared resource currently has custody of each asset. Critical for accountability, off-boarding (reclaiming equipment), and locating devices during incidents."
+    },
+    {
+      "id": "4.1-14",
+      "section": "4.1",
+      "sectionTitle": "Documentation and Support Systems",
+      "name": "Incident reports",
+      "definition": "Formal documentation of a security or operational incident: what happened, when, systems affected, actions taken, root cause, and lessons learned."
+    },
+    {
+      "id": "4.1-15",
+      "section": "4.1",
+      "sectionTitle": "Documentation and Support Systems",
+      "name": "Standard operating procedures (SOPs)",
+      "definition": "Step-by-step instructions for recurring IT tasks so any qualified technician performs them the same way every time."
+    },
+    {
+      "id": "4.1-16",
+      "section": "4.1",
+      "sectionTitle": "Documentation and Support Systems",
+      "name": "New user / onboarding setup checklist",
+      "definition": "A ordered list of provisioning tasks for new hires: create AD/Entra account, assign groups, configure email, deploy hardware, install required software, set up MFA, grant building access, and schedule orientation."
+    },
+    {
+      "id": "4.1-17",
+      "section": "4.1",
+      "sectionTitle": "Documentation and Support Systems",
+      "name": "User off-boarding checklist",
+      "definition": "Security-focused teardown when an employee leaves: disable accounts, revoke licenses, collect hardware, forward email, remove from groups, wipe mobile devices, rotate shared passwords they knew, and archive data per policy."
+    },
+    {
+      "id": "4.1-18",
+      "section": "4.1",
+      "sectionTitle": "Documentation and Support Systems",
+      "name": "Service-level agreements (SLAs)",
+      "definition": "Formal commitments defining expected service quality — response time, resolution time, uptime percentage, and support hours."
+    },
+    {
+      "id": "4.1-19",
+      "section": "4.1",
+      "sectionTitle": "Documentation and Support Systems",
+      "name": "Knowledge base / articles",
+      "definition": "A searchable library of solutions, how-to guides, and FAQs — often linked directly from the ticketing system. Reduces repeat tickets by enabling users and Tier 1 staff to self-resolve common issues."
+    },
+    {
+      "id": "4.2-0",
+      "section": "4.2",
+      "sectionTitle": "Change Management Best Practices",
+      "name": "Rollback plan",
+      "definition": "A defined set of procedures to return a system to its original configuration if an update fails."
+    },
+    {
+      "id": "4.2-1",
+      "section": "4.2",
+      "sectionTitle": "Change Management Best Practices",
+      "name": "Backup plan",
+      "definition": "Alternate steps (Plan B, Plan C, etc.) to execute if issues arise during implementation — such as using local installation files on a flash drive if internet downloads fail."
+    },
+    {
+      "id": "4.2-2",
+      "section": "4.2",
+      "sectionTitle": "Change Management Best Practices",
+      "name": "Sandbox testing",
+      "definition": "Executing and verifying changes in an isolated, self-contained test environment to validate stability and test rollback procedures without risking production uptime."
+    },
+    {
+      "id": "4.2-3",
+      "section": "4.2",
+      "sectionTitle": "Change Management Best Practices",
+      "name": "Responsible staff members",
+      "definition": "Clear division of responsibilities across:"
+    },
+    {
+      "id": "4.2-4",
+      "section": "4.2",
+      "sectionTitle": "Change Management Best Practices",
+      "name": "Request forms",
+      "definition": "Standardized digital forms that capture necessary details — including risk evaluations, scope, purpose, and rollback plans — for submission, tracking, and auditing."
+    },
+    {
+      "id": "4.2-5",
+      "section": "4.2",
+      "sectionTitle": "Change Management Best Practices",
+      "name": "Purpose of the change",
+      "definition": "Clear business justification for the modification, such as:"
+    },
+    {
+      "id": "4.2-6",
+      "section": "4.2",
+      "sectionTitle": "Change Management Best Practices",
+      "name": "Scope of the change",
+      "definition": "Defining the boundary of the update to determine whether it affects a tiny group of users or the core infrastructure of the entire organization."
+    },
+    {
+      "id": "4.2-7",
+      "section": "4.2",
+      "sectionTitle": "Change Management Best Practices",
+      "name": "Change type",
+      "definition": "Low-risk, routine, and pre-approved modifications (e.g., replacing a user’s broken monitor) that do not require formal board review."
+    },
+    {
+      "id": "4.2-8",
+      "section": "4.2",
+      "sectionTitle": "Change Management Best Practices",
+      "name": "Date and time of change",
+      "definition": "Designated, pre-approved time slots (e.g., off-peak hours such as Sundays at 2 a.m.) set aside for system changes when user impact is minimized."
+    },
+    {
+      "id": "4.2-9",
+      "section": "4.2",
+      "sectionTitle": "Change Management Best Practices",
+      "name": "Affected systems / impact",
+      "definition": "Identification of all hardware, applications, and services impacted by the update."
+    },
+    {
+      "id": "4.2-10",
+      "section": "4.2",
+      "sectionTitle": "Change Management Best Practices",
+      "name": "Risk analysis and risk level",
+      "definition": "Evaluating the technical risk of executing the change — e.g., unbootable operating systems, non-functional patches, or data loss."
+    },
+    {
+      "id": "4.2-11",
+      "section": "4.2",
+      "sectionTitle": "Change Management Best Practices",
+      "name": "Change board approvals",
+      "definition": "Review and authorization by a CCB representing multiple departments to evaluate risks, prioritize changes, and prevent scheduling conflicts."
+    },
+    {
+      "id": "4.2-12",
+      "section": "4.2",
+      "sectionTitle": "Change Management Best Practices",
+      "name": "Implementation",
+      "definition": "Carrying out the approved change according to the defined steps and schedule during the approved maintenance window."
+    },
+    {
+      "id": "4.2-13",
+      "section": "4.2",
+      "sectionTitle": "Change Management Best Practices",
+      "name": "Peer review",
+      "definition": "Reviewing implementation, rollback, and backup plans with experienced IT peers and subject matter experts before execution."
+    },
+    {
+      "id": "4.2-14",
+      "section": "4.2",
+      "sectionTitle": "Change Management Best Practices",
+      "name": "End-user acceptance",
+      "definition": "The final phase where end users test the updated software or system to confirm that it functions properly and meets business needs."
+    },
+    {
+      "id": "4.3-0",
+      "section": "4.3",
+      "sectionTitle": "Backup and Recovery Best Practices",
+      "name": "Full backup",
+      "definition": "Backs up all system data — including the OS, applications, and user files — in a single set."
+    },
+    {
+      "id": "4.3-1",
+      "section": "4.3",
+      "sectionTitle": "Backup and Recovery Best Practices",
+      "name": "Incremental backup",
+      "definition": "Backs up only files created or modified since the last backup — whether that last backup was full or incremental."
+    },
+    {
+      "id": "4.3-2",
+      "section": "4.3",
+      "sectionTitle": "Backup and Recovery Best Practices",
+      "name": "Differential backup",
+      "definition": "Backs up all data that has changed since the last full backup."
+    },
+    {
+      "id": "4.3-3",
+      "section": "4.3",
+      "sectionTitle": "Backup and Recovery Best Practices",
+      "name": "Synthetic full backup",
+      "definition": "Creates a new full backup synthetically by consolidating existing full and incremental/differential backup sets locally — rather than pulling a fresh full backup over the network."
+    },
+    {
+      "id": "4.3-4",
+      "section": "4.3",
+      "sectionTitle": "Backup and Recovery Best Practices",
+      "name": "In-place / overwrite restore",
+      "definition": "Restores data directly to its original location, replacing and overwriting any existing files currently on the system."
+    },
+    {
+      "id": "4.3-5",
+      "section": "4.3",
+      "sectionTitle": "Backup and Recovery Best Practices",
+      "name": "Alternative location restore",
+      "definition": "Restores files to a separate designated path or device rather than overwriting existing data."
+    },
+    {
+      "id": "4.3-6",
+      "section": "4.3",
+      "sectionTitle": "Backup and Recovery Best Practices",
+      "name": "Frequency and testing",
+      "definition": "Regular recovery testing and audits should be conducted to simulate file or system restoration — verifying data integrity and identifying potential restoration failures before an actual system outage occurs."
+    },
+    {
+      "id": "4.3-7",
+      "section": "4.3",
+      "sectionTitle": "Backup and Recovery Best Practices",
+      "name": "Onsite vs. offsite",
+      "definition": "Local backups provide high bandwidth, rapid recovery times, and no extra maintenance fees — but remain vulnerable to localized physical disasters (fire, flood, theft)."
+    },
+    {
+      "id": "4.3-8",
+      "section": "4.3",
+      "sectionTitle": "Backup and Recovery Best Practices",
+      "name": "Grandfather-Father-Son (GFS)",
+      "definition": "A structured rotation strategy that layers backups over distinct time intervals:"
+    },
+    {
+      "id": "4.3-9",
+      "section": "4.3",
+      "sectionTitle": "Backup and Recovery Best Practices",
+      "name": "3-2-1 backup rule",
+      "definition": "A foundational backup framework requiring:"
+    },
+    {
+      "id": "4.4-0",
+      "section": "4.4",
+      "sectionTitle": "Safety and Environmental Controls",
+      "name": "ESD straps",
+      "definition": "Wristband devices that equalize electrical potential between the technician and the chassis, featuring breakaway snaps for mobility."
+    },
+    {
+      "id": "4.4-1",
+      "section": "4.4",
+      "sectionTitle": "Safety and Environmental Controls",
+      "name": "ESD mats and pads",
+      "definition": "Conductive surface mats or desk pads used to safely balance static potential when working on components or standing near equipment."
+    },
+    {
+      "id": "4.4-2",
+      "section": "4.4",
+      "sectionTitle": "Safety and Environmental Controls",
+      "name": "Antistatic bags",
+      "definition": "Specially designed metallic or static-shielding bags that protect isolated computer parts from static discharges during transport or storage."
+    },
+    {
+      "id": "4.4-3",
+      "section": "4.4",
+      "sectionTitle": "Safety and Environmental Controls",
+      "name": "Proper component handling and storage",
+      "definition": "Always handle circuit boards by their outer edges rather than exposed circuits or chips."
+    },
+    {
+      "id": "4.4-4",
+      "section": "4.4",
+      "sectionTitle": "Safety and Environmental Controls",
+      "name": "Disconnect power",
+      "definition": "Unplug power cords from computers, printers, or peripheral devices before opening cases to prevent electrical shock."
+    },
+    {
+      "id": "4.4-5",
+      "section": "4.4",
+      "sectionTitle": "Safety and Environmental Controls",
+      "name": "High-voltage components and grounding",
+      "definition": "Never open or service power supplies, CRT displays, or laser printers — internal capacitors can retain dangerous residual voltage even when unplugged."
+    },
+    {
+      "id": "4.4-6",
+      "section": "4.4",
+      "sectionTitle": "Safety and Environmental Controls",
+      "name": "Cable management",
+      "definition": "Keep walkways clear by bundling cables using Velcro or cable ties, and taping or covering any cables crossing floor paths to eliminate trip hazards."
+    },
+    {
+      "id": "4.4-7",
+      "section": "4.4",
+      "sectionTitle": "Safety and Environmental Controls",
+      "name": "Personal protective equipment (PPE)",
+      "definition": "Select PPE matched to the specific hazard — toner, battery acid, and metal shavings each require different protection."
+    },
+    {
+      "id": "4.4-8",
+      "section": "4.4",
+      "sectionTitle": "Safety and Environmental Controls",
+      "name": "Lifting techniques",
+      "definition": "Lift heavy computers or equipment using leg strength rather than bending the back — keep the load close, feet shoulder-width apart, and avoid twisting while carrying."
+    },
+    {
+      "id": "4.4-9",
+      "section": "4.4",
+      "sectionTitle": "Safety and Environmental Controls",
+      "name": "Fire safety",
+      "definition": "Unplug burning equipment immediately if safe to do so."
+    },
+    {
+      "id": "4.4-10",
+      "section": "4.4",
+      "sectionTitle": "Safety and Environmental Controls",
+      "name": "Compliance with government regulations",
+      "definition": "Adhere to local building codes for electrical and fire safety, and observe environmental regulations regarding proper disposal and recycling of hazardous e-waste — such as old batteries, CRTs, and computers."
+    },
+    {
+      "id": "4.5-0",
+      "section": "4.5",
+      "sectionTitle": "MSDS, Disposal, and Power Protection",
+      "name": "MSDS / SDS documentation",
+      "definition": "Required by OSHA, SDS documents contain product composition, health hazard information, first aid guidelines, firefighting measures, and safe disposal steps for hazardous materials like batteries and toner."
+    },
+    {
+      "id": "4.5-1",
+      "section": "4.5",
+      "sectionTitle": "MSDS, Disposal, and Power Protection",
+      "name": "Proper battery disposal",
+      "definition": "Batteries from mobile devices, laptops, and Uninterruptible Power Supplies (UPS) contain hazardous materials and must never be thrown into regular trash."
+    },
+    {
+      "id": "4.5-2",
+      "section": "4.5",
+      "sectionTitle": "MSDS, Disposal, and Power Protection",
+      "name": "Proper toner disposal",
+      "definition": "Toner cartridges should be:"
+    },
+    {
+      "id": "4.5-3",
+      "section": "4.5",
+      "sectionTitle": "MSDS, Disposal, and Power Protection",
+      "name": "Proper disposal of devices",
+      "definition": "Electronic devices and components containing hazardous elements must be taken to authorized local hazardous material or e-waste recycling locations."
+    },
+    {
+      "id": "4.5-4",
+      "section": "4.5",
+      "sectionTitle": "MSDS, Disposal, and Power Protection",
+      "name": "Temperature and humidity awareness",
+      "definition": "Operating equipment creates significant internal heat from CPUs and memory, requiring active cooling to ensure optimal operation."
+    },
+    {
+      "id": "4.5-5",
+      "section": "4.5",
+      "sectionTitle": "MSDS, Disposal, and Power Protection",
+      "name": "Location, equipment placement, and ventilation",
+      "definition": "Workspaces require adequate ventilation when cleaning dusty computers or handling paper-heavy printer environments."
+    },
+    {
+      "id": "4.5-6",
+      "section": "4.5",
+      "sectionTitle": "MSDS, Disposal, and Power Protection",
+      "name": "Dust cleanup — compressed air and vacuums",
+      "definition": "Use a vacuum (preferably one designed for electronics) when cleaning out system dust indoors If using compressed air to blow out heavy dust, move the computer outside the building — blowing dust indoors redistributes contaminants and creates inhalation hazards"
+    },
+    {
+      "id": "4.5-7",
+      "section": "4.5",
+      "sectionTitle": "MSDS, Disposal, and Power Protection",
+      "name": "Uninterruptible Power Supply (UPS)",
+      "definition": "Provides backup power during outages and guards against brownouts (under-voltage) and power surges."
+    },
+    {
+      "id": "4.5-8",
+      "section": "4.5",
+      "sectionTitle": "MSDS, Disposal, and Power Protection",
+      "name": "Surge suppressor",
+      "definition": "Absorbs excessive voltage spikes on electrical lines and redirects them safely to the ground."
+    },
+    {
+      "id": "4.6-0",
+      "section": "4.6",
+      "sectionTitle": "Incident Response, Licensing, and Compliance",
+      "name": "Chain of custody",
+      "definition": "Maintains evidence integrity by documenting every person who contacts, accesses, or modifies physical or digital evidence."
+    },
+    {
+      "id": "4.6-1",
+      "section": "4.6",
+      "sectionTitle": "Incident Response, Licensing, and Compliance",
+      "name": "Informing management and law enforcement",
+      "definition": "Initial incident responders gather logs, monitoring metrics, and user accounts to verify a breach, then immediately notify designated internal leadership and law enforcement authorities as required by organizational policy and applicable law."
+    },
+    {
+      "id": "4.6-2",
+      "section": "4.6",
+      "sectionTitle": "Incident Response, Licensing, and Compliance",
+      "name": "Copy of drive — data integrity and preservation",
+      "definition": "Requires a bit-for-bit (byte-for-byte) clone of the storage drive — ideally using a hardware write blocker — to capture unallocated space and deleted files without altering the original evidence."
+    },
+    {
+      "id": "4.6-3",
+      "section": "4.6",
+      "sectionTitle": "Incident Response, Licensing, and Compliance",
+      "name": "Incident documentation",
+      "definition": "Formally records an executive summary, acquisition steps, analytical findings, and definitive conclusions to establish internal clarity and support legal proceedings."
+    },
+    {
+      "id": "4.6-4",
+      "section": "4.6",
+      "sectionTitle": "Incident Response, Licensing, and Compliance",
+      "name": "Order of volatility",
+      "definition": "Data must be captured starting with the most volatile components that disappear quickly when power is lost or systems are rebooted. Follow this general sequence:"
+    },
+    {
+      "id": "4.6-5",
+      "section": "4.6",
+      "sectionTitle": "Incident Response, Licensing, and Compliance",
+      "name": "Valid licenses",
+      "definition": "Software usage must conform to specific licensing models, including:"
+    },
+    {
+      "id": "4.6-6",
+      "section": "4.6",
+      "sectionTitle": "Incident Response, Licensing, and Compliance",
+      "name": "Perpetual license agreement",
+      "definition": "Grants lifetime access to a software version for a single upfront cost, common in personal-use software. Updates beyond the purchased version may require a separate purchase or maintenance agreement."
+    },
+    {
+      "id": "4.6-7",
+      "section": "4.6",
+      "sectionTitle": "Incident Response, Licensing, and Compliance",
+      "name": "Personal-use vs. corporate-use license",
+      "definition": "Covers individual or limited household devices — not valid for business deployment."
+    },
+    {
+      "id": "4.6-8",
+      "section": "4.6",
+      "sectionTitle": "Incident Response, Licensing, and Compliance",
+      "name": "Open-source license",
+      "definition": "Free and Open-Source Software (FOSS) provides full access to the source code for customization and compilation. Closed-source commercial software provides compiled executables only — source code is proprietary."
+    },
+    {
+      "id": "4.6-9",
+      "section": "4.6",
+      "sectionTitle": "Incident Response, Licensing, and Compliance",
+      "name": "NDA / MNDA",
+      "definition": "Legal contracts establishing confidentiality to protect sensitive commercial information and trade secrets."
+    },
+    {
+      "id": "4.6-10",
+      "section": "4.6",
+      "sectionTitle": "Incident Response, Licensing, and Compliance",
+      "name": "Credit card payment information",
+      "definition": "Governs cardholder data with requirements for network isolation, cardholder data protection, access controls, and ongoing auditing."
+    },
+    {
+      "id": "4.6-11",
+      "section": "4.6",
+      "sectionTitle": "Incident Response, Licensing, and Compliance",
+      "name": "Personal government-issued information",
+      "definition": "Standardized government identifiers — such as Social Security Numbers or driver's license details — subject to statutory restrictions to prevent identity theft and privacy breaches."
+    },
+    {
+      "id": "4.6-12",
+      "section": "4.6",
+      "sectionTitle": "Incident Response, Licensing, and Compliance",
+      "name": "PII — Personally Identifiable Information",
+      "definition": "Any standalone or combined data point capable of identifying an individual, requiring strict handling policies to prevent unauthorized access or account takeover."
+    },
+    {
+      "id": "4.6-13",
+      "section": "4.6",
+      "sectionTitle": "Incident Response, Licensing, and Compliance",
+      "name": "Healthcare data / PHI",
+      "definition": "Covers patient medical histories, clinical records, and treatment plans. HIPAA mandates administrative, physical, and technical safeguards for any system storing or transmitting PHI."
+    },
+    {
+      "id": "4.6-14",
+      "section": "4.6",
+      "sectionTitle": "Incident Response, Licensing, and Compliance",
+      "name": "Data retention requirements",
+      "definition": "Mandatory storage schedules driven by operational needs — such as versioning or malware recovery — or statutory compliance obligations applying to financial, legal, or government records."
+    },
+    {
+      "id": "4.6-15",
+      "section": "4.6",
+      "sectionTitle": "Incident Response, Licensing, and Compliance",
+      "name": "Acceptable Use Policy (AUP)",
+      "definition": "An employee agreement specifying allowed and prohibited uses of organizational IT assets — internet access, hardware, and mobile devices — to limit corporate legal liability."
+    },
+    {
+      "id": "4.6-16",
+      "section": "4.6",
+      "sectionTitle": "Incident Response, Licensing, and Compliance",
+      "name": "Regulatory and business compliance requirements",
+      "definition": "Organizational standards designed to satisfy legal mandates and industry guidelines — spanning data protection, financial reporting, healthcare privacy, and sector-specific regulations."
+    },
+    {
+      "id": "4.6-17",
+      "section": "4.6",
+      "sectionTitle": "Incident Response, Licensing, and Compliance",
+      "name": "Splash screens",
+      "definition": "Pre-login banner prompts that display operational expectations, legal disclaimers, or liability warnings requiring user consent before access is granted."
+    },
+    {
+      "id": "4.7-0",
+      "section": "4.7",
+      "sectionTitle": "Professionalism and Customer Service",
+      "name": "Appropriate attire",
+      "definition": "Match the organizational dress code, whether adhering to formal standards (e.g., slacks and ties) or business casual environments, to foster a comfortable and professional workplace."
+    },
+    {
+      "id": "4.7-1",
+      "section": "4.7",
+      "sectionTitle": "Professionalism and Customer Service",
+      "name": "Professional communication",
+      "definition": "Translate complex technology issues into clear, accessible concepts using non-technical language. Avoid slang, tech jargon, and acronyms when working with users or decision-makers."
+    },
+    {
+      "id": "4.7-2",
+      "section": "4.7",
+      "sectionTitle": "Professionalism and Customer Service",
+      "name": "Positive attitude and confidence",
+      "definition": "Maintain an approachable, equal-partner approach during interactions to reassure users — especially during critical data loss or complex technical failures."
+    },
+    {
+      "id": "4.7-3",
+      "section": "4.7",
+      "sectionTitle": "Professionalism and Customer Service",
+      "name": "Cultural sensitivity and titles",
+      "definition": "Respect designated professional titles and credentials — such as addressing a PhD holder as \"Doctor\" — and follow organizational guidelines for respectful treatment of all colleagues and customers."
+    },
+    {
+      "id": "4.7-4",
+      "section": "4.7",
+      "sectionTitle": "Professionalism and Customer Service",
+      "name": "Punctuality",
+      "definition": "Arrive on time for scheduled commitments — on-site appointments, meetings, and remote support sessions. If you will be late, notify the customer or team as early as possible."
+    },
+    {
+      "id": "4.7-5",
+      "section": "4.7",
+      "sectionTitle": "Professionalism and Customer Service",
+      "name": "Avoiding distractions",
+      "definition": "Eliminate personal interruptions such as personal calls, texting, or browsing social media during work hours."
+    },
+    {
+      "id": "4.7-6",
+      "section": "4.7",
+      "sectionTitle": "Professionalism and Customer Service",
+      "name": "Active listening",
+      "definition": "Allow customers to fully describe their issue without interrupting, avoiding premature assumptions about the root cause."
+    },
+    {
+      "id": "4.7-7",
+      "section": "4.7",
+      "sectionTitle": "Professionalism and Customer Service",
+      "name": "Conflict avoidance",
+      "definition": "Refrain from arguing with or acting defensively toward customers when emotions run high. Partner with the user toward a solution rather than contradicting them."
+    },
+    {
+      "id": "4.7-8",
+      "section": "4.7",
+      "sectionTitle": "Professionalism and Customer Service",
+      "name": "Non-judgmental teaching",
+      "definition": "Act as a teacher rather than judging a customer's level of technical knowledge, helping them feel more confident with their technology."
+    },
+    {
+      "id": "4.7-9",
+      "section": "4.7",
+      "sectionTitle": "Professionalism and Customer Service",
+      "name": "Clarifying and verifying",
+      "definition": "Ask probing open-ended questions, take detailed notes, and restate or repeat the issue back to the customer to verify understanding and refine the scope of the problem."
+    },
+    {
+      "id": "4.7-10",
+      "section": "4.7",
+      "sectionTitle": "Professionalism and Customer Service",
+      "name": "Discretion",
+      "definition": "Keep internal business matters, customer experiences, and workplace encounters confidential. Never post work details on public forums or social media."
+    },
+    {
+      "id": "4.7-11",
+      "section": "4.7",
+      "sectionTitle": "Professionalism and Customer Service",
+      "name": "Setting timelines and status updates",
+      "definition": "Provide regular status communications for long-term tickets — such as setting calendar reminders to contact the user weekly during manufacturer part delays."
+    },
+    {
+      "id": "4.7-12",
+      "section": "4.7",
+      "sectionTitle": "Professionalism and Customer Service",
+      "name": "Repair vs. replacement options",
+      "definition": "Present clear repair or replacement options, outlining the advantages and disadvantages of each so the user can make informed decisions."
+    },
+    {
+      "id": "4.7-13",
+      "section": "4.7",
+      "sectionTitle": "Professionalism and Customer Service",
+      "name": "Proper documentation",
+      "definition": "Document technical discussions and service details thoroughly — for example, following up phone calls with detailed summary emails that recap the issue, steps taken, and next actions."
+    },
+    {
+      "id": "4.7-14",
+      "section": "4.7",
+      "sectionTitle": "Professionalism and Customer Service",
+      "name": "Follow-up",
+      "definition": "Check in with the user after closing a ticket to verify complete satisfaction and catch minor residual issues before they escalate."
+    },
+    {
+      "id": "4.7-15",
+      "section": "4.7",
+      "sectionTitle": "Professionalism and Customer Service",
+      "name": "Handling sensitive materials",
+      "definition": "Protect all private, confidential, or sensitive personal data visible on computers, printouts, or desktops. IT professionals hold elevated access permissions and must maintain absolute confidentiality and trust regarding enterprise and personal data."
+    },
+    {
+      "id": "4.8-0",
+      "section": "4.8",
+      "sectionTitle": "Scripting Basics and Use Cases",
+      "name": ".bat — Windows Batch file",
+      "definition": "Executed at the command line, dating back to DOS and OS/2. Uses simple sequential commands (echo, copy, del, net use) and is still widely used for basic Windows automation tasks."
+    },
+    {
+      "id": "4.8-1",
+      "section": "4.8",
+      "sectionTitle": "Scripting Basics and Use Cases",
+      "name": ".ps1 — PowerShell script",
+      "definition": "Used primarily by Windows system administrators, leveraging built-in functions called cmdlets to access and modify operating system parameters and Active Directory."
+    },
+    {
+      "id": "4.8-2",
+      "section": "4.8",
+      "sectionTitle": "Scripting Basics and Use Cases",
+      "name": ".vbs — Visual Basic Script",
+      "definition": "Used for desktop scripting, backend web server operations, and Microsoft Office macros. Runs through the Windows Script Host (wscript.exe or cscript.exe)."
+    },
+    {
+      "id": "4.8-3",
+      "section": "4.8",
+      "sectionTitle": "Scripting Basics and Use Cases",
+      "name": ".sh — Unix/Linux shell script",
+      "definition": "Identified by a shebang or hashbang (#!) on its initial line, which specifies the interpreter — for example #!/bin/bash or #!/bin/sh."
+    },
+    {
+      "id": "4.8-4",
+      "section": "4.8",
+      "sectionTitle": "Scripting Basics and Use Cases",
+      "name": ".js — JavaScript",
+      "definition": "Used to enable dynamic interactivity within web browsers — distinct from the Java programming language despite the similar name."
+    },
+    {
+      "id": "4.8-5",
+      "section": "4.8",
+      "sectionTitle": "Scripting Basics and Use Cases",
+      "name": ".py — Python script",
+      "definition": "Provides cross-platform compatibility across Windows, macOS, Linux, and cloud-based automation. Popular for IT automation, data collection, and infrastructure-as-code tooling."
+    },
+    {
+      "id": "4.8-6",
+      "section": "4.8",
+      "sectionTitle": "Scripting Basics and Use Cases",
+      "name": "Basic automation",
+      "definition": "Handles repetitive or mundane tasks at high execution speeds without requiring manual input or direct oversight — freeing technicians for complex troubleshooting."
+    },
+    {
+      "id": "4.8-7",
+      "section": "4.8",
+      "sectionTitle": "Scripting Basics and Use Cases",
+      "name": "Restarting machines",
+      "definition": "Triggers remote system reboots following application updates or security patches, or schedules periodic reboots to clear hardware memory leaks."
+    },
+    {
+      "id": "4.8-8",
+      "section": "4.8",
+      "sectionTitle": "Scripting Basics and Use Cases",
+      "name": "Remapping network drives",
+      "definition": "Automatically maps shared network drives during user login, repository updates, or backup processes — ensuring consistent drive letters across the organization."
+    },
+    {
+      "id": "4.8-9",
+      "section": "4.8",
+      "sectionTitle": "Scripting Basics and Use Cases",
+      "name": "Installation of applications",
+      "definition": "Automates software deployments by mapping installation drives, running setup routines with pre-filled prompts, and initiating post-install reboots — standard in enterprise imaging and SCCM/Intune deployments."
+    },
+    {
+      "id": "4.8-10",
+      "section": "4.8",
+      "sectionTitle": "Scripting Basics and Use Cases",
+      "name": "Automated backups",
+      "definition": "Executes resource-intensive data transfers to backup drives during off-peak hours, minimizing impact on user productivity and network bandwidth."
+    },
+    {
+      "id": "4.8-11",
+      "section": "4.8",
+      "sectionTitle": "Scripting Basics and Use Cases",
+      "name": "Gathering of information and data",
+      "definition": "Automates system monitoring, hardware and software inventory collection, and vulnerability scanning using protocols like SNMP."
+    },
+    {
+      "id": "4.8-12",
+      "section": "4.8",
+      "sectionTitle": "Scripting Basics and Use Cases",
+      "name": "Initiating updates",
+      "definition": "Deploys operating system patches, application upgrades, and updated hardware device drivers without user intervention — critical for maintaining security posture at scale."
+    },
+    {
+      "id": "4.8-13",
+      "section": "4.8",
+      "sectionTitle": "Scripting Basics and Use Cases",
+      "name": "Unintentionally introducing malware",
+      "definition": "Running unverified installation scripts or deploying infected software files can inadvertently distribute malware across networked endpoints."
+    },
+    {
+      "id": "4.8-14",
+      "section": "4.8",
+      "sectionTitle": "Scripting Basics and Use Cases",
+      "name": "Inadvertently changing system settings",
+      "definition": "Unintended registry modifications or configuration edits can break system resources, requiring thorough pre-deployment testing and rollback scripts."
+    },
+    {
+      "id": "4.8-15",
+      "section": "4.8",
+      "sectionTitle": "Scripting Basics and Use Cases",
+      "name": "Browser or system crashes due to mishandling of resources",
+      "definition": "Syntax errors, loose characters, or logical bugs within scripts can cause resource exhaustion, service outages, or system downtime."
+    },
+    {
+      "id": "4.9-0",
+      "section": "4.9",
+      "sectionTitle": "Remote Access Tools and Security",
+      "name": "RDP — Remote Desktop Protocol",
+      "definition": "Proprietary Microsoft protocol providing remote GUI access to desktops and servers across operating systems. Delivers a full interactive desktop session over the network."
+    },
+    {
+      "id": "4.9-1",
+      "section": "4.9",
+      "sectionTitle": "Remote Access Tools and Security",
+      "name": "VPN — Virtual Private Network",
+      "definition": "Encrypts traffic between a remote client and a network VPN concentrator across public networks like the internet."
+    },
+    {
+      "id": "4.9-2",
+      "section": "4.9",
+      "sectionTitle": "Remote Access Tools and Security",
+      "name": "VNC — Virtual Network Computing",
+      "definition": "Open-source remote desktop solution operating via the Remote Frame Buffer (RFB) protocol across multi-platform environments — Windows, macOS, and Linux."
+    },
+    {
+      "id": "4.9-3",
+      "section": "4.9",
+      "sectionTitle": "Remote Access Tools and Security",
+      "name": "SSH — Secure Shell",
+      "definition": "Terminal-based command-line interface providing encrypted communications to execute remote configuration changes. Replaces unencrypted Telnet."
+    },
+    {
+      "id": "4.9-4",
+      "section": "4.9",
+      "sectionTitle": "Remote Access Tools and Security",
+      "name": "RMM — Remote Monitoring and Management",
+      "definition": "Centralized MSP software suite used to monitor, patch, inventory, and manage client networks and endpoints from a single console."
+    },
+    {
+      "id": "4.9-5",
+      "section": "4.9",
+      "sectionTitle": "Remote Access Tools and Security",
+      "name": "SPICE — Simple Protocol for Independent Computing Environments",
+      "definition": "Lightweight, high-efficiency protocol engineered for seamless graphics rendering, clipboard sharing, and remote access to virtual machines — commonly used with KVM/QEMU virtualization."
+    },
+    {
+      "id": "4.9-6",
+      "section": "4.9",
+      "sectionTitle": "Remote Access Tools and Security",
+      "name": "WinRM — Windows Remote Management",
+      "definition": "Enables administrators to remotely execute scripts and commands on target Windows systems and receive output without establishing an interactive desktop or terminal session."
+    },
+    {
+      "id": "4.9-7",
+      "section": "4.9",
+      "sectionTitle": "Remote Access Tools and Security",
+      "name": "Third-party tools",
+      "definition": "Specialized external utilities classified by operational purpose:"
+    },
+    {
+      "id": "4.9-8",
+      "section": "4.9",
+      "sectionTitle": "Remote Access Tools and Security",
+      "name": "RDP security",
+      "definition": "Listens on default TCP port 3389. Requires multi-factor authentication (MFA) to prevent brute-force attacks and unauthorized system takeovers."
+    },
+    {
+      "id": "4.9-9",
+      "section": "4.9",
+      "sectionTitle": "Remote Access Tools and Security",
+      "name": "VPN security",
+      "definition": "Requires multi-factor authentication alongside primary credentials to prevent unauthorized network entry via stolen login details."
+    },
+    {
+      "id": "4.9-10",
+      "section": "4.9",
+      "sectionTitle": "Remote Access Tools and Security",
+      "name": "VNC security",
+      "definition": "Vulnerable to brute-force credential attacks if relying solely on basic username/password setups. Requires additional authentication factors and should be tunneled through SSH or VPN when possible."
+    },
+    {
+      "id": "4.9-11",
+      "section": "4.9",
+      "sectionTitle": "Remote Access Tools and Security",
+      "name": "SSH security",
+      "definition": "Listens on TCP port 22. Enhances security by utilizing:"
+    },
+    {
+      "id": "4.9-12",
+      "section": "4.9",
+      "sectionTitle": "Remote Access Tools and Security",
+      "name": "RMM security",
+      "definition": "Highly targeted by attackers due to multi-tenant access across multiple customer environments — compromising one RMM console can affect every managed client."
+    },
+    {
+      "id": "4.9-13",
+      "section": "4.9",
+      "sectionTitle": "Remote Access Tools and Security",
+      "name": "WinRM security",
+      "definition": "Requires administrative credential authentication to verify and trust scripts before execution on the remote system. Use HTTPS (port 5986) rather than unencrypted HTTP (port 5985) in production."
+    },
+    {
+      "id": "4.9-14",
+      "section": "4.9",
+      "sectionTitle": "Remote Access Tools and Security",
+      "name": "Third-party tool security",
+      "definition": "Require multi-factor authentication, robust permission controls, and restricted user access to mitigate data leaks and unauthorized remote control."
+    },
+    {
+      "id": "4.10-0",
+      "section": "4.10",
+      "sectionTitle": "AI Tools, Policy, and Limitations",
+      "name": "AI in everyday tools",
+      "definition": "Everyday tools routinely feature integrated AI, including:"
+    },
+    {
+      "id": "4.10-1",
+      "section": "4.10",
+      "sectionTitle": "AI Tools, Policy, and Limitations",
+      "name": "Appropriate use",
+      "definition": "Legitimate AI applications in IT and enterprise environments include:"
+    },
+    {
+      "id": "4.10-2",
+      "section": "4.10",
+      "sectionTitle": "AI Tools, Policy, and Limitations",
+      "name": "Improper use and plagiarism",
+      "definition": "Inappropriate applications include:"
+    },
+    {
+      "id": "4.10-3",
+      "section": "4.10",
+      "sectionTitle": "AI Tools, Policy, and Limitations",
+      "name": "Bias",
+      "definition": "Occurs when training data sets are incomplete or unrepresentative, causing the model to yield unfair or skewed outcomes."
+    },
+    {
+      "id": "4.10-4",
+      "section": "4.10",
+      "sectionTitle": "AI Tools, Policy, and Limitations",
+      "name": "Hallucinations",
+      "definition": "Instances where AI confidently presents false information — such as misidentifying images or providing incorrect historical facts during product announcements."
+    },
+    {
+      "id": "4.10-5",
+      "section": "4.10",
+      "sectionTitle": "AI Tools, Policy, and Limitations",
+      "name": "Accuracy",
+      "definition": "Current models frequently produce inaccurate predictions or incorrect factual statements during evaluation tests, demonstrating that AI tools remain far from error-free."
+    },
+    {
+      "id": "4.10-6",
+      "section": "4.10",
+      "sectionTitle": "AI Tools, Policy, and Limitations",
+      "name": "Public AI",
+      "definition": "Internet-accessible tools (e.g., ChatGPT, Google Gemini) trained on vast internet-wide data sources. They offer broad informational access but pose data privacy and security risks if sensitive details or personal profiles are ingested."
+    },
+    {
+      "id": "4.10-7",
+      "section": "4.10",
+      "sectionTitle": "AI Tools, Policy, and Limitations",
+      "name": "Private AI",
+      "definition": "Enterprise-controlled environments operated internally. They restrict access to proprietary organizational data, enhancing data security and protecting internal secrets from external exposure."
+    }
+  ],
+  "total": 138
+}

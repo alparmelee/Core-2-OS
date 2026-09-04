@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4.6 Incident Response, Licensing, and Compliance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101820;
+    --muted:#4b5563;
+    --paper:#eef0f8;
+    --line:rgba(16,24,32,0.12);
+    --accent:#4338ca;
+    --accent-soft:#e0e7ff;
+    --good:#166534;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+    --highlight:#4f46e5;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(67,56,202,0.12), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.06), transparent 50%),
+      linear-gradient(180deg, #e4e6f4 0%, var(--paper) 40%, #eceef8 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--highlight); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#eef2ff;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(12,16,40,0.55) 0%, rgba(12,16,40,0.78) 52%, rgba(12,16,40,0.94) 100%),
+      url("https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1600&q=80") center/cover no-repeat;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:42ch;
+    color:#e0e7ff;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:52ch;
+    color:#94a3b8;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#e0e7ff;
+    color:#312e81;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#e0e7ff;
+    border:1px solid rgba(224,231,255,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(238,240,248,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+  .visual.icon{ font-size:3.6rem; line-height:1; }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body ul, .body ol{
+    margin:0.5rem 0 0.7rem;
+    padding-left:1.2rem;
+  }
+  .body li{ margin-bottom:0.35rem; }
+
+  .split{
+    display:grid;
+    gap:0.65rem;
+    margin-top:0.75rem;
+  }
+  @media (min-width:640px){
+    .split.cols-2{ grid-template-columns:repeat(2, 1fr); }
+    .split.cols-3{ grid-template-columns:repeat(3, 1fr); }
+  }
+  .pill{
+    padding:0.85rem 1rem;
+    border-radius:12px;
+    border:1px solid var(--line);
+    background:#fafbfd;
+  }
+  .pill strong{
+    display:block;
+    font-size:0.82rem;
+    margin-bottom:0.35rem;
+    color:var(--accent);
+  }
+  .pill p{ margin:0; font-size:0.88rem; color:var(--muted); }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(67,56,202,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">4.6</p>
+    <h1>Incident Response, Licensing, and Compliance</h1>
+    <p>Evidence handling, software licensing, regulated data, NDAs, and organizational policy requirements for IT professionals.</p>
+    <div class="hero-cta">
+      <a href="#incident">Incident response</a>
+      <a class="ghost" href="#licensing">Licensing</a>
+      <a class="ghost" href="#regulated">Regulated data</a>
+      <a class="ghost" href="#policies">Policies</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#chain-of-custody">Chain of custody</a>
+    <a href="#notify">Notify mgmt</a>
+    <a href="#drive-copy">Drive copy</a>
+    <a href="#incident-docs">Documentation</a>
+    <a href="#volatility">Volatility</a>
+    <a href="#licenses">Licenses</a>
+    <a href="#nda">NDA</a>
+    <a href="#pci">PCI DSS</a>
+    <a href="#pii">PII/PHI</a>
+    <a href="#aup">AUP</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="incident">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Incident response</h2>
+        <p>Preserving evidence integrity, notifying stakeholders, and capturing volatile data in the correct order.</p>
+      </div>
+
+      <article class="term" id="chain-of-custody">
+        <div class="visual photo">
+          <img src="4.6/Chain of custody.png" alt="Chain of custody" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Chain of custody</h3>
+          <p>Maintains evidence integrity by documenting every person who contacts, accesses, or modifies physical or digital evidence.</p>
+          <ul>
+            <li><strong>Hardware</strong> — Use tamper-evident sealed bags; log each transfer of custody with date, time, and handler identity</li>
+            <li><strong>Digital files</strong> — Use cryptographic hashes or digital signatures to verify files have not been altered</li>
+          </ul>
+          <p>A broken chain of custody can render evidence inadmissible in legal proceedings.</p>
+        </div>
+      </article>
+
+      <article class="term" id="notify">
+        <div class="visual photo">
+          <img src="4.6/Informing management and law enforcement.jfif" alt="Informing management and law enforcement" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Informing management and law enforcement</h3>
+          <p>Initial incident responders gather logs, monitoring metrics, and user accounts to verify a breach, then immediately notify designated internal leadership and law enforcement authorities as required by organizational policy and applicable law.</p>
+          <p>Follow the organization's incident response plan — do not destroy evidence or take unauthorized remediation steps before escalation.</p>
+        </div>
+      </article>
+
+      <article class="term" id="drive-copy">
+        <div class="visual photo">
+          <img src="4.6/Copy of drive data integrity and preservation.jfif" alt="Copy of drive — data integrity and preservation" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Copy of drive — data integrity and preservation</h3>
+          <p>Requires a bit-for-bit (byte-for-byte) clone of the storage drive — ideally using a <strong>hardware write blocker</strong> — to capture unallocated space and deleted files without altering the original evidence.</p>
+          <p>Work from the forensic copy for analysis; never modify the original drive. Document hash values of both source and copy to prove integrity.</p>
+        </div>
+      </article>
+
+      <article class="term" id="incident-docs">
+        <div class="visual photo">
+          <img src="4.6/Incident documentation.jfif" alt="Incident documentation" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Incident documentation</h3>
+          <p>Formally records an executive summary, acquisition steps, analytical findings, and definitive conclusions to establish internal clarity and support legal proceedings.</p>
+          <p>Include timelines, personnel involved, tools used, and all hash values. Thorough documentation protects both the organization and the technician.</p>
+        </div>
+      </article>
+
+      <article class="term" id="volatility">
+        <div class="visual photo">
+          <img src="4.6/Order of volatility.jfif" alt="Order of volatility" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Order of volatility</h3>
+          <p>Data must be captured starting with the most volatile components that disappear quickly when power is lost or systems are rebooted. Follow this general sequence:</p>
+          <ol>
+            <li>CPU registers and cache memory</li>
+            <li>Routing tables, ARP caches, process tables, and RAM</li>
+            <li>Temporary file systems</li>
+            <li>Local disk drives</li>
+            <li>Remote logging and monitoring logs</li>
+            <li>Network topologies and physical configurations</li>
+            <li>Archival backup tapes</li>
+          </ol>
+          <div class="note">Capture volatile data first — once a system is powered off or rebooted, RAM contents and running processes are lost permanently.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="licensing">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Licensing, DRM, and EULAs</h2>
+        <p>Software usage rights, license types, and open-source versus commercial models.</p>
+      </div>
+
+      <article class="term" id="licenses">
+        <div class="visual photo">
+          <img src="4.6/Valid licenses.jfif" alt="Valid licenses" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Valid licenses</h3>
+          <p>Software usage must conform to specific licensing models, including:</p>
+          <div class="split cols-3">
+            <div class="pill">
+              <strong>Per-seat</strong>
+              <p>Assigned to an individual user or device — each installation requires its own license.</p>
+            </div>
+            <div class="pill">
+              <strong>Concurrent</strong>
+              <p>Caps simultaneous users — a pool of licenses shared across the organization up to a maximum active count.</p>
+            </div>
+            <div class="pill">
+              <strong>Subscription</strong>
+              <p>Duration-based access — rights expire when the subscription period ends unless renewed.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="term" id="perpetual">
+        <div class="visual photo">
+          <img src="4.6/Perpetual license agreement.jfif" alt="Perpetual license agreement" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Perpetual license agreement</h3>
+          <p>Grants lifetime access to a software version for a single upfront cost, common in personal-use software. Updates beyond the purchased version may require a separate purchase or maintenance agreement.</p>
+        </div>
+      </article>
+
+      <article class="term" id="personal-corporate">
+        <div class="visual photo">
+          <img src="4.6/Personal-use vs. corporate-use license.jpg" alt="Personal-use vs. corporate-use license" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Personal-use vs. corporate-use license</h3>
+          <div class="split cols-2">
+            <div class="pill">
+              <strong>Personal license</strong>
+              <p>Covers individual or limited household devices — not valid for business deployment.</p>
+            </div>
+            <div class="pill">
+              <strong>Corporate license</strong>
+              <p>Covers enterprise deployments via site licenses or per-seat models, often requiring annual renewals and volume purchase agreements.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="term" id="open-source">
+        <div class="visual photo">
+          <img src="4.6/Open-source license.jfif" alt="Open-source license" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Open-source license</h3>
+          <p>Free and Open-Source Software (FOSS) provides full access to the source code for customization and compilation. Closed-source commercial software provides compiled executables only — source code is proprietary.</p>
+          <p>FOSS still carries license obligations (e.g., GPL copyleft requirements) — "free" does not mean unrestricted use.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="nda-section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Non-Disclosure Agreements</h2>
+        <p>Legal contracts protecting sensitive commercial information during business relationships.</p>
+      </div>
+
+      <article class="term" id="nda">
+        <div class="visual photo">
+          <img src="4.6/NDA  MNDA.png" alt="NDA / MNDA" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>NDA / MNDA</h3>
+          <span class="aka">Non-Disclosure Agreement / Mutual Non-Disclosure Agreement</span>
+          <p>Legal contracts establishing confidentiality to protect sensitive commercial information and trade secrets.</p>
+          <div class="split cols-2">
+            <div class="pill">
+              <strong>Unilateral NDA</strong>
+              <p>Binds one party to secrecy — common when a vendor shares proprietary details with a prospective client.</p>
+            </div>
+            <div class="pill">
+              <strong>MNDA (bilateral NDA)</strong>
+              <p>Binds both participating organizations — each agrees not to disclose the other's confidential information.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="regulated">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part D</span>
+        <h2>Regulated data</h2>
+        <p>Sensitive information categories with statutory handling and retention requirements.</p>
+      </div>
+
+      <article class="term" id="pci">
+        <div class="visual photo">
+          <img src="4.6/Credit card payment information.png" alt="Credit card payment information" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Credit card payment information</h3>
+          <span class="aka">PCI DSS — Payment Card Industry Data Security Standard</span>
+          <p>Governs cardholder data with requirements for network isolation, cardholder data protection, access controls, and ongoing auditing.</p>
+          <ul class="tags">
+            <li>Network segmentation</li>
+            <li>Encryption at rest and in transit</li>
+            <li>Access logging</li>
+            <li>Regular compliance audits</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="gov-id">
+        <div class="visual photo">
+          <img src="4.6/Personal government-issued information.jfif" alt="Personal government-issued information" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Personal government-issued information</h3>
+          <p>Standardized government identifiers — such as Social Security Numbers or driver's license details — subject to statutory restrictions to prevent identity theft and privacy breaches.</p>
+          <p>Store minimally, encrypt at rest, and limit access to authorized personnel on a need-to-know basis.</p>
+        </div>
+      </article>
+
+      <article class="term" id="pii">
+        <div class="visual photo">
+          <img src="4.6/PII Personally Identifiable Information.png" alt="PII — Personally Identifiable Information" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>PII — Personally Identifiable Information</h3>
+          <p>Any standalone or combined data point capable of identifying an individual, requiring strict handling policies to prevent unauthorized access or account takeover.</p>
+          <p>Examples include name, email, phone number, date of birth, or any combination that can uniquely identify a person.</p>
+        </div>
+      </article>
+
+      <article class="term" id="phi">
+        <div class="visual photo">
+          <img src="4.6/Healthcare data  PHI.jpg" alt="Healthcare data / PHI" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Healthcare data / PHI</h3>
+          <span class="aka">Protected Health Information — regulated by HIPAA in the U.S.</span>
+          <p>Covers patient medical histories, clinical records, and treatment plans. HIPAA mandates administrative, physical, and technical safeguards for any system storing or transmitting PHI.</p>
+        </div>
+      </article>
+
+      <article class="term" id="retention">
+        <div class="visual photo">
+          <img src="4.6/Data retention requirements.png" alt="Data retention requirements" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Data retention requirements</h3>
+          <p>Mandatory storage schedules driven by operational needs — such as versioning or malware recovery — or statutory compliance obligations applying to financial, legal, or government records.</p>
+          <p>Retention policies define how long data must be kept and when it must be securely destroyed. Exceeding retention periods can create unnecessary legal exposure.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="policies">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part E</span>
+        <h2>Policies and compliance</h2>
+        <p>Organizational standards governing acceptable use and regulatory obligations.</p>
+      </div>
+
+      <article class="term" id="aup">
+        <div class="visual photo">
+          <img src="4.6/Acceptable Use Policy (AUP).png" alt="Acceptable Use Policy (AUP)" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Acceptable Use Policy (AUP)</h3>
+          <p>An employee agreement specifying allowed and prohibited uses of organizational IT assets — internet access, hardware, and mobile devices — to limit corporate legal liability.</p>
+          <p>Users typically acknowledge the AUP during onboarding. Violations can result in disciplinary action or termination.</p>
+        </div>
+      </article>
+
+      <article class="term" id="compliance">
+        <div class="visual photo">
+          <img src="4.6/Regulatory and business compliance requirements.jfif" alt="Regulatory and business compliance requirements" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Regulatory and business compliance requirements</h3>
+          <p>Organizational standards designed to satisfy legal mandates and industry guidelines — spanning data protection, financial reporting, healthcare privacy, and sector-specific regulations.</p>
+          <p>IT technicians support compliance by enforcing access controls, patch management, audit logging, and secure disposal practices.</p>
+        </div>
+      </article>
+
+      <article class="term" id="splash">
+        <div class="visual photo">
+          <img src="4.6/Splash screens.jfif" alt="Splash screens" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Splash screens</h3>
+          <p>Pre-login banner prompts that display operational expectations, legal disclaimers, or liability warnings requiring user consent before access is granted.</p>
+          <p>Common on corporate workstations and VPN portals — clicking "Accept" constitutes acknowledgment of monitoring and acceptable use terms.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Study notes for Core 2 objective 4.6 — Incident Response, Licensing, and Compliance.
+  </div>
+</footer>
+
+<script src="study-lightbox.js"></script>
+</body>
+</html>

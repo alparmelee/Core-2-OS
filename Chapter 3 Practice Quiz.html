@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapter 3 Practice Quiz — CompTIA A+ Core 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101820;
+    --muted:#4b5563;
+    --paper:#eef2f8;
+    --line:rgba(16,24,32,0.12);
+    --accent:#1e40af;
+    --accent-soft:#dbeafe;
+    --good:#166534;
+    --good-soft:#dcfce7;
+    --bad:#b42318;
+    --bad-soft:#fee2e2;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 55%),
+      linear-gradient(180deg, #e6edf8 0%, var(--paper) 40%, #ecf1f8 100%);
+    line-height:1.55;
+    min-height:100vh;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(760px, calc(100% - 2rem)); margin:0 auto; padding:2rem 0 3rem; }
+  .top-nav{ margin-bottom:1.5rem; font-size:0.9rem; }
+  .top-nav a{ text-decoration:none; font-weight:600; }
+  .top-nav a:hover{ text-decoration:underline; }
+  h1{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.8rem, 5vw, 2.6rem);
+    margin:0 0 0.35rem;
+    letter-spacing:-0.02em;
+  }
+  .subtitle{ color:var(--muted); margin:0 0 1.5rem; }
+  .card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:1.4rem 1.5rem;
+    box-shadow:0 8px 30px rgba(16,24,32,0.06);
+  }
+  .card h2{ font-size:1rem; margin:0 0 0.75rem; }
+  .mode-row{ display:flex; flex-direction:column; gap:0.5rem; margin:1rem 0; }
+  .mode-row label{ display:flex; align-items:flex-start; gap:0.5rem; cursor:pointer; font-size:0.92rem; }
+  .section-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));
+    gap:0.55rem;
+    margin:0.75rem 0 1rem;
+  }
+  .section-card{
+    text-align:left;
+    border:1px solid var(--line);
+    background:#fafbfd;
+    border-radius:12px;
+    padding:0.85rem 1rem;
+    cursor:pointer;
+    display:flex;
+    flex-direction:column;
+    gap:0.2rem;
+    font-family:inherit;
+    transition:border-color .15s, background .15s, transform .15s;
+  }
+  .section-card:hover{
+    border-color:var(--accent);
+    background:var(--accent-soft);
+    transform:translateY(-1px);
+  }
+  .section-card-id{ font-weight:700; color:var(--accent); font-size:0.95rem; }
+  .section-card-title{ font-size:0.8rem; color:var(--ink); line-height:1.35; }
+  .section-card-count{ font-size:0.72rem; color:var(--muted); }
+  .setup-focus{ font-size:0.88rem; color:var(--muted); margin:0 0 0.75rem; }
+  .customize-block{ margin-top:1.25rem; padding-top:1.25rem; border-top:1px solid var(--line); }
+  .toggles-grid{ display:flex; flex-wrap:wrap; gap:0.4rem; margin:0.5rem 0 0.75rem; }
+  .check-pill{
+    display:flex;
+    align-items:center;
+    gap:0.4rem;
+    font-size:0.82rem;
+    padding:0.45rem 0.6rem;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:#fafbfd;
+    cursor:pointer;
+  }
+  .check-pill em{ color:var(--muted); font-style:normal; margin-left:auto; font-size:0.75rem; }
+  .check-pill input{ accent-color:var(--accent); }
+  .btn{
+    appearance:none;
+    border:none;
+    border-radius:999px;
+    padding:0.75rem 1.4rem;
+    font-family:inherit;
+    font-weight:600;
+    font-size:0.92rem;
+    cursor:pointer;
+    background:var(--accent);
+    color:#fff;
+  }
+  .btn:hover{ filter:brightness(1.05); }
+  .btn.ghost{ background:transparent; color:var(--accent); border:1px solid var(--accent); }
+  .btn-row{ display:flex; flex-wrap:wrap; gap:0.6rem; margin-top:1rem; }
+  .progress-wrap{ margin-bottom:1.25rem; }
+  .progress-meta{ display:flex; justify-content:space-between; font-size:0.82rem; color:var(--muted); margin-bottom:0.35rem; }
+  .progress-bar{ height:8px; background:#e5e9f0; border-radius:999px; overflow:hidden; }
+  .progress-fill{ height:100%; background:var(--accent); width:0%; transition:width .25s; }
+  .section-badge{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    padding:0.2rem 0.55rem;
+    border-radius:999px;
+    background:var(--accent-soft);
+    color:var(--accent);
+    margin-bottom:0.65rem;
+  }
+  .prompt-label{ font-size:0.82rem; color:var(--muted); margin:0 0 0.35rem; }
+  .prompt-text{
+    font-family:"Fraunces",serif;
+    font-size:1.35rem;
+    line-height:1.35;
+    margin:0 0 1.25rem;
+  }
+  .choices{ display:grid; gap:0.55rem; }
+  .choice{
+    text-align:left;
+    border:1px solid var(--line);
+    background:#fafbfd;
+    border-radius:10px;
+    padding:0.85rem 1rem;
+    font-family:inherit;
+    font-size:0.88rem;
+    line-height:1.45;
+    cursor:pointer;
+    transition:background .15s, border-color .15s;
+  }
+  .choice:hover:not(:disabled){ border-color:var(--accent); background:var(--accent-soft); }
+  .choice:disabled{ cursor:default; }
+  .choice.right{ border-color:var(--good); background:var(--good-soft); }
+  .choice.wrong{ border-color:var(--bad); background:var(--bad-soft); }
+  .feedback{
+    margin-top:1rem;
+    padding:0.85rem 1rem;
+    border-radius:10px;
+    font-size:0.88rem;
+  }
+  .feedback.good{ background:var(--good-soft); color:var(--good); }
+  .feedback.bad{ background:var(--bad-soft); color:var(--bad); }
+  .feedback .def-review{ display:block; margin-top:0.35rem; color:var(--ink); }
+  .results-big{
+    font-family:"Fraunces",serif;
+    font-size:3rem;
+    font-weight:700;
+    margin:0.25rem 0;
+    letter-spacing:-0.03em;
+  }
+  .review-list{ margin-top:1.25rem; display:grid; gap:0.75rem; }
+  .review-item{
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:0.85rem 1rem;
+    background:#fafbfd;
+    font-size:0.88rem;
+  }
+  .review-item strong{ display:block; margin-bottom:0.25rem; }
+  .review-item p{ margin:0; color:var(--muted); }
+  .review-meta{ font-size:0.72rem; font-weight:700; color:var(--accent); margin-bottom:0.2rem; }
+  .all-good{ color:var(--good); font-weight:600; }
+  [hidden]{ display:none !important; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="top-nav"><a href="index.html">← All guides</a></nav>
+
+    <div data-screen="setup">
+      <h1>Chapter 3 Practice Quiz</h1>
+      <p class="subtitle"><span id="term-count">0</span> terms from objectives 3.1–3.4 — troubleshooting study guides.</p>
+      <div class="card">
+        <h2>Quiz mode</h2>
+        <div class="mode-row">
+          <label><input type="radio" name="quiz-mode" value="term-to-def" checked> Term → pick the correct definition</label>
+          <label><input type="radio" name="quiz-mode" value="def-to-term"> Definition → pick the correct term</label>
+        </div>
+        <p class="setup-focus" id="setup-focus">Click a section to start instantly.</p>
+        <h2>Start a section</h2>
+        <div class="section-grid" id="section-filters"></div>
+        <button type="button" class="btn" id="start-all-btn">Quiz all sections</button>
+        <div class="customize-block">
+          <h2>Or combine sections</h2>
+          <div class="toggles-grid" id="section-toggles"></div>
+          <button type="button" class="btn ghost" id="start-btn">Start custom quiz</button>
+        </div>
+      </div>
+    </div>
+
+    <div data-screen="quiz" hidden>
+      <h1 id="quiz-heading">Chapter 3 Quiz</h1>
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span id="progress-label">Question 1 of 10</span>
+          <span id="score-live">0 correct</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      </div>
+      <div class="card">
+        <div class="section-badge" id="section-badge">2.1</div>
+        <p class="prompt-label" id="prompt-label">Which definition best describes this term?</p>
+        <p class="prompt-text" id="prompt-text">—</p>
+        <div class="choices" id="choices"></div>
+        <div class="feedback" id="feedback" hidden></div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="next-btn" hidden>Next question</button>
+        </div>
+      </div>
+    </div>
+
+    <div data-screen="results" hidden>
+      <h1>Results</h1>
+      <div class="card">
+        <p class="subtitle" style="margin:0;">Your score</p>
+        <div class="results-big" id="results-score">0 / 0</div>
+        <p id="results-pct" style="margin:0; color:var(--muted);">0%</p>
+        <div class="btn-row">
+          <button type="button" class="btn" id="retry-btn">Retry missed terms</button>
+          <button type="button" class="btn ghost" id="restart-btn">New quiz</button>
+        </div>
+        <div class="review-list" id="review-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>window.QUIZ_DATA = {"chapter": 3, "title": "Chapter 3 — Troubleshooting", "sections": [{"id": "3.1", "title": "Troubleshoot Microsoft Windows OS Problems", "file": "3.1 Troubleshoot Microsoft Windows OS Problems.html", "count": 12}, {"id": "3.2", "title": "Troubleshoot Mobile OS and Application Issues", "file": "3.2 Troubleshoot Mobile OS and Application Issues.html", "count": 12}, {"id": "3.3", "title": "Troubleshoot Mobile OS and Application Security Issues", "file": "3.3 Troubleshoot Mobile OS and Application Security Issues.html", "count": 14}, {"id": "3.4", "title": "Troubleshoot Windows OS Security Issues", "file": "3.4 Troubleshoot Windows OS Security Issues.html", "count": 10}], "terms": [{"id": "3.1-0", "section": "3.1", "sectionTitle": "Troubleshoot Microsoft Windows OS Problems", "name": "Blue screen of death (BSOD)", "definition": "Causes can stem from bad hardware, bad drivers, or application issues that prevent the OS from continuing."}, {"id": "3.1-1", "section": "3.1", "sectionTitle": "Troubleshoot Microsoft Windows OS Problems", "name": "Boot issues", "definition": "Check for missing OS/bootloader issues or dual-boot conflicts. Remove any attached non-bootable media."}, {"id": "3.1-2", "section": "3.1", "sectionTitle": "Troubleshoot Microsoft Windows OS Problems", "name": "“No OS found”", "definition": "Caused by bootloader corruption, dual-boot overwrites, or missing boot files."}, {"id": "3.1-3", "section": "3.1", "sectionTitle": "Troubleshoot Microsoft Windows OS Problems", "name": "Degraded performance", "definition": "Use Task Manager (Processes tab and 60-second Performance tab view) to identify resource-hogging apps."}, {"id": "3.1-4", "section": "3.1", "sectionTitle": "Troubleshoot Microsoft Windows OS Problems", "name": "Low memory warnings", "definition": "Sort Task Manager by the Memory column to locate memory-draining programs. Save files and close or restart open programs."}, {"id": "3.1-5", "section": "3.1", "sectionTitle": "Troubleshoot Microsoft Windows OS Problems", "name": "Frequent shutdowns", "definition": "Run full hardware diagnostics (motherboard, CPU, RAM) via UEFI/BIOS, motherboard tools, or Windows Memory Diagnostics."}, {"id": "3.1-6", "section": "3.1", "sectionTitle": "Troubleshoot Microsoft Windows OS Problems", "name": "System instability", "definition": "Occurs randomly without warning."}, {"id": "3.1-7", "section": "3.1", "sectionTitle": "Troubleshoot Microsoft Windows OS Problems", "name": "Time drift", "definition": "Caused by hardware inaccurate timekeeping."}, {"id": "3.1-8", "section": "3.1", "sectionTitle": "Troubleshoot Microsoft Windows OS Problems", "name": "Services not starting", "definition": "Verify device status in Device Manager — update, roll back, or replace drivers."}, {"id": "3.1-9", "section": "3.1", "sectionTitle": "Troubleshoot Microsoft Windows OS Problems", "name": "Applications crashing", "definition": "Inspect log entries in Event Viewer or use Reliability Monitor to identify failure causes and performance trends over time."}, {"id": "3.1-10", "section": "3.1", "sectionTitle": "Troubleshoot Microsoft Windows OS Problems", "name": "USB controller resource warnings", "definition": "This occurs when connecting devices that exceed the USB controller’s available endpoints."}, {"id": "3.1-11", "section": "3.1", "sectionTitle": "Troubleshoot Microsoft Windows OS Problems", "name": "Slow profile load", "definition": "Typically caused by network latency or WAN congestion when syncing roaming user profiles to a remote domain controller."}, {"id": "3.2-0", "section": "3.2", "sectionTitle": "Troubleshoot Mobile OS and Application Issues", "name": "Application fails to launch", "definition": "Restart the mobile device to clear memory and stored caches Check for and install application updates to fix potential software bugs Delete and reinstall the application from the app store"}, {"id": "3.2-1", "section": "3.2", "sectionTitle": "Troubleshoot Mobile OS and Application Issues", "name": "Application fails to close / crashes", "definition": "Force close the application — slide it off the app list on iOS, or select Force Stop in Android Settings — and reopen it."}, {"id": "3.2-2", "section": "3.2", "sectionTitle": "Troubleshoot Mobile OS and Application Issues", "name": "Application fails to update", "definition": "Manually trigger the update or choose Update All in the app store Verify a valid, current payment method is on file Check network/internet connectivity Verify sufficient available storage space Restart the device to clear pending updates Check for Mobile Device Management (MDM) corporate policy restrictions or app store outages MDM App store Storage"}, {"id": "3.2-3", "section": "3.2", "sectionTitle": "Troubleshoot Mobile OS and Application Issues", "name": "Application fails to install", "definition": "Check for sufficient free storage space Ensure a valid payment method is configured in the app store account Verify network connectivity or move to an unfiltered network Confirm MDM policies permit application installation"}, {"id": "3.2-4", "section": "3.2", "sectionTitle": "Troubleshoot Mobile OS and Application Issues", "name": "Slow to respond", "definition": "Perform a device restart to free up resources and clear cache Update the application or operating system to resolve underlying bugs"}, {"id": "3.2-5", "section": "3.2", "sectionTitle": "Troubleshoot Mobile OS and Application Issues", "name": "OS fails to update", "definition": "Free up storage space — OS patches require significant capacity Connect to a high-speed network with adequate bandwidth Change networks if content filtering blocks update servers Restart the device and attempt the update again"}, {"id": "3.2-6", "section": "3.2", "sectionTitle": "Troubleshoot Mobile OS and Application Issues", "name": "Battery life issues", "definition": "Enable Airplane Mode in low or no coverage areas to stop the radio from constantly searching for a signal Turn off unused features like Wi-Fi, Bluetooth, or GPS Check battery health and usage history under Settings > Battery Replace old or degraded batteries"}, {"id": "3.2-7", "section": "3.2", "sectionTitle": "Troubleshoot Mobile OS and Application Issues", "name": "Random reboots", "definition": "Update the OS and all installed applications Review crash logs or contact support to check for underlying hardware failures Inspect battery health"}, {"id": "3.2-8", "section": "3.2", "sectionTitle": "Troubleshoot Mobile OS and Application Issues", "name": "Connectivity issues — Wi-Fi", "definition": "Ensure Wi-Fi is toggled on Verify security keys and settings match the access point Move closer to the access point or connect to a different network Restart the mobile device"}, {"id": "3.2-9", "section": "3.2", "sectionTitle": "Troubleshoot Mobile OS and Application Issues", "name": "Connectivity issues — Bluetooth", "definition": "Confirm Bluetooth is enabled Toggle Bluetooth off and on, or restart the device to re-establish pairings Ensure Bluetooth (and Wi-Fi) are enabled when using proximity tools like AirDrop, and move devices closer together"}, {"id": "3.2-10", "section": "3.2", "sectionTitle": "Troubleshoot Mobile OS and Application Issues", "name": "Connectivity issues — Near-field communication (NFC)", "definition": "Toggle NFC off and on Restart the device Ensure linked credit cards and payment details are up to date"}, {"id": "3.2-11", "section": "3.2", "sectionTitle": "Troubleshoot Mobile OS and Application Issues", "name": "Screen does not autorotate", "definition": "Check if the screen orientation lock is enabled Close and reopen the stuck application Restart the mobile device Contact device support if the internal G-sensor/accelerometer hardware has failed"}, {"id": "3.3-0", "section": "3.3", "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues", "name": "Application source / unofficial application stores", "definition": "Sideloading apps from third-party sites or APK files poses severe security risks because uncurated sources may contain malware that can access device data."}, {"id": "3.3-1", "section": "3.3", "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues", "name": "Developer mode", "definition": "Enables advanced OS access, USB debugging, memory statistics, and detailed logging capabilities."}, {"id": "3.3-2", "section": "3.3", "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues", "name": "Root access / jailbreak", "definition": "Modifies core firmware to override the factory operating system, granting complete control over the device and enabling sideloading."}, {"id": "3.3-3", "section": "3.3", "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues", "name": "Unauthorized / malicious application", "definition": "Unapproved apps or infected development environments (e.g., XcodeGhost) can inject malicious code, harvest data, or secretly sign users up for paid services without consent."}, {"id": "3.3-4", "section": "3.3", "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues", "name": "Application spoofing", "definition": "Malicious apps masquerade as legitimate tools (e.g., photo editors or QR scanners) while performing hidden malicious actions in the background."}, {"id": "3.3-5", "section": "3.3", "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues", "name": "High network traffic", "definition": "Unexpected spikes in data transmission can indicate a malware infection, such as command-and-control communications or encrypted traffic proxying."}, {"id": "3.3-6", "section": "3.3", "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues", "name": "Degraded response time", "definition": "Unresponsive screens, sluggish app performance, or choppy animations can be caused by resource-heavy malware or buggy software."}, {"id": "3.3-7", "section": "3.3", "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues", "name": "Data-usage limit notification", "definition": "Reaching a cellular data threshold — using native Android limits/warnings or third-party monitoring apps — can serve as an early warning sign that background malware is exfiltrating data."}, {"id": "3.3-8", "section": "3.3", "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues", "name": "Limited internet connectivity", "definition": "Malware or misconfigurations can degrade network performance."}, {"id": "3.3-9", "section": "3.3", "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues", "name": "No internet connectivity", "definition": "Malware may intentionally block internet connections to prevent anti-malware definition updates or security software downloads."}, {"id": "3.3-10", "section": "3.3", "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues", "name": "High number of ads", "definition": "Persistent or excessive ad pop-ups are often driven by adware or fake ad-blocking malware (e.g., Fake Ads Block) designed to generate ad revenue for attackers."}, {"id": "3.3-11", "section": "3.3", "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues", "name": "Fake security warnings", "definition": "Malicious browser pop-ups imitate official system alerts to trick users into downloading “security updates” that actually install malware."}, {"id": "3.3-12", "section": "3.3", "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues", "name": "Unexpected application behavior", "definition": "Sudden crashes, unresponsiveness, broken features, or excessive battery drain are typically app-specific bugs."}, {"id": "3.3-13", "section": "3.3", "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues", "name": "Leaked personal files / data", "definition": "Caused by local malware breaches or compromised cloud storage accounts."}, {"id": "3.4-0", "section": "3.4", "sectionTitle": "Troubleshoot Windows OS Security Issues", "name": "Unable to access the network", "definition": "Malware can intentionally block network access to prevent downloading anti-malware tools or installing operating system security patches that close known vulnerabilities."}, {"id": "3.4-1", "section": "3.4", "sectionTitle": "Troubleshoot Windows OS Security Issues", "name": "Desktop alerts", "definition": "Rogue browser pop-ups or pushed web messages often impersonate official system notifications to trick users into extending fake subscriptions or downloading malicious software."}, {"id": "3.4-2", "section": "3.4", "sectionTitle": "Troubleshoot Windows OS Security Issues", "name": "False alerts regarding antivirus protection", "definition": "Scareware mimics legitimate security tools, claiming your system is disabled or infected with specific threats (e.g., Trojan spyware). They direct users to call fake tech support numbers or pay money."}, {"id": "3.4-3", "section": "3.4", "sectionTitle": "Troubleshoot Windows OS Security Issues", "name": "Altered system or personal files", "definition": "Files or system binaries are unexpectedly renamed, moved, or missing."}, {"id": "3.4-4", "section": "3.4", "sectionTitle": "Troubleshoot Windows OS Security Issues", "name": "Unwanted notifications within the OS", "definition": "Operating systems allow apps to push unwanted pop-ups."}, {"id": "3.4-5", "section": "3.4", "sectionTitle": "Troubleshoot Windows OS Security Issues", "name": "OS update failures", "definition": "Malware, network misconfigurations, firewall filtering rules, or network bandwidth caps can block system updates."}, {"id": "3.4-6", "section": "3.4", "sectionTitle": "Troubleshoot Windows OS Security Issues", "name": "Random / frequent pop-ups", "definition": "Fake application prompts appear despite modern browser pop-up blockers being enabled by default."}, {"id": "3.4-7", "section": "3.4", "sectionTitle": "Troubleshoot Windows OS Security Issues", "name": "Certificate warnings", "definition": "Browsers display “connection is not private” or untrusted site errors. Click the lock icon next to the HTTPS URL to inspect certificate details."}, {"id": "3.4-8", "section": "3.4", "sectionTitle": "Troubleshoot Windows OS Security Issues", "name": "Redirection", "definition": "Entering a search query or URL redirects the user to unintended, illegitimate websites designed to display ads or distribute further malware."}, {"id": "3.4-9", "section": "3.4", "sectionTitle": "Troubleshoot Windows OS Security Issues", "name": "Degraded browser performance", "definition": "Sluggish loading and high system resource usage can be caused by excessive open tabs, bloated browser caches, or malicious JavaScript (e.g., background crypto miners using 100% CPU)."}], "total": 48};</script>
+  <script src="study-quiz.js"></script>
+</body>
+</html>

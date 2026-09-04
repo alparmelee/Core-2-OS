@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3.3 Troubleshoot Mobile OS and Application Security Issues</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101820;
+    --muted:#4b5563;
+    --paper:#f8f3ee;
+    --line:rgba(16,24,32,0.12);
+    --accent:#c2410c;
+    --accent-soft:#ffedd5;
+    --good:#166534;
+    --warn:#9a3412;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(194,65,12,0.12), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(154,52,18,0.06), transparent 50%),
+      linear-gradient(180deg, #f0ebe6 0%, var(--paper) 40%, #f5f0ea 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#fff7ed;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(28,12,8,0.55) 0%, rgba(28,12,8,0.78) 52%, rgba(28,12,8,0.94) 100%),
+      url("https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1600&q=80") center/cover no-repeat;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:40ch;
+    color:#ffedd5;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:50ch;
+    color:#d6d3d1;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#ffedd5;
+    color:#9a3412;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#ffedd5;
+    border:1px solid rgba(255,237,213,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(248,243,238,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+  .visual.icon{ font-size:3.6rem; line-height:1; }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body ul{
+    margin:0.5rem 0 0.7rem;
+    padding-left:1.2rem;
+  }
+  .body li{ margin-bottom:0.35rem; }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(194,65,12,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+  .note.warn{
+    border-left-color:var(--danger);
+    background:rgba(180,35,24,0.08);
+    color:#7a271a;
+  }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">3.3</p>
+    <h1>Troubleshoot Mobile OS and Application Security Issues</h1>
+    <p>Unofficial app sources, jailbreak risks, malware symptoms, network anomalies, adware, and data leaks on mobile devices.</p>
+    <div class="hero-cta">
+      <a href="#threats">Threats &amp; sources</a>
+      <a class="ghost" href="#symptoms">Common symptoms</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#unofficial-stores">Unofficial stores</a>
+    <a href="#developer-mode">Developer mode</a>
+    <a href="#root-jailbreak">Root / jailbreak</a>
+    <a href="#malicious-app">Malicious apps</a>
+    <a href="#app-spoofing">Spoofing</a>
+    <a href="#high-traffic">High traffic</a>
+    <a href="#degraded-response">Slow response</a>
+    <a href="#data-limit">Data limit</a>
+    <a href="#limited-internet">Limited internet</a>
+    <a href="#no-internet">No internet</a>
+    <a href="#high-ads">Ads</a>
+    <a href="#fake-warnings">Fake warnings</a>
+    <a href="#unexpected-behavior">Unexpected behavior</a>
+    <a href="#data-leak">Data leak</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="threats">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Threats and risk sources</h2>
+        <p>How mobile devices become vulnerable through sideloading, elevated access, and deceptive applications.</p>
+      </div>
+
+      <article class="term" id="unofficial-stores">
+        <div class="visual photo">
+          <img src="3.3/unofficial application stores.jfif" alt="Unofficial application stores" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Application source / unofficial application stores</h3>
+          <p>Sideloading apps from third-party sites or APK files poses severe security risks because uncurated sources may contain malware that can access device data.</p>
+          <div class="note warn">Stick to trusted, centralized stores like the <strong>Google Play Store</strong> or <strong>Apple App Store</strong>.</div>
+        </div>
+      </article>
+
+      <article class="term" id="developer-mode">
+        <div class="visual photo">
+          <img src="3.3/Developer mode.jfif" alt="Developer mode" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Developer mode</h3>
+          <p>Enables advanced OS access, USB debugging, memory statistics, and detailed logging capabilities.</p>
+          <ul>
+            <li><strong>Android:</strong> Enabled by tapping the build number seven times under <span class="aka">Settings &gt; About Phone</span></li>
+            <li><strong>iOS / iPadOS:</strong> Developer mode is managed using Xcode on macOS</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="root-jailbreak">
+        <div class="visual photo">
+          <img src="3.3/jailbreak.webp" alt="Root access and jailbreak" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Root access / jailbreak</h3>
+          <p>Modifies core firmware to override the factory operating system, granting complete control over the device and enabling sideloading.</p>
+          <div class="note warn">Doing so strips away Mobile Device Management (MDM) management capabilities.</div>
+          <ul class="tags">
+            <li>Root (Android)</li>
+            <li>Jailbreak (iOS)</li>
+            <li>MDM bypass</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="malicious-app">
+        <div class="visual photo">
+          <img src="3.3/malicious application.jfif" alt="Unauthorized or malicious application" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Unauthorized / malicious application</h3>
+          <p>Unapproved apps or infected development environments (e.g., <strong>XcodeGhost</strong>) can inject malicious code, harvest data, or secretly sign users up for paid services without consent.</p>
+          <p>Check download sources and verify app legitimacy before installing.</p>
+        </div>
+      </article>
+
+      <article class="term" id="app-spoofing">
+        <div class="visual photo">
+          <img src="3.3/Application spoofing.jfif" alt="Application spoofing" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Application spoofing</h3>
+          <p>Malicious apps masquerade as legitimate tools (e.g., photo editors or QR scanners) while performing hidden malicious actions in the background.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="symptoms">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Common symptoms</h2>
+        <p>Warning signs of mobile malware, misconfiguration, or compromised accounts — and how to respond.</p>
+      </div>
+
+      <article class="term" id="high-traffic">
+        <div class="visual photo">
+          <img src="3.3/High network traffic.png" alt="High network traffic" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>High network traffic</h3>
+          <p>Unexpected spikes in data transmission can indicate a malware infection, such as command-and-control communications or encrypted traffic proxying.</p>
+          <p>Track usage via built-in or third-party data tools and run a malware scan.</p>
+        </div>
+      </article>
+
+      <article class="term" id="degraded-response">
+        <div class="visual photo">
+          <img src="3.3/Degraded response time.png" alt="Degraded response time" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Degraded response time</h3>
+          <p>Unresponsive screens, sluggish app performance, or choppy animations can be caused by resource-heavy malware or buggy software.</p>
+          <p><strong>Troubleshoot:</strong> Restart the device, close background apps, apply OS/app updates, or perform a factory reset.</p>
+        </div>
+      </article>
+
+      <article class="term" id="data-limit">
+        <div class="visual photo">
+          <img src="3.3/Data-usage limit notification.jpg" alt="Data-usage limit notification" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Data-usage limit notification</h3>
+          <p>Reaching a cellular data threshold — using native Android limits/warnings or third-party monitoring apps — can serve as an early warning sign that background malware is exfiltrating data.</p>
+        </div>
+      </article>
+
+      <article class="term" id="limited-internet">
+        <div class="visual photo">
+          <img src="3.3/Limited internet connectivity.jpg" alt="Limited internet connectivity" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Limited internet connectivity</h3>
+          <p>Malware or misconfigurations can degrade network performance.</p>
+          <p>Toggle Wi-Fi or Airplane mode, restart the device, run a malware scan, or reset network settings (iOS).</p>
+        </div>
+      </article>
+
+      <article class="term" id="no-internet">
+        <div class="visual photo">
+          <img src="3.3/No internet connectivity.jfif" alt="No internet connectivity" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>No internet connectivity</h3>
+          <p>Malware may intentionally block internet connections to prevent anti-malware definition updates or security software downloads.</p>
+        </div>
+      </article>
+
+      <article class="term" id="high-ads">
+        <div class="visual photo">
+          <img src="3.3/High number of ads.jfif" alt="High number of ads" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>High number of ads</h3>
+          <p>Persistent or excessive ad pop-ups are often driven by adware or fake ad-blocking malware (e.g., <strong>Fake Ads Block</strong>) designed to generate ad revenue for attackers.</p>
+        </div>
+      </article>
+
+      <article class="term" id="fake-warnings">
+        <div class="visual photo">
+          <img src="3.3/Fake security warnings.jfif" alt="Fake security warnings" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Fake security warnings</h3>
+          <p>Malicious browser pop-ups imitate official system alerts to trick users into downloading &ldquo;security updates&rdquo; that actually install malware.</p>
+          <div class="note warn">Close the browser window immediately without clicking on the prompt.</div>
+        </div>
+      </article>
+
+      <article class="term" id="unexpected-behavior">
+        <div class="visual photo">
+          <img src="3.3/Unexpected application behavior.jfif" alt="Unexpected application behavior" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Unexpected application behavior</h3>
+          <p>Sudden crashes, unresponsiveness, broken features, or excessive battery drain are typically app-specific bugs.</p>
+          <p>Contact the app developer and update to the latest app version.</p>
+        </div>
+      </article>
+
+      <article class="term" id="data-leak">
+        <div class="visual photo">
+          <img src="3.3/Leaked personal files.png" alt="Leaked personal files and data" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Leaked personal files / data</h3>
+          <p>Caused by local malware breaches or compromised cloud storage accounts.</p>
+          <p><strong>Respond by:</strong></p>
+          <ul>
+            <li>Run a malware scan</li>
+            <li>Perform a factory reset</li>
+            <li>Update passwords for cloud services (iCloud, Google Workspace, OneDrive)</li>
+            <li>Enable multi-factor authentication (MFA)</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Study notes for Core 2 objective 3.3 — Troubleshoot Mobile OS and Application Security Issues.
+  </div>
+</footer>
+
+<script src="study-lightbox.js"></script>
+</body>
+</html>

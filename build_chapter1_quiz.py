@@ -31,14 +31,17 @@ class TermParser(HTMLParser):
         self._in_body = False
         self._in_h3 = False
         self._in_p = False
+        self._in_li = False
         self._current = None
         self._buf = []
+        self._list_parts = []
 
     def handle_starttag(self, tag, attrs):
         cls = dict(attrs).get("class", "")
         if tag == "article" and "term" in cls.split():
             self._in_term = True
             self._current = {"name": "", "definition": ""}
+            self._list_parts = []
         elif self._in_term and tag == "div" and "body" in cls.split():
             self._in_body = True
         elif self._in_body and tag == "h3":
@@ -47,14 +50,21 @@ class TermParser(HTMLParser):
         elif self._in_body and tag == "p" and self._current and not self._current["definition"]:
             self._in_p = True
             self._buf = []
+        elif self._in_body and tag == "li":
+            self._in_li = True
+            self._buf = []
 
     def handle_endtag(self, tag):
         if tag == "article" and self._in_term:
-            if self._current and self._current["name"] and self._current["definition"]:
-                self.terms.append(self._current)
+            if self._current and self._current["name"]:
+                if not self._current["definition"] and self._list_parts:
+                    self._current["definition"] = " ".join(self._list_parts)
+                if self._current["definition"]:
+                    self.terms.append(self._current)
             self._in_term = False
             self._in_body = False
             self._current = None
+            self._list_parts = []
         elif tag == "div" and self._in_body:
             self._in_body = False
         elif tag == "h3" and self._in_h3:
@@ -65,9 +75,14 @@ class TermParser(HTMLParser):
             self._in_p = False
             if self._current and not self._current["definition"]:
                 self._current["definition"] = " ".join("".join(self._buf).split())
+        elif tag == "li" and self._in_li:
+            self._in_li = False
+            text = " ".join("".join(self._buf).split())
+            if text:
+                self._list_parts.append(text)
 
     def handle_data(self, data):
-        if self._in_h3 or self._in_p:
+        if self._in_h3 or self._in_p or self._in_li:
             self._buf.append(data)
 
 

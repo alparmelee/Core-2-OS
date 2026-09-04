@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3.1 Troubleshoot Microsoft Windows OS Problems</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101820;
+    --muted:#4b5563;
+    --paper:#eef3f8;
+    --line:rgba(16,24,32,0.12);
+    --accent:#1e40af;
+    --accent-soft:#dbeafe;
+    --good:#166534;
+    --warn:#9a3412;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(30,64,175,0.12), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.06), transparent 50%),
+      linear-gradient(180deg, #e4eaf2 0%, var(--paper) 40%, #e8eef5 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#eff6ff;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,16,32,0.55) 0%, rgba(8,16,32,0.78) 52%, rgba(8,16,32,0.94) 100%),
+      url("https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1600&q=80") center/cover no-repeat;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:36ch;
+    color:#dbeafe;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:50ch;
+    color:#94a3b8;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#dbeafe;
+    color:#1e3a8a;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#dbeafe;
+    border:1px solid rgba(219,234,254,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(238,243,248,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+  .visual.icon{ font-size:3.6rem; line-height:1; }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body ul{
+    margin:0.5rem 0 0.7rem;
+    padding-left:1.2rem;
+  }
+  .body li{ margin-bottom:0.35rem; }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(30,64,175,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+  .note.warn{
+    border-left-color:var(--danger);
+    background:rgba(180,35,24,0.08);
+    color:#7a271a;
+  }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">3.1</p>
+    <h1>Troubleshoot Microsoft Windows OS Problems</h1>
+    <p>BSODs, boot failures, performance issues, service errors, memory warnings, and domain-related slowdowns — causes and fixes.</p>
+    <div class="hero-cta">
+      <a href="#crashes-boot">Crashes &amp; boot</a>
+      <a class="ghost" href="#performance">Performance</a>
+      <a class="ghost" href="#services-apps">Services &amp; apps</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#bsod">BSOD</a>
+    <a href="#boot-issues">Boot issues</a>
+    <a href="#no-os">No OS found</a>
+    <a href="#degraded-performance">Performance</a>
+    <a href="#low-memory">Low memory</a>
+    <a href="#frequent-shutdowns">Shutdowns</a>
+    <a href="#system-instability">Instability</a>
+    <a href="#services">Services</a>
+    <a href="#app-crashes">App crashes</a>
+    <a href="#usb-controller">USB warnings</a>
+    <a href="#slow-profile">Slow profile</a>
+    <a href="#time-drift">Time drift</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="crashes-boot">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Crashes and boot failures</h2>
+        <p>When Windows stops, fails to start, or cannot find the operating system.</p>
+      </div>
+
+      <article class="term" id="bsod">
+        <div class="visual photo">
+          <img src="3.1/Blue screen of death (BSOD).png" alt="Blue screen of death (BSOD)" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Blue screen of death (BSOD)</h3>
+          <span class="aka">Stop error</span>
+          <p>Causes can stem from bad hardware, bad drivers, or application issues that prevent the OS from continuing.</p>
+          <p><strong>Troubleshoot:</strong></p>
+          <ul>
+            <li>Attempt to use <strong>Last Known Good Configuration</strong></li>
+            <li>Perform a <strong>System Restore</strong></li>
+            <li>Roll back recently installed drivers</li>
+            <li>Use <strong>Safe Mode</strong> to resolve normal startup issues</li>
+            <li>Reseat components to ensure good connections</li>
+            <li>Run hardware diagnostics to test CPU and RAM</li>
+          </ul>
+          <p>Refer to the QR code, <strong>stop code</strong> (e.g., kernel mode heap corruption), and <a href="https://www.microsoft.com/stopcode" target="_blank" rel="noopener">windows.com/stopcode</a> on-screen details for targeted fixes.</p>
+        </div>
+      </article>
+
+      <article class="term" id="boot-issues">
+        <div class="visual photo">
+          <img src="3.1/Boot issues.png" alt="Boot issues" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Boot issues</h3>
+          <p>Check for missing OS/bootloader issues or dual-boot conflicts. Remove any attached non-bootable media.</p>
+          <p><strong>Repair options:</strong></p>
+          <ul>
+            <li>Run <strong>Startup Repair</strong></li>
+            <li>Use <code>bootrec /rebuildbcd</code> via the Recovery Console command prompt to repair the Windows Boot Configuration Database (BCD)</li>
+          </ul>
+          <p>Use Startup Repair if the system boots exclusively into Safe Mode or if files and directories were moved.</p>
+        </div>
+      </article>
+
+      <article class="term" id="no-os">
+        <div class="visual photo">
+          <img src='3.1/"No OS found".jfif' alt="No OS found" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>&ldquo;No OS found&rdquo;</h3>
+          <p>Caused by bootloader corruption, dual-boot overwrites, or missing boot files.</p>
+          <p><strong>Fix:</strong> Unplug non-bootable media and drives. Run Startup Repair or manually repair the boot database using <code>bootrec /rebuildbcd</code> from the Recovery Console command prompt.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="performance">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Performance and stability</h2>
+        <p>Slowdowns, unexpected shutdowns, memory pressure, and clock sync problems.</p>
+      </div>
+
+      <article class="term" id="degraded-performance">
+        <div class="visual photo">
+          <img src="3.1/Degraded performance.jfif" alt="Degraded performance" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Degraded performance</h3>
+          <p>Use <strong>Task Manager</strong> (Processes tab and 60-second Performance tab view) to identify resource-hogging apps.</p>
+          <p><strong>Additional checks:</strong></p>
+          <ul>
+            <li>Check Windows Update for OS bug patches</li>
+            <li>Verify adequate free disk space</li>
+            <li>Run defrag if using an HDD</li>
+            <li>Check power source connections on laptops to avoid power-throttling</li>
+            <li>Run an antivirus scan to clear viruses and malware</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="low-memory">
+        <div class="visual photo">
+          <img src="3.1/Low memory warnings.jfif" alt="Low memory warnings" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Low memory warnings</h3>
+          <p>Sort Task Manager by the <strong>Memory</strong> column to locate memory-draining programs. Save files and close or restart open programs.</p>
+          <p>Verify and manage <strong>virtual memory</strong> (paging file configuration) under:</p>
+          <span class="aka">System &gt; About &gt; Advanced system settings &gt; Performance Settings &gt; Virtual Memory</span>
+        </div>
+      </article>
+
+      <article class="term" id="frequent-shutdowns">
+        <div class="visual photo">
+          <img src="3.1/Frequent shutdowns.jfif" alt="Frequent shutdowns" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Frequent shutdowns</h3>
+          <p>Run full hardware diagnostics (motherboard, CPU, RAM) via UEFI/BIOS, motherboard tools, or <strong>Windows Memory Diagnostics</strong>.</p>
+          <p>Check system file integrity with <code>sfc</code> (System File Checker) and scan for malware.</p>
+          <div class="note warn"><strong>Note:</strong> Unscheduled or random system stops and application failures require hardware diagnostics and system integrity scans.</div>
+        </div>
+      </article>
+
+      <article class="term" id="system-instability">
+        <div class="visual photo">
+          <img src="3.1/System instability.webp" alt="System instability" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>System instability</h3>
+          <p>Occurs randomly without warning.</p>
+          <p><strong>Troubleshoot with:</strong></p>
+          <ul>
+            <li>Full hardware diagnostics via UEFI/BIOS or motherboard tools</li>
+            <li>Windows Memory Diagnostics</li>
+            <li><code>sfc</code> (System File Checker)</li>
+            <li>Anti-malware scan</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="time-drift">
+        <div class="visual photo">
+          <img src="3.1/Time drift.png" alt="Time drift" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Time drift</h3>
+          <p>Caused by hardware inaccurate timekeeping.</p>
+          <p>Resolve by navigating to <strong>Settings &gt; Time &amp; Language &gt; Date &amp; Time</strong> and enabling <strong>Set time automatically</strong> (and automatic daylight saving adjustments) to synchronize with central time servers, or perform a manual sync.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="services-apps">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Services, applications, and peripherals</h2>
+        <p>When services fail, apps crash, USB endpoints max out, or domain profiles load slowly.</p>
+      </div>
+
+      <article class="term" id="services">
+        <div class="visual photo">
+          <img src="3.1/Services not starting.jpg" alt="Services not starting" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Services not starting</h3>
+          <p>Verify device status in <strong>Device Manager</strong> — update, roll back, or replace drivers.</p>
+          <p>Open the <strong>Services</strong> app to attempt manual service starts, adjust account authentication permissions, and verify service dependencies.</p>
+          <p>Run <code>sfc</code> for built-in Windows services or perform an admin-permission reinstall for third-party application services.</p>
+          <ul class="tags">
+            <li>Device Manager</li>
+            <li>services.msc</li>
+            <li>sfc /scannow</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="app-crashes">
+        <div class="visual photo">
+          <img src="3.1/Applications crashing.png" alt="Applications crashing" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Applications crashing</h3>
+          <p>Inspect log entries in <strong>Event Viewer</strong> or use <strong>Reliability Monitor</strong> to identify failure causes and performance trends over time.</p>
+          <p>Reinstall the failing application if necessary.</p>
+        </div>
+      </article>
+
+      <article class="term" id="usb-controller">
+        <div class="visual photo">
+          <img src="3.1/USB controller resource warnings.jpg" alt="USB controller resource warnings" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>USB controller resource warnings</h3>
+          <p>This occurs when connecting devices that exceed the USB controller&rsquo;s available endpoints.</p>
+          <p><strong>Fix:</strong> Disconnect the device and move it to a different USB port or controller. Balance endpoint loads by plugging USB 2.0 devices into USB 2.0 controllers and USB 3.0 devices into USB 3.0 controllers.</p>
+        </div>
+      </article>
+
+      <article class="term" id="slow-profile">
+        <div class="visual photo">
+          <img src="3.1/Slow profile load.jfif" alt="Slow profile load" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Slow profile load</h3>
+          <p>Typically caused by network latency or WAN congestion when syncing roaming user profiles to a remote domain controller.</p>
+          <p>Domain administrators can resolve this by repairing or optimizing local domain controllers.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Study notes for Core 2 objective 3.1 — Troubleshoot Microsoft Windows OS Problems.
+  </div>
+</footer>
+
+<script src="study-lightbox.js"></script>
+</body>
+</html>

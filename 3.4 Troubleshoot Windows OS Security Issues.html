@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3.4 Troubleshoot Windows OS Security Issues</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101820;
+    --muted:#4b5563;
+    --paper:#f3f0f8;
+    --line:rgba(16,24,32,0.12);
+    --accent:#6d28d9;
+    --accent-soft:#ede9fe;
+    --good:#166534;
+    --warn:#9a3412;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(109,40,217,0.12), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(91,33,182,0.06), transparent 50%),
+      linear-gradient(180deg, #ebe8f2 0%, var(--paper) 40%, #f0edf5 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#f5f3ff;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(20,8,40,0.55) 0%, rgba(20,8,40,0.78) 52%, rgba(20,8,40,0.94) 100%),
+      url("https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=1600&q=80") center/cover no-repeat;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:38ch;
+    color:#ede9fe;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:50ch;
+    color:#c4b5fd;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#ede9fe;
+    color:#5b21b6;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#ede9fe;
+    border:1px solid rgba(237,233,254,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(243,240,248,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+  .visual.icon{ font-size:3.6rem; line-height:1; }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .body h4{
+    font-size:0.95rem;
+    font-weight:700;
+    margin:0.85rem 0 0.35rem;
+    color:var(--ink);
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body ul{
+    margin:0.5rem 0 0.7rem;
+    padding-left:1.2rem;
+  }
+  .body li{ margin-bottom:0.35rem; }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(109,40,217,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+  .note.warn{
+    border-left-color:var(--danger);
+    background:rgba(180,35,24,0.08);
+    color:#7a271a;
+  }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">3.4</p>
+    <h1>Troubleshoot Windows OS Security Issues</h1>
+    <p>Malware symptoms, scareware, file tampering, update failures, and browser-related security problems on Windows.</p>
+    <div class="hero-cta">
+      <a href="#os-symptoms">OS symptoms</a>
+      <a class="ghost" href="#browser-symptoms">Browser symptoms</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#no-network">No network</a>
+    <a href="#desktop-alerts">Desktop alerts</a>
+    <a href="#false-av">False AV alerts</a>
+    <a href="#altered-files">Altered files</a>
+    <a href="#os-notifications">Notifications</a>
+    <a href="#update-failures">Update failures</a>
+    <a href="#browser-popups">Pop-ups</a>
+    <a href="#cert-warnings">Certificates</a>
+    <a href="#redirection">Redirection</a>
+    <a href="#browser-performance">Browser perf</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="os-symptoms">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Windows OS security symptoms</h2>
+        <p>System-level indicators of malware, scareware, and configuration problems.</p>
+      </div>
+
+      <article class="term" id="no-network">
+        <div class="visual photo">
+          <img src="3.4/Unable to access the network.jfif" alt="Unable to access the network" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Unable to access the network</h3>
+          <p>Malware can intentionally block network access to prevent downloading anti-malware tools or installing operating system security patches that close known vulnerabilities.</p>
+          <p>Address this by running a malware cleaner or wiping the machine and restoring from a known good backup.</p>
+        </div>
+      </article>
+
+      <article class="term" id="desktop-alerts">
+        <div class="visual photo">
+          <img src="3.4/Desktop alerts.jfif" alt="Desktop alerts" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Desktop alerts</h3>
+          <p>Rogue browser pop-ups or pushed web messages often impersonate official system notifications to trick users into extending fake subscriptions or downloading malicious software.</p>
+          <p>Manage these in browser security/notification settings by blocking unauthorized sites, or run a malware scan.</p>
+        </div>
+      </article>
+
+      <article class="term" id="false-av">
+        <div class="visual photo">
+          <img src="3.4/False alerts regarding antivirus protection.jfif" alt="False alerts regarding antivirus protection" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>False alerts regarding antivirus protection</h3>
+          <span class="aka">Scareware / hoax pop-ups</span>
+          <p>Scareware mimics legitimate security tools, claiming your system is disabled or infected with specific threats (e.g., Trojan spyware). They direct users to call fake tech support numbers or pay money.</p>
+          <p>These files can be manually deleted, but <strong>wiping the system and restoring from a backup</strong> is the most reliable fix.</p>
+        </div>
+      </article>
+
+      <article class="term" id="altered-files">
+        <div class="visual photo">
+          <img src="3.4/Altered system or personal files.webp" alt="Altered system or personal files" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Altered system or personal files</h3>
+          <h4>Missing / renamed files</h4>
+          <p>Files or system binaries are unexpectedly renamed, moved, or missing.</p>
+          <h4>Inability to access files</h4>
+          <p>Personal documents show altered permissions, or users are met with &ldquo;access denied&rdquo; errors.</p>
+          <div class="note warn">These behaviors are clear indicators of a malware infection and require a dedicated cleaner or a complete system wipe and restoration.</div>
+        </div>
+      </article>
+
+      <article class="term" id="os-notifications">
+        <div class="visual photo">
+          <img src="3.4/Unwanted notifications within the OS.jfif" alt="Unwanted notifications within the OS" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Unwanted notifications within the OS</h3>
+          <p>Operating systems allow apps to push unwanted pop-ups.</p>
+          <p>Configure these in Windows under <strong>Settings &gt; System &gt; Notifications</strong> on an app-by-app basis to suppress spam while retaining critical system service alerts.</p>
+        </div>
+      </article>
+
+      <article class="term" id="update-failures">
+        <div class="visual photo">
+          <img src="3.4/OS update failures.jfif" alt="OS update failures" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>OS update failures</h3>
+          <p>Malware, network misconfigurations, firewall filtering rules, or network bandwidth caps can block system updates.</p>
+          <p>Verify basic network/internet access, check firewall rules, and run the built-in <strong>Windows Update Troubleshooter</strong> via:</p>
+          <span class="aka">Settings &gt; System &gt; Troubleshoot &gt; Other troubleshooters</span>
+          <p>to detect and fix issues automatically.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="browser-symptoms">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Browser-related symptoms</h2>
+        <p>Web browser signs of malware, misconfiguration, or compromised sessions.</p>
+      </div>
+
+      <article class="term" id="browser-popups">
+        <div class="visual photo">
+          <img src="3.4/Random  frequent pop-ups.jfif" alt="Random frequent pop-ups" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Random / frequent pop-ups</h3>
+          <p>Fake application prompts appear despite modern browser pop-up blockers being enabled by default.</p>
+          <p>Persistent pop-ups point to an active malware infection; run a full malware scan or restore from a known good backup.</p>
+        </div>
+      </article>
+
+      <article class="term" id="cert-warnings">
+        <div class="visual photo">
+          <img src="3.4/Certificate warnings.png" alt="Certificate warnings" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Certificate warnings</h3>
+          <p>Browsers display &ldquo;connection is not private&rdquo; or untrusted site errors. Click the lock icon next to the HTTPS URL to inspect certificate details.</p>
+          <p><strong>Common causes:</strong></p>
+          <ul>
+            <li>Domain name mismatches</li>
+            <li>Untrusted Certificate Authorities (CAs)</li>
+            <li>Incorrect local system time and date settings</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="redirection">
+        <div class="visual photo">
+          <img src="3.4/Redirection.jfif" alt="Redirection" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Redirection</h3>
+          <p>Entering a search query or URL redirects the user to unintended, illegitimate websites designed to display ads or distribute further malware.</p>
+          <p>Resolve by running an anti-malware scan or performing a full system wipe and restoration.</p>
+        </div>
+      </article>
+
+      <article class="term" id="browser-performance">
+        <div class="visual photo">
+          <img src="3.4/Degraded browser performance.jfif" alt="Degraded browser performance" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Degraded browser performance</h3>
+          <p>Sluggish loading and high system resource usage can be caused by excessive open tabs, bloated browser caches, or malicious JavaScript (e.g., background crypto miners using 100% CPU).</p>
+          <p><strong>Fixes include:</strong></p>
+          <ul>
+            <li>Update the browser</li>
+            <li>Clear cookies and cache</li>
+            <li>Review Task Manager resource utilization</li>
+            <li>Test the site across alternative web browsers</li>
+          </ul>
+          <ul class="tags">
+            <li>Task Manager</li>
+            <li>Crypto miner</li>
+            <li>Clear cache</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Study notes for Core 2 objective 3.4 — Troubleshoot Windows OS Security Issues.
+  </div>
+</footer>
+
+<script src="study-lightbox.js"></script>
+</body>
+</html>

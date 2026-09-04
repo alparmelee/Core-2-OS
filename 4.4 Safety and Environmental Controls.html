@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4.4 Safety and Environmental Controls</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101820;
+    --muted:#4b5563;
+    --paper:#f5f5f0;
+    --line:rgba(16,24,32,0.12);
+    --accent:#ca8a04;
+    --accent-soft:#fef9c3;
+    --good:#166534;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+    --highlight:#a16207;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(202,138,4,0.12), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(180,35,24,0.05), transparent 50%),
+      linear-gradient(180deg, #eeede8 0%, var(--paper) 40%, #f2f1ec 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--highlight); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#fefce8;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(24,20,8,0.55) 0%, rgba(24,20,8,0.78) 52%, rgba(24,20,8,0.94) 100%),
+      url("https://images.unsplash.com/photo-1581092918051-0c4c3acd3789?w=1600&q=80") center/cover no-repeat;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:36ch;
+    color:#fef9c3;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:52ch;
+    color:#d6d3d1;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#fef9c3;
+    color:#854d0e;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#fef9c3;
+    border:1px solid rgba(254,249,195,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(245,245,240,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+  .visual.icon{ font-size:3.6rem; line-height:1; }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body ul{
+    margin:0.5rem 0 0.7rem;
+    padding-left:1.2rem;
+  }
+  .body li{ margin-bottom:0.35rem; }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(202,138,4,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+  .note.warn{
+    border-left-color:var(--danger);
+    background:rgba(180,35,24,0.08);
+    color:#7a271a;
+  }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">4.4</p>
+    <h1>Safety and Environmental Controls</h1>
+    <p>ESD prevention, electrical hazards, workspace safety, PPE, lifting, fire suppression, and regulatory compliance for IT technicians.</p>
+    <div class="hero-cta">
+      <a href="#esd">ESD</a>
+      <a class="ghost" href="#electrical">Electrical</a>
+      <a class="ghost" href="#personal-safety">Personal safety</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#esd-straps">ESD straps</a>
+    <a href="#esd-mats">ESD mats</a>
+    <a href="#antistatic-bags">Antistatic bags</a>
+    <a href="#handling">Handling</a>
+    <a href="#disconnect">Disconnect power</a>
+    <a href="#high-voltage">High voltage</a>
+    <a href="#cables">Cables</a>
+    <a href="#ppe">PPE</a>
+    <a href="#lifting">Lifting</a>
+    <a href="#fire">Fire safety</a>
+    <a href="#compliance">Compliance</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="esd">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>ESD prevention and component handling</h2>
+        <p>Protect sensitive electronics from electrostatic discharge during service, transport, and storage.</p>
+      </div>
+
+      <article class="term" id="esd-straps">
+        <div class="visual photo">
+          <img src="4.4/ESD straps.jfif" alt="ESD straps" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>ESD straps</h3>
+          <p>Wristband devices that equalize electrical potential between the technician and the chassis, featuring breakaway snaps for mobility.</p>
+          <div class="note warn"><strong>Never</strong> attach an ESD strap directly to a building&rsquo;s electrical ground. Connect to the equipment chassis or a proper ESD common ground point on the bench.</div>
+        </div>
+      </article>
+
+      <article class="term" id="esd-mats">
+        <div class="visual photo">
+          <img src="4.4/ESD mats and pads.jfif" alt="ESD mats and pads" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>ESD mats and pads</h3>
+          <p>Conductive surface mats or desk pads used to safely balance static potential when working on components or standing near equipment.</p>
+          <p>Mats should be grounded through a current-limiting resistor and kept clean — dust and insulators on the surface reduce effectiveness.</p>
+        </div>
+      </article>
+
+      <article class="term" id="antistatic-bags">
+        <div class="visual photo">
+          <img src="4.4/Antistatic bags.jpg" alt="Antistatic bags" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Antistatic bags</h3>
+          <p>Specially designed metallic or static-shielding bags that protect isolated computer parts from static discharges during transport or storage.</p>
+          <p>Distinguish antistatic (pink) bags from static-shielding (metallic) bags — only shielding bags provide full Faraday-cage protection for bare boards.</p>
+        </div>
+      </article>
+
+      <article class="term" id="handling">
+        <div class="visual photo">
+          <img src="4.4/Proper component handling and storage.jfif" alt="Proper component handling and storage" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Proper component handling and storage</h3>
+          <p>Always handle circuit boards by their <strong>outer edges</strong> rather than exposed circuits or chips.</p>
+          <p>Store components in climate-controlled environments (50&ndash;80&deg;F / 10&ndash;27&deg;C with low humidity), using silica gel packs or original packaging with bubble wrap to protect against moisture and physical damage.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="electrical">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Electrical and workspace safety</h2>
+        <p>Prevent shock, residual voltage injuries, and trip hazards in the work area.</p>
+      </div>
+
+      <article class="term" id="disconnect">
+        <div class="visual photo">
+          <img src="4.4/Disconnect power.png" alt="Disconnect power" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Disconnect power</h3>
+          <p>Unplug power cords from computers, printers, or peripheral devices before opening cases to prevent electrical shock.</p>
+          <p>Power off, unplug, and press the power button briefly to discharge standby power on some systems before working inside the chassis.</p>
+        </div>
+      </article>
+
+      <article class="term" id="high-voltage">
+        <div class="visual photo">
+          <img src="4.4/High-voltage components and grounding.jfif" alt="High-voltage components and grounding" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>High-voltage components and grounding</h3>
+          <p>Never open or service power supplies, CRT displays, or laser printers — internal capacitors can retain dangerous residual voltage even when unplugged.</p>
+          <p>Ensure equipment chassis and data center racks are properly connected to electrical grounds to redirect fault current away from technicians.</p>
+          <div class="note warn"><strong>Never remove ground prongs</strong> from power plugs. A missing ground defeats the safety path for fault current.</div>
+        </div>
+      </article>
+
+      <article class="term" id="cables">
+        <div class="visual photo">
+          <img src="4.4/Cable management.jfif" alt="Cable management" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Cable management</h3>
+          <p>Keep walkways clear by bundling cables using Velcro or cable ties, and taping or covering any cables crossing floor paths to eliminate trip hazards.</p>
+          <p>Label runs, maintain slack for airflow in racks, and route power and data separately where possible to reduce interference.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="personal-safety">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Personal safety and environmental compliance</h2>
+        <p>Protect yourself, handle equipment safely, and follow regulations for disposal and workplace hazards.</p>
+      </div>
+
+      <article class="term" id="ppe">
+        <div class="visual photo">
+          <img src="4.4/Personal protective equipment (PPE).jfif" alt="Personal protective equipment (PPE)" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Personal protective equipment (PPE)</h3>
+          <ul>
+            <li><strong>Safety goggles</strong> — When handling hazardous battery chemicals or working inside printers</li>
+            <li><strong>Air filter mask</strong> — To avoid inhaling fine airborne dust or printer toner during maintenance</li>
+          </ul>
+          <p>Select PPE matched to the specific hazard — toner, battery acid, and metal shavings each require different protection.</p>
+        </div>
+      </article>
+
+      <article class="term" id="lifting">
+        <div class="visual photo">
+          <img src="4.4/Lifting techniques.jfif" alt="Lifting techniques" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Lifting techniques</h3>
+          <p>Lift heavy computers or equipment using <strong>leg strength</strong> rather than bending the back — keep the load close, feet shoulder-width apart, and avoid twisting while carrying.</p>
+          <p>Use specialized lift equipment (server lifts, pallet jacks, two-person carries) for data center rack installation and heavy UPS units.</p>
+        </div>
+      </article>
+
+      <article class="term" id="fire">
+        <div class="visual photo">
+          <img src="4.4/Fire safety.jfif" alt="Fire safety" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Fire safety</h3>
+          <p>Unplug burning equipment immediately if safe to do so.</p>
+          <p>Use <strong>dry chemical</strong>, <strong>carbon dioxide (CO&#8322;)</strong>, or <strong>FM-200</strong> suppression systems for electronic equipment — <em>not</em> water or foam, which can conduct electricity and cause further damage or shock.</p>
+          <ul class="tags">
+            <li>Class C (electrical)</li>
+            <li>CO&#8322; extinguisher</li>
+            <li>FM-200 data center</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="compliance">
+        <div class="visual photo">
+          <img src="4.4/Compliance with government regulations.png" alt="Compliance with government regulations" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Compliance with government regulations</h3>
+          <p>Adhere to local building codes for electrical and fire safety, and observe environmental regulations regarding proper disposal and recycling of hazardous e-waste — such as old batteries, CRTs, and computers.</p>
+          <p>Many jurisdictions require certified e-waste recyclers; never dispose of toner, batteries, or mercury-containing devices in standard trash.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Study notes for Core 2 objective 4.4 — Safety and Environmental Controls.
+  </div>
+</footer>
+
+<script src="study-lightbox.js"></script>
+</body>
+</html>

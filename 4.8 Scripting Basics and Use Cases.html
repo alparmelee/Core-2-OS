@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4.8 Scripting Basics and Use Cases</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101820;
+    --muted:#4b5563;
+    --paper:#eef2f6;
+    --line:rgba(16,24,32,0.12);
+    --accent:#0369a1;
+    --accent-soft:#e0f2fe;
+    --good:#166534;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+    --highlight:#0284c7;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(3,105,161,0.12), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.06), transparent 50%),
+      linear-gradient(180deg, #e4eaf0 0%, var(--paper) 40%, #e8eef4 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--highlight); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#f0f9ff;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,20,32,0.55) 0%, rgba(8,20,32,0.78) 52%, rgba(8,20,32,0.94) 100%),
+      url("https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1600&q=80") center/cover no-repeat;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:38ch;
+    color:#e0f2fe;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:52ch;
+    color:#94a3b8;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#e0f2fe;
+    color:#0c4a6e;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#e0f2fe;
+    border:1px solid rgba(224,242,254,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(238,242,246,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+  .visual.icon{ font-size:3.6rem; line-height:1; }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+  .visual.ext{
+    font-family:"Fraunces",serif;
+    font-size:1.5rem;
+    font-weight:700;
+    color:var(--accent);
+    letter-spacing:-0.02em;
+  }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body ul{
+    margin:0.5rem 0 0.7rem;
+    padding-left:1.2rem;
+  }
+  .body li{ margin-bottom:0.35rem; }
+
+  .split{
+    display:grid;
+    gap:0.65rem;
+    margin-top:0.75rem;
+  }
+  @media (min-width:640px){
+    .split.cols-2{ grid-template-columns:repeat(2, 1fr); }
+    .split.cols-3{ grid-template-columns:repeat(3, 1fr); }
+  }
+  .pill{
+    padding:0.85rem 1rem;
+    border-radius:12px;
+    border:1px solid var(--line);
+    background:#fafbfd;
+  }
+  .pill strong{
+    display:block;
+    font-size:0.82rem;
+    margin-bottom:0.35rem;
+    color:var(--accent);
+  }
+  .pill p{ margin:0; font-size:0.88rem; color:var(--muted); }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--danger);
+    background:rgba(180,35,24,0.06);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">4.8</p>
+    <h1>Scripting Basics and Use Cases</h1>
+    <p>Common script file types, automation use cases, and risks to consider before deploying scripts in production.</p>
+    <div class="hero-cta">
+      <a href="#types">File types</a>
+      <a class="ghost" href="#use-cases">Use cases</a>
+      <a class="ghost" href="#considerations">Risks</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#bat">.bat</a>
+    <a href="#ps1">.ps1</a>
+    <a href="#vbs">.vbs</a>
+    <a href="#sh">.sh</a>
+    <a href="#js">.js</a>
+    <a href="#py">.py</a>
+    <a href="#automation">Automation</a>
+    <a href="#backups">Backups</a>
+    <a href="#malware">Malware risk</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="types">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Script file types</h2>
+        <p>Common script extensions across Windows, Linux, and cross-platform environments.</p>
+      </div>
+
+      <article class="term" id="bat">
+        <div class="visual photo">
+          <img src="4.8/bat Windows Batch file.jfif" alt=".bat — Windows Batch file" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>.bat — Windows Batch file</h3>
+          <span class="aka">Batch script</span>
+          <p>Executed at the command line, dating back to DOS and OS/2. Uses simple sequential commands (<code>echo</code>, <code>copy</code>, <code>del</code>, <code>net use</code>) and is still widely used for basic Windows automation tasks.</p>
+        </div>
+      </article>
+
+      <article class="term" id="ps1">
+        <div class="visual photo">
+          <img src="4.8/ps1 PowerShell script.jfif" alt=".ps1 — PowerShell script" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>.ps1 — PowerShell script</h3>
+          <p>Used primarily by Windows system administrators, leveraging built-in functions called <strong>cmdlets</strong> to access and modify operating system parameters and Active Directory.</p>
+          <p>More powerful than batch files — supports pipelines, object manipulation, and remote management. Execution policy may restrict running unsigned scripts.</p>
+        </div>
+      </article>
+
+      <article class="term" id="vbs">
+        <div class="visual photo">
+          <img src="4.8/vbs Visual Basic Script.jfif" alt=".vbs — Visual Basic Script" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>.vbs — Visual Basic Script</h3>
+          <span class="aka">VBScript — Microsoft Visual Basic Scripting Edition</span>
+          <p>Used for desktop scripting, backend web server operations, and Microsoft Office macros. Runs through the Windows Script Host (<code>wscript.exe</code> or <code>cscript.exe</code>).</p>
+          <p>Legacy technology — largely replaced by PowerShell, but still appears in older automation and macro environments.</p>
+        </div>
+      </article>
+
+      <article class="term" id="sh">
+        <div class="visual photo">
+          <img src="4.8/sh UnixLinux shell script.jfif" alt=".sh — Unix/Linux shell script" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>.sh — Unix/Linux shell script</h3>
+          <p>Identified by a <strong>shebang</strong> or <strong>hashbang</strong> (<code>#!</code>) on its initial line, which specifies the interpreter — for example <code>#!/bin/bash</code> or <code>#!/bin/sh</code>.</p>
+          <p>Common on macOS and Linux for system administration, cron jobs, and deployment pipelines.</p>
+        </div>
+      </article>
+
+      <article class="term" id="js">
+        <div class="visual photo">
+          <img src="4.8/js JavaScript.jfif" alt=".js — JavaScript" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>.js — JavaScript</h3>
+          <p>Used to enable dynamic interactivity within web browsers — distinct from the Java programming language despite the similar name.</p>
+          <p>Also runs server-side via Node.js for automation, build tools, and API integrations. Browser JavaScript and server-side Node.js serve different roles.</p>
+        </div>
+      </article>
+
+      <article class="term" id="py">
+        <div class="visual photo">
+          <img src="4.8/py Python script.jfif" alt=".py — Python script" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>.py — Python script</h3>
+          <p>Provides cross-platform compatibility across Windows, macOS, Linux, and cloud-based automation. Popular for IT automation, data collection, and infrastructure-as-code tooling.</p>
+          <p>Readable syntax and extensive libraries make Python a common choice for scripting tasks that span multiple operating systems.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="use-cases">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Use cases for scripting</h2>
+        <p>Why organizations automate tasks with scripts instead of performing them manually.</p>
+      </div>
+
+      <article class="term" id="automation">
+        <div class="visual photo">
+          <img src="4.8/Basic automation.jfif" alt="Basic automation" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Basic automation</h3>
+          <p>Handles repetitive or mundane tasks at high execution speeds without requiring manual input or direct oversight — freeing technicians for complex troubleshooting.</p>
+        </div>
+      </article>
+
+      <article class="term" id="restarting">
+        <div class="visual photo">
+          <img src="4.8/Restarting machines.jfif" alt="Restarting machines" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Restarting machines</h3>
+          <p>Triggers remote system reboots following application updates or security patches, or schedules periodic reboots to clear hardware memory leaks.</p>
+        </div>
+      </article>
+
+      <article class="term" id="drives">
+        <div class="visual photo">
+          <img src="4.8/Remapping network drives.webp" alt="Remapping network drives" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Remapping network drives</h3>
+          <p>Automatically maps shared network drives during user login, repository updates, or backup processes — ensuring consistent drive letters across the organization.</p>
+        </div>
+      </article>
+
+      <article class="term" id="install">
+        <div class="visual photo">
+          <img src="4.8/Installation of applications.jfif" alt="Installation of applications" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Installation of applications</h3>
+          <p>Automates software deployments by mapping installation drives, running setup routines with pre-filled prompts, and initiating post-install reboots — standard in enterprise imaging and SCCM/Intune deployments.</p>
+        </div>
+      </article>
+
+      <article class="term" id="backups">
+        <div class="visual photo">
+          <img src="4.8/Automated backups.png" alt="Automated backups" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Automated backups</h3>
+          <p>Executes resource-intensive data transfers to backup drives during off-peak hours, minimizing impact on user productivity and network bandwidth.</p>
+        </div>
+      </article>
+
+      <article class="term" id="gathering">
+        <div class="visual photo">
+          <img src="4.8/Gathering of information and data.jfif" alt="Gathering of information and data" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Gathering of information and data</h3>
+          <p>Automates system monitoring, hardware and software inventory collection, and vulnerability scanning using protocols like SNMP.</p>
+        </div>
+      </article>
+
+      <article class="term" id="updates">
+        <div class="visual photo">
+          <img src="4.8/Initiating updates.jfif" alt="Initiating updates" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Initiating updates</h3>
+          <p>Deploys operating system patches, application upgrades, and updated hardware device drivers without user intervention — critical for maintaining security posture at scale.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="considerations">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Other considerations when using scripts</h2>
+        <p>Risks and best practices before running or deploying scripts in production environments.</p>
+      </div>
+
+      <article class="term" id="malware">
+        <div class="visual photo">
+          <img src="4.8/Unintentionally introducing malware.jfif" alt="Unintentionally introducing malware" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Unintentionally introducing malware</h3>
+          <p>Running unverified installation scripts or deploying infected software files can inadvertently distribute malware across networked endpoints.</p>
+          <p>Always review script source, verify checksums, and test in an isolated sandbox before wide deployment.</p>
+        </div>
+      </article>
+
+      <article class="term" id="settings">
+        <div class="visual photo">
+          <img src="4.8/Inadvertently changing system settings.jfif" alt="Inadvertently changing system settings" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Inadvertently changing system settings</h3>
+          <p>Unintended registry modifications or configuration edits can break system resources, requiring thorough pre-deployment testing and rollback scripts.</p>
+          <p>Document every change a script makes and maintain version control so you can revert quickly.</p>
+        </div>
+      </article>
+
+      <article class="term" id="crashes">
+        <div class="visual photo">
+          <img src="4.8/Browser or system crashes due to mishandling of resources.jfif" alt="Browser or system crashes due to mishandling of resources" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Browser or system crashes due to mishandling of resources</h3>
+          <p>Syntax errors, loose characters, or logical bugs within scripts can cause resource exhaustion, service outages, or system downtime.</p>
+          <div class="note">Test scripts on non-production systems first. Include error handling, logging, and exit codes so failures are visible rather than silent.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Study notes for Core 2 objective 4.8 — Scripting Basics and Use Cases.
+  </div>
+</footer>
+
+<script src="study-lightbox.js"></script>
+</body>
+</html>

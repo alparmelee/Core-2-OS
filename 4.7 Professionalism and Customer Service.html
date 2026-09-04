@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4.7 Professionalism and Customer Service</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101820;
+    --muted:#4b5563;
+    --paper:#eef6f5;
+    --line:rgba(16,24,32,0.12);
+    --accent:#0d9488;
+    --accent-soft:#ccfbf1;
+    --good:#166534;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+    --highlight:#0f766e;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(13,148,136,0.12), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.06), transparent 50%),
+      linear-gradient(180deg, #e4f0ef 0%, var(--paper) 40%, #e8f4f3 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--highlight); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#f0fdfa;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,28,28,0.55) 0%, rgba(8,28,28,0.78) 52%, rgba(8,28,28,0.94) 100%),
+      url("https://images.unsplash.com/photo-1521737710145-8e07a6e9b2d7?w=1600&q=80") center/cover no-repeat;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:40ch;
+    color:#ccfbf1;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:52ch;
+    color:#94a3b8;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#ccfbf1;
+    color:#134e4a;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#ccfbf1;
+    border:1px solid rgba(204,251,241,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(238,246,245,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+  .visual.icon{ font-size:3.6rem; line-height:1; }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body ul{
+    margin:0.5rem 0 0.7rem;
+    padding-left:1.2rem;
+  }
+  .body li{ margin-bottom:0.35rem; }
+
+  .split{
+    display:grid;
+    gap:0.65rem;
+    margin-top:0.75rem;
+  }
+  @media (min-width:640px){
+    .split.cols-2{ grid-template-columns:repeat(2, 1fr); }
+  }
+  .pill{
+    padding:0.85rem 1rem;
+    border-radius:12px;
+    border:1px solid var(--line);
+    background:#fafbfd;
+  }
+  .pill strong{
+    display:block;
+    font-size:0.82rem;
+    margin-bottom:0.35rem;
+    color:var(--accent);
+  }
+  .pill p{ margin:0; font-size:0.88rem; color:var(--muted); }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(13,148,136,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">4.7</p>
+    <h1>Professionalism and Customer Service</h1>
+    <p>Professional demeanor, customer interaction skills, expectation management, and confidentiality for IT support roles.</p>
+    <div class="hero-cta">
+      <a href="#demeanor">Demeanor</a>
+      <a class="ghost" href="#difficult">Difficult situations</a>
+      <a class="ghost" href="#service">Service delivery</a>
+      <a class="ghost" href="#privacy">Privacy</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#attire">Attire</a>
+    <a href="#communication">Communication</a>
+    <a href="#attitude">Attitude</a>
+    <a href="#listening">Listening</a>
+    <a href="#conflict">Conflict</a>
+    <a href="#timelines">Timelines</a>
+    <a href="#follow-up">Follow-up</a>
+    <a href="#sensitive">Sensitive data</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="demeanor">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Appearance and professional demeanor</h2>
+        <p>How you present yourself, communicate, and conduct yourself in the workplace.</p>
+      </div>
+
+      <article class="term" id="attire">
+        <div class="visual photo">
+          <img src="4.7/Appropriate attire.webp" alt="Appropriate attire" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Appropriate attire</h3>
+          <p>Match the organizational dress code, whether adhering to formal standards (e.g., slacks and ties) or business casual environments, to foster a comfortable and professional workplace.</p>
+          <p>When in doubt, dress slightly above the minimum — first impressions matter, especially during on-site visits or executive interactions.</p>
+        </div>
+      </article>
+
+      <article class="term" id="communication">
+        <div class="visual photo">
+          <img src="4.7/Professional communication.webp" alt="Professional communication" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Professional communication</h3>
+          <p>Translate complex technology issues into clear, accessible concepts using non-technical language. Avoid slang, tech jargon, and acronyms when working with users or decision-makers.</p>
+          <p>Use analogies when helpful — compare a firewall to a building security desk, or RAM to a desk workspace. Confirm the user understands before moving on.</p>
+        </div>
+      </article>
+
+      <article class="term" id="attitude">
+        <div class="visual photo">
+          <img src="4.7/Positive attitude and confidence.jfif" alt="Positive attitude and confidence" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Positive attitude and confidence</h3>
+          <p>Maintain an approachable, equal-partner approach during interactions to reassure users — especially during critical data loss or complex technical failures.</p>
+          <p>Project calm competence without arrogance. Users take cues from your demeanor; panic from the technician amplifies user anxiety.</p>
+        </div>
+      </article>
+
+      <article class="term" id="cultural">
+        <div class="visual photo">
+          <img src="4.7/Cultural sensitivity and titles.jfif" alt="Cultural sensitivity and titles" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Cultural sensitivity and titles</h3>
+          <p>Respect designated professional titles and credentials — such as addressing a PhD holder as "Doctor" — and follow organizational guidelines for respectful treatment of all colleagues and customers.</p>
+          <p>Be aware of cultural differences in communication style, personal space, and formality. When unsure, ask politely or observe how others in the organization address the person.</p>
+        </div>
+      </article>
+
+      <article class="term" id="punctuality">
+        <div class="visual photo">
+          <img src="4.7/Punctuality.jfif" alt="Punctuality" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Punctuality</h3>
+          <p>Arrive on time for scheduled commitments — on-site appointments, meetings, and remote support sessions. If you will be late, notify the customer or team as early as possible.</p>
+          <p>Respect others' time; chronic lateness erodes trust and professionalism.</p>
+        </div>
+      </article>
+
+      <article class="term" id="distractions">
+        <div class="visual photo">
+          <img src="4.7/Avoiding distractions.png" alt="Avoiding distractions" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Avoiding distractions</h3>
+          <p>Eliminate personal interruptions such as personal calls, texting, or browsing social media during work hours.</p>
+          <ul>
+            <li>If an urgent call must be taken in front of a customer, politely request permission beforehand and apologize afterward</li>
+            <li>Avoid using speakerphone in customer interactions — it compromises privacy and appears unprofessional</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="difficult">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Handling difficult situations and customer interactivity</h2>
+        <p>Soft skills for de-escalation, understanding, and building user confidence.</p>
+      </div>
+
+      <article class="term" id="listening">
+        <div class="visual photo">
+          <img src="4.7/Active listening.jpg" alt="Active listening" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Active listening</h3>
+          <p>Allow customers to fully describe their issue without interrupting, avoiding premature assumptions about the root cause.</p>
+          <p>Use verbal acknowledgments ("I understand," "Go on") and maintain appropriate eye contact. Let the user finish before diagnosing.</p>
+        </div>
+      </article>
+
+      <article class="term" id="conflict">
+        <div class="visual photo">
+          <img src="4.7/Conflict avoidance.jpg" alt="Conflict avoidance" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Conflict avoidance</h3>
+          <p>Refrain from arguing with or acting defensively toward customers when emotions run high. Partner with the user toward a solution rather than contradicting them.</p>
+          <p>Focus on the problem, not the person. Phrases like "Let's figure this out together" redirect energy toward resolution.</p>
+        </div>
+      </article>
+
+      <article class="term" id="teaching">
+        <div class="visual photo">
+          <img src="4.7/Non-judgmental teaching.jfif" alt="Non-judgmental teaching" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Non-judgmental teaching</h3>
+          <p>Act as a teacher rather than judging a customer's level of technical knowledge, helping them feel more confident with their technology.</p>
+          <p>Never say "you should have known that" or express frustration. Every user has a different background — your job is to empower, not embarrass.</p>
+        </div>
+      </article>
+
+      <article class="term" id="clarifying">
+        <div class="visual photo">
+          <img src="4.7/Clarifying and verifying.webp" alt="Clarifying and verifying" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Clarifying and verifying</h3>
+          <p>Ask probing open-ended questions, take detailed notes, and restate or repeat the issue back to the customer to verify understanding and refine the scope of the problem.</p>
+          <p>Example: "So if I understand correctly, the printer worked yesterday but stopped after the Windows update — is that right?"</p>
+        </div>
+      </article>
+
+      <article class="term" id="discretion">
+        <div class="visual photo">
+          <img src="4.7/Discretion.jfif" alt="Discretion" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Discretion</h3>
+          <p>Keep internal business matters, customer experiences, and workplace encounters confidential. Never post work details on public forums or social media.</p>
+          <p>What you see on a user's screen or hear in a support call stays private — sharing stories, even anonymized, can violate trust and policy.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="service">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Expectation management and service delivery</h2>
+        <p>Setting timelines, presenting options, documenting work, and closing the loop with users.</p>
+      </div>
+
+      <article class="term" id="timelines">
+        <div class="visual photo">
+          <img src="4.7/Setting timelines and status updates.jfif" alt="Setting timelines and status updates" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Setting timelines and status updates</h3>
+          <p>Provide regular status communications for long-term tickets — such as setting calendar reminders to contact the user weekly during manufacturer part delays.</p>
+          <p>Under-promise and over-deliver when possible. If a timeline changes, notify the user proactively before they have to ask.</p>
+        </div>
+      </article>
+
+      <article class="term" id="repair-replace">
+        <div class="visual photo">
+          <img src="4.7/Repair vs. replacement options.jfif" alt="Repair vs. replacement options" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Repair vs. replacement options</h3>
+          <p>Present clear repair or replacement options, outlining the advantages and disadvantages of each so the user can make informed decisions.</p>
+          <div class="split cols-2">
+            <div class="pill">
+              <strong>Repair</strong>
+              <p>Lower cost, faster turnaround if parts are available — but may not address underlying wear or warranty status.</p>
+            </div>
+            <div class="pill">
+              <strong>Replacement</strong>
+              <p>New warranty coverage and updated hardware — but higher upfront cost and potential data migration effort.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="term" id="documentation">
+        <div class="visual photo">
+          <img src="4.7/Proper documentation.png" alt="Proper documentation" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Proper documentation</h3>
+          <p>Document technical discussions and service details thoroughly — for example, following up phone calls with detailed summary emails that recap the issue, steps taken, and next actions.</p>
+          <p>Good documentation protects you, the user, and the organization if questions arise later about what was discussed or agreed upon.</p>
+        </div>
+      </article>
+
+      <article class="term" id="follow-up">
+        <div class="visual photo">
+          <img src="4.7/Follow-up.jfif" alt="Follow-up" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Follow-up</h3>
+          <p>Check in with the user after closing a ticket to verify complete satisfaction and catch minor residual issues before they escalate.</p>
+          <p>A brief "Is everything still working well?" message demonstrates care and often surfaces problems the user assumed were unrelated.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="privacy">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part D</span>
+        <h2>Privacy and confidentiality</h2>
+        <p>Protecting sensitive information encountered during support work.</p>
+      </div>
+
+      <article class="term" id="sensitive">
+        <div class="visual photo">
+          <img src="4.7/Handling sensitive materials.jfif" alt="Handling sensitive materials" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Handling sensitive materials</h3>
+          <p>Protect all private, confidential, or sensitive personal data visible on computers, printouts, or desktops. IT professionals hold elevated access permissions and must maintain absolute confidentiality and trust regarding enterprise and personal data.</p>
+          <ul>
+            <li>Turn away from or cover screens when others are nearby during sensitive work</li>
+            <li>Secure or shred printed documents containing personal information</li>
+            <li>Never copy, browse, or share user data beyond what the ticket requires</li>
+            <li>Log out of shared or customer systems when stepping away</li>
+          </ul>
+          <div class="note">Privileged access is a responsibility, not a perk. Mishandling sensitive data can result in termination, legal action, and loss of professional certification.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Study notes for Core 2 objective 4.7 — Professionalism and Customer Service.
+  </div>
+</footer>
+
+<script src="study-lightbox.js"></script>
+</body>
+</html>
