@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>3.1 Windows Troubleshooting Simulator</title>
+<style>
+  :root{ --accent:#0078d4; --taskbar-bg:#1f1f1f; --win-bg:#f3f3f3; }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; margin:0; font-family:"Segoe UI",Tahoma,Arial,sans-serif; overflow:auto; }
+  body{ background:#202020; }
+  .app-root{ position:relative; width:100%; height:100%; overflow:hidden; user-select:none; }
+  .desktop{ position:absolute; inset:0; background: linear-gradient(150deg,#0b3d91 0%, #1e6fd9 45%, #56c2e6 100%); transition:filter .3s; }
+  .desktop.safemode::after{ content:"Safe Mode"; position:absolute; top:0; left:0; right:0; text-align:center; color:#ffcc00; font-size:11px; padding:2px; background:rgba(0,0,0,0.3); }
+  .safe-corner{ position:absolute; color:#ffcc00; font-size:11px; background:rgba(0,0,0,0.4); padding:3px 8px; border-radius:3px; z-index:4000; display:none; }
+  .safe-corner.show{ display:block; }
+
+  .taskbar{ position:absolute; left:0; right:0; bottom:0; height:46px; background:var(--taskbar-bg); display:flex; align-items:center; gap:4px; padding:0 8px; z-index:5000; color:#fff; }
+  .tb-start{ width:40px; height:36px; border-radius:6px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .tb-start:hover, .tb-icon:hover, .tb-tray-item:hover{ background:rgba(255,255,255,0.12); }
+  .win-grid{ display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:2px; width:15px; height:15px; }
+  .win-grid span{ background:#00adef; }
+  .tb-search{ display:flex; align-items:center; gap:8px; background:#2b2b2b; border-radius:18px; padding:6px 14px; width:250px; color:#ccc; font-size:12.5px; }
+  .tb-search input{ background:transparent; border:none; outline:none; color:#fff; font-size:12.5px; flex:1; }
+  .tb-icon{ width:36px; height:36px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:17px; cursor:pointer; }
+  .tb-right{ margin-left:auto; display:flex; align-items:center; gap:10px; }
+  .tb-tray-item{ font-size:14px; padding:6px 7px; border-radius:4px; cursor:pointer; }
+  .tb-clock{ font-size:11.5px; line-height:1.3; text-align:right; padding:4px 10px; border-radius:4px; cursor:pointer; }
+
+  .start-menu{ position:absolute; bottom:52px; left:8px; width:420px; max-height:520px; background:rgba(32,32,32,0.92); backdrop-filter:blur(18px); border-radius:10px; box-shadow:0 20px 60px rgba(0,0,0,0.5); display:none; flex-direction:column; z-index:6000; color:#fff; overflow:hidden; }
+  .start-menu.open{ display:flex; }
+  .sm-search{ padding:14px 16px 8px; }
+  .sm-search input{ width:100%; box-sizing:border-box; background:#3a3a3a; border:none; border-radius:6px; padding:8px 12px; color:#fff; font-size:12.5px; outline:none; }
+  .sm-heading{ padding:10px 16px 6px; font-size:12px; color:#bbb; }
+  .sm-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; padding:0 12px 12px; overflow-y:auto; }
+  .sm-tile{ background:rgba(255,255,255,0.06); border-radius:6px; padding:12px 4px; text-align:center; cursor:pointer; font-size:10px; }
+  .sm-tile:hover{ background:rgba(255,255,255,0.14); }
+  .sm-tile .sm-glyph{ font-size:19px; display:block; margin-bottom:4px; }
+  .sm-footer{ border-top:1px solid rgba(255,255,255,0.12); padding:10px 16px; font-size:12px; display:flex; justify-content:space-between; color:#ccc; }
+
+  .run-dialog{ position:absolute; top:40%; left:50%; transform:translate(-50%,-50%); width:380px; background:#f0f0f0; border-radius:8px; box-shadow:0 20px 60px rgba(0,0,0,0.5); display:none; z-index:7000; overflow:hidden; border:1px solid #999; }
+  .run-dialog.open{ display:block; }
+  .run-title{ padding:8px 12px; font-size:13px; font-weight:600; border-bottom:1px solid #ddd; }
+  .run-body{ padding:16px; font-size:12.5px; }
+  .run-row{ display:flex; align-items:center; gap:10px; margin-top:10px; }
+  .run-row input{ flex:1; padding:5px 8px; border:1px solid #999; font-size:12.5px; }
+  .run-btns{ display:flex; justify-content:flex-end; gap:8px; margin-top:16px; }
+  .run-btns button{ padding:5px 16px; border:1px solid #888; background:#e8e8e8; border-radius:2px; cursor:pointer; font-size:12px; }
+
+  .win{ position:absolute; background:var(--win-bg); border:1px solid #9a9a9a; box-shadow:0 20px 50px rgba(0,0,0,0.4); display:flex; flex-direction:column; overflow:hidden; min-width:340px; min-height:220px; }
+  .win-titlebar{ height:32px; background:#e6e6e6; border-bottom:1px solid #cfcfcf; display:flex; align-items:center; padding:0 0 0 8px; cursor:move; flex-shrink:0; gap:6px; }
+  .win-titlebar .wt-title{ font-size:12.5px; color:#222; flex:1; }
+  .win-titlebar .wt-btns{ display:flex; height:100%; }
+  .win-titlebar .wt-btns div{ width:44px; height:100%; display:flex; align-items:center; justify-content:center; font-size:11px; cursor:pointer; }
+  .win-titlebar .wt-btns div:hover{ background:#d7d7d7; }
+  .win-titlebar .wt-btns .wt-close:hover{ background:#e81123; color:#fff; }
+  .win-content{ flex:1; overflow:auto; font-size:12.5px; background:#fff; }
+
+  .tabbar{ display:flex; background:#eaeaea; border-bottom:1px solid #ccc; flex-shrink:0; flex-wrap:wrap; }
+  .tabbar .tab{ padding:8px 14px; font-size:12.5px; cursor:pointer; border-right:1px solid #ddd; color:#333; }
+  .tabbar .tab.active{ background:#fff; font-weight:600; border-bottom:2px solid var(--accent); }
+  .tabbar .tab:hover{ background:#f5f5f5; }
+
+  table.wtable{ width:100%; border-collapse:collapse; font-size:12px; }
+  table.wtable th{ text-align:left; background:#f3f3f3; border-bottom:1px solid #ddd; padding:6px 10px; color:#444; cursor:pointer; }
+  table.wtable td{ padding:5px 10px; border-bottom:1px solid #eee; }
+  table.wtable tr:hover td{ background:#f2f8ff; }
+  table.wtable tr.selected td{ background:#cfe4ff; }
+  .status-run{ color:#2fa84f; } .status-stop{ color:#999; } .status-warn{ color:#c98a00; } .status-err{ color:#d13438; }
+
+  .toolbar{ display:flex; gap:6px; padding:6px 10px; background:#f7f7f7; border-bottom:1px solid #e0e0e0; flex-shrink:0; align-items:center; flex-wrap:wrap; }
+  .toolbar button{ padding:5px 10px; font-size:12px; border:1px solid #c8c8c8; background:#fff; border-radius:3px; cursor:pointer; }
+  .toolbar button:hover{ background:#eef4ff; }
+  .toolbar button:disabled{ color:#aaa; cursor:default; background:#f3f3f3; }
+
+  .split{ display:flex; height:100%; }
+  .tree-pane{ width:210px; background:#f7f7f7; border-right:1px solid #ddd; overflow-y:auto; padding:6px 0; flex-shrink:0; }
+  .tree-node{ padding:6px 10px 6px 16px; font-size:12.5px; cursor:pointer; display:flex; align-items:center; gap:6px; }
+  .tree-node:hover{ background:#e9f1fb; }
+  .tree-node.active{ background:#cfe4ff; font-weight:600; }
+  .detail-pane{ flex:1; overflow-y:auto; padding:16px 18px; }
+  .detail-pane h3{ margin:0 0 10px; font-size:15px; }
+  .kv-row{ display:flex; padding:4px 0; border-bottom:1px solid #f0f0f0; font-size:12px; }
+  .kv-row .k{ width:200px; color:#555; }
+  .desc-box{ background:#eef6ff; border:1px solid #cfe0f5; padding:10px 12px; border-radius:4px; font-size:12px; margin:12px 0; color:#204060; }
+  .warn-box{ background:#fff4ce; border:1px solid #f2c94c; padding:10px 12px; border-radius:4px; font-size:12px; margin-bottom:12px; color:#664d03; }
+  .step-list{ margin:8px 0; padding-left:0; list-style:none; }
+  .step-list li{ display:flex; align-items:flex-start; gap:8px; padding:6px 0; font-size:12.5px; border-bottom:1px solid #f2f2f2; }
+  .step-list li input{ margin-top:3px; }
+
+  .field-row{ display:flex; align-items:center; gap:10px; margin:8px 0; font-size:12.5px; }
+  .field-row label{ width:160px; color:#333; }
+  .field-row input[type=text], .field-row input[type=number]{ flex:1; padding:5px 7px; border:1px solid #aaa; font-size:12.5px; }
+  .field-row input:disabled{ background:#eee; color:#999; }
+
+  .card{ border:1px solid #ddd; border-radius:6px; padding:14px; margin-bottom:12px; background:#fff; }
+  .card h4{ margin:0 0 8px; font-size:13px; }
+  .toggle{ width:36px; height:20px; border-radius:12px; background:#ccc; position:relative; cursor:pointer; transition:background .15s; display:inline-block; vertical-align:middle; }
+  .toggle.on{ background:var(--accent); }
+  .toggle .knob{ position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:#fff; transition:left .15s; }
+  .toggle.on .knob{ left:18px; }
+
+  .progress-track{ height:10px; background:#e2e2e2; border-radius:5px; overflow:hidden; margin:8px 0; }
+  .progress-fill{ height:100%; background:var(--accent); width:0%; transition:width .2s; }
+
+  .modal-overlay{ position:absolute; inset:0; background:rgba(0,0,0,0.25); display:flex; align-items:center; justify-content:center; z-index:20; }
+  .modal-box{ background:#fff; border-radius:6px; box-shadow:0 15px 40px rgba(0,0,0,0.4); width:360px; padding:18px; font-size:12.5px; max-height:80%; overflow-y:auto; }
+  .modal-box h4{ margin:0 0 10px; }
+  .modal-btns{ display:flex; justify-content:flex-end; gap:8px; margin-top:16px; }
+  .modal-btns button{ padding:6px 14px; border:1px solid #999; background:#eee; border-radius:3px; cursor:pointer; font-size:12px; }
+  .modal-btns button.primary{ background:var(--accent); color:#fff; border-color:var(--accent); }
+
+  /* BSOD */
+  .bsod{ position:absolute; inset:0; background:#0078d7; color:#fff; z-index:20000; display:none; flex-direction:column; align-items:center; justify-content:center; font-family:"Segoe UI",Arial,sans-serif; text-align:left; padding:60px; }
+  .bsod.show{ display:flex; }
+  .bsod .sadface{ font-size:80px; margin-bottom:20px; }
+  .bsod .bsod-text{ max-width:640px; font-size:15px; line-height:1.6; }
+  .bsod .bsod-progress{ margin:20px 0; font-size:15px; }
+  .bsod .bsod-bottom{ display:flex; gap:30px; margin-top:30px; align-items:center; font-size:11px; }
+  .bsod .qr{ width:90px; height:90px; background:repeating-conic-gradient(#fff 0% 25%, #0078d7 0% 50%) 0 0/16px 16px; border:6px solid #fff; }
+
+  /* WinRE */
+  .winre{ position:absolute; inset:0; background:#0f2a44; color:#fff; z-index:19000; display:none; flex-direction:column; align-items:center; justify-content:center; }
+  .winre.show{ display:flex; }
+  .winre h2{ font-weight:300; margin-bottom:26px; }
+  .winre-grid{ display:grid; grid-template-columns:repeat(3,180px); gap:16px; }
+  .winre-tile{ background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); border-radius:6px; padding:20px 10px; text-align:center; cursor:pointer; font-size:12.5px; }
+  .winre-tile:hover{ background:rgba(255,255,255,0.18); }
+  .winre-tile .wr-glyph{ font-size:26px; display:block; margin-bottom:8px; }
+  .winre-back{ margin-top:24px; font-size:12px; cursor:pointer; opacity:.8; }
+  .winre-back:hover{ opacity:1; }
+
+  /* Recovery command prompt */
+  .rcmd{ background:#000; color:#e0e0e0; font-family:Consolas,monospace; font-size:13px; padding:12px; height:100%; overflow-y:auto; white-space:pre-wrap; }
+  .rcmd-line{ min-height:1.4em; }
+  .rcmd-input-row{ display:flex; }
+  .rcmd-cursor{ display:inline-block; width:7px; height:14px; background:#ddd; margin-left:2px; animation:blink 1s step-end infinite; }
+  @keyframes blink{ 0%,50%{opacity:1;} 51%,100%{opacity:0;} }
+
+  .toast-wrap{ position:absolute; bottom:56px; right:14px; z-index:21000; display:flex; flex-direction:column; gap:8px; align-items:flex-end; }
+  .toast{ background:rgba(20,20,20,0.92); color:#fff; padding:10px 16px; border-radius:4px; font-size:12.5px; max-width:320px; box-shadow:0 10px 25px rgba(0,0,0,.35); animation:toastIn .18s ease; white-space:pre-wrap; }
+  @keyframes toastIn{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+  .layout{ display:flex; gap:16px; align-items:flex-start; justify-content:center; padding:20px; box-sizing:border-box; min-height:100vh; background:#242424; }
+  .sim-nav{ display:flex; flex-wrap:wrap; gap:0.75rem 1.25rem; align-items:center; justify-content:center; padding:14px 20px 0; background:#242424; font-family:"Segoe UI",Tahoma,Arial,sans-serif; font-size:13px; }
+  .sim-nav a{ color:#4db3ff; text-decoration:none; font-weight:600; }
+  .sim-nav a:hover{ text-decoration:underline; }
+  .sim-nav .sep{ color:#666; }
+  .screen-frame{ width:1040px; max-width:70%; min-width:660px; height:680px; max-height:82vh; border-radius:10px; overflow:hidden; box-shadow:0 25px 70px rgba(0,0,0,0.5); flex-shrink:0; position:relative; }
+  .reference{ width:410px; max-width:100%; height:680px; max-height:82vh; background:#181818; border-radius:10px; box-shadow:0 25px 70px rgba(0,0,0,0.5); display:flex; flex-direction:column; overflow:hidden; flex-shrink:0; color:#ddd; }
+  .ref-titlebar{ background:#242424; padding:10px 14px; font-size:13px; border-bottom:1px solid #333; display:flex; align-items:center; gap:8px; }
+  .ref-titlebar .dot{ width:8px; height:8px; border-radius:50%; background:var(--accent); }
+  .ref-search{ padding:10px 12px; border-bottom:1px solid #2e2e2e; background:#151515; }
+  .ref-search input{ width:100%; box-sizing:border-box; background:#0f0f0f; border:1px solid #333; color:#eee; font-size:12.5px; padding:8px 10px; border-radius:5px; outline:none; }
+  .ref-search input:focus{ border-color:var(--accent); }
+  .ref-list{ flex:1; overflow-y:auto; padding:4px 0 12px; }
+  .ref-group{ padding:10px 14px 4px; font-size:11px; color:#777; text-transform:uppercase; letter-spacing:.05em; background:#111; position:sticky; top:0; }
+  .ref-item{ padding:11px 14px; border-bottom:1px solid #232323; cursor:pointer; }
+  .ref-item:hover{ background:#212121; }
+  .ref-item .ref-name{ font-size:13.5px; color:#4db3ff; font-weight:700; }
+  .ref-item .ref-action{ font-size:11.5px; color:#f4c95d; margin-top:3px; }
+  .ref-item .ref-action::before{ content:"↳ "; color:#666; }
+  .ref-item .ref-desc{ font-size:12px; color:#aaa; margin-top:5px; line-height:1.45; }
+  .ref-empty{ padding:24px 14px; color:#777; font-size:12.5px; text-align:center; }
+  @media (max-width:1120px){
+    .layout{ flex-direction:column; }
+    .screen-frame, .reference{ width:100%; max-width:100%; height:640px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="sim-nav">
+  <a href="index.html">← All guides</a>
+  <span class="sep">·</span>
+  <a href="3.1 Troubleshoot Microsoft Windows OS Problems.html">Study guide</a>
+  <span class="sep">·</span>
+  <a href="Chapter 3 Practice Quiz.html?section=3.1&amp;start=1">Quiz 3.1</a>
+</nav>
+
+<div class="layout">
+  <div class="screen-frame">
+    <div class="app-root" id="appRoot">
+      <div class="desktop" id="desktopEl"></div>
+      <div class="safe-corner" id="safeCornerTL" style="top:8px;left:8px;">Safe Mode</div>
+      <div class="safe-corner" id="safeCornerBR" style="bottom:56px;right:8px;">Safe Mode</div>
+
+      <div id="windowLayer"></div>
+
+      <div class="start-menu" id="startMenu">
+        <div class="sm-search"><input id="smSearchInput" placeholder="Type here to search"></div>
+        <div class="sm-heading">Troubleshooting tools</div>
+        <div class="sm-grid" id="smGrid"></div>
+        <div class="sm-footer">
+          <span onclick="Win.toast('Account switching is not simulated here.')">👤 jsmith</span>
+          <span onclick="Win.triggerBSOD()" style="color:#ff8a80;">💥 Simulate a crash</span>
+        </div>
+      </div>
+
+      <div class="run-dialog" id="runDialog">
+        <div class="run-title">Run</div>
+        <div class="run-body">
+          <div class="run-row" style="align-items:flex-start;"><span style="font-size:22px;">🏃</span><div style="flex:1;">Type the name of a program or tool, and Windows will open it for you.</div></div>
+          <div class="run-row"><span>Open:</span><input id="runInput" placeholder="e.g. services.msc"></div>
+          <div class="run-btns"><button onclick="Win.runExecute()">OK</button><button onclick="Win.runClose()">Cancel</button></div>
+        </div>
+      </div>
+
+      <div class="toast-wrap" id="toastWrap"></div>
+
+      <div class="bsod" id="bsod"></div>
+      <div class="winre" id="winre"></div>
+
+      <div class="taskbar">
+        <div class="tb-start" id="startBtn" title="Start"><div class="win-grid"><span></span><span></span><span></span><span></span></div></div>
+        <div class="tb-search" id="tbSearchBox">🔍<input id="tbSearchInput" placeholder="Search"></div>
+        <div id="tbPinned" style="display:flex;"></div>
+        <div class="tb-right">
+          <div class="tb-tray-item" title="Windows Security" onclick="Win.openTool('security')">🛡️</div>
+          <div class="tb-tray-item" title="Simulate crash" onclick="Win.triggerBSOD()">💥</div>
+          <div class="tb-clock" id="tbClock"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reference">
+    <div class="ref-titlebar"><span class="dot"></span><span>Windows Troubleshooting Index</span></div>
+    <div class="ref-search"><input type="text" id="refSearchInput" placeholder="Filter symptoms..."></div>
+    <div class="ref-list" id="refList"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // ============== Window manager ==============
+  const layer = document.getElementById('windowLayer');
+  const openWins = {};
+  let zTop = 100;
+  function focusWin(id){ const w=openWins[id]; if(!w) return; zTop+=1; w.el.style.zIndex=zTop; }
+  function closeWin(id){ const w=openWins[id]; if(!w) return; w.el.remove(); delete openWins[id]; }
+  function makeDraggable(winEl, handleEl){
+    let dragging=false, sx=0, sy=0, ox=0, oy=0;
+    handleEl.addEventListener('mousedown', e=>{
+      if(e.target.closest('.wt-btns')) return;
+      dragging=true; sx=e.clientX; sy=e.clientY;
+      const rect = winEl.getBoundingClientRect();
+      const parentRect = winEl.parentElement.getBoundingClientRect();
+      ox = rect.left-parentRect.left; oy = rect.top-parentRect.top;
+      zTop+=1; winEl.style.zIndex=zTop;
+    });
+    window.addEventListener('mousemove', e=>{
+      if(!dragging) return;
+      winEl.style.left = (ox+(e.clientX-sx))+'px';
+      winEl.style.top = (oy+(e.clientY-sy))+'px';
+    });
+    window.addEventListener('mouseup', ()=> dragging=false);
+  }
+  function createWindow(id, opts){
+    if(openWins[id]){ focusWin(id); openWins[id].el.style.display='flex'; if(opts.onFocus) opts.onFocus(); return openWins[id].el; }
+    const el = document.createElement('div');
+    el.className = 'win';
+    el.style.width = (opts.width||560)+'px';
+    el.style.height = (opts.height||400)+'px';
+    el.style.left = (opts.x!==undefined?opts.x:(50+Object.keys(openWins).length*22))+'px';
+    el.style.top = (opts.y!==undefined?opts.y:(40+Object.keys(openWins).length*22))+'px';
+    zTop+=1; el.style.zIndex=zTop;
+    const tb = document.createElement('div');
+    tb.className = 'win-titlebar';
+    tb.innerHTML = `<span>${opts.icon||'🪟'}</span><span class="wt-title">${opts.title||''}</span>
+      <div class="wt-btns"><div class="wt-min">–</div><div class="wt-max">□</div><div class="wt-close">✕</div></div>`;
+    tb.querySelector('.wt-close').addEventListener('click', ()=>closeWin(id));
+    tb.querySelector('.wt-min').addEventListener('click', ()=>{ el.style.display='none'; });
+    tb.querySelector('.wt-max').addEventListener('click', ()=>{
+      if(el.dataset.max==='1'){ el.style.width=(opts.width||560)+'px'; el.style.height=(opts.height||400)+'px'; el.dataset.max='0'; }
+      else{ el.style.width='96%'; el.style.height='90%'; el.style.left='2%'; el.style.top='2%'; el.dataset.max='1'; }
+    });
+    const content = document.createElement('div');
+    content.className = 'win-content';
+    content.id = id+'-content';
+    el.appendChild(tb); el.appendChild(content);
+    el.addEventListener('mousedown', ()=>focusWin(id));
+    layer.appendChild(el);
+    makeDraggable(el, tb);
+    openWins[id] = { el, title:opts.title, icon:opts.icon||'🪟' };
+    if(opts.render) opts.render(content);
+    return el;
+  }
+
+  function toast(msg, ms){
+    const wrap = document.getElementById('toastWrap');
+    const t = document.createElement('div'); t.className='toast'; t.textContent=msg;
+    wrap.appendChild(t);
+    setTimeout(()=>{ t.style.opacity='0'; t.style.transition='opacity .3s'; setTimeout(()=>t.remove(),300); }, ms||3800);
+  }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function renderTable(container, columns, rows, opts){
+    opts = opts||{};
+    container.innerHTML = `<table class="wtable"><thead><tr>${columns.map(c=>`<th>${c}</th>`).join('')}</tr></thead>
+      <tbody>${rows.map((r,ri)=>`<tr data-ri="${ri}">${r.map(v=>`<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+    if(opts.onRowClick){
+      container.querySelectorAll('tbody tr').forEach(tr=>{
+        tr.addEventListener('click', ()=>{
+          container.querySelectorAll('tbody tr').forEach(x=>x.classList.remove('selected'));
+          tr.classList.add('selected');
+          opts.onRowClick(rows[parseInt(tr.dataset.ri)], tr);
+        });
+      });
+    }
+  }
+  function openModal(html, wire){
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.innerHTML = `<div class="modal-box">${html}</div>`;
+    document.getElementById('appRoot').appendChild(overlay);
+    if(wire) wire(overlay);
+    return overlay;
+  }
+
+  // ============== Session state ==============
+  const state = { safeMode:false, timeAuto:true, memMode:'auto', pagingAuto:true, pluggedIn:true, isSSD:true };
+
+  // ============== BSOD + WinRE ==============
+  const bsodEl = document.getElementById('bsod');
+  const winreEl = document.getElementById('winre');
+  const stopCodes = ['KERNEL_MODE_HEAP_CORRUPTION','IRQL_NOT_LESS_OR_EQUAL','SYSTEM_SERVICE_EXCEPTION','CRITICAL_PROCESS_DIED'];
+  function triggerBSOD(){
+    const code = stopCodes[Math.floor(Math.random()*stopCodes.length)];
+    bsodEl.innerHTML = `
+      <div class="sadface">:(</div>
+      <div class="bsod-text">Your PC ran into a problem and needs to restart. We're just collecting some error info, and then we'll restart for you.</div>
+      <div class="bsod-progress" id="bsod-pct">0% complete</div>
+      <div class="bsod-bottom">
+        <div class="qr"></div>
+        <div>
+          For more information about this issue and possible fixes, visit https://www.windows.com/stopcode<br><br>
+          If you call a support person, give them this info:<br>
+          Stop code: <b>${code}</b>
+        </div>
+      </div>`;
+    bsodEl.classList.add('show');
+    let pct = 0;
+    const timer = setInterval(()=>{
+      pct += 20;
+      const el = document.getElementById('bsod-pct');
+      if(el) el.textContent = Math.min(pct,100)+'% complete';
+      if(pct>=100){
+        clearInterval(timer);
+        setTimeout(()=>{ bsodEl.classList.remove('show'); openWinRE('main'); }, 700);
+      }
+    }, 350);
+  }
+
+  function winreTile(glyph, label, onclick){
+    return `<div class="winre-tile" data-a="${label}">${`<span class="wr-glyph">${glyph}</span>`}${label}</div>`;
+  }
+  function openWinRE(screen){
+    winreEl.classList.add('show');
+    if(screen==='main'){
+      winreEl.innerHTML = `<h2>Choose an option</h2><div class="winre-grid">
+        <div class="winre-tile" data-a="continue">▶<br>Continue<div style="font-size:10.5px;color:#bbb;margin-top:4px;">Exit and continue to Windows</div></div>
+        <div class="winre-tile" data-a="troubleshoot">🔧<br>Troubleshoot<div style="font-size:10.5px;color:#bbb;margin-top:4px;">Reset your PC or advanced options</div></div>
+        <div class="winre-tile" data-a="off">⏻<br>Turn off your PC</div>
+      </div>`;
+      winreEl.querySelector('[data-a="continue"]').onclick = ()=> closeWinRE();
+      winreEl.querySelector('[data-a="troubleshoot"]').onclick = ()=> openWinRE('troubleshoot');
+      winreEl.querySelector('[data-a="off"]').onclick = ()=>{ toast('Shutdown is not simulated here.'); };
+    } else if(screen==='troubleshoot'){
+      winreEl.innerHTML = `<h2>Troubleshoot</h2><div class="winre-grid">
+        <div class="winre-tile" data-a="reset">🔄<br>Reset this PC</div>
+        <div class="winre-tile" data-a="advanced">⚙️<br>Advanced options</div>
+      </div><div class="winre-back" data-back="main">← Back</div>`;
+      winreEl.querySelector('[data-a="reset"]').onclick = ()=> toast('Reset this PC is disabled in this simulator — it would erase apps and settings.');
+      winreEl.querySelector('[data-a="advanced"]').onclick = ()=> openWinRE('advanced');
+      winreEl.querySelector('[data-back]').onclick = ()=> openWinRE('main');
+    } else if(screen==='advanced'){
+      winreEl.innerHTML = `<h2>Advanced options</h2><div class="winre-grid">
+        <div class="winre-tile" data-a="restore">🕰️<br>System Restore</div>
+        <div class="winre-tile" data-a="startuprepair">🩹<br>Startup Repair</div>
+        <div class="winre-tile" data-a="cmd">⌨️<br>Command Prompt</div>
+        <div class="winre-tile" data-a="startupsettings">🚦<br>Startup Settings<div style="font-size:10.5px;color:#bbb;margin-top:4px;">Safe Mode &amp; more</div></div>
+        <div class="winre-tile" data-a="uefi">🧰<br>UEFI Firmware Settings</div>
+        <div class="winre-tile" data-a="lkg">📜<br>Last Known Good Config<div style="font-size:10.5px;color:#bbb;margin-top:4px;">Legacy — superseded by System Restore</div></div>
+      </div><div class="winre-back" data-back="troubleshoot">← Back</div>`;
+      winreEl.querySelector('[data-a="restore"]').onclick = systemRestoreFlow;
+      winreEl.querySelector('[data-a="startuprepair"]').onclick = startupRepairFlow;
+      winreEl.querySelector('[data-a="cmd"]').onclick = recoveryCmdFlow;
+      winreEl.querySelector('[data-a="startupsettings"]').onclick = startupSettingsFlow;
+      winreEl.querySelector('[data-a="uefi"]').onclick = uefiFlow;
+      winreEl.querySelector('[data-a="lkg"]').onclick = ()=> toast('Last Known Good Configuration was an F8 boot-menu option in older Windows versions. Modern Windows relies on System Restore and Startup Repair instead.');
+      winreEl.querySelector('[data-back]').onclick = ()=> openWinRE('troubleshoot');
+    }
+  }
+  function closeWinRE(){ winreEl.classList.remove('show'); winreEl.innerHTML=''; }
+
+  function systemRestoreFlow(){
+    const points = [
+      ['8/24/2026 7:02 AM','Automatic Restore Point','Before: Windows Update'],
+      ['8/20/2026 6:15 PM','Manual Restore Point','Before: driver install'],
+      ['8/10/2026 8:00 AM','Automatic Restore Point','Scheduled checkpoint'],
+    ];
+    winreEl.innerHTML = `<h2 style="font-size:18px;">System Restore</h2>
+      <div style="background:#fff;color:#222;border-radius:6px;padding:16px;width:460px;">
+        <p style="font-size:12.5px;">Choose a restore point to undo recent system changes:</p>
+        <table class="wtable"><thead><tr><th>Date</th><th>Description</th><th>Type</th></tr></thead>
+        <tbody>${points.map((p,i)=>`<tr data-i="${i}"><td>${p[0]}</td><td>${p[2]}</td><td>${p[1]}</td></tr>`).join('')}</tbody></table>
+        <div style="text-align:right;margin-top:12px;"><button id="rp-next" style="padding:6px 16px;border:1px solid #999;background:#eee;border-radius:3px;cursor:pointer;">Next ></button></div>
+      </div>
+      <div class="winre-back" data-back="advanced" style="margin-top:16px;">← Back</div>`;
+    let selected = 0;
+    winreEl.querySelectorAll('tbody tr').forEach(tr=> tr.addEventListener('click', ()=>{ selected=parseInt(tr.dataset.i); winreEl.querySelectorAll('tbody tr').forEach(x=>x.style.background=''); tr.style.background='#cfe4ff'; }));
+    winreEl.querySelector('#rp-next').onclick = async ()=>{
+      winreEl.innerHTML = `<h2>Restoring your PC…</h2><div style="width:400px;"><div class="progress-track" style="background:#333;"><div class="progress-fill" id="rp-fill"></div></div><p id="rp-status" style="font-size:12.5px;">Restoring system files and settings…</p></div>`;
+      const fill = winreEl.querySelector('#rp-fill');
+      for(let p=0;p<=100;p+=20){ fill.style.width=p+'%'; await new Promise(r=>setTimeout(r,260)); }
+      winreEl.innerHTML = `<h2>✅ System Restore completed successfully</h2><p>Your PC has been restored to ${esc(points[selected][0])}.</p><div class="winre-tile" style="width:160px;margin-top:16px;" data-a="restart">Restart</div>`;
+      winreEl.querySelector('[data-a="restart"]').onclick = ()=>{ closeWinRE(); toast('PC restarted — issue resolved after System Restore.'); };
+    };
+    winreEl.querySelector('[data-back]').onclick = ()=> openWinRE('advanced');
+  }
+  async function startupRepairFlow(){
+    winreEl.innerHTML = `<h2>Diagnosing your PC</h2><p style="font-size:12.5px;">Startup Repair is checking your system for problems…</p><div style="width:380px;"><div class="progress-track" style="background:#333;"><div class="progress-fill" id="sr-fill"></div></div></div>`;
+    const fill = winreEl.querySelector('#sr-fill');
+    for(let p=0;p<=100;p+=15){ fill.style.width=p+'%'; await new Promise(r=>setTimeout(r,260)); }
+    winreEl.innerHTML = `<h2>✅ Startup Repair fixed your PC</h2><p style="font-size:12.5px;max-width:400px;">A corrupted boot configuration entry was rebuilt. Your PC should start normally now.</p><div class="winre-tile" style="width:160px;margin-top:16px;" data-a="restart">Restart</div>`;
+    winreEl.querySelector('[data-a="restart"]').onclick = ()=>{ closeWinRE(); toast('PC restarted — boot issue resolved after Startup Repair.'); };
+  }
+  function recoveryCmdFlow(){
+    winreEl.innerHTML = `<div style="width:640px;height:400px;background:#000;border:1px solid #444;"><div class="rcmd" id="rcmd-body"></div></div><div class="winre-back" data-back="advanced" style="margin-top:12px;">← Back</div>`;
+    const body = winreEl.querySelector('#rcmd-body');
+    function line(t){ const l=document.createElement('div'); l.className='rcmd-line'; l.textContent=t; body.appendChild(l); }
+    line('Microsoft Windows [Version 10.0.22631]');
+    line('X:\\Sources>');
+    let buf='';
+    const inputRow = document.createElement('div'); inputRow.className='rcmd-input-row';
+    inputRow.innerHTML = `<span>X:\\Sources>&nbsp;</span><span id="rcmd-buf"></span><span class="rcmd-cursor"></span>`;
+    body.appendChild(inputRow);
+    const hidden = document.createElement('input'); hidden.style.position='absolute'; hidden.style.opacity='0';
+    document.body.appendChild(hidden); hidden.focus();
+    function refresh(){ inputRow.querySelector('#rcmd-buf').textContent = buf; body.scrollTop = body.scrollHeight; }
+    async function run(cmd){
+      inputRow.remove();
+      line('X:\\Sources>'+cmd);
+      const c = cmd.trim().toLowerCase();
+      if(c==='bootrec /rebuildbcd'){
+        line('Scanning all disks for Windows installations.'); await sleep(400);
+        line('Please wait, since this may take a while...'); await sleep(500);
+        line('Successfully scanned Windows installations.'); line('Total identified Windows installations: 1');
+        line('[1] C:\\Windows'); line('Add installation to boot list? Yes(Y)/No(N)/All(A): Y'); await sleep(400);
+        line('The operation completed successfully.');
+      } else if(c==='bootrec /fixmbr'){
+        await sleep(300); line('The operation completed successfully.');
+      } else if(c==='bootrec /fixboot'){
+        await sleep(300); line('The operation completed successfully.');
+      } else if(c==='exit'){
+        openWinRE('advanced'); return;
+      } else if(c===''){
+        // no-op
+      } else {
+        line(`'${cmd.split(' ')[0]}' is not recognized as an internal or external command.`);
+      }
+      body.appendChild(inputRow2()); hidden.focus();
+    }
+    function inputRow2(){
+      const row = document.createElement('div'); row.className='rcmd-input-row';
+      row.innerHTML = `<span>X:\\Sources>&nbsp;</span><span id="rcmd-buf"></span><span class="rcmd-cursor"></span>`;
+      return row;
+    }
+    function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+    hidden.addEventListener('keydown', e=>{
+      if(e.key==='Enter'){ e.preventDefault(); const c=buf; buf=''; run(c); return; }
+      if(e.key==='Backspace'){ buf=buf.slice(0,-1); refresh(); return; }
+      if(e.key.length===1){ buf+=e.key; refresh(); }
+    });
+    winreEl.querySelector('[data-back]').onclick = ()=>{ hidden.remove(); openWinRE('advanced'); };
+  }
+  function startupSettingsFlow(){
+    winreEl.innerHTML = `<h2>Startup Settings</h2>
+      <div style="background:#fff;color:#222;border-radius:6px;padding:16px;width:420px;">
+        <p style="font-size:12.5px;">Press a number to choose from the options below, or press Enter to boot normally.</p>
+        <ol style="font-size:12.5px;">
+          <li data-a="safe" style="cursor:pointer;padding:4px 0;">Enable Safe Mode</li>
+          <li data-a="safenet" style="cursor:pointer;padding:4px 0;">Enable Safe Mode with Networking</li>
+          <li data-a="safecmd" style="cursor:pointer;padding:4px 0;">Enable Safe Mode with Command Prompt</li>
+        </ol>
+      </div>
+      <div class="winre-back" data-back="advanced" style="margin-top:16px;">← Back</div>`;
+    winreEl.querySelectorAll('[data-a]').forEach(li=> li.addEventListener('click', ()=>{
+      state.safeMode = true;
+      closeWinRE();
+      applySafeMode();
+      toast('Windows started in Safe Mode — only essential drivers and services are loaded, useful for resolving normal-startup issues.');
+    }));
+    winreEl.querySelector('[data-back]').onclick = ()=> openWinRE('advanced');
+  }
+  function uefiFlow(){
+    winreEl.innerHTML = `<div style="width:600px;background:#1b1b1b;border:2px solid #555;border-radius:4px;padding:0;">
+      <div style="background:#2a2a2a;padding:8px 14px;font-size:12px;border-bottom:1px solid #444;">UEFI BIOS Utility — Hardware Monitor / Diagnostics</div>
+      <div style="padding:16px;font-family:Consolas,monospace;font-size:12px;">
+        <div class="kv-row" style="border-color:#333;"><span class="k" style="color:#8ecbff;">CPU Temperature</span><span>52°C</span></div>
+        <div class="kv-row" style="border-color:#333;"><span class="k" style="color:#8ecbff;">CPU Fan Speed</span><span>2140 RPM</span></div>
+        <div class="kv-row" style="border-color:#333;"><span class="k" style="color:#8ecbff;">System Voltage (12V/5V/3.3V)</span><span>12.02 / 5.01 / 3.31</span></div>
+        <button id="uefi-diag" style="margin-top:14px;padding:6px 14px;border:1px solid #666;background:#333;color:#fff;border-radius:3px;cursor:pointer;">Run Quick Diagnostics (CPU + RAM)</button>
+        <div id="uefi-result" style="margin-top:10px;"></div>
+      </div>
+    </div><div class="winre-back" data-back="advanced" style="margin-top:16px;">← Back</div>`;
+    winreEl.querySelector('#uefi-diag').addEventListener('click', async ()=>{
+      const res = winreEl.querySelector('#uefi-result');
+      res.innerHTML = 'Testing CPU… ';
+      await new Promise(r=>setTimeout(r,500)); res.innerHTML += '✅ PASS<br>Testing RAM… ';
+      await new Promise(r=>setTimeout(r,700)); res.innerHTML += "✅ PASS<br><span style=\"color:#9fef00;\">No hardware faults detected. If reseating components (RAM, cables) hasn't helped, the issue is likely software-related.</span>";
+    });
+    winreEl.querySelector('[data-back]').onclick = ()=> openWinRE('advanced');
+  }
+
+  function applySafeMode(){
+    const dEl = document.getElementById('desktopEl');
+    if(state.safeMode){ dEl.style.filter='grayscale(0.5) brightness(0.9)'; document.getElementById('safeCornerTL').classList.add('show'); document.getElementById('safeCornerBR').classList.add('show'); }
+    else{ dEl.style.filter=''; document.getElementById('safeCornerTL').classList.remove('show'); document.getElementById('safeCornerBR').classList.remove('show'); }
+  }
+  function exitSafeMode(){ state.safeMode=false; applySafeMode(); toast('Restarted normally — Safe Mode turned off.'); }
+
+  // ============== Task Manager ==============
+  const processesData = [
+    ['Google Chrome','App','1,120 MB','38.2%'],
+    ['Antimalware Service Executable','Background','340 MB','12.4%'],
+    ['Windows Explorer','App','96 MB','1.5%'],
+    ['Adobe Creative Cloud','Background','410 MB','6.1%'],
+    ['System','System','4 MB','2.8%'],
+    ['Runtime Broker','Background','38 MB','0.4%'],
+  ];
+  const startupData = [['OneDrive','Enabled','Medium'],['Steam','Enabled','High'],['Adobe Updater','Enabled','Low']];
+  const servicesData = [
+    ['wuauserv','Windows Update','Stopped','Automatic (Delayed)'],
+    ['Spooler','Print Spooler','Running','Automatic'],
+    ['WSearch','Windows Search','Running','Automatic (Delayed)'],
+    ['BITS','Background Intelligent Transfer Service','Running','Automatic (Delayed)'],
+    ['EventLog','Windows Event Log','Running','Automatic'],
+    ['Schedule','Task Scheduler','Running','Automatic'],
+    ['WinDefend','Microsoft Defender Antivirus','Running','Automatic'],
+    ['CustomAppSvc','Contoso Backup Agent','Stopped','Automatic'],
+  ];
+  const tmState = { tab:'processes', sortMem:false };
+  function renderTaskManager(container){
+    const target = container || document.getElementById('taskmgr-content');
+    if(!target) return;
+    const tabs = ['Processes','Performance','Startup','Services'];
+    target.innerHTML = `<div class="tabbar">${tabs.map(t=>`<div class="tab ${tmState.tab===t.toLowerCase()?'active':''}" data-t="${t.toLowerCase()}">${t}</div>`).join('')}</div><div id="tm-pane" style="height:calc(100% - 37px);overflow:auto;"></div>`;
+    target.querySelectorAll('[data-t]').forEach(tb=> tb.addEventListener('click', ()=>{ tmState.tab=tb.dataset.t; renderTaskManager(target); }));
+    const pane = target.querySelector('#tm-pane');
+    if(tmState.tab==='processes'){
+      pane.innerHTML = `<div class="toolbar"><button id="sort-mem">Sort by Memory</button><button id="sort-cpu">Sort by CPU</button></div><div id="proc-table"></div>`;
+      function draw(){
+        let rows = processesData.slice();
+        if(tmState.sortMem==='mem') rows.sort((a,b)=> parseFloat(b[2])-parseFloat(a[2]));
+        if(tmState.sortMem==='cpu') rows.sort((a,b)=> parseFloat(b[3])-parseFloat(a[3]));
+        renderTable(pane.querySelector('#proc-table'), ['Name','Type','Memory','CPU'], rows, {
+          onRowClick(r){ openModal(`<h4>End task?</h4><p>${esc(r[0])} is using ${r[2]} of memory.</p><div class="modal-btns"><button data-a="cancel">Cancel</button><button class="primary" data-a="end">End task</button></div>`,
+            (o)=>{ o.querySelector('[data-a="cancel"]').onclick=()=>o.remove(); o.querySelector('[data-a="end"]').onclick=()=>{ o.remove(); toast(`${r[0]} ended. Memory freed.`); }; }); }
+        });
+      }
+      draw();
+      pane.querySelector('#sort-mem').addEventListener('click', ()=>{ tmState.sortMem='mem'; draw(); });
+      pane.querySelector('#sort-cpu').addEventListener('click', ()=>{ tmState.sortMem='cpu'; draw(); });
+    } else if(tmState.tab==='performance'){
+      pane.innerHTML = `<div style="padding:16px;"><h3 style="margin-top:0;">CPU</h3><canvas class="perf-canvas" id="tm-canvas" width="560" height="140" style="width:100%;background:#0d1f2d;border-radius:4px;"></canvas>
+        <p style="color:#666;font-size:11.5px;margin-top:8px;">The Performance tab shows a rolling 60-second view — watch for sustained spikes that indicate a resource-hogging app.</p></div>`;
+      let hist=[];
+      if(window._tmPerfTimer) clearInterval(window._tmPerfTimer);
+      window._tmPerfTimer = setInterval(()=>{
+        hist.push(Math.max(5,Math.min(100,45+Math.random()*40-20)));
+        if(hist.length>60) hist.shift();
+        const canvas = document.getElementById('tm-canvas');
+        if(!canvas || !document.body.contains(canvas)) return;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle='#0d1f2d'; ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.strokeStyle='#33c9ff'; ctx.lineWidth=2; ctx.beginPath();
+        hist.forEach((v,i)=>{ const x=(i/59)*canvas.width; const y=canvas.height-(v/100)*canvas.height; if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); });
+        ctx.stroke();
+      }, 500);
+    } else if(tmState.tab==='startup'){
+      pane.innerHTML = `<div id="su-table"></div>`;
+      renderTable(pane.querySelector('#su-table'), ['Name','Status','Impact'], startupData);
+    } else if(tmState.tab==='services'){
+      pane.innerHTML = `<div id="svc-table"></div><div class="toolbar"><button id="svc-start" disabled>Start</button><button id="svc-stop" disabled>Stop</button><button id="svc-restart" disabled>Restart</button></div>`;
+      let selected=null;
+      function draw(){
+        renderTable(pane.querySelector('#svc-table'), ['Name','Description','Status','Startup type'],
+          servicesData.map(s=>[s[0],s[1],`<span class="${s[2]==='Running'?'status-run':'status-stop'}">${s[2]}</span>`,s[3]]),
+          { onRowClick(r){ selected = servicesData.find(s=>s[1]===r[1].replace(/<[^>]+>/g,'')); ['svc-start','svc-stop','svc-restart'].forEach(id=>pane.querySelector('#'+id).disabled=false); } });
+      }
+      draw();
+      pane.querySelector('#svc-start').addEventListener('click', ()=>{ if(selected){ selected[2]='Running'; toast(`${selected[1]} started.`); draw(); }});
+      pane.querySelector('#svc-stop').addEventListener('click', ()=>{ if(selected){ selected[2]='Stopped'; toast(`${selected[1]} stopped.`); draw(); }});
+      pane.querySelector('#svc-restart').addEventListener('click', ()=>{ if(selected){ toast(`${selected[1]} restarting…`); setTimeout(()=>{ selected[2]='Running'; toast(`${selected[1]} restarted.`); draw(); },500); }});
+    }
+  }
+  function openTaskManager(tab){ if(tab) tmState.tab=tab; createWindow('taskmgr', { title:'Task Manager', icon:'📊', width:600, height:420, x:80, y:60, render(c){ renderTaskManager(c); } }); if(tab) renderTaskManager(document.getElementById('taskmgr-content')); }
+
+  // ============== Services app (standalone) ==============
+  function openServices(){
+    createWindow('services', { title:'Services', icon:'🧩', width:600, height:400, x:110, y:80, render(c){
+      c.innerHTML = `<div id="svc2-table"></div><div class="toolbar"><button id="s2-start" disabled>Start</button><button id="s2-stop" disabled>Stop</button><button id="s2-props" disabled>Properties</button></div>`;
+      let selected=null;
+      function draw(){
+        renderTable(c.querySelector('#svc2-table'), ['Name','Description','Status','Startup type'],
+          servicesData.map(s=>[s[0],s[1],`<span class="${s[2]==='Running'?'status-run':'status-stop'}">${s[2]}</span>`,s[3]]),
+          { onRowClick(r){ selected = servicesData.find(s=>s[1]===r[1].replace(/<[^>]+>/g,'')); ['s2-start','s2-stop','s2-props'].forEach(id=>c.querySelector('#'+id).disabled=false); } });
+      }
+      draw();
+      c.querySelector('#s2-start').addEventListener('click', ()=>{ if(selected){ selected[2]='Running'; toast(`${selected[1]} started.`); draw(); }});
+      c.querySelector('#s2-stop').addEventListener('click', ()=>{ if(selected){ selected[2]='Stopped'; toast(`${selected[1]} stopped.`); draw(); }});
+      c.querySelector('#s2-props').addEventListener('click', ()=>{
+        if(!selected) return;
+        openModal(`<h4>${esc(selected[1])} Properties</h4>
+          <div class="kv-row"><span class="k">Service name</span><span>${esc(selected[0])}</span></div>
+          <div class="kv-row"><span class="k">Startup type</span><span>${selected[3]}</span></div>
+          <div class="kv-row"><span class="k">Log on as</span><span>Local System account</span></div>
+          <div class="kv-row"><span class="k">Dependencies</span><span>RPC, DCOM Server Process Launcher</span></div>
+          <p style="color:#666;font-size:11.5px;margin-top:10px;">If a service won't start, check its dependencies are running and that its log-on account has the right permissions.</p>
+          <div class="modal-btns"><button data-a="close">Close</button></div>`,
+          (o)=> o.querySelector('[data-a="close"]').onclick=()=>o.remove());
+      });
+    }});
+  }
+
+  // ============== Device Manager ==============
+  const deviceTree = {
+    'Display adapters': ['NVIDIA GeForce RTX 4070'],
+    'Disk drives': ['Samsung SSD 980 PRO 1TB'],
+    'Network adapters': ['Intel(R) Wi-Fi 6 AX201', {name:'USB Ethernet Adapter', driverIssue:true}],
+    'Universal Serial Bus controllers': [{name:'USB Root Hub (USB 3.0)', usbWarn:true}, 'Generic USB Hub'],
+    'Sound, video and game controllers': ['Realtek High Definition Audio'],
+  };
+  function renderDeviceManager(container){
+    const target = container || document.getElementById('devmgmt-content');
+    function draw(){
+      target.innerHTML = `<div class="split" style="height:100%;">
+        <div class="tree-pane">
+          <div class="tree-node" style="font-weight:600;">DESKTOP-7QK2P41</div>
+          ${Object.entries(deviceTree).map(([cat,devs])=>`
+            <div class="tree-node" style="font-weight:600;padding-left:24px;">${cat}</div>
+            ${devs.map(d=>{
+              const name = typeof d==='string'?d:d.name;
+              const flag = typeof d==='object' && (d.driverIssue||d.usbWarn) ? ' ⚠️' : '';
+              return `<div class="tree-node" style="padding-left:46px;" data-d="${esc(name)}">${name}${flag}</div>`;
+            }).join('')}
+          `).join('')}
+        </div>
+        <div class="detail-pane" id="dm-detail"><p style="color:#888;">Select a device to view its status.</p></div>
+      </div>`;
+      target.querySelectorAll('[data-d]').forEach(n=>{
+        n.addEventListener('click', ()=>{
+          const name = n.dataset.d;
+          let flagged = null;
+          Object.values(deviceTree).flat().forEach(d=>{ if(typeof d==='object' && d.name===name) flagged=d; });
+          const detail = target.querySelector('#dm-detail');
+          if(flagged && flagged.driverIssue){
+            detail.innerHTML = `<h3>${esc(name)}</h3>
+              <div class="warn-box">⚠ This device is having driver problems. (Code 43 — Windows has stopped this device because it has reported problems.)</div>
+              <div class="kv-row"><span class="k">Driver version</span><span>2.1.0.4 (outdated)</span></div>
+              <button style="margin-right:6px;padding:6px 12px;border:1px solid #ccc;background:#fff;border-radius:3px;cursor:pointer;" onclick="Win.updateDriver('${esc(name)}')">Update Driver…</button>
+              <button style="padding:6px 12px;border:1px solid #ccc;background:#fff;border-radius:3px;cursor:pointer;" onclick="Win.rollbackDriver('${esc(name)}')">Roll Back Driver…</button>`;
+          } else if(flagged && flagged.usbWarn){
+            detail.innerHTML = `<h3>${esc(name)}</h3>
+              <div class="warn-box">⚠ This hub has exceeded its available bandwidth/power allocation for connected USB devices (Code 10-style resource conflict).</div>
+              <p style="font-size:12px;color:#555;">This happens when too many devices are connected to one controller. Disconnect a device and move it to a different USB port, and balance USB 2.0 devices onto USB 2.0 controllers / USB 3.0 devices onto USB 3.0 controllers.</p>`;
+          } else {
+            detail.innerHTML = `<h3>${esc(name)}</h3>
+              <div class="kv-row"><span class="k">Device status</span><span>This device is working properly.</span></div>
+              <div class="kv-row"><span class="k">Driver version</span><span>10.${Math.floor(Math.random()*90+10)}.1.${Math.floor(Math.random()*900+100)}</span></div>
+              <button style="padding:6px 12px;border:1px solid #ccc;background:#fff;border-radius:3px;cursor:pointer;" onclick="Win.updateDriver('${esc(name)}')">Update Driver…</button>`;
+          }
+        });
+      });
+    }
+    draw();
+  }
+  function updateDriver(name){
+    toast(`Searching for updated drivers for ${name}…`);
+    setTimeout(()=> toast(`Updated driver installed for ${name}. Restart may be required.`), 1100);
+  }
+  function rollbackDriver(name){
+    toast(`Rolling back driver for ${name} to the previously installed version…`);
+    setTimeout(()=> toast(`Driver for ${name} rolled back successfully.`), 1100);
+  }
+  function openDeviceManager(){ createWindow('devmgmt', { title:'Device Manager', icon:'🖧', width:600, height:420, x:140, y:100, render(c){ renderDeviceManager(c); } }); }
+
+  // ============== Event Viewer ==============
+  const eventSamples = {
+    Application: [
+      ['Error','8/24/2026 8:02:55 AM','Application Error','1000','Faulting application photoshop.exe, faulting module ntdll.dll.'],
+      ['Warning','8/24/2026 7:40:11 AM','ESENT','642','Search indexer database warning.'],
+      ['Information','8/24/2026 7:01:12 AM','MsiInstaller','1040',''],
+    ],
+    System: [
+      ['Critical','8/23/2026 11:58:40 PM','Kernel-Power','41','The system rebooted without cleanly shutting down first — check for driver or power issues.'],
+      ['Error','8/24/2026 6:59:02 AM','Disk','153','An error was detected on device \\Device\\Harddisk0 during a paging operation.'],
+      ['Warning','8/24/2026 9:14:00 AM','User Profile Service','1530','Slow network logon detected — profile loaded from a remote domain controller in 42 seconds.'],
+      ['Information','8/24/2026 7:00:01 AM','Service Control Manager','7036','The Print Spooler service entered the running state.'],
+    ],
+  };
+  const levelIcon = { 'Information':'ℹ️','Warning':'⚠️','Error':'❌','Critical':'🛑' };
+  function renderEventViewer(container){
+    const target = container || document.getElementById('eventvwr-content');
+    let selectedLog = 'System';
+    function draw(){
+      target.innerHTML = `<div class="split" style="height:100%;">
+        <div class="tree-pane">
+          <div class="tree-node" style="font-weight:600;">Windows Logs</div>
+          ${Object.keys(eventSamples).map(l=>`<div class="tree-node ${l===selectedLog?'active':''}" style="padding-left:34px;" data-l="${l}">${l}</div>`).join('')}
+        </div>
+        <div class="detail-pane" style="padding:0;"><div id="ev-table"></div><div id="ev-detail" style="padding:12px 16px;border-top:1px solid #eee;"></div></div>
+      </div>`;
+      renderTable(target.querySelector('#ev-table'), ['Level','Date and Time','Source','Event ID'],
+        eventSamples[selectedLog].map(e=>[`${levelIcon[e[0]]} ${e[0]}`,e[1],e[2],e[3]]),
+        { onRowClick(r){ const m = eventSamples[selectedLog].find(e=>e[3]===r[3]); target.querySelector('#ev-detail').textContent = m[4] || `${m[0]} event from ${m[2]} (ID ${m[3]}).`; } });
+      target.querySelectorAll('[data-l]').forEach(n=> n.addEventListener('click', ()=>{ selectedLog=n.dataset.l; draw(); }));
+    }
+    draw();
+  }
+  function openEventViewer(){ createWindow('eventvwr', { title:'Event Viewer', icon:'📋', width:620, height:420, x:170, y:110, render(c){ renderEventViewer(c); } }); }
+
+  // ============== Reliability Monitor ==============
+  const reliabilityEvents = [
+    { day:'Aug 20', type:'crit', text:'Photoshop.exe stopped working' },
+    { day:'Aug 21', type:'ok' },
+    { day:'Aug 22', type:'warn', text:'Windows Update installed with warnings' },
+    { day:'Aug 23', type:'crit', text:'Windows was not properly shut down' },
+    { day:'Aug 24', type:'crit', text:'chrome.exe stopped responding' },
+    { day:'Aug 25', type:'ok' },
+    { day:'Aug 26', type:'ok' },
+  ];
+  function renderReliability(container){
+    const target = container || document.getElementById('relmon-content');
+    target.innerHTML = `<div style="padding:16px;">
+      <h3 style="margin-top:0;">System Stability Chart</h3>
+      <div style="display:flex;gap:14px;align-items:flex-end;height:60px;">
+        ${reliabilityEvents.map(e=>`<div style="text-align:center;font-size:16px;cursor:pointer;" data-d="${e.day}">${e.type==='crit'?'❌':(e.type==='warn'?'⚠️':'✅')}<div style="font-size:10px;color:#888;">${e.day}</div></div>`).join('')}
+      </div>
+      <div id="rel-detail" style="margin-top:16px;"></div>
+      <div class="desc-box">Reliability Monitor tracks failure causes and performance trends over time — a run of ❌ days points to a specific app or driver worth investigating in Event Viewer.</div>
+    </div>`;
+    target.querySelectorAll('[data-d]').forEach(n=>{
+      n.addEventListener('click', ()=>{
+        const e = reliabilityEvents.find(x=>x.day===n.dataset.d);
+        target.querySelector('#rel-detail').innerHTML = e.text ? `<div class="warn-box">${e.day}: ${esc(e.text)}</div>` : `<div style="color:#2fa84f;">${e.day}: No failures reported.</div>`;
+      });
+    });
+  }
+  function openReliability(){ createWindow('relmon', { title:'Reliability Monitor', icon:'📈', width:560, height:340, x:200, y:120, render(c){ renderReliability(c); } }); }
+
+  // ============== Windows Security (antivirus scan) ==============
+  function renderSecurity(container){
+    const target = container || document.getElementById('security-content');
+    target.innerHTML = `<div style="padding:16px;">
+      <h3 style="margin-top:0;">Virus &amp; threat protection</h3>
+      <div class="card"><h4>✅ No current threats</h4><p style="font-size:12px;color:#555;">Last scan: Today, 6:00 AM (Quick scan). 0 threats found.</p>
+      <button id="sec-scan" style="padding:6px 14px;border:1px solid #ccc;background:#fff;border-radius:3px;cursor:pointer;">Quick scan</button>
+      <div id="sec-progress"></div></div>
+      <div class="desc-box">A malware scan rules out viruses as a cause of degraded performance, instability, or unexpected shutdowns.</div>
+    </div>`;
+    target.querySelector('#sec-scan').addEventListener('click', async ()=>{
+      const holder = target.querySelector('#sec-progress');
+      holder.innerHTML = `<div class="progress-track"><div class="progress-fill" id="sec-fill"></div></div><p style="font-size:11.5px;color:#666;" id="sec-status">Scanning system files…</p>`;
+      const fill = holder.querySelector('#sec-fill');
+      for(let p=0;p<=100;p+=20){ fill.style.width=p+'%'; await new Promise(r=>setTimeout(r,220)); }
+      holder.querySelector('#sec-status').textContent = 'Scan complete.';
+      toast('Quick scan complete — 0 threats found.');
+    });
+  }
+  function openSecurity(){ createWindow('security', { title:'Windows Security', icon:'🛡️', width:460, height:320, x:230, y:130, render(c){ renderSecurity(c); } }); }
+
+  // ============== Windows Memory Diagnostic ==============
+  function openMemDiag(){
+    createWindow('memdiag', { title:'Windows Memory Diagnostic', icon:'🧠', width:440, height:280, x:250, y:140, render(c){
+      c.innerHTML = `<div style="padding:16px;">
+        <p>Windows will check your computer for memory problems. This requires a restart to run the test before Windows starts.</p>
+        <button id="md-now" style="display:block;width:100%;padding:8px;margin:6px 0;border:1px solid #ccc;background:#fff;border-radius:3px;cursor:pointer;text-align:left;">Restart now and check for problems</button>
+        <button id="md-later" style="display:block;width:100%;padding:8px;margin:6px 0;border:1px solid #ccc;background:#fff;border-radius:3px;cursor:pointer;text-align:left;">Check for problems the next time I start my computer</button>
+        <div id="md-progress"></div>
+      </div>`;
+      c.querySelector('#md-now').addEventListener('click', async ()=>{
+        c.innerHTML = `<div style="padding:20px;background:#000;color:#fff;height:100%;font-family:Consolas,monospace;font-size:12px;">
+          <div>Windows Memory Diagnostics Tool</div><div>Status: Running test — pass 1 of 2 (Standard)</div>
+          <div class="progress-track" style="background:#333;"><div class="progress-fill" id="md-fill"></div></div>
+        </div>`;
+        const fill = c.querySelector('#md-fill');
+        for(let p=0;p<=100;p+=10){ fill.style.width=p+'%'; await new Promise(r=>setTimeout(r,180)); }
+        toast('Memory test complete — no problems have been detected.');
+        closeWin('memdiag');
+      });
+      c.querySelector('#md-later').addEventListener('click', ()=>{ toast('Windows will check memory on the next restart.'); closeWin('memdiag'); });
+    }});
+  }
+
+  // ============== Virtual Memory dialog ==============
+  function openVirtualMemory(){
+    createWindow('vmem', { title:'Virtual Memory', icon:'💾', width:420, height:340, x:260, y:150, render(c){
+      function draw(){
+        c.innerHTML = `<div style="padding:16px;">
+          <label style="display:block;margin-bottom:10px;"><input type="checkbox" id="vm-auto" ${state.pagingAuto?'checked':''}> Automatically manage paging file size for all drives</label>
+          <table class="wtable"><tr><th>Drive</th><th>Paging File Size (MB)</th></tr>
+            <tr><td>C: (System)</td><td>${state.pagingAuto?'System managed':'2048 - 4096'}</td></tr>
+            <tr><td>D:</td><td>${state.pagingAuto?'None':'None'}</td></tr></table>
+          <div style="margin-top:12px; ${state.pagingAuto?'opacity:.4;pointer-events:none;':''}">
+            <div class="field-row"><label>Initial size (MB)</label><input type="text" value="2048"></div>
+            <div class="field-row"><label>Maximum size (MB)</label><input type="text" value="4096"></div>
+            <button style="padding:5px 12px;border:1px solid #ccc;background:#fff;border-radius:3px;cursor:pointer;">Set</button>
+          </div>
+          <p style="font-size:11px;color:#777;margin-top:12px;">Recommended: 4470 MB &nbsp; Currently allocated: 4096 MB</p>
+          <div style="text-align:right;"><button id="vm-ok" style="padding:6px 16px;border:1px solid #999;background:#eee;border-radius:3px;cursor:pointer;">OK</button></div>
+        </div>`;
+        c.querySelector('#vm-auto').addEventListener('change', e=>{ state.pagingAuto = e.target.checked; draw(); });
+        c.querySelector('#vm-ok').addEventListener('click', ()=>{ toast('Virtual memory settings saved. A restart may be required.'); });
+      }
+      draw();
+    }});
+  }
+
+  // ============== Date & Time settings ==============
+  function openDateTime(){
+    createWindow('datetime', { title:'Settings — Date & Time', icon:'🕒', width:440, height:320, x:280, y:160, render(c){
+      function draw(){
+        const now = new Date();
+        c.innerHTML = `<div style="padding:16px;">
+          <h3 style="margin-top:0;">Date &amp; time</h3>
+          <p style="font-size:16px;">${now.toLocaleTimeString()} — ${now.toLocaleDateString()}</p>
+          <div class="card"><span>Set time automatically</span> <div class="toggle ${state.timeAuto?'on':''}" style="float:right;" id="dt-auto"><div class="knob"></div></div></div>
+          <div class="card"><span>Set time zone automatically</span> <div class="toggle ${state.timeAuto?'on':''}" style="float:right;"><div class="knob"></div></div></div>
+          <button id="dt-sync" style="padding:6px 14px;border:1px solid #ccc;background:#fff;border-radius:3px;cursor:pointer;" ${!state.timeAuto?'disabled':''}>Sync now</button>
+          <p style="font-size:11px;color:#777;margin-top:10px;">Time source: time.windows.com (NTP)</p>
+        </div>`;
+        c.querySelector('#dt-auto').addEventListener('click', ()=>{ state.timeAuto=!state.timeAuto; draw(); });
+        const syncBtn = c.querySelector('#dt-sync');
+        if(syncBtn) syncBtn.addEventListener('click', ()=> toast('Clock synchronized with time.windows.com.'));
+      }
+      draw();
+    }});
+  }
+
+  // ============== This PC (disk space) ==============
+  function openThisPC(){
+    createWindow('thispc', { title:'This PC', icon:'💽', width:420, height:260, x:300, y:170, render(c){
+      c.innerHTML = `<div style="padding:16px;">
+        <div class="card"><h4>Local Disk (C:)</h4><div class="progress-track"><div class="progress-fill" style="width:81%;"></div></div>
+          <p style="font-size:11.5px;color:#666;">401 GB used of 494 GB — 93 GB free</p></div>
+        <div class="desc-box">Low free disk space can cause slowdowns — Windows needs headroom for the paging file, temp files, and updates. Consider Disk Cleanup or moving large files elsewhere.</div>
+      </div>`;
+    }});
+  }
+
+  // ============== Power settings ==============
+  function openPower(){
+    createWindow('power', { title:'Settings — Power & Battery', icon:'🔋', width:420, height:280, x:320, y:180, render(c){
+      function draw(){
+        c.innerHTML = `<div style="padding:16px;">
+          <div class="card"><h4>${state.pluggedIn?'🔌 Plugged in':'🔋 On battery'}</h4>
+            <p style="font-size:12px;">${state.pluggedIn?'Full performance available.':'⚠ Power throttling may reduce CPU performance to save battery.'}</p>
+            <button id="pw-toggle" style="padding:6px 12px;border:1px solid #ccc;background:#fff;border-radius:3px;cursor:pointer;">${state.pluggedIn?'Simulate unplugging':'Simulate plugging in'}</button>
+          </div>
+          <div class="desc-box">On laptops, a loose or damaged power connection can trigger power-throttling and look like a performance problem — check the physical connection first.</div>
+        </div>`;
+        c.querySelector('#pw-toggle').addEventListener('click', ()=>{ state.pluggedIn=!state.pluggedIn; draw(); toast(state.pluggedIn?'Power adapter connected.':'Running on battery — power throttling may occur.'); });
+      }
+      draw();
+    }});
+  }
+
+  // ============== Disk Defragment ==============
+  function openDefrag(){
+    createWindow('defrag', { title:'Optimize Drives', icon:'🧩', width:460, height:300, x:340, y:190, render(c){
+      c.innerHTML = `<div id="dfr-table"></div>
+        <div style="padding:12px 16px;color:#666;font-size:11.5px;">Solid-state drives don't need defragmentation — Windows uses TRIM instead and blocks the Optimize button for them.</div>
+        <div class="toolbar"><button id="dfr-opt">Optimize (D:)</button></div>
+        <div id="dfr-progress" style="padding:0 16px;"></div>`;
+      renderTable(c.querySelector('#dfr-table'), ['Drive','Media type','Current status'], [
+        ['(C:) Windows','Solid state drive','0% (Optimization not needed)'],
+        ['(D:) Data','Hard disk drive','9% fragmented'],
+      ]);
+      c.querySelector('#dfr-opt').addEventListener('click', async ()=>{
+        const holder = c.querySelector('#dfr-progress');
+        holder.innerHTML = `<div class="progress-track"><div class="progress-fill" id="dfr-fill"></div></div>`;
+        const fill = holder.querySelector('#dfr-fill');
+        for(let p=0;p<=100;p+=20){ fill.style.width=p+'%'; await new Promise(r=>setTimeout(r,200)); }
+        toast('Optimization complete for (D:) Data.');
+      });
+    }});
+  }
+
+  // ============== Windows Update ==============
+  function openWindowsUpdate(){
+    createWindow('wupdate', { title:'Settings — Windows Update', icon:'🔄', width:440, height:280, x:360, y:200, render(c){
+      c.innerHTML = `<div style="padding:16px;">
+        <div class="card"><h4>You're up to date (mostly)</h4><p style="font-size:12px;color:#666;">1 optional patch available: KB5041234 — reliability and bug fixes.</p>
+        <button id="wu-install" style="padding:6px 14px;border:1px solid #ccc;background:#fff;border-radius:3px;cursor:pointer;">Download &amp; install</button>
+        <div id="wu-progress"></div></div>
+      </div>`;
+      c.querySelector('#wu-install').addEventListener('click', async ()=>{
+        const holder = c.querySelector('#wu-progress');
+        holder.innerHTML = `<div class="progress-track"><div class="progress-fill" id="wu-fill"></div></div>`;
+        const fill = holder.querySelector('#wu-fill');
+        for(let p=0;p<=100;p+=25){ fill.style.width=p+'%'; await new Promise(r=>setTimeout(r,220)); }
+        toast('KB5041234 installed. Restart to finish applying the update.');
+      });
+    }});
+  }
+
+  // ============== sfc modal ==============
+  function runSfc(){
+    openModal(`<h4>Command Prompt (Admin)</h4><div id="sfc-out" style="background:#000;color:#0f0;font-family:Consolas,monospace;font-size:11.5px;padding:10px;height:160px;overflow-y:auto;"></div><div class="modal-btns"><button data-a="close">Close</button></div>`,
+      async (o)=>{
+        const out = o.querySelector('#sfc-out');
+        function line(t){ out.innerHTML += t+'<br>'; out.scrollTop = out.scrollHeight; }
+        line('C:\\WINDOWS\\system32&gt;sfc /scannow');
+        line('Beginning system scan. This process will take some time.');
+        await new Promise(r=>setTimeout(r,700));
+        line('Verification 100% complete.');
+        line('Windows Resource Protection found corrupt files and successfully repaired them.');
+        o.querySelector('[data-a="close"]').onclick = ()=> o.remove();
+      });
+  }
+
+  // ============== Command map / Run / launcher ==============
+  const commandMap = {
+    'taskmgr': ()=>openTaskManager(), 'taskmgr.exe': ()=>openTaskManager(),
+    'services.msc': openServices,
+    'devmgmt.msc': openDeviceManager,
+    'eventvwr': openEventViewer, 'eventvwr.msc': openEventViewer,
+    'perfmon /rel': openReliability, 'perfmon/rel': openReliability,
+    'mdsched': openMemDiag, 'mdsched.exe': openMemDiag,
+    'sfc /scannow': runSfc,
+    'windowssecurity': openSecurity,
+  };
+  function executeCommand(raw){
+    const text = raw.trim(); if(!text) return;
+    const lower = text.toLowerCase();
+    if(lower.startsWith('bootrec')){ toast('bootrec is only available from the Recovery Environment Command Prompt — trigger a crash (💥) to access WinRE.'); return; }
+    const key = Object.keys(commandMap).find(k=> lower===k);
+    if(key){ commandMap[key](); return; }
+    toast(`Windows cannot find '${text}'.`);
+  }
+  function openTool(key){
+    const map = { taskmgr:()=>openTaskManager(), services:openServices, devmgmt:openDeviceManager, eventvwr:openEventViewer, reliability:openReliability, security:openSecurity, memdiag:openMemDiag, vmem:openVirtualMemory, datetime:openDateTime, thispc:openThisPC, power:openPower, defrag:openDefrag, wupdate:openWindowsUpdate, sfc:runSfc };
+    if(map[key]) map[key]();
+  }
+
+  // ============== Run dialog ==============
+  const runDialog = document.getElementById('runDialog');
+  const runInput = document.getElementById('runInput');
+  function runOpen(){ runDialog.classList.add('open'); runInput.value=''; runInput.focus(); }
+  function runClose(){ runDialog.classList.remove('open'); }
+  function runExecute(){ executeCommand(runInput.value); runClose(); }
+  runInput.addEventListener('keydown', e=>{ if(e.key==='Enter') runExecute(); if(e.key==='Escape') runClose(); });
+
+  // ============== Start menu ==============
+  const startMenu = document.getElementById('startMenu');
+  const startBtn = document.getElementById('startBtn');
+  const pinnedApps = [
+    ['📊','Task Manager', ()=>openTaskManager()],
+    ['🧩','Services', openServices],
+    ['🖧','Device Manager', openDeviceManager],
+    ['📋','Event Viewer', openEventViewer],
+    ['📈','Reliability Monitor', openReliability],
+    ['🛡️','Windows Security', openSecurity],
+    ['🧠','Memory Diagnostic', openMemDiag],
+    ['💾','Virtual Memory', openVirtualMemory],
+    ['🕒','Date & Time', openDateTime],
+    ['💽','This PC', openThisPC],
+    ['🔋','Power & Battery', openPower],
+    ['🧩','Optimize Drives', openDefrag],
+    ['🔄','Windows Update', openWindowsUpdate],
+    ['🏃','Run…', runOpen],
+  ];
+  const smGrid = document.getElementById('smGrid');
+  pinnedApps.forEach(([icon,label,fn])=>{
+    const t = document.createElement('div'); t.className='sm-tile';
+    t.innerHTML = `<span class="sm-glyph">${icon}</span>${label}`;
+    t.addEventListener('click', ()=>{ fn(); startMenu.classList.remove('open'); });
+    smGrid.appendChild(t);
+  });
+  const tbPinned = document.getElementById('tbPinned');
+  [['📊',()=>openTaskManager()],['🖧',openDeviceManager],['📋',openEventViewer]].forEach(([icon,fn])=>{
+    const d = document.createElement('div'); d.className='tb-icon'; d.textContent=icon;
+    d.addEventListener('click', fn);
+    tbPinned.appendChild(d);
+  });
+  startBtn.addEventListener('click', e=>{ e.stopPropagation(); startMenu.classList.toggle('open'); });
+  document.addEventListener('click', e=>{ if(!startMenu.contains(e.target) && e.target!==startBtn && !startBtn.contains(e.target)) startMenu.classList.remove('open'); });
+  document.getElementById('smSearchInput').addEventListener('keydown', e=>{ if(e.key==='Enter'){ executeCommand(e.target.value); startMenu.classList.remove('open'); e.target.value=''; } });
+  document.getElementById('tbSearchInput').addEventListener('keydown', e=>{ if(e.key==='Enter'){ executeCommand(e.target.value); e.target.value=''; } });
+
+  // ============== Clock ==============
+  function tickClock(){
+    const now = new Date();
+    document.getElementById('tbClock').innerHTML = now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}) + '<br>' + now.toLocaleDateString('en-US',{month:'numeric',day:'numeric',year:'numeric'});
+  }
+  tickClock(); setInterval(tickClock, 15000);
+  window.addEventListener('keydown', e=>{ if(e.key==='Escape'){ runClose(); startMenu.classList.remove('open'); } });
+
+  // ============== Reference index (grouped) ==============
+  const reference = [
+    { group:'Part A — Crashes and boot failures', name:'Blue screen of death (BSOD) / Stop error', action:'Simulate a crash (💥)', desc:'Causes can stem from bad hardware, bad drivers, or application issues that prevent the OS from continuing. Troubleshoot: Last Known Good Config, System Restore, roll back drivers, Safe Mode, reseat components, hardware diagnostics — and check the on-screen stop code / windows.com/stopcode.', run: triggerBSOD },
+    { group:'Part A — Crashes and boot failures', name:'Boot issues', action:'WinRE → Advanced options → Startup Repair', desc:'Check for missing OS/bootloader issues or dual-boot conflicts, and remove any attached non-bootable media. Run Startup Repair, or use bootrec /rebuildbcd from the Recovery Console to repair the Boot Configuration Database (BCD).', run:()=>{ triggerBSOD(); } },
+    { group:'Part A — Crashes and boot failures', name:'"No OS found"', action:'WinRE → Advanced options → Command Prompt → bootrec /rebuildbcd', desc:'Caused by bootloader corruption, dual-boot overwrites, or missing boot files. Fix: unplug non-bootable media and drives, then run Startup Repair or bootrec /rebuildbcd from the Recovery Console.', run:()=>{ triggerBSOD(); } },
+
+    { group:'Part B — Performance and stability', name:'Degraded performance', action:'Task Manager → Processes / Performance', desc:'Use Task Manager (Processes tab and the 60-second Performance tab view) to identify resource-hogging apps. Also check Windows Update, free disk space, run defrag on an HDD, check the laptop power connection, and run an antivirus scan.', run:()=> openTaskManager('processes') },
+    { group:'Part B — Performance and stability', name:'Low memory warnings', action:'Task Manager → Sort by Memory; Virtual Memory settings', desc:"Sort Task Manager by the Memory column to locate memory-draining programs; save files and close or restart them. Verify and manage the paging file under System > About > Advanced system settings > Performance Settings > Virtual Memory.", run:()=>{ openTaskManager('processes'); setTimeout(()=>{ tmState.sortMem='mem'; renderTaskManager(); },60); } },
+    { group:'Part B — Performance and stability', name:'Frequent shutdowns', action:'Hardware diagnostics (UEFI) + Memory Diagnostic + sfc', desc:'Run full hardware diagnostics (motherboard, CPU, RAM) via UEFI/BIOS or motherboard tools, and Windows Memory Diagnostics. Check system file integrity with sfc and scan for malware. Unscheduled stops and app failures point to hardware diagnostics and integrity scans.', run: openMemDiag },
+    { group:'Part B — Performance and stability', name:'System instability', action:'Hardware diagnostics + Memory Diagnostic + sfc + malware scan', desc:'Occurs randomly without warning. Troubleshoot with full hardware diagnostics via UEFI/BIOS or motherboard tools, Windows Memory Diagnostics, sfc (System File Checker), and an anti-malware scan.', run: openSecurity },
+    { group:'Part B — Performance and stability', name:'Time drift', action:'Settings → Date & Time', desc:'Caused by hardware inaccurate timekeeping. Resolve via Settings > Time & Language > Date & Time — enable Set time automatically (and automatic DST adjustments) to sync with central time servers, or sync manually.', run: openDateTime },
+
+    { group:'Part C — Services, applications, and peripherals', name:'Services not starting', action:'Device Manager + Services (services.msc) + sfc', desc:'Verify device status in Device Manager — update, roll back, or replace drivers. Open Services to attempt manual starts, adjust account authentication permissions, and verify dependencies. Run sfc for built-in services, or an admin reinstall for third-party app services.', run: openDeviceManager },
+    { group:'Part C — Services, applications, and peripherals', name:'Applications crashing', action:'Event Viewer + Reliability Monitor', desc:'Inspect log entries in Event Viewer or use Reliability Monitor to identify failure causes and performance trends over time. Reinstall the failing application if necessary.', run: openReliability },
+    { group:'Part C — Services, applications, and peripherals', name:'USB controller resource warnings', action:'Device Manager → USB Root Hub', desc:"This occurs when connecting devices that exceed the USB controller's available endpoints. Fix: disconnect the device and move it to a different USB port/controller, balancing USB 2.0 devices onto USB 2.0 controllers and USB 3.0 devices onto USB 3.0 controllers.", run:()=>{ openDeviceManager(); } },
+    { group:'Part C — Services, applications, and peripherals', name:'Slow profile load', action:'Event Viewer → System log (slow logon event)', desc:'Typically caused by network latency or WAN congestion when syncing roaming user profiles to a remote domain controller. Domain administrators can resolve this by repairing or optimizing local domain controllers.', run:()=>{ openEventViewer(); } },
+  ];
+  function renderReference(filter){
+    const list = document.getElementById('refList');
+    list.innerHTML = '';
+    const f = (filter||'').trim().toLowerCase();
+    const items = reference.filter(r=> !f || r.name.toLowerCase().includes(f) || r.desc.toLowerCase().includes(f));
+    if(items.length===0){ list.innerHTML = '<div class="ref-empty">No matching topics.</div>'; return; }
+    let lastGroup = null;
+    items.forEach(r=>{
+      if(r.group!==lastGroup){ const g=document.createElement('div'); g.className='ref-group'; g.textContent=r.group; list.appendChild(g); lastGroup=r.group; }
+      const item = document.createElement('div'); item.className='ref-item';
+      item.innerHTML = `<div class="ref-name">${r.name}</div><div class="ref-action">${r.action}</div><div class="ref-desc">${r.desc}</div>`;
+      item.addEventListener('click', ()=> r.run());
+      list.appendChild(item);
+    });
+  }
+  document.getElementById('refSearchInput').addEventListener('input', e=> renderReference(e.target.value));
+  renderReference('');
+
+  // ============== Expose API ==============
+  window.Win = {
+    toast, triggerBSOD, openTool, updateDriver, rollbackDriver, exitSafeMode,
+    runOpen, runClose, runExecute,
+  };
+
+  // Boot
+  openTaskManager();
+})();
+</script>
+</body>
+</html>
