@@ -167,6 +167,13 @@
     badge.textContent = q.term.section;
     badge.title = q.term.sectionTitle;
 
+    const categoryEl = $("#category-label");
+    if (categoryEl) {
+      const category = q.term.category || q.term.sectionTitle || "";
+      categoryEl.textContent = category;
+      categoryEl.hidden = !category;
+    }
+
     if (q.mode === "term-to-def") {
       $("#prompt-label").textContent = "Which definition best describes this term?";
       $("#prompt-text").textContent = q.term.name;
@@ -212,8 +219,9 @@
     const fb = $("#feedback");
     fb.hidden = false;
     fb.className = "feedback " + (isCorrect ? "good" : "bad");
+    const context = [q.term.section, q.term.category].filter(Boolean).join(" · ");
     fb.innerHTML = isCorrect
-      ? `<strong>Correct!</strong> ${q.term.section} — <em>${q.term.name}</em>`
+      ? `<strong>Correct!</strong> ${context} — <em>${q.term.name}</em>`
       : `<strong>Not quite.</strong> The answer was <em>${q.term.name}</em>.<br><span class="def-review">${q.term.definition}</span>`;
 
     $("#score-live").textContent = `${state.correct} correct`;
@@ -246,7 +254,8 @@
     state.missed.forEach((q) => {
       const item = document.createElement("div");
       item.className = "review-item";
-      item.innerHTML = `<div class="review-meta">${q.term.section}</div><strong>${q.term.name}</strong><p>${q.term.definition}</p>`;
+      const context = [q.term.section, q.term.category].filter(Boolean).join(" · ");
+      item.innerHTML = `<div class="review-meta">${context}</div><strong>${q.term.name}</strong><p>${q.term.definition}</p>`;
       review.appendChild(item);
     });
   }

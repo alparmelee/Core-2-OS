@@ -32,15 +32,23 @@ class TermParser(HTMLParser):
         self._in_h3 = False
         self._in_p = False
         self._in_li = False
+        self._in_section_head = False
+        self._in_category_h2 = False
         self._current = None
         self._buf = []
         self._list_parts = []
+        self._category = ""
 
     def handle_starttag(self, tag, attrs):
         cls = dict(attrs).get("class", "")
-        if tag == "article" and "term" in cls.split():
+        if tag == "div" and "section-head" in cls.split():
+            self._in_section_head = True
+        elif self._in_section_head and tag == "h2":
+            self._in_category_h2 = True
+            self._buf = []
+        elif tag == "article" and "term" in cls.split():
             self._in_term = True
-            self._current = {"name": "", "definition": ""}
+            self._current = {"name": "", "definition": "", "category": self._category}
             self._list_parts = []
         elif self._in_term and tag == "div" and "body" in cls.split():
             self._in_body = True
@@ -65,6 +73,12 @@ class TermParser(HTMLParser):
             self._in_body = False
             self._current = None
             self._list_parts = []
+        elif tag == "div" and self._in_section_head and not self._in_category_h2:
+            self._in_section_head = False
+        elif tag == "h2" and self._in_category_h2:
+            self._in_category_h2 = False
+            self._category = " ".join("".join(self._buf).split())
+            self._in_section_head = False
         elif tag == "div" and self._in_body:
             self._in_body = False
         elif tag == "h3" and self._in_h3:
@@ -82,7 +96,7 @@ class TermParser(HTMLParser):
                 self._list_parts.append(text)
 
     def handle_data(self, data):
-        if self._in_h3 or self._in_p or self._in_li:
+        if self._in_h3 or self._in_p or self._in_li or self._in_category_h2:
             self._buf.append(data)
 
 
@@ -203,8 +217,7 @@ def extract_topics_terms(html: str) -> list[dict]:
         desc = extract_field(chunk, "desc")
         group = extract_field(chunk, "group")
         if name and desc:
-            definition = f"{group}: {desc}" if group else desc
-            terms.append({"name": name, "definition": definition})
+            terms.append({"name": name, "definition": desc, "category": group or ""})
     return terms
 
 
@@ -220,7 +233,13 @@ def extract_simulator_terms(html: str, section_id: str) -> list[dict]:
         if not definition:
             return
         seen.add(name)
-        terms.append({"name": name, "definition": definition})
+        terms.append(
+            {
+                "name": name,
+                "definition": definition,
+                "category": term.get("category", ""),
+            }
+        )
 
     if section_id == "1.4":
         for t in extract_apps_terms(html):
@@ -253,6 +272,7 @@ def main():
                 "id": f"{section_id}-{len(section_terms)}",
                 "section": section_id,
                 "sectionTitle": title,
+                "category": t.get("category", ""),
                 "name": t["name"],
                 "definition": t["definition"],
             }
@@ -412,7 +432,12 @@ QUIZ_PAGE_HTML = r"""<!DOCTYPE html>
     border-radius:999px;
     background:var(--accent-soft);
     color:var(--accent);
-    margin-bottom:0.65rem;
+    margin-bottom:0.35rem;
+  }
+  .category-label{
+    font-size:0.82rem;
+    color:var(--muted);
+    margin:0 0 0.85rem;
   }
   .prompt-label{ font-size:0.82rem; color:var(--muted); margin:0 0 0.35rem; }
   .prompt-text{
@@ -505,6 +530,7 @@ QUIZ_PAGE_HTML = r"""<!DOCTYPE html>
       </div>
       <div class="card">
         <div class="section-badge" id="section-badge">1.1</div>
+        <p class="category-label" id="category-label"></p>
         <p class="prompt-label" id="prompt-label">Which definition best describes this term?</p>
         <p class="prompt-text" id="prompt-text">—</p>
         <div class="choices" id="choices"></div>

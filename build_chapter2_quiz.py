@@ -166,7 +166,12 @@ def quiz_page_html(chapter: int, title: str, range_label: str, accent: str, acce
     border-radius:999px;
     background:var(--accent-soft);
     color:var(--accent);
-    margin-bottom:0.65rem;
+    margin-bottom:0.35rem;
+  }}
+  .category-label{{
+    font-size:0.82rem;
+    color:var(--muted);
+    margin:0 0 0.85rem;
   }}
   .prompt-label{{ font-size:0.82rem; color:var(--muted); margin:0 0 0.35rem; }}
   .prompt-text{{
@@ -259,6 +264,7 @@ def quiz_page_html(chapter: int, title: str, range_label: str, accent: str, acce
       </div>
       <div class="card">
         <div class="section-badge" id="section-badge">2.1</div>
+        <p class="category-label" id="category-label"></p>
         <p class="prompt-label" id="prompt-label">Which definition best describes this term?</p>
         <p class="prompt-text" id="prompt-text">—</p>
         <div class="choices" id="choices"></div>
@@ -309,6 +315,7 @@ def main():
                 "id": f"{section_id}-{len(section_terms)}",
                 "section": section_id,
                 "sectionTitle": title,
+                "category": t.get("category", ""),
                 "name": t["name"],
                 "definition": t["definition"],
             }

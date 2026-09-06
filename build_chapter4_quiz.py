@@ -78,6 +78,7 @@ def main():
                 "id": f"{section_id}-{len(section_terms)}",
                 "section": section_id,
                 "sectionTitle": title,
+                "category": t.get("category", ""),
                 "name": t["name"],
                 "definition": t["definition"],
             }
