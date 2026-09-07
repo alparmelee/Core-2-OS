@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5.1 CompTIA A+ Acronyms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101820;
+    --muted:#4b5563;
+    --paper:#f4f1ea;
+    --line:rgba(16,24,32,0.12);
+    --accent:#0f766e;
+    --accent-soft:#ccfbf1;
+    --sky:#0e4d7b;
+    --highlight:#0d9488;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(15,118,110,0.12), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.06), transparent 50%),
+      linear-gradient(180deg, #ebe8e0 0%, var(--paper) 40%, #f0ece4 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--highlight); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#f0fdfa;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,28,26,0.55) 0%, rgba(8,28,26,0.78) 52%, rgba(8,28,26,0.94) 100%),
+      url("https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1600&q=80") center/cover no-repeat;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:40ch;
+    color:#ccfbf1;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:52ch;
+    color:#94a3b8;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#ccfbf1;
+    color:#134e4a;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#ccfbf1;
+    border:1px solid rgba(204,251,241,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(244,241,234,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(120px, 180px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.2rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:110px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+  .visual.acronym{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.15rem, 2.4vw, 1.55rem);
+    font-weight:700;
+    color:var(--accent);
+    letter-spacing:-0.02em;
+    padding:0.75rem;
+    text-align:center;
+    line-height:1.15;
+    word-break:break-word;
+  }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.25rem;
+    margin:0 0 0.45rem;
+    letter-spacing:-0.01em;
+  }
+  .body p{ margin:0; color:var(--ink); }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">5.1</p>
+    <h1>CompTIA A+ Acronyms</h1>
+    <p>200 exam acronyms with full expansions and what each one is used for.</p>
+    <div class="hero-cta">
+      <a href="#group-a-c">A–C</a>
+      <a class="ghost" href="#group-d-f">D–F</a>
+      <a class="ghost" href="#group-g-i">G–I</a>
+      <a class="ghost" href="#group-j-m">J–M</a>
+      <a class="ghost" href="#group-n-p">N–P</a>
+      <a class="ghost" href="#group-q-r">Q–R</a>
+      <a class="ghost" href="#group-s-t">S–T</a>
+      <a class="ghost" href="#group-u-z">U–Z</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#group-a-c">A–C</a>
+    <a href="#group-d-f">D–F</a>
+    <a href="#group-g-i">G–I</a>
+    <a href="#group-j-m">J–M</a>
+    <a href="#group-n-p">N–P</a>
+    <a href="#group-q-r">Q–R</a>
+    <a href="#group-s-t">S–T</a>
+    <a href="#group-u-z">U–Z</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="group-a-c">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Acronyms A–C</h2>
+        <p>23 exam acronyms starting with letters A–C.</p>
+      </div>
+
+      <article class="term" id="aaa">
+        <div class="visual acronym" aria-hidden="true">AAA</div>
+        <div class="body">
+          <h3>AAA (Authentication, Authorization, and Accounting)</h3>
+          <p>Security framework that verifies who you are, what you can access, and logs what you did on a network or system.</p>
+        </div>
+      </article>
+      <article class="term" id="acl">
+        <div class="visual acronym" aria-hidden="true">ACL</div>
+        <div class="body">
+          <h3>ACL (Access Control List)</h3>
+          <p>Ruleset that specifies which users or systems are allowed or denied access to a resource such as a file, folder, or network.</p>
+        </div>
+      </article>
+      <article class="term" id="adf">
+        <div class="visual acronym" aria-hidden="true">ADF</div>
+        <div class="body">
+          <h3>ADF (Automatic Document Feeder)</h3>
+          <p>Printer/scanner tray that feeds multipage documents automatically so you do not have to place each sheet on the glass.</p>
+        </div>
+      </article>
+      <article class="term" id="aes">
+        <div class="visual acronym" aria-hidden="true">AES</div>
+        <div class="body">
+          <h3>AES (Advanced Encryption Standard)</h3>
+          <p>Widely used symmetric encryption algorithm that protects data at rest and in transit with strong, standardized ciphers.</p>
+        </div>
+      </article>
+      <article class="term" id="amd">
+        <div class="visual acronym" aria-hidden="true">AMD</div>
+        <div class="body">
+          <h3>AMD (Advanced Micro Devices, Inc.)</h3>
+          <p>CPU and GPU manufacturer whose processors and graphics chips compete with Intel and NVIDIA in PCs and servers.</p>
+        </div>
+      </article>
+      <article class="term" id="ap">
+        <div class="visual acronym" aria-hidden="true">AP</div>
+        <div class="body">
+          <h3>AP (Access Point)</h3>
+          <p>Wireless network device that lets Wi-Fi clients connect to a wired LAN or the internet.</p>
+        </div>
+      </article>
+      <article class="term" id="apfs">
+        <div class="visual acronym" aria-hidden="true">APFS</div>
+        <div class="body">
+          <h3>APFS (Apple File System)</h3>
+          <p>Modern Apple disk file system optimized for SSDs, with strong encryption, snapshots, and space sharing on macOS and iOS.</p>
+        </div>
+      </article>
+      <article class="term" id="apipa">
+        <div class="visual acronym" aria-hidden="true">APIPA</div>
+        <div class="body">
+          <h3>APIPA (Automatic Private Internet Protocol Addressing)</h3>
+          <p>Windows feature that assigns a 169.254.x.x address when DHCP fails so the host can still talk on the local link.</p>
+        </div>
+      </article>
+      <article class="term" id="arm">
+        <div class="visual acronym" aria-hidden="true">ARM</div>
+        <div class="body">
+          <h3>ARM (Advanced RISC (Reduced Instruction Set Computer) Machine)</h3>
+          <p>CPU architecture used in phones, tablets, and many laptops that emphasizes efficiency with a reduced instruction set.</p>
+        </div>
+      </article>
+      <article class="term" id="atx">
+        <div class="visual acronym" aria-hidden="true">ATX</div>
+        <div class="body">
+          <h3>ATX (Advanced Technology Extended)</h3>
+          <p>Common PC motherboard and power-supply form factor that defines board size, mounting holes, and connector layout.</p>
+        </div>
+      </article>
+      <article class="term" id="aup">
+        <div class="visual acronym" aria-hidden="true">AUP</div>
+        <div class="body">
+          <h3>AUP (Acceptable Use Policy)</h3>
+          <p>Organizational rules describing allowed and prohibited uses of company computers, networks, and internet access.</p>
+        </div>
+      </article>
+      <article class="term" id="bec">
+        <div class="visual acronym" aria-hidden="true">BEC</div>
+        <div class="body">
+          <h3>BEC (Business Email Compromise)</h3>
+          <p>Social-engineering fraud where attackers impersonate executives or vendors by email to steal money or data.</p>
+        </div>
+      </article>
+      <article class="term" id="bios">
+        <div class="visual acronym" aria-hidden="true">BIOS</div>
+        <div class="body">
+          <h3>BIOS (Basic Input/Output System)</h3>
+          <p>Legacy firmware that initializes hardware at power-on and starts the boot process before the OS loads.</p>
+        </div>
+      </article>
+      <article class="term" id="bnc">
+        <div class="visual acronym" aria-hidden="true">BNC</div>
+        <div class="body">
+          <h3>BNC (Bayonet Neill-Concelman)</h3>
+          <p>Coaxial connector with a twist-lock bayonet coupling, historically used on older network and video cabling.</p>
+        </div>
+      </article>
+      <article class="term" id="bsod">
+        <div class="visual acronym" aria-hidden="true">BSOD</div>
+        <div class="body">
+          <h3>BSOD (Blue Screen of Death)</h3>
+          <p>Windows stop-error screen shown when the OS encounters a critical fault it cannot recover from safely.</p>
+        </div>
+      </article>
+      <article class="term" id="byod">
+        <div class="visual acronym" aria-hidden="true">BYOD</div>
+        <div class="body">
+          <h3>BYOD (Bring Your Own Device)</h3>
+          <p>Policy that lets employees use personal phones or laptops for work, usually managed with MDM and security controls.</p>
+        </div>
+      </article>
+      <article class="term" id="cac">
+        <div class="visual acronym" aria-hidden="true">CAC</div>
+        <div class="body">
+          <h3>CAC (Calling-card Authorization Computer)</h3>
+          <p>Smart-card style credential used to authenticate users for secure access in government and enterprise environments.</p>
+        </div>
+      </article>
+      <article class="term" id="cas">
+        <div class="visual acronym" aria-hidden="true">CAS</div>
+        <div class="body">
+          <h3>CAS (Column Address Strobe)</h3>
+          <p>Memory timing signal related to how DRAM columns are addressed; often discussed with RAM latency (CAS latency).</p>
+        </div>
+      </article>
+      <article class="term" id="cifs">
+        <div class="visual acronym" aria-hidden="true">CIFS</div>
+        <div class="body">
+          <h3>CIFS (Common Internet File System)</h3>
+          <p>Microsoft file-sharing dialect of SMB that lets clients access networked files and printers over TCP/IP.</p>
+        </div>
+      </article>
+      <article class="term" id="cmdb">
+        <div class="visual acronym" aria-hidden="true">CMDB</div>
+        <div class="body">
+          <h3>CMDB (Configuration Management Database)</h3>
+          <p>Central inventory of IT assets and their relationships used for change, incident, and asset management.</p>
+        </div>
+      </article>
+      <article class="term" id="cmos">
+        <div class="visual acronym" aria-hidden="true">CMOS</div>
+        <div class="body">
+          <h3>CMOS (Complementary Metal-Oxide Semiconductor)</h3>
+          <p>Low-power chip technology; in PCs it often refers to the battery-backed chip storing BIOS/UEFI settings.</p>
+        </div>
+      </article>
+      <article class="term" id="cname">
+        <div class="visual acronym" aria-hidden="true">CNAME</div>
+        <div class="body">
+          <h3>CNAME (Canonical Name)</h3>
+          <p>DNS record that aliases one hostname to another canonical hostname.</p>
+        </div>
+      </article>
+      <article class="term" id="cpu">
+        <div class="visual acronym" aria-hidden="true">CPU</div>
+        <div class="body">
+          <h3>CPU (Central Processing Unit)</h3>
+          <p>Primary processor that executes program instructions and performs most computing work in a device.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="group-d-f">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Acronyms D–F</h2>
+        <p>26 exam acronyms starting with letters D–F.</p>
+      </div>
+
+      <article class="term" id="db-9">
+        <div class="visual acronym" aria-hidden="true">DB-9</div>
+        <div class="body">
+          <h3>DB-9 (Serial Communications D-Shell Connector, 9 pins)</h3>
+          <p>Nine-pin D-sub serial connector historically used for RS-232 devices, consoles, and older peripherals.</p>
+        </div>
+      </article>
+      <article class="term" id="ddos">
+        <div class="visual acronym" aria-hidden="true">DDoS</div>
+        <div class="body">
+          <h3>DDoS (Distributed Denial of Service)</h3>
+          <p>Attack that floods a target from many compromised systems to overwhelm availability of a service.</p>
+        </div>
+      </article>
+      <article class="term" id="ddr">
+        <div class="visual acronym" aria-hidden="true">DDR</div>
+        <div class="body">
+          <h3>DDR (Double Data Rate)</h3>
+          <p>Memory technology that transfers data on both clock edges, used in successive generations of RAM modules.</p>
+        </div>
+      </article>
+      <article class="term" id="dhcp">
+        <div class="visual acronym" aria-hidden="true">DHCP</div>
+        <div class="body">
+          <h3>DHCP (Dynamic Host Configuration Protocol)</h3>
+          <p>Network service that automatically assigns IP addresses and related settings to clients.</p>
+        </div>
+      </article>
+      <article class="term" id="dimm">
+        <div class="visual acronym" aria-hidden="true">DIMM</div>
+        <div class="body">
+          <h3>DIMM (Dual In-line Memory Module)</h3>
+          <p>Standard stick form factor for desktop and server RAM with contacts on both sides of the module.</p>
+        </div>
+      </article>
+      <article class="term" id="dkim">
+        <div class="visual acronym" aria-hidden="true">DKIM</div>
+        <div class="body">
+          <h3>DKIM (DomainKeys Identified Mail)</h3>
+          <p>Email authentication method that signs outbound messages so receivers can verify the sending domain.</p>
+        </div>
+      </article>
+      <article class="term" id="dlp">
+        <div class="visual acronym" aria-hidden="true">DLP</div>
+        <div class="body">
+          <h3>DLP (Data Loss Prevention)</h3>
+          <p>Security controls that detect and block unauthorized transfer or leakage of sensitive data.</p>
+        </div>
+      </article>
+      <article class="term" id="dmarc">
+        <div class="visual acronym" aria-hidden="true">DMARC</div>
+        <div class="body">
+          <h3>DMARC (Domain-based Message Authentication, Reporting, and Conformance)</h3>
+          <p>Email policy framework that builds on SPF/DKIM and tells receivers how to handle failed authentication.</p>
+        </div>
+      </article>
+      <article class="term" id="dns">
+        <div class="visual acronym" aria-hidden="true">DNS</div>
+        <div class="body">
+          <h3>DNS (Domain Name System)</h3>
+          <p>Internet directory that resolves human-readable names to IP addresses and related records.</p>
+        </div>
+      </article>
+      <article class="term" id="dos">
+        <div class="visual acronym" aria-hidden="true">DoS</div>
+        <div class="body">
+          <h3>DoS (Denial of Service)</h3>
+          <p>Attack that makes a system or network unavailable by exhausting resources or crashing a service.</p>
+        </div>
+      </article>
+      <article class="term" id="drm">
+        <div class="visual acronym" aria-hidden="true">DRM</div>
+        <div class="body">
+          <h3>DRM (Digital Rights Management)</h3>
+          <p>Technology that restricts how digital media or software can be copied, shared, or used.</p>
+        </div>
+      </article>
+      <article class="term" id="dsl">
+        <div class="visual acronym" aria-hidden="true">DSL</div>
+        <div class="body">
+          <h3>DSL (Digital Subscriber Line)</h3>
+          <p>Broadband internet technology that delivers data over telephone copper lines.</p>
+        </div>
+      </article>
+      <article class="term" id="dvi">
+        <div class="visual acronym" aria-hidden="true">DVI</div>
+        <div class="body">
+          <h3>DVI (Digital Visual Interface)</h3>
+          <p>Video connector standard used to link computers to monitors, supporting digital (and sometimes analog) signals.</p>
+        </div>
+      </article>
+      <article class="term" id="ecc">
+        <div class="visual acronym" aria-hidden="true">ECC</div>
+        <div class="body">
+          <h3>ECC (Error-correcting Code)</h3>
+          <p>Memory feature that detects and corrects bit errors, common in servers for higher reliability.</p>
+        </div>
+      </article>
+      <article class="term" id="edr">
+        <div class="visual acronym" aria-hidden="true">EDR</div>
+        <div class="body">
+          <h3>EDR (Endpoint Detection and Response)</h3>
+          <p>Security platform that monitors endpoints for threats and supports investigation and remediation.</p>
+        </div>
+      </article>
+      <article class="term" id="efs">
+        <div class="visual acronym" aria-hidden="true">EFS</div>
+        <div class="body">
+          <h3>EFS (Encrypting File System)</h3>
+          <p>Windows feature that encrypts individual files and folders with user-tied keys.</p>
+        </div>
+      </article>
+      <article class="term" id="eol">
+        <div class="visual acronym" aria-hidden="true">EOL</div>
+        <div class="body">
+          <h3>EOL (End-of-life)</h3>
+          <p>Point when a product no longer receives updates or vendor support and should be replaced or mitigated.</p>
+        </div>
+      </article>
+      <article class="term" id="esata">
+        <div class="visual acronym" aria-hidden="true">eSATA</div>
+        <div class="body">
+          <h3>eSATA (External Serial Advanced Technology Attachment)</h3>
+          <p>External SATA interface for connecting outside hard drives at SATA speeds.</p>
+        </div>
+      </article>
+      <article class="term" id="esd">
+        <div class="visual acronym" aria-hidden="true">ESD</div>
+        <div class="body">
+          <h3>ESD (Electrostatic Discharge)</h3>
+          <p>Sudden static electricity surge that can damage sensitive electronic components during handling.</p>
+        </div>
+      </article>
+      <article class="term" id="esim">
+        <div class="visual acronym" aria-hidden="true">eSIM</div>
+        <div class="body">
+          <h3>eSIM (Embedded SIM)</h3>
+          <p>Software-based SIM built into a device that can be provisioned without a physical SIM card.</p>
+        </div>
+      </article>
+      <article class="term" id="eula">
+        <div class="visual acronym" aria-hidden="true">EULA</div>
+        <div class="body">
+          <h3>EULA (End-user License Agreement)</h3>
+          <p>Legal contract defining the terms under which a user may install and use software.</p>
+        </div>
+      </article>
+      <article class="term" id="exfat">
+        <div class="visual acronym" aria-hidden="true">exFAT</div>
+        <div class="body">
+          <h3>exFAT (Extended File Allocation Table)</h3>
+          <p>Microsoft file system designed for flash media with large file support across Windows, macOS, and more.</p>
+        </div>
+      </article>
+      <article class="term" id="faas">
+        <div class="visual acronym" aria-hidden="true">FaaS</div>
+        <div class="body">
+          <h3>FaaS (Function As A Service)</h3>
+          <p>Cloud model that runs event-triggered code functions without managing servers (serverless).</p>
+        </div>
+      </article>
+      <article class="term" id="fat32">
+        <div class="visual acronym" aria-hidden="true">FAT32</div>
+        <div class="body">
+          <h3>FAT32 (32-bit File Allocation Table)</h3>
+          <p>Older widely compatible file system with a 4 GB per-file size limit, still used on USB drives.</p>
+        </div>
+      </article>
+      <article class="term" id="frt">
+        <div class="visual acronym" aria-hidden="true">FRT</div>
+        <div class="body">
+          <h3>FRT (Facial Recognition Technology)</h3>
+          <p>Biometric method that identifies or unlocks devices by analyzing facial features.</p>
+        </div>
+      </article>
+      <article class="term" id="ftp">
+        <div class="visual acronym" aria-hidden="true">FTP</div>
+        <div class="body">
+          <h3>FTP (File Transfer Protocol)</h3>
+          <p>Classic protocol for uploading and downloading files; often replaced by SFTP for security.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="group-g-i">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Acronyms G–I</h2>
+        <p>23 exam acronyms starting with letters G–I.</p>
+      </div>
+
+      <article class="term" id="gfs">
+        <div class="visual acronym" aria-hidden="true">GFS</div>
+        <div class="body">
+          <h3>GFS (Grandfather-Father-Son)</h3>
+          <p>Backup rotation scheme that keeps daily, weekly, and monthly copies on a staggered schedule.</p>
+        </div>
+      </article>
+      <article class="term" id="gps">
+        <div class="visual acronym" aria-hidden="true">GPS</div>
+        <div class="body">
+          <h3>GPS (Global Positioning System)</h3>
+          <p>Satellite navigation system that provides location and time data to GPS receivers.</p>
+        </div>
+      </article>
+      <article class="term" id="gpt">
+        <div class="visual acronym" aria-hidden="true">GPT</div>
+        <div class="body">
+          <h3>GPT (GUID (Globally Unique Identifier) Partition Table)</h3>
+          <p>Modern disk partitioning scheme that supports large disks and many partitions, replacing MBR limits.</p>
+        </div>
+      </article>
+      <article class="term" id="gpu">
+        <div class="visual acronym" aria-hidden="true">GPU</div>
+        <div class="body">
+          <h3>GPU (Graphics Processing Unit)</h3>
+          <p>Processor specialized for rendering graphics and accelerating parallel workloads like video and AI.</p>
+        </div>
+      </article>
+      <article class="term" id="gui">
+        <div class="visual acronym" aria-hidden="true">GUI</div>
+        <div class="body">
+          <h3>GUI (Graphical User Interface)</h3>
+          <p>Visual interface of windows, icons, and menus that users interact with instead of pure text commands.</p>
+        </div>
+      </article>
+      <article class="term" id="guid">
+        <div class="visual acronym" aria-hidden="true">GUID</div>
+        <div class="body">
+          <h3>GUID (Globally Unique Identifier)</h3>
+          <p>128-bit unique ID used to identify software objects, partitions, and other entities without collision.</p>
+        </div>
+      </article>
+      <article class="term" id="hd">
+        <div class="visual acronym" aria-hidden="true">HD</div>
+        <div class="body">
+          <h3>HD (High Definition)</h3>
+          <p>Video quality standard with higher resolution than standard definition (commonly 720p or 1080p).</p>
+        </div>
+      </article>
+      <article class="term" id="hdd">
+        <div class="visual acronym" aria-hidden="true">HDD</div>
+        <div class="body">
+          <h3>HDD (Hard Disk Drive)</h3>
+          <p>Magnetic spinning-disk storage device used for bulk data storage at lower cost per gigabyte.</p>
+        </div>
+      </article>
+      <article class="term" id="hdmi">
+        <div class="visual acronym" aria-hidden="true">HDMI</div>
+        <div class="body">
+          <h3>HDMI (High-definition Media Interface)</h3>
+          <p>Digital audio/video connector that carries uncompressed video and multi-channel audio to displays.</p>
+        </div>
+      </article>
+      <article class="term" id="hsm">
+        <div class="visual acronym" aria-hidden="true">HSM</div>
+        <div class="body">
+          <h3>HSM (Hardware Security Module)</h3>
+          <p>Tamper-resistant device that generates and stores cryptographic keys for high-security operations.</p>
+        </div>
+      </article>
+      <article class="term" id="http">
+        <div class="visual acronym" aria-hidden="true">HTTP</div>
+        <div class="body">
+          <h3>HTTP (Hypertext Transfer Protocol)</h3>
+          <p>Application protocol that transfers web pages and API data between browsers and servers (unencrypted).</p>
+        </div>
+      </article>
+      <article class="term" id="https">
+        <div class="visual acronym" aria-hidden="true">HTTPS</div>
+        <div class="body">
+          <h3>HTTPS (Hypertext Transfer Protocol Secure)</h3>
+          <p>HTTP wrapped in TLS encryption to protect web traffic confidentiality and integrity.</p>
+        </div>
+      </article>
+      <article class="term" id="iaas">
+        <div class="visual acronym" aria-hidden="true">IaaS</div>
+        <div class="body">
+          <h3>IaaS (Infrastructure as a Service)</h3>
+          <p>Cloud model that rents virtual servers, storage, and networking for customers to configure.</p>
+        </div>
+      </article>
+      <article class="term" id="iam">
+        <div class="visual acronym" aria-hidden="true">IAM</div>
+        <div class="body">
+          <h3>IAM (Identity Access Management)</h3>
+          <p>Policies and tools that control user identities, authentication, and access rights across systems.</p>
+        </div>
+      </article>
+      <article class="term" id="imap">
+        <div class="visual acronym" aria-hidden="true">IMAP</div>
+        <div class="body">
+          <h3>IMAP (Internet Mail Access Protocol)</h3>
+          <p>Email protocol that keeps messages on the server and syncs mailboxes across multiple devices.</p>
+        </div>
+      </article>
+      <article class="term" id="iops">
+        <div class="visual acronym" aria-hidden="true">IOPS</div>
+        <div class="body">
+          <h3>IOPS (Input/Output Operations Per Second)</h3>
+          <p>Performance metric measuring how many read/write operations a storage device can handle per second.</p>
+        </div>
+      </article>
+      <article class="term" id="iot">
+        <div class="visual acronym" aria-hidden="true">IoT</div>
+        <div class="body">
+          <h3>IoT (Internet of Things)</h3>
+          <p>Network of everyday devices (sensors, appliances, cameras) connected to the internet for data and control.</p>
+        </div>
+      </article>
+      <article class="term" id="ip">
+        <div class="visual acronym" aria-hidden="true">IP</div>
+        <div class="body">
+          <h3>IP (Internet Protocol)</h3>
+          <p>Core network protocol that addresses and routes packets between hosts on an IP network.</p>
+        </div>
+      </article>
+      <article class="term" id="ips">
+        <div class="visual acronym" aria-hidden="true">IPS</div>
+        <div class="body">
+          <h3>IPS (In-plane Switching)</h3>
+          <p>LCD panel technology known for wide viewing angles and accurate colors compared with TN panels.</p>
+        </div>
+      </article>
+      <article class="term" id="ir">
+        <div class="visual acronym" aria-hidden="true">IR</div>
+        <div class="body">
+          <h3>IR (Infrared)</h3>
+          <p>Wireless line-of-sight communication or sensing using infrared light, used in remotes and some sensors.</p>
+        </div>
+      </article>
+      <article class="term" id="iso">
+        <div class="visual acronym" aria-hidden="true">ISO</div>
+        <div class="body">
+          <h3>ISO (International Organization for Standardization)</h3>
+          <p>Standards body; also casually used for disk image files (.iso) that mirror optical media.</p>
+        </div>
+      </article>
+      <article class="term" id="isp">
+        <div class="visual acronym" aria-hidden="true">ISP</div>
+        <div class="body">
+          <h3>ISP (Internet Service Provider)</h3>
+          <p>Company that provides customers with internet connectivity and related services.</p>
+        </div>
+      </article>
+      <article class="term" id="itx">
+        <div class="visual acronym" aria-hidden="true">ITX</div>
+        <div class="body">
+          <h3>ITX (Information Technology eXtended)</h3>
+          <p>Smaller motherboard form-factor family (such as Mini-ITX) for compact PCs.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="group-j-m">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part D</span>
+        <h2>Acronyms J–M</h2>
+        <p>18 exam acronyms starting with letters J–M.</p>
+      </div>
+
+      <article class="term" id="kvm">
+        <div class="visual acronym" aria-hidden="true">KVM</div>
+        <div class="body">
+          <h3>KVM (Keyboard-Video-Mouse)</h3>
+          <p>Switch or device that lets one keyboard, mouse, and monitor control multiple computers.</p>
+        </div>
+      </article>
+      <article class="term" id="lan">
+        <div class="visual acronym" aria-hidden="true">LAN</div>
+        <div class="body">
+          <h3>LAN (Local Area Network)</h3>
+          <p>Network covering a limited area such as a home, office, or building.</p>
+        </div>
+      </article>
+      <article class="term" id="lc">
+        <div class="visual acronym" aria-hidden="true">LC</div>
+        <div class="body">
+          <h3>LC (Lucent Connector)</h3>
+          <p>Small form-factor fiber-optic connector commonly used in high-density network installations.</p>
+        </div>
+      </article>
+      <article class="term" id="lcd">
+        <div class="visual acronym" aria-hidden="true">LCD</div>
+        <div class="body">
+          <h3>LCD (Liquid Crystal Display)</h3>
+          <p>Flat-panel display technology that uses liquid crystals and a backlight to form images.</p>
+        </div>
+      </article>
+      <article class="term" id="ldap">
+        <div class="visual acronym" aria-hidden="true">LDAP</div>
+        <div class="body">
+          <h3>LDAP (Lightweight Directory Access Protocol)</h3>
+          <p>Protocol for querying and managing directory services such as user accounts and groups.</p>
+        </div>
+      </article>
+      <article class="term" id="led">
+        <div class="visual acronym" aria-hidden="true">LED</div>
+        <div class="body">
+          <h3>LED (Light-emitting Diode)</h3>
+          <p>Semiconductor light source used for indicators, lighting, and modern display backlights.</p>
+        </div>
+      </article>
+      <article class="term" id="lte">
+        <div class="visual acronym" aria-hidden="true">LTE</div>
+        <div class="body">
+          <h3>LTE (Long-Term Evolution)</h3>
+          <p>High-speed cellular wireless standard commonly known as 4G LTE mobile data.</p>
+        </div>
+      </article>
+      <article class="term" id="mac">
+        <div class="visual acronym" aria-hidden="true">MAC</div>
+        <div class="body">
+          <h3>MAC (Media Access Control)</h3>
+          <p>Hardware address uniquely identifying a network interface on a local network segment.</p>
+        </div>
+      </article>
+      <article class="term" id="man">
+        <div class="visual acronym" aria-hidden="true">MAN</div>
+        <div class="body">
+          <h3>MAN (Metropolitan Area Network)</h3>
+          <p>Network spanning a city or campus, larger than a LAN but smaller than a WAN.</p>
+        </div>
+      </article>
+      <article class="term" id="mbr">
+        <div class="visual acronym" aria-hidden="true">MBR</div>
+        <div class="body">
+          <h3>MBR (Master Boot Record)</h3>
+          <p>Legacy disk boot sector and partitioning scheme limited to four primary partitions and 2 TB disks.</p>
+        </div>
+      </article>
+      <article class="term" id="mdm">
+        <div class="visual acronym" aria-hidden="true">MDM</div>
+        <div class="body">
+          <h3>MDM (Mobile Device Management)</h3>
+          <p>Enterprise software that configures, secures, and remotely manages smartphones and tablets.</p>
+        </div>
+      </article>
+      <article class="term" id="mdr">
+        <div class="visual acronym" aria-hidden="true">MDR</div>
+        <div class="body">
+          <h3>MDR (Managed Detection and Response)</h3>
+          <p>Outsourced security service that monitors for threats and helps respond to incidents.</p>
+        </div>
+      </article>
+      <article class="term" id="mfa">
+        <div class="visual acronym" aria-hidden="true">MFA</div>
+        <div class="body">
+          <h3>MFA (Multifactor Authentication)</h3>
+          <p>Login requirement that combines two or more factors (something you know, have, or are).</p>
+        </div>
+      </article>
+      <article class="term" id="mfp">
+        <div class="visual acronym" aria-hidden="true">MFP</div>
+        <div class="body">
+          <h3>MFP (Multifunction Printer)</h3>
+          <p>Office device that combines printing, scanning, copying, and often faxing in one unit.</p>
+        </div>
+      </article>
+      <article class="term" id="mmc">
+        <div class="visual acronym" aria-hidden="true">MMC</div>
+        <div class="body">
+          <h3>MMC (Microsoft Management Console)</h3>
+          <p>Windows shell that hosts administrative snap-ins such as Device Manager and Event Viewer tools.</p>
+        </div>
+      </article>
+      <article class="term" id="mnda">
+        <div class="visual acronym" aria-hidden="true">MNDA</div>
+        <div class="body">
+          <h3>MNDA (Mutual Non-Disclosure Agreement)</h3>
+          <p>Contract where both parties agree to keep shared confidential information secret.</p>
+        </div>
+      </article>
+      <article class="term" id="msata">
+        <div class="visual acronym" aria-hidden="true">mSATA</div>
+        <div class="body">
+          <h3>mSATA (Mini-serial Advanced Technology Attachment)</h3>
+          <p>Compact SATA connector/form factor used for small SSDs in laptops and embedded systems.</p>
+        </div>
+      </article>
+      <article class="term" id="mx">
+        <div class="visual acronym" aria-hidden="true">MX</div>
+        <div class="body">
+          <h3>MX (Mail Exchange)</h3>
+          <p>DNS record that tells senders which mail servers accept email for a domain.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="group-n-p">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part E</span>
+        <h2>Acronyms N–P</h2>
+        <p>31 exam acronyms starting with letters N–P.</p>
+      </div>
+
+      <article class="term" id="nac">
+        <div class="visual acronym" aria-hidden="true">NAC</div>
+        <div class="body">
+          <h3>NAC (Network Access Control)</h3>
+          <p>Security approach that authenticates and checks devices before granting network access.</p>
+        </div>
+      </article>
+      <article class="term" id="nas">
+        <div class="visual acronym" aria-hidden="true">NAS</div>
+        <div class="body">
+          <h3>NAS (Network Access Server)</h3>
+          <p>Device or service that authenticates remote users and grants them access to network resources.</p>
+        </div>
+      </article>
+      <article class="term" id="nat">
+        <div class="visual acronym" aria-hidden="true">NAT</div>
+        <div class="body">
+          <h3>NAT (Network Address Translation)</h3>
+          <p>Router technique that maps private internal IPs to public addresses for internet access.</p>
+        </div>
+      </article>
+      <article class="term" id="nda">
+        <div class="visual acronym" aria-hidden="true">NDA</div>
+        <div class="body">
+          <h3>NDA (Non-Disclosure Agreement)</h3>
+          <p>Legal contract requiring one or more parties not to reveal confidential information.</p>
+        </div>
+      </article>
+      <article class="term" id="netbios">
+        <div class="visual acronym" aria-hidden="true">NetBIOS</div>
+        <div class="body">
+          <h3>NetBIOS (Network Basic Input/Output System)</h3>
+          <p>Legacy Windows networking API/name service used historically for local name resolution and shares.</p>
+        </div>
+      </article>
+      <article class="term" id="nfc">
+        <div class="visual acronym" aria-hidden="true">NFC</div>
+        <div class="body">
+          <h3>NFC (Near-field Communication)</h3>
+          <p>Short-range wireless tech for payments, pairing, and data exchange within a few centimeters.</p>
+        </div>
+      </article>
+      <article class="term" id="nic">
+        <div class="visual acronym" aria-hidden="true">NIC</div>
+        <div class="body">
+          <h3>NIC (Network Interface Card)</h3>
+          <p>Hardware adapter that connects a computer to a wired or wireless network.</p>
+        </div>
+      </article>
+      <article class="term" id="ntfs">
+        <div class="visual acronym" aria-hidden="true">NTFS</div>
+        <div class="body">
+          <h3>NTFS (New Technology File System)</h3>
+          <p>Default Windows file system supporting permissions, encryption, compression, and large volumes.</p>
+        </div>
+      </article>
+      <article class="term" id="ntp">
+        <div class="visual acronym" aria-hidden="true">NTP</div>
+        <div class="body">
+          <h3>NTP (Network Time Protocol)</h3>
+          <p>Protocol that synchronizes device clocks with authoritative time servers.</p>
+        </div>
+      </article>
+      <article class="term" id="nvme">
+        <div class="visual acronym" aria-hidden="true">NVMe</div>
+        <div class="body">
+          <h3>NVMe (Non-volatile Memory Express)</h3>
+          <p>High-speed SSD interface protocol designed for PCIe flash storage with low latency.</p>
+        </div>
+      </article>
+      <article class="term" id="oem">
+        <div class="visual acronym" aria-hidden="true">OEM</div>
+        <div class="body">
+          <h3>OEM (Original Equipment Manufacturer)</h3>
+          <p>Company that builds hardware or software sold under another brand or bundled with systems.</p>
+        </div>
+      </article>
+      <article class="term" id="oled">
+        <div class="visual acronym" aria-hidden="true">OLED</div>
+        <div class="body">
+          <h3>OLED (Organic Light-emitting Diode)</h3>
+          <p>Display technology where each pixel emits its own light, enabling deep blacks and high contrast.</p>
+        </div>
+      </article>
+      <article class="term" id="ont">
+        <div class="visual acronym" aria-hidden="true">ONT</div>
+        <div class="body">
+          <h3>ONT (Optical Network Terminal)</h3>
+          <p>Fiber-to-the-premises device that converts optical signals to Ethernet for home or business use.</p>
+        </div>
+      </article>
+      <article class="term" id="os">
+        <div class="visual acronym" aria-hidden="true">OS</div>
+        <div class="body">
+          <h3>OS (Operating System)</h3>
+          <p>Core software that manages hardware, processes, memory, and provides services for applications.</p>
+        </div>
+      </article>
+      <article class="term" id="otp">
+        <div class="visual acronym" aria-hidden="true">OTP</div>
+        <div class="body">
+          <h3>OTP (One-time Password/Passcode)</h3>
+          <p>Single-use code used for authentication, often delivered by app, SMS, or hardware token.</p>
+        </div>
+      </article>
+      <article class="term" id="paas">
+        <div class="visual acronym" aria-hidden="true">PaaS</div>
+        <div class="body">
+          <h3>PaaS (Platform as a Service)</h3>
+          <p>Cloud model that provides a managed runtime platform so developers deploy apps without managing OS infrastructure.</p>
+        </div>
+      </article>
+      <article class="term" id="pam">
+        <div class="visual acronym" aria-hidden="true">PAM</div>
+        <div class="body">
+          <h3>PAM (Privileged Access Management)</h3>
+          <p>Controls that secure, monitor, and limit use of powerful admin accounts and credentials.</p>
+        </div>
+      </article>
+      <article class="term" id="pan">
+        <div class="visual acronym" aria-hidden="true">PAN</div>
+        <div class="body">
+          <h3>PAN (Personal Area Network)</h3>
+          <p>Very short-range network around a person, such as Bluetooth between phone and headset.</p>
+        </div>
+      </article>
+      <article class="term" id="pc">
+        <div class="visual acronym" aria-hidden="true">PC</div>
+        <div class="body">
+          <h3>PC (Personal Computer)</h3>
+          <p>General-purpose computer designed for individual use, such as a desktop or laptop.</p>
+        </div>
+      </article>
+      <article class="term" id="pci">
+        <div class="visual acronym" aria-hidden="true">PCI</div>
+        <div class="body">
+          <h3>PCI (Peripheral Component Interconnect)</h3>
+          <p>Older parallel expansion-bus standard for adding cards to a motherboard.</p>
+        </div>
+      </article>
+      <article class="term" id="pcie">
+        <div class="visual acronym" aria-hidden="true">PCIe</div>
+        <div class="body">
+          <h3>PCIe (Peripheral Component Interconnect Express)</h3>
+          <p>Modern high-speed serial expansion bus used for GPUs, NVMe SSDs, and add-in cards.</p>
+        </div>
+      </article>
+      <article class="term" id="pcl">
+        <div class="visual acronym" aria-hidden="true">PCL</div>
+        <div class="body">
+          <h3>PCL (Printer Command Language)</h3>
+          <p>HP page-description language that tells printers how to render text and graphics.</p>
+        </div>
+      </article>
+      <article class="term" id="pii">
+        <div class="visual acronym" aria-hidden="true">PII</div>
+        <div class="body">
+          <h3>PII (Personally Identifiable Information)</h3>
+          <p>Data that can identify an individual, such as name, SSN, or email, requiring careful protection.</p>
+        </div>
+      </article>
+      <article class="term" id="pin">
+        <div class="visual acronym" aria-hidden="true">PIN</div>
+        <div class="body">
+          <h3>PIN (Personal Identification Number)</h3>
+          <p>Numeric secret used to authenticate a user, often with a card, phone unlock, or smart card.</p>
+        </div>
+      </article>
+      <article class="term" id="piv">
+        <div class="visual acronym" aria-hidden="true">PIV</div>
+        <div class="body">
+          <h3>PIV (Personal Identity Verification)</h3>
+          <p>U.S. federal smart-card standard for employee identity and strong authentication.</p>
+        </div>
+      </article>
+      <article class="term" id="poe">
+        <div class="visual acronym" aria-hidden="true">PoE</div>
+        <div class="body">
+          <h3>PoE (Power over Ethernet)</h3>
+          <p>Technology that delivers electrical power and data over the same Ethernet cable to devices like APs and cameras.</p>
+        </div>
+      </article>
+      <article class="term" id="pop">
+        <div class="visual acronym" aria-hidden="true">POP</div>
+        <div class="body">
+          <h3>POP (Post Office Protocol)</h3>
+          <p>Email retrieval protocol that typically downloads messages to a client and may remove them from the server.</p>
+        </div>
+      </article>
+      <article class="term" id="post">
+        <div class="visual acronym" aria-hidden="true">POST</div>
+        <div class="body">
+          <h3>POST (Power-on Self-test)</h3>
+          <p>Firmware diagnostic sequence that checks critical hardware before the OS boots.</p>
+        </div>
+      </article>
+      <article class="term" id="psu">
+        <div class="visual acronym" aria-hidden="true">PSU</div>
+        <div class="body">
+          <h3>PSU (Power Supply Unit)</h3>
+          <p>Component that converts wall AC power into the DC voltages a computer needs.</p>
+        </div>
+      </article>
+      <article class="term" id="pup">
+        <div class="visual acronym" aria-hidden="true">PUP</div>
+        <div class="body">
+          <h3>PUP (Potentially Unwanted Program)</h3>
+          <p>Software that is not outright malware but is undesirable (adware, toolbars, bundled junk).</p>
+        </div>
+      </article>
+      <article class="term" id="pxe">
+        <div class="visual acronym" aria-hidden="true">PXE</div>
+        <div class="body">
+          <h3>PXE (Preboot eXecution Environment)</h3>
+          <p>Network boot technology that lets a PC load an OS installer or image from a server.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="group-q-r">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part F</span>
+        <h2>Acronyms Q–R</h2>
+        <p>14 exam acronyms starting with letters Q–R.</p>
+      </div>
+
+      <article class="term" id="qos">
+        <div class="visual acronym" aria-hidden="true">QoS</div>
+        <div class="body">
+          <h3>QoS (Quality of Service)</h3>
+          <p>Networking techniques that prioritize certain traffic (voice, video) for better performance.</p>
+        </div>
+      </article>
+      <article class="term" id="radius">
+        <div class="visual acronym" aria-hidden="true">RADIUS</div>
+        <div class="body">
+          <h3>RADIUS (Remote Authentication Dial-in User Server)</h3>
+          <p>Centralized AAA protocol commonly used for VPN, Wi-Fi, and network device authentication.</p>
+        </div>
+      </article>
+      <article class="term" id="raid">
+        <div class="visual acronym" aria-hidden="true">RAID</div>
+        <div class="body">
+          <h3>RAID (Redundant Array of Independent Disks)</h3>
+          <p>Disk configuration that combines drives for performance, capacity, and/or fault tolerance.</p>
+        </div>
+      </article>
+      <article class="term" id="ram">
+        <div class="visual acronym" aria-hidden="true">RAM</div>
+        <div class="body">
+          <h3>RAM (Random-access Memory)</h3>
+          <p>Volatile working memory the CPU uses to store running programs and data.</p>
+        </div>
+      </article>
+      <article class="term" id="rdp">
+        <div class="visual acronym" aria-hidden="true">RDP</div>
+        <div class="body">
+          <h3>RDP (Remote Desktop Protocol)</h3>
+          <p>Microsoft protocol that provides remote graphical desktop access to Windows systems.</p>
+        </div>
+      </article>
+      <article class="term" id="refs">
+        <div class="visual acronym" aria-hidden="true">ReFS</div>
+        <div class="body">
+          <h3>ReFS (Resilient File System)</h3>
+          <p>Microsoft file system focused on integrity and resilience for large volumes and storage spaces.</p>
+        </div>
+      </article>
+      <article class="term" id="rfid">
+        <div class="visual acronym" aria-hidden="true">RFID</div>
+        <div class="body">
+          <h3>RFID (Radio-frequency Identification)</h3>
+          <p>Wireless ID technology using tags and readers for access control, inventory, and tracking.</p>
+        </div>
+      </article>
+      <article class="term" id="rgb">
+        <div class="visual acronym" aria-hidden="true">RGB</div>
+        <div class="body">
+          <h3>RGB (Red-Green-Blue)</h3>
+          <p>Additive color model used by displays and lighting where colors are mixed from red, green, and blue.</p>
+        </div>
+      </article>
+      <article class="term" id="risc">
+        <div class="visual acronym" aria-hidden="true">RISC</div>
+        <div class="body">
+          <h3>RISC (Reduced Instruction Set Computer)</h3>
+          <p>CPU design philosophy using a smaller, simpler instruction set for efficiency (as in ARM).</p>
+        </div>
+      </article>
+      <article class="term" id="rj11">
+        <div class="visual acronym" aria-hidden="true">RJ11</div>
+        <div class="body">
+          <h3>RJ11 (Registered Jack Function 11)</h3>
+          <p>Telephone connector typically used for landline/DSL with fewer contacts than RJ45.</p>
+        </div>
+      </article>
+      <article class="term" id="rj45">
+        <div class="visual acronym" aria-hidden="true">RJ45</div>
+        <div class="body">
+          <h3>RJ45 (Registered Jack Function 45)</h3>
+          <p>Eight-position modular connector used for Ethernet networking cables.</p>
+        </div>
+      </article>
+      <article class="term" id="rmm">
+        <div class="visual acronym" aria-hidden="true">RMM</div>
+        <div class="body">
+          <h3>RMM (Remote Monitoring and Management)</h3>
+          <p>MSP platform used to monitor, patch, and manage many client endpoints from one console.</p>
+        </div>
+      </article>
+      <article class="term" id="rpm">
+        <div class="visual acronym" aria-hidden="true">RPM</div>
+        <div class="body">
+          <h3>RPM (Revolutions Per Minute)</h3>
+          <p>Speed measurement for spinning devices such as HDD platters or cooling fans.</p>
+        </div>
+      </article>
+      <article class="term" id="rsr">
+        <div class="visual acronym" aria-hidden="true">RSR</div>
+        <div class="body">
+          <h3>RSR (Rapid Security Response)</h3>
+          <p>Fast security update mechanism (notably Apple) that delivers urgent fixes outside major OS releases.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="group-s-t">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part G</span>
+        <h2>Acronyms S–T</h2>
+        <p>36 exam acronyms starting with letters S–T.</p>
+      </div>
+
+      <article class="term" id="saas">
+        <div class="visual acronym" aria-hidden="true">SaaS</div>
+        <div class="body">
+          <h3>SaaS (Software as a Service)</h3>
+          <p>Cloud model delivering applications over the internet (e.g., Microsoft 365, Google Workspace).</p>
+        </div>
+      </article>
+      <article class="term" id="saml">
+        <div class="visual acronym" aria-hidden="true">SAML</div>
+        <div class="body">
+          <h3>SAML (Security Assertions Markup Language)</h3>
+          <p>XML-based standard for exchanging authentication/authorization data, often used for SSO.</p>
+        </div>
+      </article>
+      <article class="term" id="san">
+        <div class="visual acronym" aria-hidden="true">SAN</div>
+        <div class="body">
+          <h3>SAN (Storage Area Network)</h3>
+          <p>High-speed dedicated network that provides block-level storage to servers.</p>
+        </div>
+      </article>
+      <article class="term" id="sas">
+        <div class="visual acronym" aria-hidden="true">SAS</div>
+        <div class="body">
+          <h3>SAS (Serial Attached SCSI (Small Computer System Interface))</h3>
+          <p>Enterprise disk interface that connects servers to high-reliability SAS drives.</p>
+        </div>
+      </article>
+      <article class="term" id="sata">
+        <div class="visual acronym" aria-hidden="true">SATA</div>
+        <div class="body">
+          <h3>SATA (Serial Advanced Technology Attachment)</h3>
+          <p>Common interface for connecting internal HDDs and SSDs to a motherboard.</p>
+        </div>
+      </article>
+      <article class="term" id="sc">
+        <div class="visual acronym" aria-hidden="true">SC</div>
+        <div class="body">
+          <h3>SC (Subscriber Connector)</h3>
+          <p>Square push-pull fiber-optic connector used in networking and telecom.</p>
+        </div>
+      </article>
+      <article class="term" id="scada">
+        <div class="visual acronym" aria-hidden="true">SCADA</div>
+        <div class="body">
+          <h3>SCADA (Supervisory Control and Data Acquisition)</h3>
+          <p>Industrial control system used to monitor and operate infrastructure like plants and utilities.</p>
+        </div>
+      </article>
+      <article class="term" id="scsi">
+        <div class="visual acronym" aria-hidden="true">SCSI</div>
+        <div class="body">
+          <h3>SCSI (Small Computer System Interface)</h3>
+          <p>Legacy/enterprise peripheral interface for disks and other devices; ancestor concepts live on in SAS.</p>
+        </div>
+      </article>
+      <article class="term" id="sd">
+        <div class="visual acronym" aria-hidden="true">SD</div>
+        <div class="body">
+          <h3>SD (Secure Digital)</h3>
+          <p>Removable flash memory card format used in cameras, phones, and embedded devices.</p>
+        </div>
+      </article>
+      <article class="term" id="sds">
+        <div class="visual acronym" aria-hidden="true">SDS</div>
+        <div class="body">
+          <h3>SDS (Safety Data Sheet)</h3>
+          <p>Document listing hazards, handling, and disposal guidance for a chemical or material (formerly MSDS).</p>
+        </div>
+      </article>
+      <article class="term" id="sftp">
+        <div class="visual acronym" aria-hidden="true">SFTP</div>
+        <div class="body">
+          <h3>SFTP (Secure File Transfer Protocol)</h3>
+          <p>Encrypted file transfer method that runs over SSH instead of plaintext FTP.</p>
+        </div>
+      </article>
+      <article class="term" id="sim">
+        <div class="visual acronym" aria-hidden="true">SIM</div>
+        <div class="body">
+          <h3>SIM (Subscriber Identity Module)</h3>
+          <p>Card that stores mobile subscriber identity and authentication data for cellular service.</p>
+        </div>
+      </article>
+      <article class="term" id="sla">
+        <div class="visual acronym" aria-hidden="true">SLA</div>
+        <div class="body">
+          <h3>SLA (Service-level Agreement)</h3>
+          <p>Contract defining expected service performance, uptime, and response times between provider and customer.</p>
+        </div>
+      </article>
+      <article class="term" id="smart">
+        <div class="visual acronym" aria-hidden="true">S.M.A.R.T</div>
+        <div class="body">
+          <h3>S.M.A.R.T (Self-monitoring Analysis and Reporting Technology)</h3>
+          <p>Drive self-diagnostics that report health metrics to warn of impending disk failure.</p>
+        </div>
+      </article>
+      <article class="term" id="smb">
+        <div class="visual acronym" aria-hidden="true">SMB</div>
+        <div class="body">
+          <h3>SMB (Server Message Block)</h3>
+          <p>Windows file-and-printer sharing protocol used for networked resources.</p>
+        </div>
+      </article>
+      <article class="term" id="sms">
+        <div class="visual acronym" aria-hidden="true">SMS</div>
+        <div class="body">
+          <h3>SMS (Short Message Service)</h3>
+          <p>Cellular text messaging service used for communication and sometimes OTP delivery.</p>
+        </div>
+      </article>
+      <article class="term" id="smtp">
+        <div class="visual acronym" aria-hidden="true">SMTP</div>
+        <div class="body">
+          <h3>SMTP (Simple Mail Transfer Protocol)</h3>
+          <p>Protocol that sends email between mail clients and mail servers.</p>
+        </div>
+      </article>
+      <article class="term" id="snmp">
+        <div class="visual acronym" aria-hidden="true">SNMP</div>
+        <div class="body">
+          <h3>SNMP (Simple Network Management Protocol)</h3>
+          <p>Protocol for monitoring and managing network devices such as switches, routers, and printers.</p>
+        </div>
+      </article>
+      <article class="term" id="sodimm">
+        <div class="visual acronym" aria-hidden="true">SODIMM</div>
+        <div class="body">
+          <h3>SODIMM (Small Outline Dual In-line Memory Module)</h3>
+          <p>Compact RAM module form factor used in laptops and small-form-factor systems.</p>
+        </div>
+      </article>
+      <article class="term" id="soho">
+        <div class="visual acronym" aria-hidden="true">SOHO</div>
+        <div class="body">
+          <h3>SOHO (Small Office/Home Office)</h3>
+          <p>Small business/home work environment with simpler networking and fewer users than enterprise.</p>
+        </div>
+      </article>
+      <article class="term" id="sop">
+        <div class="visual acronym" aria-hidden="true">SOP</div>
+        <div class="body">
+          <h3>SOP (Standard Operating Procedure)</h3>
+          <p>Documented step-by-step process for performing a routine IT or business task consistently.</p>
+        </div>
+      </article>
+      <article class="term" id="spf">
+        <div class="visual acronym" aria-hidden="true">SPF</div>
+        <div class="body">
+          <h3>SPF (Sender Policy Framework)</h3>
+          <p>Email DNS record that lists servers authorized to send mail for a domain.</p>
+        </div>
+      </article>
+      <article class="term" id="spice">
+        <div class="visual acronym" aria-hidden="true">SPICE</div>
+        <div class="body">
+          <h3>SPICE (Simple Protocol for Independent Computing Environments)</h3>
+          <p>Remote-display protocol optimized for accessing virtual machines with graphics and clipboard sharing.</p>
+        </div>
+      </article>
+      <article class="term" id="sql">
+        <div class="visual acronym" aria-hidden="true">SQL</div>
+        <div class="body">
+          <h3>SQL (Structured Query Language)</h3>
+          <p>Standard language for querying and managing relational databases.</p>
+        </div>
+      </article>
+      <article class="term" id="ssd">
+        <div class="visual acronym" aria-hidden="true">SSD</div>
+        <div class="body">
+          <h3>SSD (Solid-state Drive)</h3>
+          <p>Flash-based storage with no moving parts, offering higher speed and durability than HDDs.</p>
+        </div>
+      </article>
+      <article class="term" id="ssh">
+        <div class="visual acronym" aria-hidden="true">SSH</div>
+        <div class="body">
+          <h3>SSH (Secure Shell)</h3>
+          <p>Encrypted remote command-line protocol that replaced insecure Telnet for administration.</p>
+        </div>
+      </article>
+      <article class="term" id="ssid">
+        <div class="visual acronym" aria-hidden="true">SSID</div>
+        <div class="body">
+          <h3>SSID (Service Set Identifier)</h3>
+          <p>Human-readable name of a Wi-Fi network that clients see when scanning for wireless networks.</p>
+        </div>
+      </article>
+      <article class="term" id="sso">
+        <div class="visual acronym" aria-hidden="true">SSO</div>
+        <div class="body">
+          <h3>SSO (Single Sign-on)</h3>
+          <p>Authentication approach where one login grants access to multiple related applications.</p>
+        </div>
+      </article>
+      <article class="term" id="st">
+        <div class="visual acronym" aria-hidden="true">ST</div>
+        <div class="body">
+          <h3>ST (Straight Tip)</h3>
+          <p>Bayonet-style fiber-optic connector with a round ferrule, used in older fiber installations.</p>
+        </div>
+      </article>
+      <article class="term" id="tacacs">
+        <div class="visual acronym" aria-hidden="true">TACACS</div>
+        <div class="body">
+          <h3>TACACS (Terminal Access Controller Access-control System)</h3>
+          <p>Cisco-oriented AAA protocol for authenticating administrators to network devices.</p>
+        </div>
+      </article>
+      <article class="term" id="tcp">
+        <div class="visual acronym" aria-hidden="true">TCP</div>
+        <div class="body">
+          <h3>TCP (Transmission Control Protocol)</h3>
+          <p>Reliable, connection-oriented transport protocol that delivers ordered, acknowledged data streams.</p>
+        </div>
+      </article>
+      <article class="term" id="tkip">
+        <div class="visual acronym" aria-hidden="true">TKIP</div>
+        <div class="body">
+          <h3>TKIP (Temporal Key Integrity Protocol)</h3>
+          <p>Legacy WPA encryption/integrity mechanism superseded by stronger AES-based Wi-Fi security.</p>
+        </div>
+      </article>
+      <article class="term" id="tn">
+        <div class="visual acronym" aria-hidden="true">TN</div>
+        <div class="body">
+          <h3>TN (Twisted Nematic)</h3>
+          <p>Fast, inexpensive LCD panel type with narrower viewing angles than IPS or VA.</p>
+        </div>
+      </article>
+      <article class="term" id="totp">
+        <div class="visual acronym" aria-hidden="true">TOTP</div>
+        <div class="body">
+          <h3>TOTP (Time-based One-time Password)</h3>
+          <p>OTP algorithm that generates rotating codes based on the current time and a shared secret.</p>
+        </div>
+      </article>
+      <article class="term" id="tpm">
+        <div class="visual acronym" aria-hidden="true">TPM</div>
+        <div class="body">
+          <h3>TPM (Trusted Platform Module)</h3>
+          <p>Secure cryptoprocessor chip that stores keys and supports features like BitLocker and measured boot.</p>
+        </div>
+      </article>
+      <article class="term" id="txt">
+        <div class="visual acronym" aria-hidden="true">TXT</div>
+        <div class="body">
+          <h3>TXT (Text)</h3>
+          <p>DNS record type that stores arbitrary text, often used for SPF, DKIM, and domain verification.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="group-u-z">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part H</span>
+        <h2>Acronyms U–Z</h2>
+        <p>29 exam acronyms starting with letters U–Z.</p>
+      </div>
+
+      <article class="term" id="uac">
+        <div class="visual acronym" aria-hidden="true">UAC</div>
+        <div class="body">
+          <h3>UAC (User Account Control)</h3>
+          <p>Windows security prompt that asks for elevation before allowing administrative actions.</p>
+        </div>
+      </article>
+      <article class="term" id="udp">
+        <div class="visual acronym" aria-hidden="true">UDP</div>
+        <div class="body">
+          <h3>UDP (User Datagram Protocol)</h3>
+          <p>Connectionless transport protocol used for fast, lightweight traffic such as DNS and streaming.</p>
+        </div>
+      </article>
+      <article class="term" id="uefi">
+        <div class="visual acronym" aria-hidden="true">UEFI</div>
+        <div class="body">
+          <h3>UEFI (Unified Extensible Firmware Interface)</h3>
+          <p>Modern firmware interface that replaces legacy BIOS with faster boot, GUI setup, and Secure Boot.</p>
+        </div>
+      </article>
+      <article class="term" id="upnp">
+        <div class="visual acronym" aria-hidden="true">UPnP</div>
+        <div class="body">
+          <h3>UPnP (Universal Plug and Play)</h3>
+          <p>Protocol that lets devices automatically open router ports; convenient but often a security risk.</p>
+        </div>
+      </article>
+      <article class="term" id="ups">
+        <div class="visual acronym" aria-hidden="true">UPS</div>
+        <div class="body">
+          <h3>UPS (Uninterruptible Power Supply)</h3>
+          <p>Battery-backed power device that keeps equipment running during outages and smooths power issues.</p>
+        </div>
+      </article>
+      <article class="term" id="usb">
+        <div class="visual acronym" aria-hidden="true">USB</div>
+        <div class="body">
+          <h3>USB (Universal Serial Bus)</h3>
+          <p>Hot-pluggable interface for connecting peripherals, storage, and chargers to computers.</p>
+        </div>
+      </article>
+      <article class="term" id="usb-c">
+        <div class="visual acronym" aria-hidden="true">USB-C</div>
+        <div class="body">
+          <h3>USB-C (Universal Serial Bus Type C)</h3>
+          <p>Reversible USB connector supporting data, video, and high-wattage power delivery.</p>
+        </div>
+      </article>
+      <article class="term" id="utm">
+        <div class="visual acronym" aria-hidden="true">UTM</div>
+        <div class="body">
+          <h3>UTM (Unified Threat Management)</h3>
+          <p>Security appliance that combines firewall, IDS/IPS, antivirus, and related protections in one box.</p>
+        </div>
+      </article>
+      <article class="term" id="va">
+        <div class="visual acronym" aria-hidden="true">VA</div>
+        <div class="body">
+          <h3>VA (Vertical Alignment)</h3>
+          <p>LCD panel technology with strong contrast, sitting between TN and IPS in viewing-angle performance.</p>
+        </div>
+      </article>
+      <article class="term" id="vdi">
+        <div class="visual acronym" aria-hidden="true">VDI</div>
+        <div class="body">
+          <h3>VDI (Virtual Desktop Infrastructure)</h3>
+          <p>Architecture that hosts user desktops as VMs in a data center and streams them to thin clients.</p>
+        </div>
+      </article>
+      <article class="term" id="vga">
+        <div class="visual acronym" aria-hidden="true">VGA</div>
+        <div class="body">
+          <h3>VGA (Video Graphics Array)</h3>
+          <p>Legacy analog video connector and resolution standard historically used for PC monitors.</p>
+        </div>
+      </article>
+      <article class="term" id="vlan">
+        <div class="visual acronym" aria-hidden="true">VLAN</div>
+        <div class="body">
+          <h3>VLAN (Virtual LAN (Local Area Network))</h3>
+          <p>Logical network segment created on switches to isolate broadcast domains without separate physical cabling.</p>
+        </div>
+      </article>
+      <article class="term" id="vm">
+        <div class="visual acronym" aria-hidden="true">VM</div>
+        <div class="body">
+          <h3>VM (Virtual Machine)</h3>
+          <p>Software-emulated computer running an OS and apps on a hypervisor alongside other VMs.</p>
+        </div>
+      </article>
+      <article class="term" id="vnc">
+        <div class="visual acronym" aria-hidden="true">VNC</div>
+        <div class="body">
+          <h3>VNC (Virtual Network Computer)</h3>
+          <p>Cross-platform remote desktop technology that shares a graphical desktop over the RFB protocol.</p>
+        </div>
+      </article>
+      <article class="term" id="voip">
+        <div class="visual acronym" aria-hidden="true">VoIP</div>
+        <div class="body">
+          <h3>VoIP (Voice over Internet Protocol)</h3>
+          <p>Technology that carries voice calls as data packets over IP networks instead of traditional phone lines.</p>
+        </div>
+      </article>
+      <article class="term" id="vpn">
+        <div class="visual acronym" aria-hidden="true">VPN</div>
+        <div class="body">
+          <h3>VPN (Virtual Private Network)</h3>
+          <p>Encrypted tunnel that securely connects a remote client or site to a private network over the internet.</p>
+        </div>
+      </article>
+      <article class="term" id="vram">
+        <div class="visual acronym" aria-hidden="true">VRAM</div>
+        <div class="body">
+          <h3>VRAM (Video Random-access Memory)</h3>
+          <p>Memory used by a GPU to store textures, framebuffers, and other graphics data.</p>
+        </div>
+      </article>
+      <article class="term" id="wan">
+        <div class="visual acronym" aria-hidden="true">WAN</div>
+        <div class="body">
+          <h3>WAN (Wide Area Network)</h3>
+          <p>Network spanning large geographic areas, typically connecting multiple sites over ISP links.</p>
+        </div>
+      </article>
+      <article class="term" id="wap">
+        <div class="visual acronym" aria-hidden="true">WAP</div>
+        <div class="body">
+          <h3>WAP (Wireless Access Point)</h3>
+          <p>Device that bridges wireless clients onto a wired network (often used interchangeably with AP).</p>
+        </div>
+      </article>
+      <article class="term" id="wep">
+        <div class="visual acronym" aria-hidden="true">WEP</div>
+        <div class="body">
+          <h3>WEP (Wired Equivalent Privacy)</h3>
+          <p>Obsolete Wi-Fi security protocol that is easily cracked and must not be used.</p>
+        </div>
+      </article>
+      <article class="term" id="winrm">
+        <div class="visual acronym" aria-hidden="true">WinRM</div>
+        <div class="body">
+          <h3>WinRM (Windows Remote Management)</h3>
+          <p>Microsoft service that enables remote PowerShell and management commands without a full desktop session.</p>
+        </div>
+      </article>
+      <article class="term" id="wisp">
+        <div class="visual acronym" aria-hidden="true">WISP</div>
+        <div class="body">
+          <h3>WISP (Written Internet Service Provider)</h3>
+          <p>Provider of internet service (exam acronym expansion); in practice often refers to wireless ISPs serving rural areas.</p>
+        </div>
+      </article>
+      <article class="term" id="wlan">
+        <div class="visual acronym" aria-hidden="true">WLAN</div>
+        <div class="body">
+          <h3>WLAN (Wireless LAN (Local Area Network))</h3>
+          <p>Local network that uses Wi-Fi radio instead of (or in addition to) Ethernet cabling.</p>
+        </div>
+      </article>
+      <article class="term" id="wpa">
+        <div class="visual acronym" aria-hidden="true">WPA</div>
+        <div class="body">
+          <h3>WPA (Wi-Fi Protected Access)</h3>
+          <p>Family of Wi-Fi security standards (WPA/WPA2/WPA3) that encrypt and authenticate wireless traffic.</p>
+        </div>
+      </article>
+      <article class="term" id="wwan">
+        <div class="visual acronym" aria-hidden="true">WWAN</div>
+        <div class="body">
+          <h3>WWAN (Wireless Wide Area Network)</h3>
+          <p>Wide-area wireless connectivity such as cellular (LTE/5G) for mobile internet access.</p>
+        </div>
+      </article>
+      <article class="term" id="xaas">
+        <div class="visual acronym" aria-hidden="true">XaaS</div>
+        <div class="body">
+          <h3>XaaS (Anything As A Service)</h3>
+          <p>Broad term for delivering almost any IT capability as a cloud subscription service.</p>
+        </div>
+      </article>
+      <article class="term" id="xdr">
+        <div class="visual acronym" aria-hidden="true">XDR</div>
+        <div class="body">
+          <h3>XDR (Extended Detection and Response)</h3>
+          <p>Security approach that correlates threat data across endpoints, email, cloud, and network for detection.</p>
+        </div>
+      </article>
+      <article class="term" id="xfs">
+        <div class="visual acronym" aria-hidden="true">XFS</div>
+        <div class="body">
+          <h3>XFS (Extended File System)</h3>
+          <p>High-performance journaling file system commonly used on Linux for large volumes.</p>
+        </div>
+      </article>
+      <article class="term" id="xss">
+        <div class="visual acronym" aria-hidden="true">XSS</div>
+        <div class="body">
+          <h3>XSS (Cross-site Scripting)</h3>
+          <p>Web attack that injects malicious scripts into pages viewed by other users to steal data or hijack sessions.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    Study notes for Core 2 Chapter 5 — CompTIA A+ Acronyms (200 terms).
+    <a href="Chapter 5 Practice Quiz.html">Practice quiz</a> ·
+    <a href="index.html">All guides</a>
+  </div>
+</footer>
+
+</body>
+</html>

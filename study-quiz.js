@@ -122,7 +122,7 @@
     window.QUIZ_DATA.sections.forEach((s) => {
       const label = document.createElement("label");
       label.className = "check-pill";
-      label.innerHTML = `<input type="checkbox" value="${s.id}" checked> <span>${s.id}</span> <em>(${s.count})</em>`;
+      label.innerHTML = `<input type="checkbox" value="${s.id}" checked> <span>${s.title || s.id}</span> <em>(${s.count})</em>`;
       label.querySelector("input").addEventListener("change", () => {
         updateSetupHeading(getSelectedSections());
       });
