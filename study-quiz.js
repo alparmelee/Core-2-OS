@@ -13,10 +13,35 @@
     answered: false,
     mode: "term-to-def",
     missed: [],
+    inChaptersOnly: false,
   };
 
   function $(sel) {
     return document.querySelector(sel);
+  }
+
+  function supportsChapterFilter() {
+    return Boolean(window.QUIZ_DATA?.supportsChapterFilter);
+  }
+
+  function sectionCount(section) {
+    if (state.inChaptersOnly && typeof section.coreCount === "number") {
+      return section.coreCount;
+    }
+    return section.count;
+  }
+
+  function visibleTerms() {
+    const terms = window.QUIZ_DATA.terms || [];
+    if (!state.inChaptersOnly) return terms;
+    return terms.filter((t) => t.inChapters);
+  }
+
+  function visibleTotal() {
+    if (state.inChaptersOnly && typeof window.QUIZ_DATA.coreTotal === "number") {
+      return window.QUIZ_DATA.coreTotal;
+    }
+    return window.QUIZ_DATA.total;
   }
 
   function shuffle(arr) {
@@ -75,11 +100,12 @@
           : [],
       start: p.get("start") === "1",
       mode: p.get("mode") || null,
+      core: p.get("core") === "1",
     };
   }
 
   function setSectionSelection(ids) {
-    document.querySelectorAll("#section-filters input").forEach((el) => {
+    document.querySelectorAll("#section-toggles input").forEach((el) => {
       el.checked = ids.length ? ids.includes(el.value) : true;
     });
   }
@@ -89,30 +115,40 @@
     if (!container) return;
     container.innerHTML = "";
     window.QUIZ_DATA.sections.forEach((s) => {
+      const count = sectionCount(s);
       const card = document.createElement("button");
       card.type = "button";
-      card.className = "section-card";
+      card.className = "section-card" + (count < 4 ? " is-empty" : "");
       card.dataset.section = s.id;
-      card.innerHTML = `<span class="section-card-id">${s.id}</span><span class="section-card-title">${s.title}</span><span class="section-card-count">${s.count} terms</span>`;
+      card.disabled = count < 4;
+      card.innerHTML = `<span class="section-card-id">${s.id}</span><span class="section-card-title">${s.title}</span><span class="section-card-count">${count} terms</span>`;
       card.addEventListener("click", () => startQuiz([s.id]));
       container.appendChild(card);
     });
-    $("#term-count").textContent = window.QUIZ_DATA.total;
-    updateSetupHeading();
+    const termCount = $("#term-count");
+    if (termCount) termCount.textContent = visibleTotal();
+    updateSetupHeading(getSelectedSections());
   }
 
   function updateSetupHeading(sections) {
     const el = $("#setup-focus");
     if (!el) return;
+    const focusHint = state.inChaptersOnly
+      ? "Filtering to terms also mentioned in Chapters 1–4. "
+      : "";
     if (!sections || !sections.length) {
-      el.textContent = "Pick a section below to start instantly, or customize with checkboxes.";
+      el.textContent =
+        focusHint +
+        (window.QUIZ_DATA.chapter === 5
+          ? "Pick a letter range below to start instantly, or customize with checkboxes."
+          : "Pick a section below to start instantly, or customize with checkboxes.");
       return;
     }
     const labels = sections.map((id) => {
       const s = window.QUIZ_DATA.sections.find((x) => x.id === id);
-      return s ? `${s.id} (${s.count})` : id;
+      return s ? `${s.id} (${sectionCount(s)})` : id;
     });
-    el.textContent = `Ready: ${labels.join(", ")}`;
+    el.textContent = `${focusHint}Ready: ${labels.join(", ")}`;
   }
 
   function renderSectionToggles() {
@@ -120,9 +156,11 @@
     if (!container) return;
     container.innerHTML = "";
     window.QUIZ_DATA.sections.forEach((s) => {
+      const count = sectionCount(s);
       const label = document.createElement("label");
       label.className = "check-pill";
-      label.innerHTML = `<input type="checkbox" value="${s.id}" checked> <span>${s.title || s.id}</span> <em>(${s.count})</em>`;
+      label.hidden = state.inChaptersOnly && count === 0;
+      label.innerHTML = `<input type="checkbox" value="${s.id}" ${count ? "checked" : ""} ${count < 4 ? "disabled" : ""}> <span>${s.title || s.id}</span> <em>(${count})</em>`;
       label.querySelector("input").addEventListener("change", () => {
         updateSetupHeading(getSelectedSections());
       });
@@ -130,8 +168,36 @@
     });
   }
 
+  function syncChapterFilterUi() {
+    const row = $("#chapter-filter-row");
+    const checkbox = $("#filter-core");
+    const hint = $("#filter-core-hint");
+    if (!supportsChapterFilter()) {
+      if (row) row.hidden = true;
+      return;
+    }
+    if (row) row.hidden = false;
+    if (checkbox) checkbox.checked = state.inChaptersOnly;
+    if (hint) {
+      const core = window.QUIZ_DATA.coreTotal ?? 0;
+      const total = window.QUIZ_DATA.total ?? 0;
+      hint.textContent = state.inChaptersOnly
+        ? `Using ${core} of ${total} acronyms`
+        : `${core} of ${total} appear in other chapters`;
+    }
+  }
+
+  function setInChaptersOnly(on) {
+    state.inChaptersOnly = Boolean(on);
+    syncChapterFilterUi();
+    renderSetup();
+    renderSectionToggles();
+  }
+
   function getSelectedSections() {
-    return [...document.querySelectorAll("#section-toggles input:checked")].map((el) => el.value);
+    return [...document.querySelectorAll("#section-toggles input:checked:not(:disabled)")].map(
+      (el) => el.value
+    );
   }
 
   function startQuiz(forcedSections) {
@@ -141,7 +207,7 @@
       return;
     }
     state.mode = document.querySelector('input[name="quiz-mode"]:checked')?.value || "term-to-def";
-    state.pool = window.QUIZ_DATA.terms.filter((t) => sections.includes(t.section));
+    state.pool = visibleTerms().filter((t) => sections.includes(t.section));
     if (state.pool.length < 4) {
       alert("Need at least 4 terms in the selected sections for multiple-choice questions.");
       return;
@@ -278,11 +344,23 @@
       document.body.innerHTML = "<p style='padding:2rem'>Quiz data not loaded.</p>";
       return;
     }
+
+    const params = getUrlParams();
+    if (supportsChapterFilter()) {
+      state.inChaptersOnly = params.core;
+      syncChapterFilterUi();
+      $("#filter-core")?.addEventListener("change", (e) => {
+        setInChaptersOnly(e.target.checked);
+      });
+    }
+
     renderSetup();
     renderSectionToggles();
     $("#start-btn")?.addEventListener("click", () => startQuiz());
     $("#start-all-btn")?.addEventListener("click", () => {
-      const all = window.QUIZ_DATA.sections.map((s) => s.id);
+      const all = window.QUIZ_DATA.sections
+        .filter((s) => sectionCount(s) >= 4)
+        .map((s) => s.id);
       setSectionSelection(all);
       startQuiz(all);
     });
@@ -290,7 +368,6 @@
     $("#retry-btn")?.addEventListener("click", retryMissed);
     $("#restart-btn")?.addEventListener("click", () => showScreen("setup"));
 
-    const params = getUrlParams();
     if (params.mode) {
       const modeInput = document.querySelector(`input[name="quiz-mode"][value="${params.mode}"]`);
       if (modeInput) modeInput.checked = true;
@@ -303,7 +380,9 @@
         return;
       }
     } else if (params.start) {
-      const all = window.QUIZ_DATA.sections.map((s) => s.id);
+      const all = window.QUIZ_DATA.sections
+        .filter((s) => sectionCount(s) >= 4)
+        .map((s) => s.id);
       startQuiz(all);
       return;
     }

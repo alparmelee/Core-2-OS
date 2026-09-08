@@ -3,6 +3,7 @@
 
 import html
 import json
+import re
 from pathlib import Path
 
 from build_chapter2_quiz import quiz_page_html
@@ -349,6 +350,40 @@ def build_image_map() -> dict[str, str]:
 
 IMAGE_MAP = build_image_map()
 
+# Short tokens that match unrelated chapter text (e.g. "Macintosh HD", "PCI DSS").
+_FALSE_POSITIVE_ACRONYMS = frozenset({"HD", "PCI"})
+
+
+def find_chapter_mentioned_acronyms() -> set[str]:
+    """Acronyms that appear as tokens in other chapter study guides (1.x–4.x)."""
+    files = []
+    for path in ROOT.glob("[1-4].*.html"):
+        name = path.name.lower()
+        if "simulator" in name or "quiz" in name:
+            continue
+        files.append(path)
+
+    corpora = []
+    for path in files:
+        raw = path.read_text(encoding="utf-8", errors="ignore")
+        raw = re.sub(r"<style[^>]*>.*?</style>", " ", raw, flags=re.I | re.S)
+        corpora.append(re.sub(r"<[^>]+>", " ", raw))
+    corpus = "\n".join(corpora)
+
+    found: set[str] = set()
+    for acronym, _, _ in ACRONYMS:
+        if acronym in _FALSE_POSITIVE_ACRONYMS:
+            continue
+        if acronym == "S.M.A.R.T":
+            pattern = r"(?<![A-Za-z0-9])(?:S\.M\.A\.R\.T|SMART)(?![A-Za-z0-9])"
+        elif acronym == "POP":
+            pattern = r"(?<![A-Za-z0-9])POP3?(?![A-Za-z0-9])"
+        else:
+            pattern = rf"(?<![A-Za-z0-9]){re.escape(acronym)}s?(?![A-Za-z0-9])"
+        if re.search(pattern, corpus):
+            found.add(acronym)
+    return found
+
 
 def letter_group(acronym: str) -> str:
     first = acronym[0].upper()
@@ -379,6 +414,7 @@ def term_title(acronym: str, expansion: str) -> str:
 
 def build_study_guide(image_map: dict[str, str] | None = None) -> str:
     image_map = image_map or IMAGE_MAP
+    in_chapters = find_chapter_mentioned_acronyms()
     groups: dict[str, list[tuple[str, str, str]]] = {}
     order = ["A–C", "D–F", "G–I", "J–M", "N–P", "Q–R", "S–T", "U–Z"]
     for label in order:
@@ -394,11 +430,13 @@ def build_study_guide(image_map: dict[str, str] | None = None) -> str:
         cls = ' class="ghost"' if i else ""
         hero_parts.append(f'      <a{cls} href="#{group_id(label)}">{html.escape(label)}</a>')
     hero_cta = "\n".join(hero_parts)
+    core_count = sum(1 for a, _, _ in ACRONYMS if a in in_chapters)
 
     sections = []
     for i, label in enumerate(order):
         items = groups[label]
         articles = []
+        core_in_group = 0
         for acronym, expansion, purpose in items:
             aid = (
                 acronym.lower()
@@ -407,6 +445,9 @@ def build_study_guide(image_map: dict[str, str] | None = None) -> str:
                 .replace(" ", "-")
             )
             title = term_title(acronym, expansion)
+            mentioned = acronym in in_chapters
+            if mentioned:
+                core_in_group += 1
             img = image_map.get(acronym)
             if img:
                 visual = (
@@ -421,7 +462,7 @@ def build_study_guide(image_map: dict[str, str] | None = None) -> str:
                 )
             articles.append(
                 f"""
-      <article class="term" id="{html.escape(aid)}">
+      <article class="term" id="{html.escape(aid)}" data-in-chapters="{"1" if mentioned else "0"}">
         {visual}
         <div class="body">
           <h3>{html.escape(title)}</h3>
@@ -431,12 +472,12 @@ def build_study_guide(image_map: dict[str, str] | None = None) -> str:
             )
         sections.append(
             f"""
-  <section id="{group_id(label)}">
+  <section id="{group_id(label)}" data-total="{len(items)}" data-core="{core_in_group}" data-label="{html.escape(label)}">
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">Part {chr(65 + i)}</span>
         <h2>Acronyms {html.escape(label)}</h2>
-        <p>{len(items)} exam acronyms starting with letters {html.escape(label)}.</p>
+        <p class="section-count">{len(items)} exam acronyms starting with letters {html.escape(label)}.</p>
       </div>
 {''.join(articles)}
     </div>
@@ -520,7 +561,7 @@ def build_study_guide(image_map: dict[str, str] | None = None) -> str:
     color:#94a3b8;
   }}
   .hero-cta{{ display:flex; flex-wrap:wrap; gap:0.7rem; }}
-  .hero-cta a{{
+  .hero-cta a, .hero-cta button{{
     text-decoration:none;
     font-weight:600;
     font-size:0.92rem;
@@ -528,11 +569,19 @@ def build_study_guide(image_map: dict[str, str] | None = None) -> str:
     border-radius:999px;
     background:#ccfbf1;
     color:#134e4a;
+    border:0;
+    cursor:pointer;
+    font-family:inherit;
   }}
-  .hero-cta a.ghost{{
+  .hero-cta a.ghost, .hero-cta button.ghost{{
     background:transparent;
     color:#ccfbf1;
     border:1px solid rgba(204,251,241,0.4);
+  }}
+  .hero-cta button.is-active{{
+    background:#ccfbf1;
+    color:#134e4a;
+    border-color:transparent;
   }}
 
   .toc{{
@@ -542,10 +591,10 @@ def build_study_guide(image_map: dict[str, str] | None = None) -> str:
     border-bottom:1px solid var(--line);
   }}
   .toc .wrap{{
-    display:flex; gap:0.3rem; overflow-x:auto;
+    display:flex; gap:0.3rem; overflow-x:auto; align-items:center;
     padding:0.7rem 0; scrollbar-width:thin;
   }}
-  .toc a{{
+  .toc a, .toc button.filter-btn{{
     flex:0 0 auto;
     text-decoration:none;
     color:var(--muted);
@@ -553,8 +602,23 @@ def build_study_guide(image_map: dict[str, str] | None = None) -> str:
     font-weight:600;
     padding:0.42rem 0.75rem;
     border-radius:999px;
+    border:1px solid transparent;
+    background:transparent;
+    cursor:pointer;
+    font-family:inherit;
   }}
-  .toc a:hover{{ background:var(--accent-soft); color:var(--accent); }}
+  .toc a:hover, .toc button.filter-btn:hover{{ background:var(--accent-soft); color:var(--accent); }}
+  .toc button.filter-btn.is-active{{
+    background:var(--accent);
+    color:#f0fdfa;
+  }}
+  .toc .filter-status{{
+    flex:0 0 auto;
+    font-size:0.72rem;
+    color:var(--muted);
+    margin-left:0.35rem;
+    white-space:nowrap;
+  }}
 
   section{{ padding:3.1rem 0 0.5rem; }}
   .section-head{{ margin-bottom:1.4rem; max-width:46rem; }}
@@ -585,6 +649,8 @@ def build_study_guide(image_map: dict[str, str] | None = None) -> str:
     border-top:1px solid var(--line);
   }}
   .term:last-of-type{{ border-bottom:1px solid var(--line); }}
+  body.filter-core .term[data-in-chapters="0"]{{ display:none; }}
+  body.filter-core section.is-empty{{ display:none; }}
   .visual{{
     border:1px solid var(--line);
     border-radius:18px;
@@ -638,15 +704,16 @@ def build_study_guide(image_map: dict[str, str] | None = None) -> str:
   }}
 </style>
 </head>
-<body>
+<body data-total="{len(ACRONYMS)}" data-core="{core_count}">
 
 <header class="hero">
   <div class="hero-inner">
     <p class="brand">5.1</p>
     <h1>CompTIA A+ Acronyms</h1>
-    <p>{len(ACRONYMS)} exam acronyms with full expansions and what each one is used for.</p>
+    <p id="hero-summary">{len(ACRONYMS)} exam acronyms with full expansions and what each one is used for.</p>
     <div class="hero-cta">
 {hero_cta}
+      <button type="button" class="ghost" id="filter-core-hero" aria-pressed="false">Used in other chapters</button>
     </div>
   </div>
 </header>
@@ -654,6 +721,8 @@ def build_study_guide(image_map: dict[str, str] | None = None) -> str:
 <nav class="toc" aria-label="On this page">
   <div class="wrap">
 {toc_links}
+    <button type="button" class="filter-btn" id="filter-core-toc" aria-pressed="false">Used in chapters</button>
+    <span class="filter-status" id="filter-status" hidden></span>
   </div>
 </nav>
 
@@ -670,6 +739,55 @@ def build_study_guide(image_map: dict[str, str] | None = None) -> str:
 </footer>
 
 <script src="study-lightbox.js"></script>
+<script>
+(function(){{
+  const body = document.body;
+  const total = Number(body.dataset.total || 0);
+  const core = Number(body.dataset.core || 0);
+  const heroSummary = document.getElementById("hero-summary");
+  const status = document.getElementById("filter-status");
+  const buttons = [
+    document.getElementById("filter-core-hero"),
+    document.getElementById("filter-core-toc"),
+  ].filter(Boolean);
+
+  function updateSections(on){{
+    document.querySelectorAll("main > section").forEach((section) => {{
+      const count = on
+        ? Number(section.dataset.core || 0)
+        : Number(section.dataset.total || 0);
+      const pretty = section.dataset.label || "";
+      const p = section.querySelector(".section-count");
+      if (p) {{
+        p.textContent = count + " exam acronyms starting with letters " + pretty + ".";
+      }}
+      section.classList.toggle("is-empty", on && count === 0);
+    }});
+  }}
+
+  function setFilter(on){{
+    body.classList.toggle("filter-core", on);
+    buttons.forEach((btn) => {{
+      btn.classList.toggle("is-active", on);
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+    }});
+    if (heroSummary) {{
+      heroSummary.textContent = on
+        ? (core + " acronyms also mentioned in Chapters 1–4 (hiding " + (total - core) + " list-only terms).")
+        : (total + " exam acronyms with full expansions and what each one is used for.");
+    }}
+    if (status) {{
+      status.hidden = !on;
+      status.textContent = on ? ("Showing " + core + " / " + total) : "";
+    }}
+    updateSections(on);
+  }}
+
+  buttons.forEach((btn) => {{
+    btn.addEventListener("click", () => setFilter(!body.classList.contains("filter-core")));
+  }});
+}})();
+</script>
 </body>
 </html>
 """
@@ -693,7 +811,9 @@ def main():
     guide_path.write_text(guide_html, encoding="utf-8")
     imaged = sum(1 for a, _, _ in ACRONYMS if a in IMAGE_MAP)
     missing = [a for a, _, _ in ACRONYMS if a not in IMAGE_MAP]
+    core = find_chapter_mentioned_acronyms()
     print(f"Wrote {guide_path.name} ({len(ACRONYMS)} acronyms, {imaged} with images)")
+    print(f"Mentioned in other chapters: {len(core)} (filter hides {len(ACRONYMS) - len(core)})")
     if missing:
         print(f"Still letter-only: {', '.join(missing)}")
 
@@ -701,11 +821,15 @@ def main():
     sections = []
     terms = []
     counts = {label: 0 for label in order}
+    core_counts = {label: 0 for label in order}
 
     for i, (acronym, expansion, purpose) in enumerate(ACRONYMS):
         label = letter_group(acronym)
         section_id = label.replace("–", "-")
         counts[label] += 1
+        mentioned = acronym in core
+        if mentioned:
+            core_counts[label] += 1
         terms.append(
             {
                 "id": f"5.1-{i}",
@@ -714,6 +838,7 @@ def main():
                 "category": f"Acronyms {label}",
                 "name": term_title(acronym, expansion),
                 "definition": purpose,
+                "inChapters": mentioned,
             }
         )
 
@@ -725,9 +850,10 @@ def main():
                 "title": f"Acronyms {label}",
                 "file": "5.1 CompTIA A+ Acronyms.html",
                 "count": counts[label],
+                "coreCount": core_counts[label],
             }
         )
-        print(f"{section_id}: {counts[label]} terms")
+        print(f"{section_id}: {counts[label]} terms ({core_counts[label]} in other chapters)")
 
     data = {
         "chapter": 5,
@@ -735,6 +861,8 @@ def main():
         "sections": sections,
         "terms": terms,
         "total": len(terms),
+        "coreTotal": len(core),
+        "supportsChapterFilter": True,
     }
 
     json_path = ROOT / "chapter5-quiz-data.json"

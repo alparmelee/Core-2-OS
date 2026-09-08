@@ -124,6 +124,21 @@ def quiz_page_html(chapter: int, title: str, range_label: str, accent: str, acce
   .section-card-title{{ font-size:0.8rem; color:var(--ink); line-height:1.35; }}
   .section-card-count{{ font-size:0.72rem; color:var(--muted); }}
   .setup-focus{{ font-size:0.88rem; color:var(--muted); margin:0 0 0.75rem; }}
+  .filter-row{{
+    display:flex; flex-wrap:wrap; gap:0.55rem 1rem; align-items:center;
+    margin:0 0 1rem; padding:0.75rem 0.9rem;
+    border:1px solid var(--line); border-radius:14px;
+    background:rgba(15,118,110,0.04);
+  }}
+  .filter-toggle{{
+    display:flex; gap:0.55rem; align-items:center;
+    font-size:0.88rem; font-weight:600; cursor:pointer;
+  }}
+  .filter-toggle input{{ width:1.05rem; height:1.05rem; accent-color:var(--accent); }}
+  .filter-hint{{ font-size:0.78rem; color:var(--muted); }}
+  .section-card.is-empty{{
+    opacity:0.45; pointer-events:none;
+  }}
   .customize-block{{ margin-top:1.25rem; padding-top:1.25rem; border-top:1px solid var(--line); }}
   .toggles-grid{{ display:flex; flex-wrap:wrap; gap:0.4rem; margin:0.5rem 0 0.75rem; }}
   .check-pill{{
@@ -242,6 +257,13 @@ def quiz_page_html(chapter: int, title: str, range_label: str, accent: str, acce
           <label><input type="radio" name="quiz-mode" value="def-to-term"> Definition → pick the correct term</label>
         </div>
         <p class="setup-focus" id="setup-focus">Click a section to start instantly.</p>
+        <div class="filter-row" id="chapter-filter-row" hidden>
+          <label class="filter-toggle">
+            <input type="checkbox" id="filter-core">
+            <span>Only terms used in other chapters</span>
+          </label>
+          <span class="filter-hint" id="filter-core-hint"></span>
+        </div>
         <h2>Start a section</h2>
         <div class="section-grid" id="section-filters"></div>
         <button type="button" class="btn" id="start-all-btn">Quiz all sections</button>

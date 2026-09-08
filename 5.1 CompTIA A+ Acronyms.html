@@ -75,7 +75,7 @@
     color:#94a3b8;
   }
   .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
-  .hero-cta a{
+  .hero-cta a, .hero-cta button{
     text-decoration:none;
     font-weight:600;
     font-size:0.92rem;
@@ -83,11 +83,19 @@
     border-radius:999px;
     background:#ccfbf1;
     color:#134e4a;
+    border:0;
+    cursor:pointer;
+    font-family:inherit;
   }
-  .hero-cta a.ghost{
+  .hero-cta a.ghost, .hero-cta button.ghost{
     background:transparent;
     color:#ccfbf1;
     border:1px solid rgba(204,251,241,0.4);
+  }
+  .hero-cta button.is-active{
+    background:#ccfbf1;
+    color:#134e4a;
+    border-color:transparent;
   }
 
   .toc{
@@ -97,10 +105,10 @@
     border-bottom:1px solid var(--line);
   }
   .toc .wrap{
-    display:flex; gap:0.3rem; overflow-x:auto;
+    display:flex; gap:0.3rem; overflow-x:auto; align-items:center;
     padding:0.7rem 0; scrollbar-width:thin;
   }
-  .toc a{
+  .toc a, .toc button.filter-btn{
     flex:0 0 auto;
     text-decoration:none;
     color:var(--muted);
@@ -108,8 +116,23 @@
     font-weight:600;
     padding:0.42rem 0.75rem;
     border-radius:999px;
+    border:1px solid transparent;
+    background:transparent;
+    cursor:pointer;
+    font-family:inherit;
   }
-  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+  .toc a:hover, .toc button.filter-btn:hover{ background:var(--accent-soft); color:var(--accent); }
+  .toc button.filter-btn.is-active{
+    background:var(--accent);
+    color:#f0fdfa;
+  }
+  .toc .filter-status{
+    flex:0 0 auto;
+    font-size:0.72rem;
+    color:var(--muted);
+    margin-left:0.35rem;
+    white-space:nowrap;
+  }
 
   section{ padding:3.1rem 0 0.5rem; }
   .section-head{ margin-bottom:1.4rem; max-width:46rem; }
@@ -140,6 +163,8 @@
     border-top:1px solid var(--line);
   }
   .term:last-of-type{ border-bottom:1px solid var(--line); }
+  body.filter-core .term[data-in-chapters="0"]{ display:none; }
+  body.filter-core section.is-empty{ display:none; }
   .visual{
     border:1px solid var(--line);
     border-radius:18px;
@@ -193,13 +218,13 @@
   }
 </style>
 </head>
-<body>
+<body data-total="200" data-core="122">
 
 <header class="hero">
   <div class="hero-inner">
     <p class="brand">5.1</p>
     <h1>CompTIA A+ Acronyms</h1>
-    <p>200 exam acronyms with full expansions and what each one is used for.</p>
+    <p id="hero-summary">200 exam acronyms with full expansions and what each one is used for.</p>
     <div class="hero-cta">
       <a href="#group-a-c">A–C</a>
       <a class="ghost" href="#group-d-f">D–F</a>
@@ -209,6 +234,7 @@
       <a class="ghost" href="#group-q-r">Q–R</a>
       <a class="ghost" href="#group-s-t">S–T</a>
       <a class="ghost" href="#group-u-z">U–Z</a>
+      <button type="button" class="ghost" id="filter-core-hero" aria-pressed="false">Used in other chapters</button>
     </div>
   </div>
 </header>
@@ -223,174 +249,176 @@
     <a href="#group-q-r">Q–R</a>
     <a href="#group-s-t">S–T</a>
     <a href="#group-u-z">U–Z</a>
+    <button type="button" class="filter-btn" id="filter-core-toc" aria-pressed="false">Used in chapters</button>
+    <span class="filter-status" id="filter-status" hidden></span>
   </div>
 </nav>
 
 <main>
 
-  <section id="group-a-c">
+  <section id="group-a-c" data-total="23" data-core="12" data-label="A–C">
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">Part A</span>
         <h2>Acronyms A–C</h2>
-        <p>23 exam acronyms starting with letters A–C.</p>
+        <p class="section-count">23 exam acronyms starting with letters A–C.</p>
       </div>
 
-      <article class="term" id="aaa">
+      <article class="term" id="aaa" data-in-chapters="1">
         <div class="visual photo"><img src="2.3/RADIUS.png" alt="AAA (Authentication, Authorization, and Accounting)" loading="lazy"></div>
         <div class="body">
           <h3>AAA (Authentication, Authorization, and Accounting)</h3>
           <p>Security framework that verifies who you are, what you can access, and logs what you did on a network or system.</p>
         </div>
       </article>
-      <article class="term" id="acl">
+      <article class="term" id="acl" data-in-chapters="1">
         <div class="visual photo"><img src="2.1/Access control lists (ACLs).png" alt="ACL (Access Control List)" loading="lazy"></div>
         <div class="body">
           <h3>ACL (Access Control List)</h3>
           <p>Ruleset that specifies which users or systems are allowed or denied access to a resource such as a file, folder, or network.</p>
         </div>
       </article>
-      <article class="term" id="adf">
+      <article class="term" id="adf" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/ADF.jfif" alt="ADF (Automatic Document Feeder)" loading="lazy"></div>
         <div class="body">
           <h3>ADF (Automatic Document Feeder)</h3>
           <p>Printer/scanner tray that feeds multipage documents automatically so you do not have to place each sheet on the glass.</p>
         </div>
       </article>
-      <article class="term" id="aes">
+      <article class="term" id="aes" data-in-chapters="1">
         <div class="visual photo"><img src="2.3/AES.png" alt="AES (Advanced Encryption Standard)" loading="lazy"></div>
         <div class="body">
           <h3>AES (Advanced Encryption Standard)</h3>
           <p>Widely used symmetric encryption algorithm that protects data at rest and in transit with strong, standardized ciphers.</p>
         </div>
       </article>
-      <article class="term" id="amd">
+      <article class="term" id="amd" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/AMD.webp" alt="AMD (Advanced Micro Devices, Inc.)" loading="lazy"></div>
         <div class="body">
           <h3>AMD (Advanced Micro Devices, Inc.)</h3>
           <p>CPU and GPU manufacturer whose processors and graphics chips compete with Intel and NVIDIA in PCs and servers.</p>
         </div>
       </article>
-      <article class="term" id="ap">
+      <article class="term" id="ap" data-in-chapters="0">
         <div class="visual photo"><img src="3.2/Connectivity issues Wi-Fi.jfif" alt="AP (Access Point)" loading="lazy"></div>
         <div class="body">
           <h3>AP (Access Point)</h3>
           <p>Wireless network device that lets Wi-Fi clients connect to a wired LAN or the internet.</p>
         </div>
       </article>
-      <article class="term" id="apfs">
+      <article class="term" id="apfs" data-in-chapters="1">
         <div class="visual photo"><img src="1.1/apfs-logo.jpg" alt="APFS (Apple File System)" loading="lazy"></div>
         <div class="body">
           <h3>APFS (Apple File System)</h3>
           <p>Modern Apple disk file system optimized for SSDs, with strong encryption, snapshots, and space sharing on macOS and iOS.</p>
         </div>
       </article>
-      <article class="term" id="apipa">
+      <article class="term" id="apipa" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/APIPA.jfif" alt="APIPA (Automatic Private Internet Protocol Addressing)" loading="lazy"></div>
         <div class="body">
           <h3>APIPA (Automatic Private Internet Protocol Addressing)</h3>
           <p>Windows feature that assigns a 169.254.x.x address when DHCP fails so the host can still talk on the local link.</p>
         </div>
       </article>
-      <article class="term" id="arm">
+      <article class="term" id="arm" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/ARM.jfif" alt="ARM (Advanced RISC (Reduced Instruction Set Computer) Machine)" loading="lazy"></div>
         <div class="body">
           <h3>ARM (Advanced RISC (Reduced Instruction Set Computer) Machine)</h3>
           <p>CPU architecture used in phones, tablets, and many laptops that emphasizes efficiency with a reduced instruction set.</p>
         </div>
       </article>
-      <article class="term" id="atx">
+      <article class="term" id="atx" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/ATX.jfif" alt="ATX (Advanced Technology Extended)" loading="lazy"></div>
         <div class="body">
           <h3>ATX (Advanced Technology Extended)</h3>
           <p>Common PC motherboard and power-supply form factor that defines board size, mounting holes, and connector layout.</p>
         </div>
       </article>
-      <article class="term" id="aup">
+      <article class="term" id="aup" data-in-chapters="1">
         <div class="visual photo"><img src="4.6/Acceptable Use Policy (AUP).png" alt="AUP (Acceptable Use Policy)" loading="lazy"></div>
         <div class="body">
           <h3>AUP (Acceptable Use Policy)</h3>
           <p>Organizational rules describing allowed and prohibited uses of company computers, networks, and internet access.</p>
         </div>
       </article>
-      <article class="term" id="bec">
+      <article class="term" id="bec" data-in-chapters="1">
         <div class="visual photo"><img src="2.5/Business email compromise (BEC).webp" alt="BEC (Business Email Compromise)" loading="lazy"></div>
         <div class="body">
           <h3>BEC (Business Email Compromise)</h3>
           <p>Social-engineering fraud where attackers impersonate executives or vendors by email to steal money or data.</p>
         </div>
       </article>
-      <article class="term" id="bios">
+      <article class="term" id="bios" data-in-chapters="1">
         <div class="visual photo"><img src="2.10/Firmware updates.jpg" alt="BIOS (Basic Input/Output System)" loading="lazy"></div>
         <div class="body">
           <h3>BIOS (Basic Input/Output System)</h3>
           <p>Legacy firmware that initializes hardware at power-on and starts the boot process before the OS loads.</p>
         </div>
       </article>
-      <article class="term" id="bnc">
+      <article class="term" id="bnc" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/BNC.jfif" alt="BNC (Bayonet Neill-Concelman)" loading="lazy"></div>
         <div class="body">
           <h3>BNC (Bayonet Neill-Concelman)</h3>
           <p>Coaxial connector with a twist-lock bayonet coupling, historically used on older network and video cabling.</p>
         </div>
       </article>
-      <article class="term" id="bsod">
+      <article class="term" id="bsod" data-in-chapters="1">
         <div class="visual photo"><img src="3.1/Blue screen of death (BSOD).png" alt="BSOD (Blue Screen of Death)" loading="lazy"></div>
         <div class="body">
           <h3>BSOD (Blue Screen of Death)</h3>
           <p>Windows stop-error screen shown when the OS encounters a critical fault it cannot recover from safely.</p>
         </div>
       </article>
-      <article class="term" id="byod">
+      <article class="term" id="byod" data-in-chapters="1">
         <div class="visual photo"><img src="2.5/Bring Your Own Device (BYOD).png" alt="BYOD (Bring Your Own Device)" loading="lazy"></div>
         <div class="body">
           <h3>BYOD (Bring Your Own Device)</h3>
           <p>Policy that lets employees use personal phones or laptops for work, usually managed with MDM and security controls.</p>
         </div>
       </article>
-      <article class="term" id="cac">
+      <article class="term" id="cac" data-in-chapters="0">
         <div class="visual photo"><img src="2.1/Smart cards.png" alt="CAC (Calling-card Authorization Computer)" loading="lazy"></div>
         <div class="body">
           <h3>CAC (Calling-card Authorization Computer)</h3>
           <p>Smart-card style credential used to authenticate users for secure access in government and enterprise environments.</p>
         </div>
       </article>
-      <article class="term" id="cas">
+      <article class="term" id="cas" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/CAS.png" alt="CAS (Column Address Strobe)" loading="lazy"></div>
         <div class="body">
           <h3>CAS (Column Address Strobe)</h3>
           <p>Memory timing signal related to how DRAM columns are addressed; often discussed with RAM latency (CAS latency).</p>
         </div>
       </article>
-      <article class="term" id="cifs">
+      <article class="term" id="cifs" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/CIFS.jfif" alt="CIFS (Common Internet File System)" loading="lazy"></div>
         <div class="body">
           <h3>CIFS (Common Internet File System)</h3>
           <p>Microsoft file-sharing dialect of SMB that lets clients access networked files and printers over TCP/IP.</p>
         </div>
       </article>
-      <article class="term" id="cmdb">
+      <article class="term" id="cmdb" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/CMDB.jfif" alt="CMDB (Configuration Management Database)" loading="lazy"></div>
         <div class="body">
           <h3>CMDB (Configuration Management Database)</h3>
           <p>Central inventory of IT assets and their relationships used for change, incident, and asset management.</p>
         </div>
       </article>
-      <article class="term" id="cmos">
+      <article class="term" id="cmos" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/CMOS.jfif" alt="CMOS (Complementary Metal-Oxide Semiconductor)" loading="lazy"></div>
         <div class="body">
           <h3>CMOS (Complementary Metal-Oxide Semiconductor)</h3>
           <p>Low-power chip technology; in PCs it often refers to the battery-backed chip storing BIOS/UEFI settings.</p>
         </div>
       </article>
-      <article class="term" id="cname">
+      <article class="term" id="cname" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/CNAME.png" alt="CNAME (Canonical Name)" loading="lazy"></div>
         <div class="body">
           <h3>CNAME (Canonical Name)</h3>
           <p>DNS record that aliases one hostname to another canonical hostname.</p>
         </div>
       </article>
-      <article class="term" id="cpu">
+      <article class="term" id="cpu" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/CPU.jfif" alt="CPU (Central Processing Unit)" loading="lazy"></div>
         <div class="body">
           <h3>CPU (Central Processing Unit)</h3>
@@ -399,190 +427,190 @@
       </article>
     </div>
   </section>
-  <section id="group-d-f">
+  <section id="group-d-f" data-total="26" data-core="15" data-label="D–F">
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">Part B</span>
         <h2>Acronyms D–F</h2>
-        <p>26 exam acronyms starting with letters D–F.</p>
+        <p class="section-count">26 exam acronyms starting with letters D–F.</p>
       </div>
 
-      <article class="term" id="db-9">
+      <article class="term" id="db-9" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/DB9.jpg" alt="DB-9 (Serial Communications D-Shell Connector, 9 pins)" loading="lazy"></div>
         <div class="body">
           <h3>DB-9 (Serial Communications D-Shell Connector, 9 pins)</h3>
           <p>Nine-pin D-sub serial connector historically used for RS-232 devices, consoles, and older peripherals.</p>
         </div>
       </article>
-      <article class="term" id="ddos">
+      <article class="term" id="ddos" data-in-chapters="1">
         <div class="visual photo"><img src="2.5/Distributed Denial of Service (DDoS).png" alt="DDoS (Distributed Denial of Service)" loading="lazy"></div>
         <div class="body">
           <h3>DDoS (Distributed Denial of Service)</h3>
           <p>Attack that floods a target from many compromised systems to overwhelm availability of a service.</p>
         </div>
       </article>
-      <article class="term" id="ddr">
+      <article class="term" id="ddr" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/DDR.jfif" alt="DDR (Double Data Rate)" loading="lazy"></div>
         <div class="body">
           <h3>DDR (Double Data Rate)</h3>
           <p>Memory technology that transfers data on both clock edges, used in successive generations of RAM modules.</p>
         </div>
       </article>
-      <article class="term" id="dhcp">
+      <article class="term" id="dhcp" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/DHCP.png" alt="DHCP (Dynamic Host Configuration Protocol)" loading="lazy"></div>
         <div class="body">
           <h3>DHCP (Dynamic Host Configuration Protocol)</h3>
           <p>Network service that automatically assigns IP addresses and related settings to clients.</p>
         </div>
       </article>
-      <article class="term" id="dimm">
+      <article class="term" id="dimm" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/DIMM.jfif" alt="DIMM (Dual In-line Memory Module)" loading="lazy"></div>
         <div class="body">
           <h3>DIMM (Dual In-line Memory Module)</h3>
           <p>Standard stick form factor for desktop and server RAM with contacts on both sides of the module.</p>
         </div>
       </article>
-      <article class="term" id="dkim">
+      <article class="term" id="dkim" data-in-chapters="0">
         <div class="visual photo"><img src="2.1/Email auth.png" alt="DKIM (DomainKeys Identified Mail)" loading="lazy"></div>
         <div class="body">
           <h3>DKIM (DomainKeys Identified Mail)</h3>
           <p>Email authentication method that signs outbound messages so receivers can verify the sending domain.</p>
         </div>
       </article>
-      <article class="term" id="dlp">
+      <article class="term" id="dlp" data-in-chapters="1">
         <div class="visual photo"><img src="2.1/Data loss prevention (DLP).png" alt="DLP (Data Loss Prevention)" loading="lazy"></div>
         <div class="body">
           <h3>DLP (Data Loss Prevention)</h3>
           <p>Security controls that detect and block unauthorized transfer or leakage of sensitive data.</p>
         </div>
       </article>
-      <article class="term" id="dmarc">
+      <article class="term" id="dmarc" data-in-chapters="0">
         <div class="visual photo"><img src="2.1/Email auth.png" alt="DMARC (Domain-based Message Authentication, Reporting, and Conformance)" loading="lazy"></div>
         <div class="body">
           <h3>DMARC (Domain-based Message Authentication, Reporting, and Conformance)</h3>
           <p>Email policy framework that builds on SPF/DKIM and tells receivers how to handle failed authentication.</p>
         </div>
       </article>
-      <article class="term" id="dns">
+      <article class="term" id="dns" data-in-chapters="1">
         <div class="visual photo"><img src="2.11/Secure DNS.jpg" alt="DNS (Domain Name System)" loading="lazy"></div>
         <div class="body">
           <h3>DNS (Domain Name System)</h3>
           <p>Internet directory that resolves human-readable names to IP addresses and related records.</p>
         </div>
       </article>
-      <article class="term" id="dos">
+      <article class="term" id="dos" data-in-chapters="1">
         <div class="visual photo"><img src="2.5/Denial of Service (DoS).jpg" alt="DoS (Denial of Service)" loading="lazy"></div>
         <div class="body">
           <h3>DoS (Denial of Service)</h3>
           <p>Attack that makes a system or network unavailable by exhausting resources or crashing a service.</p>
         </div>
       </article>
-      <article class="term" id="drm">
+      <article class="term" id="drm" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/DRM.jfif" alt="DRM (Digital Rights Management)" loading="lazy"></div>
         <div class="body">
           <h3>DRM (Digital Rights Management)</h3>
           <p>Technology that restricts how digital media or software can be copied, shared, or used.</p>
         </div>
       </article>
-      <article class="term" id="dsl">
+      <article class="term" id="dsl" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/DSL.webp" alt="DSL (Digital Subscriber Line)" loading="lazy"></div>
         <div class="body">
           <h3>DSL (Digital Subscriber Line)</h3>
           <p>Broadband internet technology that delivers data over telephone copper lines.</p>
         </div>
       </article>
-      <article class="term" id="dvi">
+      <article class="term" id="dvi" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/DVI.jfif" alt="DVI (Digital Visual Interface)" loading="lazy"></div>
         <div class="body">
           <h3>DVI (Digital Visual Interface)</h3>
           <p>Video connector standard used to link computers to monitors, supporting digital (and sometimes analog) signals.</p>
         </div>
       </article>
-      <article class="term" id="ecc">
+      <article class="term" id="ecc" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/ECC.jfif" alt="ECC (Error-correcting Code)" loading="lazy"></div>
         <div class="body">
           <h3>ECC (Error-correcting Code)</h3>
           <p>Memory feature that detects and corrects bit errors, common in servers for higher reliability.</p>
         </div>
       </article>
-      <article class="term" id="edr">
+      <article class="term" id="edr" data-in-chapters="1">
         <div class="visual photo"><img src="2.4/Endpoint Detection &amp; Response (EDR).jpg" alt="EDR (Endpoint Detection and Response)" loading="lazy"></div>
         <div class="body">
           <h3>EDR (Endpoint Detection and Response)</h3>
           <p>Security platform that monitors endpoints for threats and supports investigation and remediation.</p>
         </div>
       </article>
-      <article class="term" id="efs">
+      <article class="term" id="efs" data-in-chapters="1">
         <div class="visual photo"><img src="2.7/File system encryption.webp" alt="EFS (Encrypting File System)" loading="lazy"></div>
         <div class="body">
           <h3>EFS (Encrypting File System)</h3>
           <p>Windows feature that encrypts individual files and folders with user-tied keys.</p>
         </div>
       </article>
-      <article class="term" id="eol">
+      <article class="term" id="eol" data-in-chapters="1">
         <div class="visual photo"><img src="2.5/End-of-life (EOL).jfif" alt="EOL (End-of-life)" loading="lazy"></div>
         <div class="body">
           <h3>EOL (End-of-life)</h3>
           <p>Point when a product no longer receives updates or vendor support and should be replaced or mitigated.</p>
         </div>
       </article>
-      <article class="term" id="esata">
+      <article class="term" id="esata" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/eSATA.jfif" alt="eSATA (External Serial Advanced Technology Attachment)" loading="lazy"></div>
         <div class="body">
           <h3>eSATA (External Serial Advanced Technology Attachment)</h3>
           <p>External SATA interface for connecting outside hard drives at SATA speeds.</p>
         </div>
       </article>
-      <article class="term" id="esd">
+      <article class="term" id="esd" data-in-chapters="1">
         <div class="visual photo"><img src="4.4/ESD straps.jfif" alt="ESD (Electrostatic Discharge)" loading="lazy"></div>
         <div class="body">
           <h3>ESD (Electrostatic Discharge)</h3>
           <p>Sudden static electricity surge that can damage sensitive electronic components during handling.</p>
         </div>
       </article>
-      <article class="term" id="esim">
+      <article class="term" id="esim" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/eSIM.jfif" alt="eSIM (Embedded SIM)" loading="lazy"></div>
         <div class="body">
           <h3>eSIM (Embedded SIM)</h3>
           <p>Software-based SIM built into a device that can be provisioned without a physical SIM card.</p>
         </div>
       </article>
-      <article class="term" id="eula">
+      <article class="term" id="eula" data-in-chapters="1">
         <div class="visual photo"><img src="4.6/Valid licenses.jfif" alt="EULA (End-user License Agreement)" loading="lazy"></div>
         <div class="body">
           <h3>EULA (End-user License Agreement)</h3>
           <p>Legal contract defining the terms under which a user may install and use software.</p>
         </div>
       </article>
-      <article class="term" id="exfat">
+      <article class="term" id="exfat" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/exFAT.jfif" alt="exFAT (Extended File Allocation Table)" loading="lazy"></div>
         <div class="body">
           <h3>exFAT (Extended File Allocation Table)</h3>
           <p>Microsoft file system designed for flash media with large file support across Windows, macOS, and more.</p>
         </div>
       </article>
-      <article class="term" id="faas">
+      <article class="term" id="faas" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/faas.jpg" alt="FaaS (Function As A Service)" loading="lazy"></div>
         <div class="body">
           <h3>FaaS (Function As A Service)</h3>
           <p>Cloud model that runs event-triggered code functions without managing servers (serverless).</p>
         </div>
       </article>
-      <article class="term" id="fat32">
+      <article class="term" id="fat32" data-in-chapters="1">
         <div class="visual photo"><img src="1.1/fat32.webp" alt="FAT32 (32-bit File Allocation Table)" loading="lazy"></div>
         <div class="body">
           <h3>FAT32 (32-bit File Allocation Table)</h3>
           <p>Older widely compatible file system with a 4 GB per-file size limit, still used on USB drives.</p>
         </div>
       </article>
-      <article class="term" id="frt">
+      <article class="term" id="frt" data-in-chapters="1">
         <div class="visual photo"><img src="2.1/Facial recognition technology (FRT).png" alt="FRT (Facial Recognition Technology)" loading="lazy"></div>
         <div class="body">
           <h3>FRT (Facial Recognition Technology)</h3>
           <p>Biometric method that identifies or unlocks devices by analyzing facial features.</p>
         </div>
       </article>
-      <article class="term" id="ftp">
+      <article class="term" id="ftp" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/FTP.webp" alt="FTP (File Transfer Protocol)" loading="lazy"></div>
         <div class="body">
           <h3>FTP (File Transfer Protocol)</h3>
@@ -591,169 +619,169 @@
       </article>
     </div>
   </section>
-  <section id="group-g-i">
+  <section id="group-g-i" data-total="23" data-core="16" data-label="G–I">
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">Part C</span>
         <h2>Acronyms G–I</h2>
-        <p>23 exam acronyms starting with letters G–I.</p>
+        <p class="section-count">23 exam acronyms starting with letters G–I.</p>
       </div>
 
-      <article class="term" id="gfs">
+      <article class="term" id="gfs" data-in-chapters="1">
         <div class="visual photo"><img src="4.3/Grandfather-Father-Son (GFS).jfif" alt="GFS (Grandfather-Father-Son)" loading="lazy"></div>
         <div class="body">
           <h3>GFS (Grandfather-Father-Son)</h3>
           <p>Backup rotation scheme that keeps daily, weekly, and monthly copies on a staggered schedule.</p>
         </div>
       </article>
-      <article class="term" id="gps">
+      <article class="term" id="gps" data-in-chapters="1">
         <div class="visual photo"><img src="2.8/Locator applications.png" alt="GPS (Global Positioning System)" loading="lazy"></div>
         <div class="body">
           <h3>GPS (Global Positioning System)</h3>
           <p>Satellite navigation system that provides location and time data to GPS receivers.</p>
         </div>
       </article>
-      <article class="term" id="gpt">
+      <article class="term" id="gpt" data-in-chapters="1">
         <div class="visual photo"><img src="1.2/gpt-partition-table.webp" alt="GPT (GUID (Globally Unique Identifier) Partition Table)" loading="lazy"></div>
         <div class="body">
           <h3>GPT (GUID (Globally Unique Identifier) Partition Table)</h3>
           <p>Modern disk partitioning scheme that supports large disks and many partitions, replacing MBR limits.</p>
         </div>
       </article>
-      <article class="term" id="gpu">
+      <article class="term" id="gpu" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/GPU.webp" alt="GPU (Graphics Processing Unit)" loading="lazy"></div>
         <div class="body">
           <h3>GPU (Graphics Processing Unit)</h3>
           <p>Processor specialized for rendering graphics and accelerating parallel workloads like video and AI.</p>
         </div>
       </article>
-      <article class="term" id="gui">
+      <article class="term" id="gui" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/GUI.jfif" alt="GUI (Graphical User Interface)" loading="lazy"></div>
         <div class="body">
           <h3>GUI (Graphical User Interface)</h3>
           <p>Visual interface of windows, icons, and menus that users interact with instead of pure text commands.</p>
         </div>
       </article>
-      <article class="term" id="guid">
+      <article class="term" id="guid" data-in-chapters="1">
         <div class="visual photo"><img src="1.2/GUID.png" alt="GUID (Globally Unique Identifier)" loading="lazy"></div>
         <div class="body">
           <h3>GUID (Globally Unique Identifier)</h3>
           <p>128-bit unique ID used to identify software objects, partitions, and other entities without collision.</p>
         </div>
       </article>
-      <article class="term" id="hd">
+      <article class="term" id="hd" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/HD.jfif" alt="HD (High Definition)" loading="lazy"></div>
         <div class="body">
           <h3>HD (High Definition)</h3>
           <p>Video quality standard with higher resolution than standard definition (commonly 720p or 1080p).</p>
         </div>
       </article>
-      <article class="term" id="hdd">
+      <article class="term" id="hdd" data-in-chapters="1">
         <div class="visual photo"><img src="1.2/Internal hard drive (partition).png" alt="HDD (Hard Disk Drive)" loading="lazy"></div>
         <div class="body">
           <h3>HDD (Hard Disk Drive)</h3>
           <p>Magnetic spinning-disk storage device used for bulk data storage at lower cost per gigabyte.</p>
         </div>
       </article>
-      <article class="term" id="hdmi">
+      <article class="term" id="hdmi" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/HDMI.jfif" alt="HDMI (High-definition Media Interface)" loading="lazy"></div>
         <div class="body">
           <h3>HDMI (High-definition Media Interface)</h3>
           <p>Digital audio/video connector that carries uncompressed video and multi-channel audio to displays.</p>
         </div>
       </article>
-      <article class="term" id="hsm">
+      <article class="term" id="hsm" data-in-chapters="0">
         <div class="visual photo"><img src="2.1/Hardware token.png" alt="HSM (Hardware Security Module)" loading="lazy"></div>
         <div class="body">
           <h3>HSM (Hardware Security Module)</h3>
           <p>Tamper-resistant device that generates and stores cryptographic keys for high-security operations.</p>
         </div>
       </article>
-      <article class="term" id="http">
+      <article class="term" id="http" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/HTTP.png" alt="HTTP (Hypertext Transfer Protocol)" loading="lazy"></div>
         <div class="body">
           <h3>HTTP (Hypertext Transfer Protocol)</h3>
           <p>Application protocol that transfers web pages and API data between browsers and servers (unencrypted).</p>
         </div>
       </article>
-      <article class="term" id="https">
+      <article class="term" id="https" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/HTTPS.jfif" alt="HTTPS (Hypertext Transfer Protocol Secure)" loading="lazy"></div>
         <div class="body">
           <h3>HTTPS (Hypertext Transfer Protocol Secure)</h3>
           <p>HTTP wrapped in TLS encryption to protect web traffic confidentiality and integrity.</p>
         </div>
       </article>
-      <article class="term" id="iaas">
+      <article class="term" id="iaas" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/IaaS.png" alt="IaaS (Infrastructure as a Service)" loading="lazy"></div>
         <div class="body">
           <h3>IaaS (Infrastructure as a Service)</h3>
           <p>Cloud model that rents virtual servers, storage, and networking for customers to configure.</p>
         </div>
       </article>
-      <article class="term" id="iam">
+      <article class="term" id="iam" data-in-chapters="1">
         <div class="visual photo"><img src="2.1/Identity access management (IAM).png" alt="IAM (Identity Access Management)" loading="lazy"></div>
         <div class="body">
           <h3>IAM (Identity Access Management)</h3>
           <p>Policies and tools that control user identities, authentication, and access rights across systems.</p>
         </div>
       </article>
-      <article class="term" id="imap">
+      <article class="term" id="imap" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/IMAP.jfif" alt="IMAP (Internet Mail Access Protocol)" loading="lazy"></div>
         <div class="body">
           <h3>IMAP (Internet Mail Access Protocol)</h3>
           <p>Email protocol that keeps messages on the server and syncs mailboxes across multiple devices.</p>
         </div>
       </article>
-      <article class="term" id="iops">
+      <article class="term" id="iops" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/IOPS.jpg" alt="IOPS (Input/Output Operations Per Second)" loading="lazy"></div>
         <div class="body">
           <h3>IOPS (Input/Output Operations Per Second)</h3>
           <p>Performance metric measuring how many read/write operations a storage device can handle per second.</p>
         </div>
       </article>
-      <article class="term" id="iot">
+      <article class="term" id="iot" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/IoT.jfif" alt="IoT (Internet of Things)" loading="lazy"></div>
         <div class="body">
           <h3>IoT (Internet of Things)</h3>
           <p>Network of everyday devices (sensors, appliances, cameras) connected to the internet for data and control.</p>
         </div>
       </article>
-      <article class="term" id="ip">
+      <article class="term" id="ip" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/IP.png" alt="IP (Internet Protocol)" loading="lazy"></div>
         <div class="body">
           <h3>IP (Internet Protocol)</h3>
           <p>Core network protocol that addresses and routes packets between hosts on an IP network.</p>
         </div>
       </article>
-      <article class="term" id="ips">
+      <article class="term" id="ips" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/IPS.jfif" alt="IPS (In-plane Switching)" loading="lazy"></div>
         <div class="body">
           <h3>IPS (In-plane Switching)</h3>
           <p>LCD panel technology known for wide viewing angles and accurate colors compared with TN panels.</p>
         </div>
       </article>
-      <article class="term" id="ir">
+      <article class="term" id="ir" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/IR.jfif" alt="IR (Infrared)" loading="lazy"></div>
         <div class="body">
           <h3>IR (Infrared)</h3>
           <p>Wireless line-of-sight communication or sensing using infrared light, used in remotes and some sensors.</p>
         </div>
       </article>
-      <article class="term" id="iso">
+      <article class="term" id="iso" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/ISO.svg" alt="ISO (International Organization for Standardization)" loading="lazy"></div>
         <div class="body">
           <h3>ISO (International Organization for Standardization)</h3>
           <p>Standards body; also casually used for disk image files (.iso) that mirror optical media.</p>
         </div>
       </article>
-      <article class="term" id="isp">
+      <article class="term" id="isp" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/ISP.jfif" alt="ISP (Internet Service Provider)" loading="lazy"></div>
         <div class="body">
           <h3>ISP (Internet Service Provider)</h3>
           <p>Company that provides customers with internet connectivity and related services.</p>
         </div>
       </article>
-      <article class="term" id="itx">
+      <article class="term" id="itx" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/ITX.jfif" alt="ITX (Information Technology eXtended)" loading="lazy"></div>
         <div class="body">
           <h3>ITX (Information Technology eXtended)</h3>
@@ -762,134 +790,134 @@
       </article>
     </div>
   </section>
-  <section id="group-j-m">
+  <section id="group-j-m" data-total="18" data-core="12" data-label="J–M">
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">Part D</span>
         <h2>Acronyms J–M</h2>
-        <p>18 exam acronyms starting with letters J–M.</p>
+        <p class="section-count">18 exam acronyms starting with letters J–M.</p>
       </div>
 
-      <article class="term" id="kvm">
+      <article class="term" id="kvm" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/KVM.jpg" alt="KVM (Keyboard-Video-Mouse)" loading="lazy"></div>
         <div class="body">
           <h3>KVM (Keyboard-Video-Mouse)</h3>
           <p>Switch or device that lets one keyboard, mouse, and monitor control multiple computers.</p>
         </div>
       </article>
-      <article class="term" id="lan">
+      <article class="term" id="lan" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/LAN.png" alt="LAN (Local Area Network)" loading="lazy"></div>
         <div class="body">
           <h3>LAN (Local Area Network)</h3>
           <p>Network covering a limited area such as a home, office, or building.</p>
         </div>
       </article>
-      <article class="term" id="lc">
+      <article class="term" id="lc" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/LC.jfif" alt="LC (Lucent Connector)" loading="lazy"></div>
         <div class="body">
           <h3>LC (Lucent Connector)</h3>
           <p>Small form-factor fiber-optic connector commonly used in high-density network installations.</p>
         </div>
       </article>
-      <article class="term" id="lcd">
+      <article class="term" id="lcd" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/LCD.jfif" alt="LCD (Liquid Crystal Display)" loading="lazy"></div>
         <div class="body">
           <h3>LCD (Liquid Crystal Display)</h3>
           <p>Flat-panel display technology that uses liquid crystals and a backlight to form images.</p>
         </div>
       </article>
-      <article class="term" id="ldap">
+      <article class="term" id="ldap" data-in-chapters="1">
         <div class="visual photo"><img src="2.1/Directory services.png" alt="LDAP (Lightweight Directory Access Protocol)" loading="lazy"></div>
         <div class="body">
           <h3>LDAP (Lightweight Directory Access Protocol)</h3>
           <p>Protocol for querying and managing directory services such as user accounts and groups.</p>
         </div>
       </article>
-      <article class="term" id="led">
+      <article class="term" id="led" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/LED.jfif" alt="LED (Light-emitting Diode)" loading="lazy"></div>
         <div class="body">
           <h3>LED (Light-emitting Diode)</h3>
           <p>Semiconductor light source used for indicators, lighting, and modern display backlights.</p>
         </div>
       </article>
-      <article class="term" id="lte">
+      <article class="term" id="lte" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/LTE.png" alt="LTE (Long-Term Evolution)" loading="lazy"></div>
         <div class="body">
           <h3>LTE (Long-Term Evolution)</h3>
           <p>High-speed cellular wireless standard commonly known as 4G LTE mobile data.</p>
         </div>
       </article>
-      <article class="term" id="mac">
+      <article class="term" id="mac" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/MAC.jfif" alt="MAC (Media Access Control)" loading="lazy"></div>
         <div class="body">
           <h3>MAC (Media Access Control)</h3>
           <p>Hardware address uniquely identifying a network interface on a local network segment.</p>
         </div>
       </article>
-      <article class="term" id="man">
+      <article class="term" id="man" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/MAN.jfif" alt="MAN (Metropolitan Area Network)" loading="lazy"></div>
         <div class="body">
           <h3>MAN (Metropolitan Area Network)</h3>
           <p>Network spanning a city or campus, larger than a LAN but smaller than a WAN.</p>
         </div>
       </article>
-      <article class="term" id="mbr">
+      <article class="term" id="mbr" data-in-chapters="1">
         <div class="visual photo"><img src="1.2/mbr.webp" alt="MBR (Master Boot Record)" loading="lazy"></div>
         <div class="body">
           <h3>MBR (Master Boot Record)</h3>
           <p>Legacy disk boot sector and partitioning scheme limited to four primary partitions and 2 TB disks.</p>
         </div>
       </article>
-      <article class="term" id="mdm">
+      <article class="term" id="mdm" data-in-chapters="1">
         <div class="visual photo"><img src="2.8/MDM (Mobile Device Management).jpg" alt="MDM (Mobile Device Management)" loading="lazy"></div>
         <div class="body">
           <h3>MDM (Mobile Device Management)</h3>
           <p>Enterprise software that configures, secures, and remotely manages smartphones and tablets.</p>
         </div>
       </article>
-      <article class="term" id="mdr">
+      <article class="term" id="mdr" data-in-chapters="1">
         <div class="visual photo"><img src="2.4/Managed Detection &amp; Response (MDR).jpg" alt="MDR (Managed Detection and Response)" loading="lazy"></div>
         <div class="body">
           <h3>MDR (Managed Detection and Response)</h3>
           <p>Outsourced security service that monitors for threats and helps respond to incidents.</p>
         </div>
       </article>
-      <article class="term" id="mfa">
+      <article class="term" id="mfa" data-in-chapters="1">
         <div class="visual photo"><img src="2.1/Multifactor authentication (MFA).png" alt="MFA (Multifactor Authentication)" loading="lazy"></div>
         <div class="body">
           <h3>MFA (Multifactor Authentication)</h3>
           <p>Login requirement that combines two or more factors (something you know, have, or are).</p>
         </div>
       </article>
-      <article class="term" id="mfp">
+      <article class="term" id="mfp" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/MFP.jfif" alt="MFP (Multifunction Printer)" loading="lazy"></div>
         <div class="body">
           <h3>MFP (Multifunction Printer)</h3>
           <p>Office device that combines printing, scanning, copying, and often faxing in one unit.</p>
         </div>
       </article>
-      <article class="term" id="mmc">
+      <article class="term" id="mmc" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/MMC.jfif" alt="MMC (Microsoft Management Console)" loading="lazy"></div>
         <div class="body">
           <h3>MMC (Microsoft Management Console)</h3>
           <p>Windows shell that hosts administrative snap-ins such as Device Manager and Event Viewer tools.</p>
         </div>
       </article>
-      <article class="term" id="mnda">
+      <article class="term" id="mnda" data-in-chapters="1">
         <div class="visual photo"><img src="4.6/NDA  MNDA.png" alt="MNDA (Mutual Non-Disclosure Agreement)" loading="lazy"></div>
         <div class="body">
           <h3>MNDA (Mutual Non-Disclosure Agreement)</h3>
           <p>Contract where both parties agree to keep shared confidential information secret.</p>
         </div>
       </article>
-      <article class="term" id="msata">
+      <article class="term" id="msata" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/mSATA.jfif" alt="mSATA (Mini-serial Advanced Technology Attachment)" loading="lazy"></div>
         <div class="body">
           <h3>mSATA (Mini-serial Advanced Technology Attachment)</h3>
           <p>Compact SATA connector/form factor used for small SSDs in laptops and embedded systems.</p>
         </div>
       </article>
-      <article class="term" id="mx">
+      <article class="term" id="mx" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/MX.png" alt="MX (Mail Exchange)" loading="lazy"></div>
         <div class="body">
           <h3>MX (Mail Exchange)</h3>
@@ -898,225 +926,225 @@
       </article>
     </div>
   </section>
-  <section id="group-n-p">
+  <section id="group-n-p" data-total="31" data-core="19" data-label="N–P">
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">Part E</span>
         <h2>Acronyms N–P</h2>
-        <p>31 exam acronyms starting with letters N–P.</p>
+        <p class="section-count">31 exam acronyms starting with letters N–P.</p>
       </div>
 
-      <article class="term" id="nac">
+      <article class="term" id="nac" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/NAC.png" alt="NAC (Network Access Control)" loading="lazy"></div>
         <div class="body">
           <h3>NAC (Network Access Control)</h3>
           <p>Security approach that authenticates and checks devices before granting network access.</p>
         </div>
       </article>
-      <article class="term" id="nas">
+      <article class="term" id="nas" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/NAS.png" alt="NAS (Network Access Server)" loading="lazy"></div>
         <div class="body">
           <h3>NAS (Network Access Server)</h3>
           <p>Device or service that authenticates remote users and grants them access to network resources.</p>
         </div>
       </article>
-      <article class="term" id="nat">
+      <article class="term" id="nat" data-in-chapters="1">
         <div class="visual photo"><img src="2.10/Port forwarding  mapping.jfif" alt="NAT (Network Address Translation)" loading="lazy"></div>
         <div class="body">
           <h3>NAT (Network Address Translation)</h3>
           <p>Router technique that maps private internal IPs to public addresses for internet access.</p>
         </div>
       </article>
-      <article class="term" id="nda">
+      <article class="term" id="nda" data-in-chapters="1">
         <div class="visual photo"><img src="4.6/NDA  MNDA.png" alt="NDA (Non-Disclosure Agreement)" loading="lazy"></div>
         <div class="body">
           <h3>NDA (Non-Disclosure Agreement)</h3>
           <p>Legal contract requiring one or more parties not to reveal confidential information.</p>
         </div>
       </article>
-      <article class="term" id="netbios">
+      <article class="term" id="netbios" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/NetBIOS .jfif" alt="NetBIOS (Network Basic Input/Output System)" loading="lazy"></div>
         <div class="body">
           <h3>NetBIOS (Network Basic Input/Output System)</h3>
           <p>Legacy Windows networking API/name service used historically for local name resolution and shares.</p>
         </div>
       </article>
-      <article class="term" id="nfc">
+      <article class="term" id="nfc" data-in-chapters="1">
         <div class="visual photo"><img src="3.2/Connectivity issues Near-field communication (NFC).webp" alt="NFC (Near-field Communication)" loading="lazy"></div>
         <div class="body">
           <h3>NFC (Near-field Communication)</h3>
           <p>Short-range wireless tech for payments, pairing, and data exchange within a few centimeters.</p>
         </div>
       </article>
-      <article class="term" id="nic">
+      <article class="term" id="nic" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/NIC.jfif" alt="NIC (Network Interface Card)" loading="lazy"></div>
         <div class="body">
           <h3>NIC (Network Interface Card)</h3>
           <p>Hardware adapter that connects a computer to a wired or wireless network.</p>
         </div>
       </article>
-      <article class="term" id="ntfs">
+      <article class="term" id="ntfs" data-in-chapters="1">
         <div class="visual photo"><img src="1.1/NTFS.jpg" alt="NTFS (New Technology File System)" loading="lazy"></div>
         <div class="body">
           <h3>NTFS (New Technology File System)</h3>
           <p>Default Windows file system supporting permissions, encryption, compression, and large volumes.</p>
         </div>
       </article>
-      <article class="term" id="ntp">
+      <article class="term" id="ntp" data-in-chapters="1">
         <div class="visual photo"><img src="3.1/Time drift.png" alt="NTP (Network Time Protocol)" loading="lazy"></div>
         <div class="body">
           <h3>NTP (Network Time Protocol)</h3>
           <p>Protocol that synchronizes device clocks with authoritative time servers.</p>
         </div>
       </article>
-      <article class="term" id="nvme">
+      <article class="term" id="nvme" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/NVMe.jfif" alt="NVMe (Non-volatile Memory Express)" loading="lazy"></div>
         <div class="body">
           <h3>NVMe (Non-volatile Memory Express)</h3>
           <p>High-speed SSD interface protocol designed for PCIe flash storage with low latency.</p>
         </div>
       </article>
-      <article class="term" id="oem">
+      <article class="term" id="oem" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/OEM.jfif" alt="OEM (Original Equipment Manufacturer)" loading="lazy"></div>
         <div class="body">
           <h3>OEM (Original Equipment Manufacturer)</h3>
           <p>Company that builds hardware or software sold under another brand or bundled with systems.</p>
         </div>
       </article>
-      <article class="term" id="oled">
+      <article class="term" id="oled" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/OLED.jfif" alt="OLED (Organic Light-emitting Diode)" loading="lazy"></div>
         <div class="body">
           <h3>OLED (Organic Light-emitting Diode)</h3>
           <p>Display technology where each pixel emits its own light, enabling deep blacks and high contrast.</p>
         </div>
       </article>
-      <article class="term" id="ont">
+      <article class="term" id="ont" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/ONT.webp" alt="ONT (Optical Network Terminal)" loading="lazy"></div>
         <div class="body">
           <h3>ONT (Optical Network Terminal)</h3>
           <p>Fiber-to-the-premises device that converts optical signals to Ethernet for home or business use.</p>
         </div>
       </article>
-      <article class="term" id="os">
+      <article class="term" id="os" data-in-chapters="1">
         <div class="visual photo"><img src="1.1/Operating System.jfif" alt="OS (Operating System)" loading="lazy"></div>
         <div class="body">
           <h3>OS (Operating System)</h3>
           <p>Core software that manages hardware, processes, memory, and provides services for applications.</p>
         </div>
       </article>
-      <article class="term" id="otp">
+      <article class="term" id="otp" data-in-chapters="1">
         <div class="visual photo"><img src="2.1/One-time password  passcode (OTP).png" alt="OTP (One-time Password/Passcode)" loading="lazy"></div>
         <div class="body">
           <h3>OTP (One-time Password/Passcode)</h3>
           <p>Single-use code used for authentication, often delivered by app, SMS, or hardware token.</p>
         </div>
       </article>
-      <article class="term" id="paas">
+      <article class="term" id="paas" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/PaaS.jfif" alt="PaaS (Platform as a Service)" loading="lazy"></div>
         <div class="body">
           <h3>PaaS (Platform as a Service)</h3>
           <p>Cloud model that provides a managed runtime platform so developers deploy apps without managing OS infrastructure.</p>
         </div>
       </article>
-      <article class="term" id="pam">
+      <article class="term" id="pam" data-in-chapters="1">
         <div class="visual photo"><img src="2.1/Privileged access management (PAM).png" alt="PAM (Privileged Access Management)" loading="lazy"></div>
         <div class="body">
           <h3>PAM (Privileged Access Management)</h3>
           <p>Controls that secure, monitor, and limit use of powerful admin accounts and credentials.</p>
         </div>
       </article>
-      <article class="term" id="pan">
+      <article class="term" id="pan" data-in-chapters="0">
         <div class="visual photo"><img src="3.2/Connectivity issues Bluetooth.jfif" alt="PAN (Personal Area Network)" loading="lazy"></div>
         <div class="body">
           <h3>PAN (Personal Area Network)</h3>
           <p>Very short-range network around a person, such as Bluetooth between phone and headset.</p>
         </div>
       </article>
-      <article class="term" id="pc">
+      <article class="term" id="pc" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/PC.jfif" alt="PC (Personal Computer)" loading="lazy"></div>
         <div class="body">
           <h3>PC (Personal Computer)</h3>
           <p>General-purpose computer designed for individual use, such as a desktop or laptop.</p>
         </div>
       </article>
-      <article class="term" id="pci">
+      <article class="term" id="pci" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/PCI.jfif" alt="PCI (Peripheral Component Interconnect)" loading="lazy"></div>
         <div class="body">
           <h3>PCI (Peripheral Component Interconnect)</h3>
           <p>Older parallel expansion-bus standard for adding cards to a motherboard.</p>
         </div>
       </article>
-      <article class="term" id="pcie">
+      <article class="term" id="pcie" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/PCIe.webp" alt="PCIe (Peripheral Component Interconnect Express)" loading="lazy"></div>
         <div class="body">
           <h3>PCIe (Peripheral Component Interconnect Express)</h3>
           <p>Modern high-speed serial expansion bus used for GPUs, NVMe SSDs, and add-in cards.</p>
         </div>
       </article>
-      <article class="term" id="pcl">
+      <article class="term" id="pcl" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/PCL.jfif" alt="PCL (Printer Command Language)" loading="lazy"></div>
         <div class="body">
           <h3>PCL (Printer Command Language)</h3>
           <p>HP page-description language that tells printers how to render text and graphics.</p>
         </div>
       </article>
-      <article class="term" id="pii">
+      <article class="term" id="pii" data-in-chapters="1">
         <div class="visual photo"><img src="4.6/PII Personally Identifiable Information.png" alt="PII (Personally Identifiable Information)" loading="lazy"></div>
         <div class="body">
           <h3>PII (Personally Identifiable Information)</h3>
           <p>Data that can identify an individual, such as name, SSN, or email, requiring careful protection.</p>
         </div>
       </article>
-      <article class="term" id="pin">
+      <article class="term" id="pin" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/PIN.jfif" alt="PIN (Personal Identification Number)" loading="lazy"></div>
         <div class="body">
           <h3>PIN (Personal Identification Number)</h3>
           <p>Numeric secret used to authenticate a user, often with a card, phone unlock, or smart card.</p>
         </div>
       </article>
-      <article class="term" id="piv">
+      <article class="term" id="piv" data-in-chapters="0">
         <div class="visual photo"><img src="2.1/Smart cards.png" alt="PIV (Personal Identity Verification)" loading="lazy"></div>
         <div class="body">
           <h3>PIV (Personal Identity Verification)</h3>
           <p>U.S. federal smart-card standard for employee identity and strong authentication.</p>
         </div>
       </article>
-      <article class="term" id="poe">
+      <article class="term" id="poe" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/PoE.jfif" alt="PoE (Power over Ethernet)" loading="lazy"></div>
         <div class="body">
           <h3>PoE (Power over Ethernet)</h3>
           <p>Technology that delivers electrical power and data over the same Ethernet cable to devices like APs and cameras.</p>
         </div>
       </article>
-      <article class="term" id="pop">
+      <article class="term" id="pop" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/POP.jfif" alt="POP (Post Office Protocol)" loading="lazy"></div>
         <div class="body">
           <h3>POP (Post Office Protocol)</h3>
           <p>Email retrieval protocol that typically downloads messages to a client and may remove them from the server.</p>
         </div>
       </article>
-      <article class="term" id="post">
+      <article class="term" id="post" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/POST.jfif" alt="POST (Power-on Self-test)" loading="lazy"></div>
         <div class="body">
           <h3>POST (Power-on Self-test)</h3>
           <p>Firmware diagnostic sequence that checks critical hardware before the OS boots.</p>
         </div>
       </article>
-      <article class="term" id="psu">
+      <article class="term" id="psu" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/PSU.jfif" alt="PSU (Power Supply Unit)" loading="lazy"></div>
         <div class="body">
           <h3>PSU (Power Supply Unit)</h3>
           <p>Component that converts wall AC power into the DC voltages a computer needs.</p>
         </div>
       </article>
-      <article class="term" id="pup">
+      <article class="term" id="pup" data-in-chapters="1">
         <div class="visual photo"><img src="2.4/Potentially Unwanted Program (PUP).jpeg" alt="PUP (Potentially Unwanted Program)" loading="lazy"></div>
         <div class="body">
           <h3>PUP (Potentially Unwanted Program)</h3>
           <p>Software that is not outright malware but is undesirable (adware, toolbars, bundled junk).</p>
         </div>
       </article>
-      <article class="term" id="pxe">
+      <article class="term" id="pxe" data-in-chapters="1">
         <div class="visual photo"><img src="1.2/PXE_diagram.png" alt="PXE (Preboot eXecution Environment)" loading="lazy"></div>
         <div class="body">
           <h3>PXE (Preboot eXecution Environment)</h3>
@@ -1125,106 +1153,106 @@
       </article>
     </div>
   </section>
-  <section id="group-q-r">
+  <section id="group-q-r" data-total="14" data-core="9" data-label="Q–R">
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">Part F</span>
         <h2>Acronyms Q–R</h2>
-        <p>14 exam acronyms starting with letters Q–R.</p>
+        <p class="section-count">14 exam acronyms starting with letters Q–R.</p>
       </div>
 
-      <article class="term" id="qos">
+      <article class="term" id="qos" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/QoS.webp" alt="QoS (Quality of Service)" loading="lazy"></div>
         <div class="body">
           <h3>QoS (Quality of Service)</h3>
           <p>Networking techniques that prioritize certain traffic (voice, video) for better performance.</p>
         </div>
       </article>
-      <article class="term" id="radius">
+      <article class="term" id="radius" data-in-chapters="1">
         <div class="visual photo"><img src="2.3/RADIUS.png" alt="RADIUS (Remote Authentication Dial-in User Server)" loading="lazy"></div>
         <div class="body">
           <h3>RADIUS (Remote Authentication Dial-in User Server)</h3>
           <p>Centralized AAA protocol commonly used for VPN, Wi-Fi, and network device authentication.</p>
         </div>
       </article>
-      <article class="term" id="raid">
+      <article class="term" id="raid" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/RAID.jfif" alt="RAID (Redundant Array of Independent Disks)" loading="lazy"></div>
         <div class="body">
           <h3>RAID (Redundant Array of Independent Disks)</h3>
           <p>Disk configuration that combines drives for performance, capacity, and/or fault tolerance.</p>
         </div>
       </article>
-      <article class="term" id="ram">
+      <article class="term" id="ram" data-in-chapters="1">
         <div class="visual photo"><img src="1.3/RAM limitations.jfif" alt="RAM (Random-access Memory)" loading="lazy"></div>
         <div class="body">
           <h3>RAM (Random-access Memory)</h3>
           <p>Volatile working memory the CPU uses to store running programs and data.</p>
         </div>
       </article>
-      <article class="term" id="rdp">
+      <article class="term" id="rdp" data-in-chapters="1">
         <div class="visual photo"><img src="4.9/RDP.jpeg" alt="RDP (Remote Desktop Protocol)" loading="lazy"></div>
         <div class="body">
           <h3>RDP (Remote Desktop Protocol)</h3>
           <p>Microsoft protocol that provides remote graphical desktop access to Windows systems.</p>
         </div>
       </article>
-      <article class="term" id="refs">
+      <article class="term" id="refs" data-in-chapters="1">
         <div class="visual photo"><img src="1.1/refs.png" alt="ReFS (Resilient File System)" loading="lazy"></div>
         <div class="body">
           <h3>ReFS (Resilient File System)</h3>
           <p>Microsoft file system focused on integrity and resilience for large volumes and storage spaces.</p>
         </div>
       </article>
-      <article class="term" id="rfid">
+      <article class="term" id="rfid" data-in-chapters="1">
         <div class="visual photo"><img src="2.1/Key fobs.png" alt="RFID (Radio-frequency Identification)" loading="lazy"></div>
         <div class="body">
           <h3>RFID (Radio-frequency Identification)</h3>
           <p>Wireless ID technology using tags and readers for access control, inventory, and tracking.</p>
         </div>
       </article>
-      <article class="term" id="rgb">
+      <article class="term" id="rgb" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/RGB.jfif" alt="RGB (Red-Green-Blue)" loading="lazy"></div>
         <div class="body">
           <h3>RGB (Red-Green-Blue)</h3>
           <p>Additive color model used by displays and lighting where colors are mixed from red, green, and blue.</p>
         </div>
       </article>
-      <article class="term" id="risc">
+      <article class="term" id="risc" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/RISC.jpg" alt="RISC (Reduced Instruction Set Computer)" loading="lazy"></div>
         <div class="body">
           <h3>RISC (Reduced Instruction Set Computer)</h3>
           <p>CPU design philosophy using a smaller, simpler instruction set for efficiency (as in ARM).</p>
         </div>
       </article>
-      <article class="term" id="rj11">
+      <article class="term" id="rj11" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/RJ11.jfif" alt="RJ11 (Registered Jack Function 11)" loading="lazy"></div>
         <div class="body">
           <h3>RJ11 (Registered Jack Function 11)</h3>
           <p>Telephone connector typically used for landline/DSL with fewer contacts than RJ45.</p>
         </div>
       </article>
-      <article class="term" id="rj45">
+      <article class="term" id="rj45" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/RJ45.jfif" alt="RJ45 (Registered Jack Function 45)" loading="lazy"></div>
         <div class="body">
           <h3>RJ45 (Registered Jack Function 45)</h3>
           <p>Eight-position modular connector used for Ethernet networking cables.</p>
         </div>
       </article>
-      <article class="term" id="rmm">
+      <article class="term" id="rmm" data-in-chapters="1">
         <div class="visual photo"><img src="4.9/RMM.png" alt="RMM (Remote Monitoring and Management)" loading="lazy"></div>
         <div class="body">
           <h3>RMM (Remote Monitoring and Management)</h3>
           <p>MSP platform used to monitor, patch, and manage many client endpoints from one console.</p>
         </div>
       </article>
-      <article class="term" id="rpm">
+      <article class="term" id="rpm" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/RPM.jfif" alt="RPM (Revolutions Per Minute)" loading="lazy"></div>
         <div class="body">
           <h3>RPM (Revolutions Per Minute)</h3>
           <p>Speed measurement for spinning devices such as HDD platters or cooling fans.</p>
         </div>
       </article>
-      <article class="term" id="rsr">
+      <article class="term" id="rsr" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/RSR.jfif" alt="RSR (Rapid Security Response)" loading="lazy"></div>
         <div class="body">
           <h3>RSR (Rapid Security Response)</h3>
@@ -1233,260 +1261,260 @@
       </article>
     </div>
   </section>
-  <section id="group-s-t">
+  <section id="group-s-t" data-total="36" data-core="22" data-label="S–T">
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">Part G</span>
         <h2>Acronyms S–T</h2>
-        <p>36 exam acronyms starting with letters S–T.</p>
+        <p class="section-count">36 exam acronyms starting with letters S–T.</p>
       </div>
 
-      <article class="term" id="saas">
+      <article class="term" id="saas" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/SaaS.png" alt="SaaS (Software as a Service)" loading="lazy"></div>
         <div class="body">
           <h3>SaaS (Software as a Service)</h3>
           <p>Cloud model delivering applications over the internet (e.g., Microsoft 365, Google Workspace).</p>
         </div>
       </article>
-      <article class="term" id="saml">
+      <article class="term" id="saml" data-in-chapters="1">
         <div class="visual photo"><img src="2.1/Security Assertions Markup Language (SAML).png" alt="SAML (Security Assertions Markup Language)" loading="lazy"></div>
         <div class="body">
           <h3>SAML (Security Assertions Markup Language)</h3>
           <p>XML-based standard for exchanging authentication/authorization data, often used for SSO.</p>
         </div>
       </article>
-      <article class="term" id="san">
+      <article class="term" id="san" data-in-chapters="0">
         <div class="visual photo"><img src="1.2/IBM_TotalStorage_Exp400.jpg" alt="SAN (Storage Area Network)" loading="lazy"></div>
         <div class="body">
           <h3>SAN (Storage Area Network)</h3>
           <p>High-speed dedicated network that provides block-level storage to servers.</p>
         </div>
       </article>
-      <article class="term" id="sas">
+      <article class="term" id="sas" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/SAS .jfif" alt="SAS (Serial Attached SCSI (Small Computer System Interface))" loading="lazy"></div>
         <div class="body">
           <h3>SAS (Serial Attached SCSI (Small Computer System Interface))</h3>
           <p>Enterprise disk interface that connects servers to high-reliability SAS drives.</p>
         </div>
       </article>
-      <article class="term" id="sata">
+      <article class="term" id="sata" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/SATA.jfif" alt="SATA (Serial Advanced Technology Attachment)" loading="lazy"></div>
         <div class="body">
           <h3>SATA (Serial Advanced Technology Attachment)</h3>
           <p>Common interface for connecting internal HDDs and SSDs to a motherboard.</p>
         </div>
       </article>
-      <article class="term" id="sc">
+      <article class="term" id="sc" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/SC.jfif" alt="SC (Subscriber Connector)" loading="lazy"></div>
         <div class="body">
           <h3>SC (Subscriber Connector)</h3>
           <p>Square push-pull fiber-optic connector used in networking and telecom.</p>
         </div>
       </article>
-      <article class="term" id="scada">
+      <article class="term" id="scada" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/SCADA.jfif" alt="SCADA (Supervisory Control and Data Acquisition)" loading="lazy"></div>
         <div class="body">
           <h3>SCADA (Supervisory Control and Data Acquisition)</h3>
           <p>Industrial control system used to monitor and operate infrastructure like plants and utilities.</p>
         </div>
       </article>
-      <article class="term" id="scsi">
+      <article class="term" id="scsi" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/SCSI .jfif" alt="SCSI (Small Computer System Interface)" loading="lazy"></div>
         <div class="body">
           <h3>SCSI (Small Computer System Interface)</h3>
           <p>Legacy/enterprise peripheral interface for disks and other devices; ancestor concepts live on in SAS.</p>
         </div>
       </article>
-      <article class="term" id="sd">
+      <article class="term" id="sd" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/SD.jfif" alt="SD (Secure Digital)" loading="lazy"></div>
         <div class="body">
           <h3>SD (Secure Digital)</h3>
           <p>Removable flash memory card format used in cameras, phones, and embedded devices.</p>
         </div>
       </article>
-      <article class="term" id="sds">
+      <article class="term" id="sds" data-in-chapters="1">
         <div class="visual photo"><img src="4.5/MSDS  SDS documentation.jfif" alt="SDS (Safety Data Sheet)" loading="lazy"></div>
         <div class="body">
           <h3>SDS (Safety Data Sheet)</h3>
           <p>Document listing hazards, handling, and disposal guidance for a chemical or material (formerly MSDS).</p>
         </div>
       </article>
-      <article class="term" id="sftp">
+      <article class="term" id="sftp" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/SFTP.png" alt="SFTP (Secure File Transfer Protocol)" loading="lazy"></div>
         <div class="body">
           <h3>SFTP (Secure File Transfer Protocol)</h3>
           <p>Encrypted file transfer method that runs over SSH instead of plaintext FTP.</p>
         </div>
       </article>
-      <article class="term" id="sim">
+      <article class="term" id="sim" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/SIM.webp" alt="SIM (Subscriber Identity Module)" loading="lazy"></div>
         <div class="body">
           <h3>SIM (Subscriber Identity Module)</h3>
           <p>Card that stores mobile subscriber identity and authentication data for cellular service.</p>
         </div>
       </article>
-      <article class="term" id="sla">
+      <article class="term" id="sla" data-in-chapters="1">
         <div class="visual photo"><img src="4.1/Service-level agreements (SLAs).png" alt="SLA (Service-level Agreement)" loading="lazy"></div>
         <div class="body">
           <h3>SLA (Service-level Agreement)</h3>
           <p>Contract defining expected service performance, uptime, and response times between provider and customer.</p>
         </div>
       </article>
-      <article class="term" id="smart">
+      <article class="term" id="smart" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/S.M.A.R.T.png" alt="S.M.A.R.T (Self-monitoring Analysis and Reporting Technology)" loading="lazy"></div>
         <div class="body">
           <h3>S.M.A.R.T (Self-monitoring Analysis and Reporting Technology)</h3>
           <p>Drive self-diagnostics that report health metrics to warn of impending disk failure.</p>
         </div>
       </article>
-      <article class="term" id="smb">
+      <article class="term" id="smb" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/SMB.jfif" alt="SMB (Server Message Block)" loading="lazy"></div>
         <div class="body">
           <h3>SMB (Server Message Block)</h3>
           <p>Windows file-and-printer sharing protocol used for networked resources.</p>
         </div>
       </article>
-      <article class="term" id="sms">
+      <article class="term" id="sms" data-in-chapters="1">
         <div class="visual photo"><img src="2.1/Short Message Service (SMS).png" alt="SMS (Short Message Service)" loading="lazy"></div>
         <div class="body">
           <h3>SMS (Short Message Service)</h3>
           <p>Cellular text messaging service used for communication and sometimes OTP delivery.</p>
         </div>
       </article>
-      <article class="term" id="smtp">
+      <article class="term" id="smtp" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/SMTP.png" alt="SMTP (Simple Mail Transfer Protocol)" loading="lazy"></div>
         <div class="body">
           <h3>SMTP (Simple Mail Transfer Protocol)</h3>
           <p>Protocol that sends email between mail clients and mail servers.</p>
         </div>
       </article>
-      <article class="term" id="snmp">
+      <article class="term" id="snmp" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/SNMP.jpg" alt="SNMP (Simple Network Management Protocol)" loading="lazy"></div>
         <div class="body">
           <h3>SNMP (Simple Network Management Protocol)</h3>
           <p>Protocol for monitoring and managing network devices such as switches, routers, and printers.</p>
         </div>
       </article>
-      <article class="term" id="sodimm">
+      <article class="term" id="sodimm" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/SODIMM.jfif" alt="SODIMM (Small Outline Dual In-line Memory Module)" loading="lazy"></div>
         <div class="body">
           <h3>SODIMM (Small Outline Dual In-line Memory Module)</h3>
           <p>Compact RAM module form factor used in laptops and small-form-factor systems.</p>
         </div>
       </article>
-      <article class="term" id="soho">
+      <article class="term" id="soho" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/SOHO.webp" alt="SOHO (Small Office/Home Office)" loading="lazy"></div>
         <div class="body">
           <h3>SOHO (Small Office/Home Office)</h3>
           <p>Small business/home work environment with simpler networking and fewer users than enterprise.</p>
         </div>
       </article>
-      <article class="term" id="sop">
+      <article class="term" id="sop" data-in-chapters="1">
         <div class="visual photo"><img src="4.1/Standard operating procedures (SOPs).webp" alt="SOP (Standard Operating Procedure)" loading="lazy"></div>
         <div class="body">
           <h3>SOP (Standard Operating Procedure)</h3>
           <p>Documented step-by-step process for performing a routine IT or business task consistently.</p>
         </div>
       </article>
-      <article class="term" id="spf">
+      <article class="term" id="spf" data-in-chapters="0">
         <div class="visual photo"><img src="2.1/Email auth.png" alt="SPF (Sender Policy Framework)" loading="lazy"></div>
         <div class="body">
           <h3>SPF (Sender Policy Framework)</h3>
           <p>Email DNS record that lists servers authorized to send mail for a domain.</p>
         </div>
       </article>
-      <article class="term" id="spice">
+      <article class="term" id="spice" data-in-chapters="1">
         <div class="visual photo"><img src="4.9/SPICE.jpg" alt="SPICE (Simple Protocol for Independent Computing Environments)" loading="lazy"></div>
         <div class="body">
           <h3>SPICE (Simple Protocol for Independent Computing Environments)</h3>
           <p>Remote-display protocol optimized for accessing virtual machines with graphics and clipboard sharing.</p>
         </div>
       </article>
-      <article class="term" id="sql">
+      <article class="term" id="sql" data-in-chapters="1">
         <div class="visual photo"><img src="2.5/SQL injection (SQLi).jpg" alt="SQL (Structured Query Language)" loading="lazy"></div>
         <div class="body">
           <h3>SQL (Structured Query Language)</h3>
           <p>Standard language for querying and managing relational databases.</p>
         </div>
       </article>
-      <article class="term" id="ssd">
+      <article class="term" id="ssd" data-in-chapters="1">
         <div class="visual photo"><img src="1.2/Solid-state  flash drives.jfif" alt="SSD (Solid-state Drive)" loading="lazy"></div>
         <div class="body">
           <h3>SSD (Solid-state Drive)</h3>
           <p>Flash-based storage with no moving parts, offering higher speed and durability than HDDs.</p>
         </div>
       </article>
-      <article class="term" id="ssh">
+      <article class="term" id="ssh" data-in-chapters="1">
         <div class="visual photo"><img src="4.9/SSH.png" alt="SSH (Secure Shell)" loading="lazy"></div>
         <div class="body">
           <h3>SSH (Secure Shell)</h3>
           <p>Encrypted remote command-line protocol that replaced insecure Telnet for administration.</p>
         </div>
       </article>
-      <article class="term" id="ssid">
+      <article class="term" id="ssid" data-in-chapters="1">
         <div class="visual photo"><img src="2.10/Changing the service set identifier (SSID).jpg" alt="SSID (Service Set Identifier)" loading="lazy"></div>
         <div class="body">
           <h3>SSID (Service Set Identifier)</h3>
           <p>Human-readable name of a Wi-Fi network that clients see when scanning for wireless networks.</p>
         </div>
       </article>
-      <article class="term" id="sso">
+      <article class="term" id="sso" data-in-chapters="1">
         <div class="visual photo"><img src="2.1/Single sign-on (SSO).png" alt="SSO (Single Sign-on)" loading="lazy"></div>
         <div class="body">
           <h3>SSO (Single Sign-on)</h3>
           <p>Authentication approach where one login grants access to multiple related applications.</p>
         </div>
       </article>
-      <article class="term" id="st">
+      <article class="term" id="st" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/ST.jpg" alt="ST (Straight Tip)" loading="lazy"></div>
         <div class="body">
           <h3>ST (Straight Tip)</h3>
           <p>Bayonet-style fiber-optic connector with a round ferrule, used in older fiber installations.</p>
         </div>
       </article>
-      <article class="term" id="tacacs">
+      <article class="term" id="tacacs" data-in-chapters="1">
         <div class="visual photo"><img src="2.3/TACACS+.png" alt="TACACS (Terminal Access Controller Access-control System)" loading="lazy"></div>
         <div class="body">
           <h3>TACACS (Terminal Access Controller Access-control System)</h3>
           <p>Cisco-oriented AAA protocol for authenticating administrators to network devices.</p>
         </div>
       </article>
-      <article class="term" id="tcp">
+      <article class="term" id="tcp" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/TCP.png" alt="TCP (Transmission Control Protocol)" loading="lazy"></div>
         <div class="body">
           <h3>TCP (Transmission Control Protocol)</h3>
           <p>Reliable, connection-oriented transport protocol that delivers ordered, acknowledged data streams.</p>
         </div>
       </article>
-      <article class="term" id="tkip">
+      <article class="term" id="tkip" data-in-chapters="1">
         <div class="visual photo"><img src="2.3/TKIP.png" alt="TKIP (Temporal Key Integrity Protocol)" loading="lazy"></div>
         <div class="body">
           <h3>TKIP (Temporal Key Integrity Protocol)</h3>
           <p>Legacy WPA encryption/integrity mechanism superseded by stronger AES-based Wi-Fi security.</p>
         </div>
       </article>
-      <article class="term" id="tn">
+      <article class="term" id="tn" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/TN.jfif" alt="TN (Twisted Nematic)" loading="lazy"></div>
         <div class="body">
           <h3>TN (Twisted Nematic)</h3>
           <p>Fast, inexpensive LCD panel type with narrower viewing angles than IPS or VA.</p>
         </div>
       </article>
-      <article class="term" id="totp">
+      <article class="term" id="totp" data-in-chapters="1">
         <div class="visual photo"><img src="2.1/Time-based one-time password (TOTP).png" alt="TOTP (Time-based One-time Password)" loading="lazy"></div>
         <div class="body">
           <h3>TOTP (Time-based One-time Password)</h3>
           <p>OTP algorithm that generates rotating codes based on the current time and a shared secret.</p>
         </div>
       </article>
-      <article class="term" id="tpm">
+      <article class="term" id="tpm" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/TPM.webp" alt="TPM (Trusted Platform Module)" loading="lazy"></div>
         <div class="body">
           <h3>TPM (Trusted Platform Module)</h3>
           <p>Secure cryptoprocessor chip that stores keys and supports features like BitLocker and measured boot.</p>
         </div>
       </article>
-      <article class="term" id="txt">
+      <article class="term" id="txt" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/TXT.jfif" alt="TXT (Text)" loading="lazy"></div>
         <div class="body">
           <h3>TXT (Text)</h3>
@@ -1495,211 +1523,211 @@
       </article>
     </div>
   </section>
-  <section id="group-u-z">
+  <section id="group-u-z" data-total="29" data-core="17" data-label="U–Z">
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">Part H</span>
         <h2>Acronyms U–Z</h2>
-        <p>29 exam acronyms starting with letters U–Z.</p>
+        <p class="section-count">29 exam acronyms starting with letters U–Z.</p>
       </div>
 
-      <article class="term" id="uac">
+      <article class="term" id="uac" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/UAC.jfif" alt="UAC (User Account Control)" loading="lazy"></div>
         <div class="body">
           <h3>UAC (User Account Control)</h3>
           <p>Windows security prompt that asks for elevation before allowing administrative actions.</p>
         </div>
       </article>
-      <article class="term" id="udp">
+      <article class="term" id="udp" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/UDP.jpg" alt="UDP (User Datagram Protocol)" loading="lazy"></div>
         <div class="body">
           <h3>UDP (User Datagram Protocol)</h3>
           <p>Connectionless transport protocol used for fast, lightweight traffic such as DNS and streaming.</p>
         </div>
       </article>
-      <article class="term" id="uefi">
+      <article class="term" id="uefi" data-in-chapters="1">
         <div class="visual photo"><img src="1.3/UEFI.webp" alt="UEFI (Unified Extensible Firmware Interface)" loading="lazy"></div>
         <div class="body">
           <h3>UEFI (Unified Extensible Firmware Interface)</h3>
           <p>Modern firmware interface that replaces legacy BIOS with faster boot, GUI setup, and Secure Boot.</p>
         </div>
       </article>
-      <article class="term" id="upnp">
+      <article class="term" id="upnp" data-in-chapters="1">
         <div class="visual photo"><img src="2.10/Universal Plug and Play (UPnP).jfif" alt="UPnP (Universal Plug and Play)" loading="lazy"></div>
         <div class="body">
           <h3>UPnP (Universal Plug and Play)</h3>
           <p>Protocol that lets devices automatically open router ports; convenient but often a security risk.</p>
         </div>
       </article>
-      <article class="term" id="ups">
+      <article class="term" id="ups" data-in-chapters="1">
         <div class="visual photo"><img src="4.5/Uninterruptible Power Supply (UPS).jfif" alt="UPS (Uninterruptible Power Supply)" loading="lazy"></div>
         <div class="body">
           <h3>UPS (Uninterruptible Power Supply)</h3>
           <p>Battery-backed power device that keeps equipment running during outages and smooths power issues.</p>
         </div>
       </article>
-      <article class="term" id="usb">
+      <article class="term" id="usb" data-in-chapters="1">
         <div class="visual photo"><img src="1.2/ktc-usb-flash-drives-differences-usb-2-gen1-gen2-og.jpg" alt="USB (Universal Serial Bus)" loading="lazy"></div>
         <div class="body">
           <h3>USB (Universal Serial Bus)</h3>
           <p>Hot-pluggable interface for connecting peripherals, storage, and chargers to computers.</p>
         </div>
       </article>
-      <article class="term" id="usb-c">
+      <article class="term" id="usb-c" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/USBC.jfif" alt="USB-C (Universal Serial Bus Type C)" loading="lazy"></div>
         <div class="body">
           <h3>USB-C (Universal Serial Bus Type C)</h3>
           <p>Reversible USB connector supporting data, video, and high-wattage power delivery.</p>
         </div>
       </article>
-      <article class="term" id="utm">
+      <article class="term" id="utm" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/UTM.png" alt="UTM (Unified Threat Management)" loading="lazy"></div>
         <div class="body">
           <h3>UTM (Unified Threat Management)</h3>
           <p>Security appliance that combines firewall, IDS/IPS, antivirus, and related protections in one box.</p>
         </div>
       </article>
-      <article class="term" id="va">
+      <article class="term" id="va" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/VA.jfif" alt="VA (Vertical Alignment)" loading="lazy"></div>
         <div class="body">
           <h3>VA (Vertical Alignment)</h3>
           <p>LCD panel technology with strong contrast, sitting between TN and IPS in viewing-angle performance.</p>
         </div>
       </article>
-      <article class="term" id="vdi">
+      <article class="term" id="vdi" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/VDI.png" alt="VDI (Virtual Desktop Infrastructure)" loading="lazy"></div>
         <div class="body">
           <h3>VDI (Virtual Desktop Infrastructure)</h3>
           <p>Architecture that hosts user desktops as VMs in a data center and streams them to thin clients.</p>
         </div>
       </article>
-      <article class="term" id="vga">
+      <article class="term" id="vga" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/VGA.jfif" alt="VGA (Video Graphics Array)" loading="lazy"></div>
         <div class="body">
           <h3>VGA (Video Graphics Array)</h3>
           <p>Legacy analog video connector and resolution standard historically used for PC monitors.</p>
         </div>
       </article>
-      <article class="term" id="vlan">
+      <article class="term" id="vlan" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/VLAN.webp" alt="VLAN (Virtual LAN (Local Area Network))" loading="lazy"></div>
         <div class="body">
           <h3>VLAN (Virtual LAN (Local Area Network))</h3>
           <p>Logical network segment created on switches to isolate broadcast domains without separate physical cabling.</p>
         </div>
       </article>
-      <article class="term" id="vm">
+      <article class="term" id="vm" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/VM.webp" alt="VM (Virtual Machine)" loading="lazy"></div>
         <div class="body">
           <h3>VM (Virtual Machine)</h3>
           <p>Software-emulated computer running an OS and apps on a hypervisor alongside other VMs.</p>
         </div>
       </article>
-      <article class="term" id="vnc">
+      <article class="term" id="vnc" data-in-chapters="1">
         <div class="visual photo"><img src="4.9/VNC.webp" alt="VNC (Virtual Network Computer)" loading="lazy"></div>
         <div class="body">
           <h3>VNC (Virtual Network Computer)</h3>
           <p>Cross-platform remote desktop technology that shares a graphical desktop over the RFB protocol.</p>
         </div>
       </article>
-      <article class="term" id="voip">
+      <article class="term" id="voip" data-in-chapters="0">
         <div class="visual photo"><img src="2.1/Voice call.png" alt="VoIP (Voice over Internet Protocol)" loading="lazy"></div>
         <div class="body">
           <h3>VoIP (Voice over Internet Protocol)</h3>
           <p>Technology that carries voice calls as data packets over IP networks instead of traditional phone lines.</p>
         </div>
       </article>
-      <article class="term" id="vpn">
+      <article class="term" id="vpn" data-in-chapters="1">
         <div class="visual photo"><img src="4.9/VPN.jfif" alt="VPN (Virtual Private Network)" loading="lazy"></div>
         <div class="body">
           <h3>VPN (Virtual Private Network)</h3>
           <p>Encrypted tunnel that securely connects a remote client or site to a private network over the internet.</p>
         </div>
       </article>
-      <article class="term" id="vram">
+      <article class="term" id="vram" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/VRAM.jfif" alt="VRAM (Video Random-access Memory)" loading="lazy"></div>
         <div class="body">
           <h3>VRAM (Video Random-access Memory)</h3>
           <p>Memory used by a GPU to store textures, framebuffers, and other graphics data.</p>
         </div>
       </article>
-      <article class="term" id="wan">
+      <article class="term" id="wan" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/WAN.jfif" alt="WAN (Wide Area Network)" loading="lazy"></div>
         <div class="body">
           <h3>WAN (Wide Area Network)</h3>
           <p>Network spanning large geographic areas, typically connecting multiple sites over ISP links.</p>
         </div>
       </article>
-      <article class="term" id="wap">
+      <article class="term" id="wap" data-in-chapters="0">
         <div class="visual photo"><img src="3.2/Connectivity issues Wi-Fi.jfif" alt="WAP (Wireless Access Point)" loading="lazy"></div>
         <div class="body">
           <h3>WAP (Wireless Access Point)</h3>
           <p>Device that bridges wireless clients onto a wired network (often used interchangeably with AP).</p>
         </div>
       </article>
-      <article class="term" id="wep">
+      <article class="term" id="wep" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/WEP.jfif" alt="WEP (Wired Equivalent Privacy)" loading="lazy"></div>
         <div class="body">
           <h3>WEP (Wired Equivalent Privacy)</h3>
           <p>Obsolete Wi-Fi security protocol that is easily cracked and must not be used.</p>
         </div>
       </article>
-      <article class="term" id="winrm">
+      <article class="term" id="winrm" data-in-chapters="1">
         <div class="visual photo"><img src="4.9/WinRM.jfif" alt="WinRM (Windows Remote Management)" loading="lazy"></div>
         <div class="body">
           <h3>WinRM (Windows Remote Management)</h3>
           <p>Microsoft service that enables remote PowerShell and management commands without a full desktop session.</p>
         </div>
       </article>
-      <article class="term" id="wisp">
+      <article class="term" id="wisp" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/WISP.webp" alt="WISP (Written Internet Service Provider)" loading="lazy"></div>
         <div class="body">
           <h3>WISP (Written Internet Service Provider)</h3>
           <p>Provider of internet service (exam acronym expansion); in practice often refers to wireless ISPs serving rural areas.</p>
         </div>
       </article>
-      <article class="term" id="wlan">
+      <article class="term" id="wlan" data-in-chapters="0">
         <div class="visual photo"><img src="3.2/Connectivity issues Wi-Fi.jfif" alt="WLAN (Wireless LAN (Local Area Network))" loading="lazy"></div>
         <div class="body">
           <h3>WLAN (Wireless LAN (Local Area Network))</h3>
           <p>Local network that uses Wi-Fi radio instead of (or in addition to) Ethernet cabling.</p>
         </div>
       </article>
-      <article class="term" id="wpa">
+      <article class="term" id="wpa" data-in-chapters="1">
         <div class="visual photo"><img src="2.3/WPA2.png" alt="WPA (Wi-Fi Protected Access)" loading="lazy"></div>
         <div class="body">
           <h3>WPA (Wi-Fi Protected Access)</h3>
           <p>Family of Wi-Fi security standards (WPA/WPA2/WPA3) that encrypt and authenticate wireless traffic.</p>
         </div>
       </article>
-      <article class="term" id="wwan">
+      <article class="term" id="wwan" data-in-chapters="1">
         <div class="visual photo"><img src="5.1/WWAN.jfif" alt="WWAN (Wireless Wide Area Network)" loading="lazy"></div>
         <div class="body">
           <h3>WWAN (Wireless Wide Area Network)</h3>
           <p>Wide-area wireless connectivity such as cellular (LTE/5G) for mobile internet access.</p>
         </div>
       </article>
-      <article class="term" id="xaas">
+      <article class="term" id="xaas" data-in-chapters="0">
         <div class="visual photo"><img src="5.1/XaaS.jfif" alt="XaaS (Anything As A Service)" loading="lazy"></div>
         <div class="body">
           <h3>XaaS (Anything As A Service)</h3>
           <p>Broad term for delivering almost any IT capability as a cloud subscription service.</p>
         </div>
       </article>
-      <article class="term" id="xdr">
+      <article class="term" id="xdr" data-in-chapters="1">
         <div class="visual photo"><img src="2.4/Extended Detection &amp; Response (XDR).jpg" alt="XDR (Extended Detection and Response)" loading="lazy"></div>
         <div class="body">
           <h3>XDR (Extended Detection and Response)</h3>
           <p>Security approach that correlates threat data across endpoints, email, cloud, and network for detection.</p>
         </div>
       </article>
-      <article class="term" id="xfs">
+      <article class="term" id="xfs" data-in-chapters="1">
         <div class="visual photo"><img src="1.1/xfs_linux.webp" alt="XFS (Extended File System)" loading="lazy"></div>
         <div class="body">
           <h3>XFS (Extended File System)</h3>
           <p>High-performance journaling file system commonly used on Linux for large volumes.</p>
         </div>
       </article>
-      <article class="term" id="xss">
+      <article class="term" id="xss" data-in-chapters="1">
         <div class="visual photo"><img src="2.5/Cross-site scripting (XSS).jpg" alt="XSS (Cross-site Scripting)" loading="lazy"></div>
         <div class="body">
           <h3>XSS (Cross-site Scripting)</h3>
@@ -1719,5 +1747,54 @@
 </footer>
 
 <script src="study-lightbox.js"></script>
+<script>
+(function(){
+  const body = document.body;
+  const total = Number(body.dataset.total || 0);
+  const core = Number(body.dataset.core || 0);
+  const heroSummary = document.getElementById("hero-summary");
+  const status = document.getElementById("filter-status");
+  const buttons = [
+    document.getElementById("filter-core-hero"),
+    document.getElementById("filter-core-toc"),
+  ].filter(Boolean);
+
+  function updateSections(on){
+    document.querySelectorAll("main > section").forEach((section) => {
+      const count = on
+        ? Number(section.dataset.core || 0)
+        : Number(section.dataset.total || 0);
+      const pretty = section.dataset.label || "";
+      const p = section.querySelector(".section-count");
+      if (p) {
+        p.textContent = count + " exam acronyms starting with letters " + pretty + ".";
+      }
+      section.classList.toggle("is-empty", on && count === 0);
+    });
+  }
+
+  function setFilter(on){
+    body.classList.toggle("filter-core", on);
+    buttons.forEach((btn) => {
+      btn.classList.toggle("is-active", on);
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    if (heroSummary) {
+      heroSummary.textContent = on
+        ? (core + " acronyms also mentioned in Chapters 1–4 (hiding " + (total - core) + " list-only terms).")
+        : (total + " exam acronyms with full expansions and what each one is used for.");
+    }
+    if (status) {
+      status.hidden = !on;
+      status.textContent = on ? ("Showing " + core + " / " + total) : "";
+    }
+    updateSections(on);
+  }
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => setFilter(!body.classList.contains("filter-core")));
+  });
+})();
+</script>
 </body>
 </html>
