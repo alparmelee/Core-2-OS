@@ -213,6 +213,142 @@ ACRONYMS = [
     ("XSS", "Cross-site Scripting", "Web attack that injects malicious scripts into pages viewed by other users to steal data or hijack sessions."),
 ]
 
+# Prefer dedicated files in 5.1/; fall back to clear matches from other folders.
+BORROWED_IMAGES = {
+    "AAA": "2.3/RADIUS.png",
+    "ACL": "2.1/Access control lists (ACLs).png",
+    "AES": "2.3/AES.png",
+    "AP": "3.2/Connectivity issues Wi-Fi.jfif",
+    "APFS": "1.1/apfs-logo.jpg",
+    "AUP": "4.6/Acceptable Use Policy (AUP).png",
+    "BEC": "2.5/Business email compromise (BEC).webp",
+    "BIOS": "2.10/Firmware updates.jpg",
+    "BSOD": "3.1/Blue screen of death (BSOD).png",
+    "BYOD": "2.5/Bring Your Own Device (BYOD).png",
+    "CAC": "2.1/Smart cards.png",
+    "DDoS": "2.5/Distributed Denial of Service (DDoS).png",
+    "DKIM": "2.1/Email auth.png",
+    "DLP": "2.1/Data loss prevention (DLP).png",
+    "DMARC": "2.1/Email auth.png",
+    "DNS": "2.11/Secure DNS.jpg",
+    "DoS": "2.5/Denial of Service (DoS).jpg",
+    "EDR": "2.4/Endpoint Detection & Response (EDR).jpg",
+    "EFS": "2.7/File system encryption.webp",
+    "EOL": "2.5/End-of-life (EOL).jfif",
+    "ESD": "4.4/ESD straps.jfif",
+    "EULA": "4.6/Valid licenses.jfif",
+    "FAT32": "1.1/fat32.webp",
+    "FRT": "2.1/Facial recognition technology (FRT).png",
+    "GFS": "4.3/Grandfather-Father-Son (GFS).jfif",
+    "GPS": "2.8/Locator applications.png",
+    "GPT": "1.2/gpt-partition-table.webp",
+    "GUID": "1.2/GUID.png",
+    "HDD": "1.2/Internal hard drive (partition).png",
+    "HSM": "2.1/Hardware token.png",
+    "IAM": "2.1/Identity access management (IAM).png",
+    "LDAP": "2.1/Directory services.png",
+    "MBR": "1.2/mbr.webp",
+    "MDM": "2.8/MDM (Mobile Device Management).jpg",
+    "MDR": "2.4/Managed Detection & Response (MDR).jpg",
+    "MFA": "2.1/Multifactor authentication (MFA).png",
+    "MNDA": "4.6/NDA  MNDA.png",
+    "NAT": "2.10/Port forwarding  mapping.jfif",
+    "NDA": "4.6/NDA  MNDA.png",
+    "NFC": "3.2/Connectivity issues Near-field communication (NFC).webp",
+    "NTFS": "1.1/NTFS.jpg",
+    "NTP": "3.1/Time drift.png",
+    "OS": "1.1/Operating System.jfif",
+    "OTP": "2.1/One-time password  passcode (OTP).png",
+    "PAM": "2.1/Privileged access management (PAM).png",
+    "PAN": "3.2/Connectivity issues Bluetooth.jfif",
+    "PII": "4.6/PII Personally Identifiable Information.png",
+    "PIV": "2.1/Smart cards.png",
+    "PUP": "2.4/Potentially Unwanted Program (PUP).jpeg",
+    "PXE": "1.2/PXE_diagram.png",
+    "RADIUS": "2.3/RADIUS.png",
+    "RAM": "1.3/RAM limitations.jfif",
+    "RDP": "4.9/RDP.jpeg",
+    "ReFS": "1.1/refs.png",
+    "RFID": "2.1/Key fobs.png",
+    "RMM": "4.9/RMM.png",
+    "SAML": "2.1/Security Assertions Markup Language (SAML).png",
+    "SAN": "1.2/IBM_TotalStorage_Exp400.jpg",
+    "SDS": "4.5/MSDS  SDS documentation.jfif",
+    "SLA": "4.1/Service-level agreements (SLAs).png",
+    "SMS": "2.1/Short Message Service (SMS).png",
+    "SOP": "4.1/Standard operating procedures (SOPs).webp",
+    "SPF": "2.1/Email auth.png",
+    "SPICE": "4.9/SPICE.jpg",
+    "SQL": "2.5/SQL injection (SQLi).jpg",
+    "SSD": "1.2/Solid-state  flash drives.jfif",
+    "SSH": "4.9/SSH.png",
+    "SSID": "2.10/Changing the service set identifier (SSID).jpg",
+    "SSO": "2.1/Single sign-on (SSO).png",
+    "TACACS": "2.3/TACACS+.png",
+    "TKIP": "2.3/TKIP.png",
+    "TOTP": "2.1/Time-based one-time password (TOTP).png",
+    "TPM": "1.3/TPM.png",
+    "UEFI": "1.3/UEFI.webp",
+    "UPnP": "2.10/Universal Plug and Play (UPnP).jfif",
+    "UPS": "4.5/Uninterruptible Power Supply (UPS).jfif",
+    "USB": "1.2/ktc-usb-flash-drives-differences-usb-2-gen1-gen2-og.jpg",
+    "VNC": "4.9/VNC.webp",
+    "VoIP": "2.1/Voice call.png",
+    "VPN": "4.9/VPN.jfif",
+    "WAP": "3.2/Connectivity issues Wi-Fi.jfif",
+    "WinRM": "4.9/WinRM.jfif",
+    "WLAN": "3.2/Connectivity issues Wi-Fi.jfif",
+    "WPA": "2.3/WPA2.png",
+    "XDR": "2.4/Extended Detection & Response (XDR).jpg",
+    "XFS": "1.1/xfs_linux.webp",
+    "XSS": "2.5/Cross-site scripting (XSS).jpg",
+}
+
+_IMAGE_EXTS = {".png", ".jpg", ".jpeg", ".webp", ".jfif", ".gif", ".svg"}
+_ACRONYM_FILE_ALIASES = {
+    "DB-9": ("DB9",),
+    "USB-C": ("USBC",),
+    "S.M.A.R.T": ("SMART", "S.M.A.R.T"),
+}
+
+
+def _norm_key(value: str) -> str:
+    return "".join(ch for ch in value.upper() if ch.isalnum())
+
+
+def build_image_map() -> dict[str, str]:
+    """Map acronyms to images: 5.1/ first, then borrowed fallbacks."""
+    folder = ROOT / "5.1"
+    by_key: dict[str, str] = {}
+    if folder.is_dir():
+        # Prefer sharper formats when duplicates exist (e.g. SMB.webp over SMB.jfif).
+        rank = {".svg": 0, ".png": 1, ".webp": 2, ".jpg": 3, ".jpeg": 3, ".gif": 4, ".jfif": 5}
+        for path in folder.iterdir():
+            if not path.is_file() or path.suffix.lower() not in _IMAGE_EXTS:
+                continue
+            key = _norm_key(path.stem.strip())
+            rel = path.relative_to(ROOT).as_posix()
+            prev = by_key.get(key)
+            if prev is None:
+                by_key[key] = rel
+                continue
+            prev_ext = Path(prev).suffix.lower()
+            if rank.get(path.suffix.lower(), 9) < rank.get(prev_ext, 9):
+                by_key[key] = rel
+
+    image_map: dict[str, str] = {}
+    for acronym, _, _ in ACRONYMS:
+        keys = [_norm_key(acronym), *[ _norm_key(a) for a in _ACRONYM_FILE_ALIASES.get(acronym, ()) ]]
+        local = next((by_key[k] for k in keys if k in by_key), None)
+        if local:
+            image_map[acronym] = local
+        elif acronym in BORROWED_IMAGES:
+            image_map[acronym] = BORROWED_IMAGES[acronym]
+    return image_map
+
+
+IMAGE_MAP = build_image_map()
+
 
 def letter_group(acronym: str) -> str:
     first = acronym[0].upper()
@@ -241,7 +377,8 @@ def term_title(acronym: str, expansion: str) -> str:
     return f"{acronym} ({expansion})"
 
 
-def build_study_guide() -> str:
+def build_study_guide(image_map: dict[str, str] | None = None) -> str:
+    image_map = image_map or IMAGE_MAP
     groups: dict[str, list[tuple[str, str, str]]] = {}
     order = ["A–C", "D–F", "G–I", "J–M", "N–P", "Q–R", "S–T", "U–Z"]
     for label in order:
@@ -270,10 +407,22 @@ def build_study_guide() -> str:
                 .replace(" ", "-")
             )
             title = term_title(acronym, expansion)
+            img = image_map.get(acronym)
+            if img:
+                visual = (
+                    f'<div class="visual photo">'
+                    f'<img src="{html.escape(img)}" alt="{html.escape(title)}" loading="lazy">'
+                    f"</div>"
+                )
+            else:
+                visual = (
+                    f'<div class="visual acronym" aria-hidden="true">'
+                    f"{html.escape(acronym)}</div>"
+                )
             articles.append(
                 f"""
       <article class="term" id="{html.escape(aid)}">
-        <div class="visual acronym" aria-hidden="true">{html.escape(acronym)}</div>
+        {visual}
         <div class="body">
           <h3>{html.escape(title)}</h3>
           <p>{html.escape(purpose)}</p>
@@ -457,6 +606,13 @@ def build_study_guide() -> str:
     line-height:1.15;
     word-break:break-word;
   }}
+  .visual.photo{{ padding:0; cursor:zoom-in; }}
+  .visual.photo img{{
+    width:100%;
+    height:140px;
+    object-fit:cover;
+    display:block;
+  }}
 
   .body h3{{
     font-family:"Fraunces",serif;
@@ -513,6 +669,7 @@ def build_study_guide() -> str:
   </div>
 </footer>
 
+<script src="study-lightbox.js"></script>
 </body>
 </html>
 """
@@ -525,14 +682,20 @@ def section_meta(acronym: str) -> tuple[str, str]:
 
 
 def main():
+    global IMAGE_MAP
+    IMAGE_MAP = build_image_map()
     guide_path = ROOT / "5.1 CompTIA A+ Acronyms.html"
-    guide_html = build_study_guide()
+    guide_html = build_study_guide(IMAGE_MAP)
     guide_html = guide_html.replace(
         'href="Chapter 5 Practice Quiz.html?start=1"',
         'href="Chapter 5 Practice Quiz.html"',
     )
     guide_path.write_text(guide_html, encoding="utf-8")
-    print(f"Wrote {guide_path.name} ({len(ACRONYMS)} acronyms)")
+    imaged = sum(1 for a, _, _ in ACRONYMS if a in IMAGE_MAP)
+    missing = [a for a, _, _ in ACRONYMS if a not in IMAGE_MAP]
+    print(f"Wrote {guide_path.name} ({len(ACRONYMS)} acronyms, {imaged} with images)")
+    if missing:
+        print(f"Still letter-only: {', '.join(missing)}")
 
     order = ["A–C", "D–F", "G–I", "J–M", "N–P", "Q–R", "S–T", "U–Z"]
     sections = []
