@@ -836,7 +836,8 @@ def main():
                 "section": section_id,
                 "sectionTitle": f"Acronyms {label}",
                 "category": f"Acronyms {label}",
-                "name": term_title(acronym, expansion),
+                # Quiz UI should show the acronym only (no "(Full Expansion)" parentheses).
+                "name": acronym,
                 "definition": purpose,
                 "inChapters": mentioned,
             }

@@ -65,7 +65,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "AAA (Authentication, Authorization, and Accounting)",
+      "name": "AAA",
       "definition": "Security framework that verifies who you are, what you can access, and logs what you did on a network or system.",
       "inChapters": true
     },
@@ -74,7 +74,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "ACL (Access Control List)",
+      "name": "ACL",
       "definition": "Ruleset that specifies which users or systems are allowed or denied access to a resource such as a file, folder, or network.",
       "inChapters": true
     },
@@ -83,7 +83,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "ADF (Automatic Document Feeder)",
+      "name": "ADF",
       "definition": "Printer/scanner tray that feeds multipage documents automatically so you do not have to place each sheet on the glass.",
       "inChapters": false
     },
@@ -92,7 +92,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "AES (Advanced Encryption Standard)",
+      "name": "AES",
       "definition": "Widely used symmetric encryption algorithm that protects data at rest and in transit with strong, standardized ciphers.",
       "inChapters": true
     },
@@ -101,7 +101,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "AMD (Advanced Micro Devices, Inc.)",
+      "name": "AMD",
       "definition": "CPU and GPU manufacturer whose processors and graphics chips compete with Intel and NVIDIA in PCs and servers.",
       "inChapters": false
     },
@@ -110,7 +110,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "AP (Access Point)",
+      "name": "AP",
       "definition": "Wireless network device that lets Wi-Fi clients connect to a wired LAN or the internet.",
       "inChapters": false
     },
@@ -119,7 +119,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "APFS (Apple File System)",
+      "name": "APFS",
       "definition": "Modern Apple disk file system optimized for SSDs, with strong encryption, snapshots, and space sharing on macOS and iOS.",
       "inChapters": true
     },
@@ -128,7 +128,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "APIPA (Automatic Private Internet Protocol Addressing)",
+      "name": "APIPA",
       "definition": "Windows feature that assigns a 169.254.x.x address when DHCP fails so the host can still talk on the local link.",
       "inChapters": false
     },
@@ -137,7 +137,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "ARM (Advanced RISC (Reduced Instruction Set Computer) Machine)",
+      "name": "ARM",
       "definition": "CPU architecture used in phones, tablets, and many laptops that emphasizes efficiency with a reduced instruction set.",
       "inChapters": false
     },
@@ -146,7 +146,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "ATX (Advanced Technology Extended)",
+      "name": "ATX",
       "definition": "Common PC motherboard and power-supply form factor that defines board size, mounting holes, and connector layout.",
       "inChapters": false
     },
@@ -155,7 +155,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "AUP (Acceptable Use Policy)",
+      "name": "AUP",
       "definition": "Organizational rules describing allowed and prohibited uses of company computers, networks, and internet access.",
       "inChapters": true
     },
@@ -164,7 +164,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "BEC (Business Email Compromise)",
+      "name": "BEC",
       "definition": "Social-engineering fraud where attackers impersonate executives or vendors by email to steal money or data.",
       "inChapters": true
     },
@@ -173,7 +173,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "BIOS (Basic Input/Output System)",
+      "name": "BIOS",
       "definition": "Legacy firmware that initializes hardware at power-on and starts the boot process before the OS loads.",
       "inChapters": true
     },
@@ -182,7 +182,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "BNC (Bayonet Neill-Concelman)",
+      "name": "BNC",
       "definition": "Coaxial connector with a twist-lock bayonet coupling, historically used on older network and video cabling.",
       "inChapters": false
     },
@@ -191,7 +191,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "BSOD (Blue Screen of Death)",
+      "name": "BSOD",
       "definition": "Windows stop-error screen shown when the OS encounters a critical fault it cannot recover from safely.",
       "inChapters": true
     },
@@ -200,7 +200,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "BYOD (Bring Your Own Device)",
+      "name": "BYOD",
       "definition": "Policy that lets employees use personal phones or laptops for work, usually managed with MDM and security controls.",
       "inChapters": true
     },
@@ -209,7 +209,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "CAC (Calling-card Authorization Computer)",
+      "name": "CAC",
       "definition": "Smart-card style credential used to authenticate users for secure access in government and enterprise environments.",
       "inChapters": false
     },
@@ -218,7 +218,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "CAS (Column Address Strobe)",
+      "name": "CAS",
       "definition": "Memory timing signal related to how DRAM columns are addressed; often discussed with RAM latency (CAS latency).",
       "inChapters": false
     },
@@ -227,7 +227,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "CIFS (Common Internet File System)",
+      "name": "CIFS",
       "definition": "Microsoft file-sharing dialect of SMB that lets clients access networked files and printers over TCP/IP.",
       "inChapters": false
     },
@@ -236,7 +236,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "CMDB (Configuration Management Database)",
+      "name": "CMDB",
       "definition": "Central inventory of IT assets and their relationships used for change, incident, and asset management.",
       "inChapters": true
     },
@@ -245,7 +245,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "CMOS (Complementary Metal-Oxide Semiconductor)",
+      "name": "CMOS",
       "definition": "Low-power chip technology; in PCs it often refers to the battery-backed chip storing BIOS/UEFI settings.",
       "inChapters": false
     },
@@ -254,7 +254,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "CNAME (Canonical Name)",
+      "name": "CNAME",
       "definition": "DNS record that aliases one hostname to another canonical hostname.",
       "inChapters": true
     },
@@ -263,7 +263,7 @@
       "section": "A-C",
       "sectionTitle": "Acronyms A–C",
       "category": "Acronyms A–C",
-      "name": "CPU (Central Processing Unit)",
+      "name": "CPU",
       "definition": "Primary processor that executes program instructions and performs most computing work in a device.",
       "inChapters": true
     },
@@ -272,7 +272,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "DB-9 (Serial Communications D-Shell Connector, 9 pins)",
+      "name": "DB-9",
       "definition": "Nine-pin D-sub serial connector historically used for RS-232 devices, consoles, and older peripherals.",
       "inChapters": false
     },
@@ -281,7 +281,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "DDoS (Distributed Denial of Service)",
+      "name": "DDoS",
       "definition": "Attack that floods a target from many compromised systems to overwhelm availability of a service.",
       "inChapters": true
     },
@@ -290,7 +290,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "DDR (Double Data Rate)",
+      "name": "DDR",
       "definition": "Memory technology that transfers data on both clock edges, used in successive generations of RAM modules.",
       "inChapters": false
     },
@@ -299,7 +299,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "DHCP (Dynamic Host Configuration Protocol)",
+      "name": "DHCP",
       "definition": "Network service that automatically assigns IP addresses and related settings to clients.",
       "inChapters": true
     },
@@ -308,7 +308,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "DIMM (Dual In-line Memory Module)",
+      "name": "DIMM",
       "definition": "Standard stick form factor for desktop and server RAM with contacts on both sides of the module.",
       "inChapters": false
     },
@@ -317,7 +317,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "DKIM (DomainKeys Identified Mail)",
+      "name": "DKIM",
       "definition": "Email authentication method that signs outbound messages so receivers can verify the sending domain.",
       "inChapters": false
     },
@@ -326,7 +326,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "DLP (Data Loss Prevention)",
+      "name": "DLP",
       "definition": "Security controls that detect and block unauthorized transfer or leakage of sensitive data.",
       "inChapters": true
     },
@@ -335,7 +335,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "DMARC (Domain-based Message Authentication, Reporting, and Conformance)",
+      "name": "DMARC",
       "definition": "Email policy framework that builds on SPF/DKIM and tells receivers how to handle failed authentication.",
       "inChapters": false
     },
@@ -344,7 +344,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "DNS (Domain Name System)",
+      "name": "DNS",
       "definition": "Internet directory that resolves human-readable names to IP addresses and related records.",
       "inChapters": true
     },
@@ -353,7 +353,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "DoS (Denial of Service)",
+      "name": "DoS",
       "definition": "Attack that makes a system or network unavailable by exhausting resources or crashing a service.",
       "inChapters": true
     },
@@ -362,7 +362,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "DRM (Digital Rights Management)",
+      "name": "DRM",
       "definition": "Technology that restricts how digital media or software can be copied, shared, or used.",
       "inChapters": true
     },
@@ -371,7 +371,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "DSL (Digital Subscriber Line)",
+      "name": "DSL",
       "definition": "Broadband internet technology that delivers data over telephone copper lines.",
       "inChapters": false
     },
@@ -380,7 +380,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "DVI (Digital Visual Interface)",
+      "name": "DVI",
       "definition": "Video connector standard used to link computers to monitors, supporting digital (and sometimes analog) signals.",
       "inChapters": false
     },
@@ -389,7 +389,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "ECC (Error-correcting Code)",
+      "name": "ECC",
       "definition": "Memory feature that detects and corrects bit errors, common in servers for higher reliability.",
       "inChapters": false
     },
@@ -398,7 +398,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "EDR (Endpoint Detection and Response)",
+      "name": "EDR",
       "definition": "Security platform that monitors endpoints for threats and supports investigation and remediation.",
       "inChapters": true
     },
@@ -407,7 +407,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "EFS (Encrypting File System)",
+      "name": "EFS",
       "definition": "Windows feature that encrypts individual files and folders with user-tied keys.",
       "inChapters": true
     },
@@ -416,7 +416,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "EOL (End-of-life)",
+      "name": "EOL",
       "definition": "Point when a product no longer receives updates or vendor support and should be replaced or mitigated.",
       "inChapters": true
     },
@@ -425,7 +425,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "eSATA (External Serial Advanced Technology Attachment)",
+      "name": "eSATA",
       "definition": "External SATA interface for connecting outside hard drives at SATA speeds.",
       "inChapters": false
     },
@@ -434,7 +434,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "ESD (Electrostatic Discharge)",
+      "name": "ESD",
       "definition": "Sudden static electricity surge that can damage sensitive electronic components during handling.",
       "inChapters": true
     },
@@ -443,7 +443,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "eSIM (Embedded SIM)",
+      "name": "eSIM",
       "definition": "Software-based SIM built into a device that can be provisioned without a physical SIM card.",
       "inChapters": false
     },
@@ -452,7 +452,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "EULA (End-user License Agreement)",
+      "name": "EULA",
       "definition": "Legal contract defining the terms under which a user may install and use software.",
       "inChapters": true
     },
@@ -461,7 +461,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "exFAT (Extended File Allocation Table)",
+      "name": "exFAT",
       "definition": "Microsoft file system designed for flash media with large file support across Windows, macOS, and more.",
       "inChapters": true
     },
@@ -470,7 +470,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "FaaS (Function As A Service)",
+      "name": "FaaS",
       "definition": "Cloud model that runs event-triggered code functions without managing servers (serverless).",
       "inChapters": false
     },
@@ -479,7 +479,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "FAT32 (32-bit File Allocation Table)",
+      "name": "FAT32",
       "definition": "Older widely compatible file system with a 4 GB per-file size limit, still used on USB drives.",
       "inChapters": true
     },
@@ -488,7 +488,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "FRT (Facial Recognition Technology)",
+      "name": "FRT",
       "definition": "Biometric method that identifies or unlocks devices by analyzing facial features.",
       "inChapters": true
     },
@@ -497,7 +497,7 @@
       "section": "D-F",
       "sectionTitle": "Acronyms D–F",
       "category": "Acronyms D–F",
-      "name": "FTP (File Transfer Protocol)",
+      "name": "FTP",
       "definition": "Classic protocol for uploading and downloading files; often replaced by SFTP for security.",
       "inChapters": true
     },
@@ -506,7 +506,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "GFS (Grandfather-Father-Son)",
+      "name": "GFS",
       "definition": "Backup rotation scheme that keeps daily, weekly, and monthly copies on a staggered schedule.",
       "inChapters": true
     },
@@ -515,7 +515,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "GPS (Global Positioning System)",
+      "name": "GPS",
       "definition": "Satellite navigation system that provides location and time data to GPS receivers.",
       "inChapters": true
     },
@@ -524,7 +524,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "GPT (GUID (Globally Unique Identifier) Partition Table)",
+      "name": "GPT",
       "definition": "Modern disk partitioning scheme that supports large disks and many partitions, replacing MBR limits.",
       "inChapters": true
     },
@@ -533,7 +533,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "GPU (Graphics Processing Unit)",
+      "name": "GPU",
       "definition": "Processor specialized for rendering graphics and accelerating parallel workloads like video and AI.",
       "inChapters": true
     },
@@ -542,7 +542,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "GUI (Graphical User Interface)",
+      "name": "GUI",
       "definition": "Visual interface of windows, icons, and menus that users interact with instead of pure text commands.",
       "inChapters": true
     },
@@ -551,7 +551,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "GUID (Globally Unique Identifier)",
+      "name": "GUID",
       "definition": "128-bit unique ID used to identify software objects, partitions, and other entities without collision.",
       "inChapters": true
     },
@@ -560,7 +560,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "HD (High Definition)",
+      "name": "HD",
       "definition": "Video quality standard with higher resolution than standard definition (commonly 720p or 1080p).",
       "inChapters": false
     },
@@ -569,7 +569,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "HDD (Hard Disk Drive)",
+      "name": "HDD",
       "definition": "Magnetic spinning-disk storage device used for bulk data storage at lower cost per gigabyte.",
       "inChapters": true
     },
@@ -578,7 +578,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "HDMI (High-definition Media Interface)",
+      "name": "HDMI",
       "definition": "Digital audio/video connector that carries uncompressed video and multi-channel audio to displays.",
       "inChapters": false
     },
@@ -587,7 +587,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "HSM (Hardware Security Module)",
+      "name": "HSM",
       "definition": "Tamper-resistant device that generates and stores cryptographic keys for high-security operations.",
       "inChapters": false
     },
@@ -596,7 +596,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "HTTP (Hypertext Transfer Protocol)",
+      "name": "HTTP",
       "definition": "Application protocol that transfers web pages and API data between browsers and servers (unencrypted).",
       "inChapters": true
     },
@@ -605,7 +605,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "HTTPS (Hypertext Transfer Protocol Secure)",
+      "name": "HTTPS",
       "definition": "HTTP wrapped in TLS encryption to protect web traffic confidentiality and integrity.",
       "inChapters": true
     },
@@ -614,7 +614,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "IaaS (Infrastructure as a Service)",
+      "name": "IaaS",
       "definition": "Cloud model that rents virtual servers, storage, and networking for customers to configure.",
       "inChapters": false
     },
@@ -623,7 +623,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "IAM (Identity Access Management)",
+      "name": "IAM",
       "definition": "Policies and tools that control user identities, authentication, and access rights across systems.",
       "inChapters": true
     },
@@ -632,7 +632,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "IMAP (Internet Mail Access Protocol)",
+      "name": "IMAP",
       "definition": "Email protocol that keeps messages on the server and syncs mailboxes across multiple devices.",
       "inChapters": true
     },
@@ -641,7 +641,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "IOPS (Input/Output Operations Per Second)",
+      "name": "IOPS",
       "definition": "Performance metric measuring how many read/write operations a storage device can handle per second.",
       "inChapters": false
     },
@@ -650,7 +650,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "IoT (Internet of Things)",
+      "name": "IoT",
       "definition": "Network of everyday devices (sensors, appliances, cameras) connected to the internet for data and control.",
       "inChapters": true
     },
@@ -659,7 +659,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "IP (Internet Protocol)",
+      "name": "IP",
       "definition": "Core network protocol that addresses and routes packets between hosts on an IP network.",
       "inChapters": true
     },
@@ -668,7 +668,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "IPS (In-plane Switching)",
+      "name": "IPS",
       "definition": "LCD panel technology known for wide viewing angles and accurate colors compared with TN panels.",
       "inChapters": false
     },
@@ -677,7 +677,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "IR (Infrared)",
+      "name": "IR",
       "definition": "Wireless line-of-sight communication or sensing using infrared light, used in remotes and some sensors.",
       "inChapters": true
     },
@@ -686,7 +686,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "ISO (International Organization for Standardization)",
+      "name": "ISO",
       "definition": "Standards body; also casually used for disk image files (.iso) that mirror optical media.",
       "inChapters": true
     },
@@ -695,7 +695,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "ISP (Internet Service Provider)",
+      "name": "ISP",
       "definition": "Company that provides customers with internet connectivity and related services.",
       "inChapters": true
     },
@@ -704,7 +704,7 @@
       "section": "G-I",
       "sectionTitle": "Acronyms G–I",
       "category": "Acronyms G–I",
-      "name": "ITX (Information Technology eXtended)",
+      "name": "ITX",
       "definition": "Smaller motherboard form-factor family (such as Mini-ITX) for compact PCs.",
       "inChapters": false
     },
@@ -713,7 +713,7 @@
       "section": "J-M",
       "sectionTitle": "Acronyms J–M",
       "category": "Acronyms J–M",
-      "name": "KVM (Keyboard-Video-Mouse)",
+      "name": "KVM",
       "definition": "Switch or device that lets one keyboard, mouse, and monitor control multiple computers.",
       "inChapters": true
     },
@@ -722,7 +722,7 @@
       "section": "J-M",
       "sectionTitle": "Acronyms J–M",
       "category": "Acronyms J–M",
-      "name": "LAN (Local Area Network)",
+      "name": "LAN",
       "definition": "Network covering a limited area such as a home, office, or building.",
       "inChapters": true
     },
@@ -731,7 +731,7 @@
       "section": "J-M",
       "sectionTitle": "Acronyms J–M",
       "category": "Acronyms J–M",
-      "name": "LC (Lucent Connector)",
+      "name": "LC",
       "definition": "Small form-factor fiber-optic connector commonly used in high-density network installations.",
       "inChapters": false
     },
@@ -740,7 +740,7 @@
       "section": "J-M",
       "sectionTitle": "Acronyms J–M",
       "category": "Acronyms J–M",
-      "name": "LCD (Liquid Crystal Display)",
+      "name": "LCD",
       "definition": "Flat-panel display technology that uses liquid crystals and a backlight to form images.",
       "inChapters": false
     },
@@ -749,7 +749,7 @@
       "section": "J-M",
       "sectionTitle": "Acronyms J–M",
       "category": "Acronyms J–M",
-      "name": "LDAP (Lightweight Directory Access Protocol)",
+      "name": "LDAP",
       "definition": "Protocol for querying and managing directory services such as user accounts and groups.",
       "inChapters": true
     },
@@ -758,7 +758,7 @@
       "section": "J-M",
       "sectionTitle": "Acronyms J–M",
       "category": "Acronyms J–M",
-      "name": "LED (Light-emitting Diode)",
+      "name": "LED",
       "definition": "Semiconductor light source used for indicators, lighting, and modern display backlights.",
       "inChapters": false
     },
@@ -767,7 +767,7 @@
       "section": "J-M",
       "sectionTitle": "Acronyms J–M",
       "category": "Acronyms J–M",
-      "name": "LTE (Long-Term Evolution)",
+      "name": "LTE",
       "definition": "High-speed cellular wireless standard commonly known as 4G LTE mobile data.",
       "inChapters": true
     },
@@ -776,7 +776,7 @@
       "section": "J-M",
       "sectionTitle": "Acronyms J–M",
       "category": "Acronyms J–M",
-      "name": "MAC (Media Access Control)",
+      "name": "MAC",
       "definition": "Hardware address uniquely identifying a network interface on a local network segment.",
       "inChapters": false
     },
@@ -785,7 +785,7 @@
       "section": "J-M",
       "sectionTitle": "Acronyms J–M",
       "category": "Acronyms J–M",
-      "name": "MAN (Metropolitan Area Network)",
+      "name": "MAN",
       "definition": "Network spanning a city or campus, larger than a LAN but smaller than a WAN.",
       "inChapters": false
     },
@@ -794,7 +794,7 @@
       "section": "J-M",
       "sectionTitle": "Acronyms J–M",
       "category": "Acronyms J–M",
-      "name": "MBR (Master Boot Record)",
+      "name": "MBR",
       "definition": "Legacy disk boot sector and partitioning scheme limited to four primary partitions and 2 TB disks.",
       "inChapters": true
     },
@@ -803,7 +803,7 @@
       "section": "J-M",
       "sectionTitle": "Acronyms J–M",
       "category": "Acronyms J–M",
-      "name": "MDM (Mobile Device Management)",
+      "name": "MDM",
       "definition": "Enterprise software that configures, secures, and remotely manages smartphones and tablets.",
       "inChapters": true
     },
@@ -812,7 +812,7 @@
       "section": "J-M",
       "sectionTitle": "Acronyms J–M",
       "category": "Acronyms J–M",
-      "name": "MDR (Managed Detection and Response)",
+      "name": "MDR",
       "definition": "Outsourced security service that monitors for threats and helps respond to incidents.",
       "inChapters": true
     },
@@ -821,7 +821,7 @@
       "section": "J-M",
       "sectionTitle": "Acronyms J–M",
       "category": "Acronyms J–M",
-      "name": "MFA (Multifactor Authentication)",
+      "name": "MFA",
       "definition": "Login requirement that combines two or more factors (something you know, have, or are).",
       "inChapters": true
     },
@@ -830,7 +830,7 @@
       "section": "J-M",
       "sectionTitle": "Acronyms J–M",
       "category": "Acronyms J–M",
-      "name": "MFP (Multifunction Printer)",
+      "name": "MFP",
       "definition": "Office device that combines printing, scanning, copying, and often faxing in one unit.",
       "inChapters": true
     },
@@ -839,7 +839,7 @@
       "section": "J-M",
       "sectionTitle": "Acronyms J–M",
       "category": "Acronyms J–M",
-      "name": "MMC (Microsoft Management Console)",
+      "name": "MMC",
       "definition": "Windows shell that hosts administrative snap-ins such as Device Manager and Event Viewer tools.",
       "inChapters": true
     },
@@ -848,7 +848,7 @@
       "section": "J-M",
       "sectionTitle": "Acronyms J–M",
       "category": "Acronyms J–M",
-      "name": "MNDA (Mutual Non-Disclosure Agreement)",
+      "name": "MNDA",
       "definition": "Contract where both parties agree to keep shared confidential information secret.",
       "inChapters": true
     },
@@ -857,7 +857,7 @@
       "section": "J-M",
       "sectionTitle": "Acronyms J–M",
       "category": "Acronyms J–M",
-      "name": "mSATA (Mini-serial Advanced Technology Attachment)",
+      "name": "mSATA",
       "definition": "Compact SATA connector/form factor used for small SSDs in laptops and embedded systems.",
       "inChapters": false
     },
@@ -866,7 +866,7 @@
       "section": "J-M",
       "sectionTitle": "Acronyms J–M",
       "category": "Acronyms J–M",
-      "name": "MX (Mail Exchange)",
+      "name": "MX",
       "definition": "DNS record that tells senders which mail servers accept email for a domain.",
       "inChapters": true
     },
@@ -875,7 +875,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "NAC (Network Access Control)",
+      "name": "NAC",
       "definition": "Security approach that authenticates and checks devices before granting network access.",
       "inChapters": true
     },
@@ -884,7 +884,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "NAS (Network Access Server)",
+      "name": "NAS",
       "definition": "Device or service that authenticates remote users and grants them access to network resources.",
       "inChapters": true
     },
@@ -893,7 +893,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "NAT (Network Address Translation)",
+      "name": "NAT",
       "definition": "Router technique that maps private internal IPs to public addresses for internet access.",
       "inChapters": true
     },
@@ -902,7 +902,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "NDA (Non-Disclosure Agreement)",
+      "name": "NDA",
       "definition": "Legal contract requiring one or more parties not to reveal confidential information.",
       "inChapters": true
     },
@@ -911,7 +911,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "NetBIOS (Network Basic Input/Output System)",
+      "name": "NetBIOS",
       "definition": "Legacy Windows networking API/name service used historically for local name resolution and shares.",
       "inChapters": true
     },
@@ -920,7 +920,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "NFC (Near-field Communication)",
+      "name": "NFC",
       "definition": "Short-range wireless tech for payments, pairing, and data exchange within a few centimeters.",
       "inChapters": true
     },
@@ -929,7 +929,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "NIC (Network Interface Card)",
+      "name": "NIC",
       "definition": "Hardware adapter that connects a computer to a wired or wireless network.",
       "inChapters": false
     },
@@ -938,7 +938,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "NTFS (New Technology File System)",
+      "name": "NTFS",
       "definition": "Default Windows file system supporting permissions, encryption, compression, and large volumes.",
       "inChapters": true
     },
@@ -947,7 +947,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "NTP (Network Time Protocol)",
+      "name": "NTP",
       "definition": "Protocol that synchronizes device clocks with authoritative time servers.",
       "inChapters": true
     },
@@ -956,7 +956,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "NVMe (Non-volatile Memory Express)",
+      "name": "NVMe",
       "definition": "High-speed SSD interface protocol designed for PCIe flash storage with low latency.",
       "inChapters": true
     },
@@ -965,7 +965,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "OEM (Original Equipment Manufacturer)",
+      "name": "OEM",
       "definition": "Company that builds hardware or software sold under another brand or bundled with systems.",
       "inChapters": true
     },
@@ -974,7 +974,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "OLED (Organic Light-emitting Diode)",
+      "name": "OLED",
       "definition": "Display technology where each pixel emits its own light, enabling deep blacks and high contrast.",
       "inChapters": false
     },
@@ -983,7 +983,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "ONT (Optical Network Terminal)",
+      "name": "ONT",
       "definition": "Fiber-to-the-premises device that converts optical signals to Ethernet for home or business use.",
       "inChapters": false
     },
@@ -992,7 +992,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "OS (Operating System)",
+      "name": "OS",
       "definition": "Core software that manages hardware, processes, memory, and provides services for applications.",
       "inChapters": true
     },
@@ -1001,7 +1001,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "OTP (One-time Password/Passcode)",
+      "name": "OTP",
       "definition": "Single-use code used for authentication, often delivered by app, SMS, or hardware token.",
       "inChapters": true
     },
@@ -1010,7 +1010,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "PaaS (Platform as a Service)",
+      "name": "PaaS",
       "definition": "Cloud model that provides a managed runtime platform so developers deploy apps without managing OS infrastructure.",
       "inChapters": false
     },
@@ -1019,7 +1019,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "PAM (Privileged Access Management)",
+      "name": "PAM",
       "definition": "Controls that secure, monitor, and limit use of powerful admin accounts and credentials.",
       "inChapters": true
     },
@@ -1028,7 +1028,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "PAN (Personal Area Network)",
+      "name": "PAN",
       "definition": "Very short-range network around a person, such as Bluetooth between phone and headset.",
       "inChapters": false
     },
@@ -1037,7 +1037,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "PC (Personal Computer)",
+      "name": "PC",
       "definition": "General-purpose computer designed for individual use, such as a desktop or laptop.",
       "inChapters": true
     },
@@ -1046,7 +1046,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "PCI (Peripheral Component Interconnect)",
+      "name": "PCI",
       "definition": "Older parallel expansion-bus standard for adding cards to a motherboard.",
       "inChapters": false
     },
@@ -1055,7 +1055,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "PCIe (Peripheral Component Interconnect Express)",
+      "name": "PCIe",
       "definition": "Modern high-speed serial expansion bus used for GPUs, NVMe SSDs, and add-in cards.",
       "inChapters": false
     },
@@ -1064,7 +1064,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "PCL (Printer Command Language)",
+      "name": "PCL",
       "definition": "HP page-description language that tells printers how to render text and graphics.",
       "inChapters": false
     },
@@ -1073,7 +1073,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "PII (Personally Identifiable Information)",
+      "name": "PII",
       "definition": "Data that can identify an individual, such as name, SSN, or email, requiring careful protection.",
       "inChapters": true
     },
@@ -1082,7 +1082,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "PIN (Personal Identification Number)",
+      "name": "PIN",
       "definition": "Numeric secret used to authenticate a user, often with a card, phone unlock, or smart card.",
       "inChapters": true
     },
@@ -1091,7 +1091,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "PIV (Personal Identity Verification)",
+      "name": "PIV",
       "definition": "U.S. federal smart-card standard for employee identity and strong authentication.",
       "inChapters": false
     },
@@ -1100,7 +1100,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "PoE (Power over Ethernet)",
+      "name": "PoE",
       "definition": "Technology that delivers electrical power and data over the same Ethernet cable to devices like APs and cameras.",
       "inChapters": false
     },
@@ -1109,7 +1109,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "POP (Post Office Protocol)",
+      "name": "POP",
       "definition": "Email retrieval protocol that typically downloads messages to a client and may remove them from the server.",
       "inChapters": true
     },
@@ -1118,7 +1118,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "POST (Power-on Self-test)",
+      "name": "POST",
       "definition": "Firmware diagnostic sequence that checks critical hardware before the OS boots.",
       "inChapters": false
     },
@@ -1127,7 +1127,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "PSU (Power Supply Unit)",
+      "name": "PSU",
       "definition": "Component that converts wall AC power into the DC voltages a computer needs.",
       "inChapters": false
     },
@@ -1136,7 +1136,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "PUP (Potentially Unwanted Program)",
+      "name": "PUP",
       "definition": "Software that is not outright malware but is undesirable (adware, toolbars, bundled junk).",
       "inChapters": true
     },
@@ -1145,7 +1145,7 @@
       "section": "N-P",
       "sectionTitle": "Acronyms N–P",
       "category": "Acronyms N–P",
-      "name": "PXE (Preboot eXecution Environment)",
+      "name": "PXE",
       "definition": "Network boot technology that lets a PC load an OS installer or image from a server.",
       "inChapters": true
     },
@@ -1154,7 +1154,7 @@
       "section": "Q-R",
       "sectionTitle": "Acronyms Q–R",
       "category": "Acronyms Q–R",
-      "name": "QoS (Quality of Service)",
+      "name": "QoS",
       "definition": "Networking techniques that prioritize certain traffic (voice, video) for better performance.",
       "inChapters": true
     },
@@ -1163,7 +1163,7 @@
       "section": "Q-R",
       "sectionTitle": "Acronyms Q–R",
       "category": "Acronyms Q–R",
-      "name": "RADIUS (Remote Authentication Dial-in User Server)",
+      "name": "RADIUS",
       "definition": "Centralized AAA protocol commonly used for VPN, Wi-Fi, and network device authentication.",
       "inChapters": true
     },
@@ -1172,7 +1172,7 @@
       "section": "Q-R",
       "sectionTitle": "Acronyms Q–R",
       "category": "Acronyms Q–R",
-      "name": "RAID (Redundant Array of Independent Disks)",
+      "name": "RAID",
       "definition": "Disk configuration that combines drives for performance, capacity, and/or fault tolerance.",
       "inChapters": true
     },
@@ -1181,7 +1181,7 @@
       "section": "Q-R",
       "sectionTitle": "Acronyms Q–R",
       "category": "Acronyms Q–R",
-      "name": "RAM (Random-access Memory)",
+      "name": "RAM",
       "definition": "Volatile working memory the CPU uses to store running programs and data.",
       "inChapters": true
     },
@@ -1190,7 +1190,7 @@
       "section": "Q-R",
       "sectionTitle": "Acronyms Q–R",
       "category": "Acronyms Q–R",
-      "name": "RDP (Remote Desktop Protocol)",
+      "name": "RDP",
       "definition": "Microsoft protocol that provides remote graphical desktop access to Windows systems.",
       "inChapters": true
     },
@@ -1199,7 +1199,7 @@
       "section": "Q-R",
       "sectionTitle": "Acronyms Q–R",
       "category": "Acronyms Q–R",
-      "name": "ReFS (Resilient File System)",
+      "name": "ReFS",
       "definition": "Microsoft file system focused on integrity and resilience for large volumes and storage spaces.",
       "inChapters": true
     },
@@ -1208,7 +1208,7 @@
       "section": "Q-R",
       "sectionTitle": "Acronyms Q–R",
       "category": "Acronyms Q–R",
-      "name": "RFID (Radio-frequency Identification)",
+      "name": "RFID",
       "definition": "Wireless ID technology using tags and readers for access control, inventory, and tracking.",
       "inChapters": true
     },
@@ -1217,7 +1217,7 @@
       "section": "Q-R",
       "sectionTitle": "Acronyms Q–R",
       "category": "Acronyms Q–R",
-      "name": "RGB (Red-Green-Blue)",
+      "name": "RGB",
       "definition": "Additive color model used by displays and lighting where colors are mixed from red, green, and blue.",
       "inChapters": false
     },
@@ -1226,7 +1226,7 @@
       "section": "Q-R",
       "sectionTitle": "Acronyms Q–R",
       "category": "Acronyms Q–R",
-      "name": "RISC (Reduced Instruction Set Computer)",
+      "name": "RISC",
       "definition": "CPU design philosophy using a smaller, simpler instruction set for efficiency (as in ARM).",
       "inChapters": false
     },
@@ -1235,7 +1235,7 @@
       "section": "Q-R",
       "sectionTitle": "Acronyms Q–R",
       "category": "Acronyms Q–R",
-      "name": "RJ11 (Registered Jack Function 11)",
+      "name": "RJ11",
       "definition": "Telephone connector typically used for landline/DSL with fewer contacts than RJ45.",
       "inChapters": false
     },
@@ -1244,7 +1244,7 @@
       "section": "Q-R",
       "sectionTitle": "Acronyms Q–R",
       "category": "Acronyms Q–R",
-      "name": "RJ45 (Registered Jack Function 45)",
+      "name": "RJ45",
       "definition": "Eight-position modular connector used for Ethernet networking cables.",
       "inChapters": false
     },
@@ -1253,7 +1253,7 @@
       "section": "Q-R",
       "sectionTitle": "Acronyms Q–R",
       "category": "Acronyms Q–R",
-      "name": "RMM (Remote Monitoring and Management)",
+      "name": "RMM",
       "definition": "MSP platform used to monitor, patch, and manage many client endpoints from one console.",
       "inChapters": true
     },
@@ -1262,7 +1262,7 @@
       "section": "Q-R",
       "sectionTitle": "Acronyms Q–R",
       "category": "Acronyms Q–R",
-      "name": "RPM (Revolutions Per Minute)",
+      "name": "RPM",
       "definition": "Speed measurement for spinning devices such as HDD platters or cooling fans.",
       "inChapters": false
     },
@@ -1271,7 +1271,7 @@
       "section": "Q-R",
       "sectionTitle": "Acronyms Q–R",
       "category": "Acronyms Q–R",
-      "name": "RSR (Rapid Security Response)",
+      "name": "RSR",
       "definition": "Fast security update mechanism (notably Apple) that delivers urgent fixes outside major OS releases.",
       "inChapters": true
     },
@@ -1280,7 +1280,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SaaS (Software as a Service)",
+      "name": "SaaS",
       "definition": "Cloud model delivering applications over the internet (e.g., Microsoft 365, Google Workspace).",
       "inChapters": false
     },
@@ -1289,7 +1289,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SAML (Security Assertions Markup Language)",
+      "name": "SAML",
       "definition": "XML-based standard for exchanging authentication/authorization data, often used for SSO.",
       "inChapters": true
     },
@@ -1298,7 +1298,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SAN (Storage Area Network)",
+      "name": "SAN",
       "definition": "High-speed dedicated network that provides block-level storage to servers.",
       "inChapters": false
     },
@@ -1307,7 +1307,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SAS (Serial Attached SCSI (Small Computer System Interface))",
+      "name": "SAS",
       "definition": "Enterprise disk interface that connects servers to high-reliability SAS drives.",
       "inChapters": false
     },
@@ -1316,7 +1316,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SATA (Serial Advanced Technology Attachment)",
+      "name": "SATA",
       "definition": "Common interface for connecting internal HDDs and SSDs to a motherboard.",
       "inChapters": false
     },
@@ -1325,7 +1325,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SC (Subscriber Connector)",
+      "name": "SC",
       "definition": "Square push-pull fiber-optic connector used in networking and telecom.",
       "inChapters": false
     },
@@ -1334,7 +1334,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SCADA (Supervisory Control and Data Acquisition)",
+      "name": "SCADA",
       "definition": "Industrial control system used to monitor and operate infrastructure like plants and utilities.",
       "inChapters": false
     },
@@ -1343,7 +1343,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SCSI (Small Computer System Interface)",
+      "name": "SCSI",
       "definition": "Legacy/enterprise peripheral interface for disks and other devices; ancestor concepts live on in SAS.",
       "inChapters": false
     },
@@ -1352,7 +1352,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SD (Secure Digital)",
+      "name": "SD",
       "definition": "Removable flash memory card format used in cameras, phones, and embedded devices.",
       "inChapters": false
     },
@@ -1361,7 +1361,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SDS (Safety Data Sheet)",
+      "name": "SDS",
       "definition": "Document listing hazards, handling, and disposal guidance for a chemical or material (formerly MSDS).",
       "inChapters": true
     },
@@ -1370,7 +1370,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SFTP (Secure File Transfer Protocol)",
+      "name": "SFTP",
       "definition": "Encrypted file transfer method that runs over SSH instead of plaintext FTP.",
       "inChapters": true
     },
@@ -1379,7 +1379,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SIM (Subscriber Identity Module)",
+      "name": "SIM",
       "definition": "Card that stores mobile subscriber identity and authentication data for cellular service.",
       "inChapters": false
     },
@@ -1388,7 +1388,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SLA (Service-level Agreement)",
+      "name": "SLA",
       "definition": "Contract defining expected service performance, uptime, and response times between provider and customer.",
       "inChapters": true
     },
@@ -1397,7 +1397,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "S.M.A.R.T (Self-monitoring Analysis and Reporting Technology)",
+      "name": "S.M.A.R.T",
       "definition": "Drive self-diagnostics that report health metrics to warn of impending disk failure.",
       "inChapters": false
     },
@@ -1406,7 +1406,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SMB (Server Message Block)",
+      "name": "SMB",
       "definition": "Windows file-and-printer sharing protocol used for networked resources.",
       "inChapters": true
     },
@@ -1415,7 +1415,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SMS (Short Message Service)",
+      "name": "SMS",
       "definition": "Cellular text messaging service used for communication and sometimes OTP delivery.",
       "inChapters": true
     },
@@ -1424,7 +1424,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SMTP (Simple Mail Transfer Protocol)",
+      "name": "SMTP",
       "definition": "Protocol that sends email between mail clients and mail servers.",
       "inChapters": true
     },
@@ -1433,7 +1433,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SNMP (Simple Network Management Protocol)",
+      "name": "SNMP",
       "definition": "Protocol for monitoring and managing network devices such as switches, routers, and printers.",
       "inChapters": true
     },
@@ -1442,7 +1442,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SODIMM (Small Outline Dual In-line Memory Module)",
+      "name": "SODIMM",
       "definition": "Compact RAM module form factor used in laptops and small-form-factor systems.",
       "inChapters": false
     },
@@ -1451,7 +1451,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SOHO (Small Office/Home Office)",
+      "name": "SOHO",
       "definition": "Small business/home work environment with simpler networking and fewer users than enterprise.",
       "inChapters": true
     },
@@ -1460,7 +1460,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SOP (Standard Operating Procedure)",
+      "name": "SOP",
       "definition": "Documented step-by-step process for performing a routine IT or business task consistently.",
       "inChapters": true
     },
@@ -1469,7 +1469,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SPF (Sender Policy Framework)",
+      "name": "SPF",
       "definition": "Email DNS record that lists servers authorized to send mail for a domain.",
       "inChapters": false
     },
@@ -1478,7 +1478,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SPICE (Simple Protocol for Independent Computing Environments)",
+      "name": "SPICE",
       "definition": "Remote-display protocol optimized for accessing virtual machines with graphics and clipboard sharing.",
       "inChapters": true
     },
@@ -1487,7 +1487,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SQL (Structured Query Language)",
+      "name": "SQL",
       "definition": "Standard language for querying and managing relational databases.",
       "inChapters": true
     },
@@ -1496,7 +1496,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SSD (Solid-state Drive)",
+      "name": "SSD",
       "definition": "Flash-based storage with no moving parts, offering higher speed and durability than HDDs.",
       "inChapters": true
     },
@@ -1505,7 +1505,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SSH (Secure Shell)",
+      "name": "SSH",
       "definition": "Encrypted remote command-line protocol that replaced insecure Telnet for administration.",
       "inChapters": true
     },
@@ -1514,7 +1514,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SSID (Service Set Identifier)",
+      "name": "SSID",
       "definition": "Human-readable name of a Wi-Fi network that clients see when scanning for wireless networks.",
       "inChapters": true
     },
@@ -1523,7 +1523,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "SSO (Single Sign-on)",
+      "name": "SSO",
       "definition": "Authentication approach where one login grants access to multiple related applications.",
       "inChapters": true
     },
@@ -1532,7 +1532,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "ST (Straight Tip)",
+      "name": "ST",
       "definition": "Bayonet-style fiber-optic connector with a round ferrule, used in older fiber installations.",
       "inChapters": false
     },
@@ -1541,7 +1541,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "TACACS (Terminal Access Controller Access-control System)",
+      "name": "TACACS",
       "definition": "Cisco-oriented AAA protocol for authenticating administrators to network devices.",
       "inChapters": true
     },
@@ -1550,7 +1550,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "TCP (Transmission Control Protocol)",
+      "name": "TCP",
       "definition": "Reliable, connection-oriented transport protocol that delivers ordered, acknowledged data streams.",
       "inChapters": true
     },
@@ -1559,7 +1559,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "TKIP (Temporal Key Integrity Protocol)",
+      "name": "TKIP",
       "definition": "Legacy WPA encryption/integrity mechanism superseded by stronger AES-based Wi-Fi security.",
       "inChapters": true
     },
@@ -1568,7 +1568,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "TN (Twisted Nematic)",
+      "name": "TN",
       "definition": "Fast, inexpensive LCD panel type with narrower viewing angles than IPS or VA.",
       "inChapters": false
     },
@@ -1577,7 +1577,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "TOTP (Time-based One-time Password)",
+      "name": "TOTP",
       "definition": "OTP algorithm that generates rotating codes based on the current time and a shared secret.",
       "inChapters": true
     },
@@ -1586,7 +1586,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "TPM (Trusted Platform Module)",
+      "name": "TPM",
       "definition": "Secure cryptoprocessor chip that stores keys and supports features like BitLocker and measured boot.",
       "inChapters": true
     },
@@ -1595,7 +1595,7 @@
       "section": "S-T",
       "sectionTitle": "Acronyms S–T",
       "category": "Acronyms S–T",
-      "name": "TXT (Text)",
+      "name": "TXT",
       "definition": "DNS record type that stores arbitrary text, often used for SPF, DKIM, and domain verification.",
       "inChapters": true
     },
@@ -1604,7 +1604,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "UAC (User Account Control)",
+      "name": "UAC",
       "definition": "Windows security prompt that asks for elevation before allowing administrative actions.",
       "inChapters": true
     },
@@ -1613,7 +1613,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "UDP (User Datagram Protocol)",
+      "name": "UDP",
       "definition": "Connectionless transport protocol used for fast, lightweight traffic such as DNS and streaming.",
       "inChapters": true
     },
@@ -1622,7 +1622,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "UEFI (Unified Extensible Firmware Interface)",
+      "name": "UEFI",
       "definition": "Modern firmware interface that replaces legacy BIOS with faster boot, GUI setup, and Secure Boot.",
       "inChapters": true
     },
@@ -1631,7 +1631,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "UPnP (Universal Plug and Play)",
+      "name": "UPnP",
       "definition": "Protocol that lets devices automatically open router ports; convenient but often a security risk.",
       "inChapters": true
     },
@@ -1640,7 +1640,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "UPS (Uninterruptible Power Supply)",
+      "name": "UPS",
       "definition": "Battery-backed power device that keeps equipment running during outages and smooths power issues.",
       "inChapters": true
     },
@@ -1649,7 +1649,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "USB (Universal Serial Bus)",
+      "name": "USB",
       "definition": "Hot-pluggable interface for connecting peripherals, storage, and chargers to computers.",
       "inChapters": true
     },
@@ -1658,7 +1658,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "USB-C (Universal Serial Bus Type C)",
+      "name": "USB-C",
       "definition": "Reversible USB connector supporting data, video, and high-wattage power delivery.",
       "inChapters": false
     },
@@ -1667,7 +1667,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "UTM (Unified Threat Management)",
+      "name": "UTM",
       "definition": "Security appliance that combines firewall, IDS/IPS, antivirus, and related protections in one box.",
       "inChapters": false
     },
@@ -1676,7 +1676,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "VA (Vertical Alignment)",
+      "name": "VA",
       "definition": "LCD panel technology with strong contrast, sitting between TN and IPS in viewing-angle performance.",
       "inChapters": false
     },
@@ -1685,7 +1685,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "VDI (Virtual Desktop Infrastructure)",
+      "name": "VDI",
       "definition": "Architecture that hosts user desktops as VMs in a data center and streams them to thin clients.",
       "inChapters": false
     },
@@ -1694,7 +1694,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "VGA (Video Graphics Array)",
+      "name": "VGA",
       "definition": "Legacy analog video connector and resolution standard historically used for PC monitors.",
       "inChapters": false
     },
@@ -1703,7 +1703,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "VLAN (Virtual LAN (Local Area Network))",
+      "name": "VLAN",
       "definition": "Logical network segment created on switches to isolate broadcast domains without separate physical cabling.",
       "inChapters": false
     },
@@ -1712,7 +1712,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "VM (Virtual Machine)",
+      "name": "VM",
       "definition": "Software-emulated computer running an OS and apps on a hypervisor alongside other VMs.",
       "inChapters": false
     },
@@ -1721,7 +1721,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "VNC (Virtual Network Computer)",
+      "name": "VNC",
       "definition": "Cross-platform remote desktop technology that shares a graphical desktop over the RFB protocol.",
       "inChapters": true
     },
@@ -1730,7 +1730,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "VoIP (Voice over Internet Protocol)",
+      "name": "VoIP",
       "definition": "Technology that carries voice calls as data packets over IP networks instead of traditional phone lines.",
       "inChapters": false
     },
@@ -1739,7 +1739,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "VPN (Virtual Private Network)",
+      "name": "VPN",
       "definition": "Encrypted tunnel that securely connects a remote client or site to a private network over the internet.",
       "inChapters": true
     },
@@ -1748,7 +1748,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "VRAM (Video Random-access Memory)",
+      "name": "VRAM",
       "definition": "Memory used by a GPU to store textures, framebuffers, and other graphics data.",
       "inChapters": true
     },
@@ -1757,7 +1757,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "WAN (Wide Area Network)",
+      "name": "WAN",
       "definition": "Network spanning large geographic areas, typically connecting multiple sites over ISP links.",
       "inChapters": true
     },
@@ -1766,7 +1766,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "WAP (Wireless Access Point)",
+      "name": "WAP",
       "definition": "Device that bridges wireless clients onto a wired network (often used interchangeably with AP).",
       "inChapters": false
     },
@@ -1775,7 +1775,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "WEP (Wired Equivalent Privacy)",
+      "name": "WEP",
       "definition": "Obsolete Wi-Fi security protocol that is easily cracked and must not be used.",
       "inChapters": true
     },
@@ -1784,7 +1784,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "WinRM (Windows Remote Management)",
+      "name": "WinRM",
       "definition": "Microsoft service that enables remote PowerShell and management commands without a full desktop session.",
       "inChapters": true
     },
@@ -1793,7 +1793,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "WISP (Written Internet Service Provider)",
+      "name": "WISP",
       "definition": "Provider of internet service (exam acronym expansion); in practice often refers to wireless ISPs serving rural areas.",
       "inChapters": false
     },
@@ -1802,7 +1802,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "WLAN (Wireless LAN (Local Area Network))",
+      "name": "WLAN",
       "definition": "Local network that uses Wi-Fi radio instead of (or in addition to) Ethernet cabling.",
       "inChapters": false
     },
@@ -1811,7 +1811,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "WPA (Wi-Fi Protected Access)",
+      "name": "WPA",
       "definition": "Family of Wi-Fi security standards (WPA/WPA2/WPA3) that encrypt and authenticate wireless traffic.",
       "inChapters": true
     },
@@ -1820,7 +1820,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "WWAN (Wireless Wide Area Network)",
+      "name": "WWAN",
       "definition": "Wide-area wireless connectivity such as cellular (LTE/5G) for mobile internet access.",
       "inChapters": true
     },
@@ -1829,7 +1829,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "XaaS (Anything As A Service)",
+      "name": "XaaS",
       "definition": "Broad term for delivering almost any IT capability as a cloud subscription service.",
       "inChapters": false
     },
@@ -1838,7 +1838,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "XDR (Extended Detection and Response)",
+      "name": "XDR",
       "definition": "Security approach that correlates threat data across endpoints, email, cloud, and network for detection.",
       "inChapters": true
     },
@@ -1847,7 +1847,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "XFS (Extended File System)",
+      "name": "XFS",
       "definition": "High-performance journaling file system commonly used on Linux for large volumes.",
       "inChapters": true
     },
@@ -1856,7 +1856,7 @@
       "section": "U-Z",
       "sectionTitle": "Acronyms U–Z",
       "category": "Acronyms U–Z",
-      "name": "XSS (Cross-site Scripting)",
+      "name": "XSS",
       "definition": "Web attack that injects malicious scripts into pages viewed by other users to steal data or hijack sessions.",
       "inChapters": true
     }
