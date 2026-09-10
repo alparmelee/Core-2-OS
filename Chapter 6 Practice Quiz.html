@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapter 6 Practice Quiz — Commands</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101820;
+    --muted:#4b5563;
+    --paper:#eef2f8;
+    --line:rgba(16,24,32,0.12);
+    --accent:#1d4ed8;
+    --accent-soft:#dbeafe;
+    --good:#166534;
+    --good-soft:#dcfce7;
+    --bad:#b42318;
+    --bad-soft:#fee2e2;
+    --warn:#92400e;
+    --term:#0c0c0c;
+    --term-fg:#e8f2ec;
+    --mono:"JetBrains Mono","Cascadia Mono",Consolas,monospace;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 55%),
+      linear-gradient(180deg, #e6edf8 0%, var(--paper) 40%, #ecf1f8 100%);
+    line-height:1.55;
+    min-height:100vh;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(760px, calc(100% - 2rem)); margin:0 auto; padding:2rem 0 3rem; }
+  .top-nav{ margin-bottom:1.5rem; font-size:0.9rem; }
+  .top-nav a{ text-decoration:none; font-weight:600; }
+  .top-nav a:hover{ text-decoration:underline; }
+  h1{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.8rem, 4vw, 2.4rem);
+    margin:0 0 0.4rem;
+    letter-spacing:-0.02em;
+  }
+  .subtitle{ color:var(--muted); margin:0 0 1.5rem; }
+  .card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:1.35rem 1.4rem 1.5rem;
+    box-shadow:0 10px 30px rgba(16,24,32,0.05);
+  }
+  .card h2{
+    font-family:"Fraunces",serif;
+    font-size:1.15rem;
+    margin:0 0 0.75rem;
+  }
+  .section-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+    gap:0.75rem;
+    margin:0.75rem 0 1rem;
+  }
+  .section-card{
+    appearance:none;
+    text-align:left;
+    display:flex;
+    flex-direction:column;
+    gap:0.25rem;
+    padding:0.95rem 1rem;
+    border:1px solid var(--line);
+    border-radius:14px;
+    background:#fafbfd;
+    cursor:pointer;
+    font-family:inherit;
+    transition:border-color .15s, background .15s, transform .15s;
+  }
+  .section-card:hover{
+    border-color:var(--accent);
+    background:var(--accent-soft);
+    transform:translateY(-1px);
+  }
+  .section-card-id{ font-weight:700; color:var(--accent); font-size:0.95rem; }
+  .section-card-title{ font-size:0.82rem; color:var(--ink); line-height:1.35; }
+  .section-card-count{ font-size:0.72rem; color:var(--muted); }
+  .setup-focus{ font-size:0.88rem; color:var(--muted); margin:0 0 0.75rem; }
+  .customize-block{ margin-top:1.25rem; padding-top:1.25rem; border-top:1px solid var(--line); }
+  .toggles-grid{ display:flex; flex-wrap:wrap; gap:0.4rem; margin:0.5rem 0 0.75rem; }
+  .check-pill{
+    display:flex; align-items:center; gap:0.4rem;
+    font-size:0.82rem; padding:0.45rem 0.6rem;
+    border:1px solid var(--line); border-radius:8px; background:#fafbfd; cursor:pointer;
+  }
+  .check-pill em{ color:var(--muted); font-style:normal; margin-left:auto; font-size:0.75rem; }
+  .check-pill input{ accent-color:var(--accent); }
+  .btn{
+    appearance:none; border:none; border-radius:999px;
+    padding:0.75rem 1.4rem; font-family:inherit; font-weight:600; font-size:0.92rem;
+    cursor:pointer; background:var(--accent); color:#fff;
+  }
+  .btn:hover{ filter:brightness(1.05); }
+  .btn.ghost{
+    background:transparent; color:var(--accent);
+    border:1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+  .btn-row{ display:flex; flex-wrap:wrap; gap:0.55rem; margin-top:1rem; }
+  .standalone{
+    margin-top:1rem; font-size:0.82rem; color:var(--muted);
+  }
+  .standalone a{ font-weight:600; }
+
+  .progress-wrap{ margin:0 0 1rem; }
+  .progress-meta{
+    display:flex; justify-content:space-between;
+    font-size:0.8rem; color:var(--muted); margin-bottom:0.4rem;
+  }
+  .progress-bar{ height:6px; background:rgba(16,24,32,0.08); border-radius:99px; overflow:hidden; }
+  .progress-fill{ height:100%; width:0%; background:var(--accent); transition:width .25s ease; }
+  .section-badge{
+    display:inline-block; font-size:0.72rem; font-weight:700;
+    color:var(--accent); background:var(--accent-soft);
+    padding:0.25rem 0.55rem; border-radius:999px; margin-bottom:0.65rem;
+  }
+  .scenario-label{
+    font-size:0.7rem; font-weight:700; letter-spacing:0.06em;
+    text-transform:uppercase; color:var(--muted); margin:0 0 0.35rem;
+  }
+  .scenario{
+    font-size:1.05rem; line-height:1.55; margin:0 0 1.1rem; color:var(--ink);
+  }
+
+  .terminal{
+    display:flex; align-items:center;
+    background:var(--term);
+    border-radius:10px;
+    border:1px solid #000;
+    padding:0 4px 0 12px;
+    overflow:hidden;
+    margin-bottom:0.75rem;
+  }
+  .terminal .pfx{
+    font-family:var(--mono); font-size:0.9rem; white-space:nowrap;
+    color:#6bbf9a; user-select:none;
+  }
+  .terminal.cmd .pfx{ color:#4ec9b0; }
+  .terminal input{
+    flex:1; font-family:var(--mono); font-size:0.92rem;
+    padding:0.85rem 0.7rem; border:none; background:transparent;
+    color:var(--term-fg); outline:none; min-width:0;
+  }
+  .terminal input::placeholder{ color:#5b6b64; }
+  .terminal input:disabled{ color:#7f8f88; }
+
+  .hint-btn{
+    background:none; border:none; color:var(--accent);
+    text-decoration:underline; cursor:pointer; font:inherit; font-size:0.85rem; padding:0;
+  }
+  .hint-line{ font-size:0.85rem; color:var(--muted); margin-top:0.45rem; }
+  .feedback{
+    margin-top:1rem; padding:0.9rem 1rem; border-radius:12px;
+    font-size:0.92rem; line-height:1.5;
+  }
+  .feedback.good{ background:var(--good-soft); color:var(--good); }
+  .feedback.bad{ background:var(--bad-soft); color:var(--bad); }
+  .feedback .accepted{ font-family:var(--mono); font-weight:600; }
+  .feedback .explain{ display:block; margin-top:0.45rem; color:var(--ink); opacity:0.85; }
+
+  .results-big{
+    font-family:"Fraunces",serif;
+    font-size:clamp(2.4rem, 8vw, 3.4rem);
+    font-weight:700; margin:0.35rem 0;
+  }
+  .review-list{ margin-top:1.25rem; display:flex; flex-direction:column; gap:0.7rem; }
+  .review-item{
+    border:1px solid var(--line); border-radius:12px;
+    padding:0.85rem 1rem; background:#fafbfd; font-size:0.88rem;
+  }
+  .review-item strong{ display:block; margin:0.2rem 0; font-family:var(--mono); color:var(--warn); }
+  .review-meta{ font-size:0.72rem; font-weight:700; color:var(--accent); }
+  .review-item p{ margin:0.35rem 0 0; color:var(--muted); }
+  .all-good{ color:var(--good); font-weight:600; }
+  [hidden]{ display:none !important; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="top-nav"><a href="index.html">← All guides</a></nav>
+
+    <div data-screen="setup">
+      <h1>Chapter 6 Practice Quiz</h1>
+      <p class="subtitle"><span id="term-count">0</span> command scenarios from Windows CMD (1.5) and Linux (1.9) — type the command that solves each situation.</p>
+      <div class="card">
+        <p class="setup-focus" id="setup-focus">Click a section to start instantly.</p>
+        <h2>Start a section</h2>
+        <div class="section-grid" id="section-filters"></div>
+        <button type="button" class="btn" id="start-all-btn">Quiz all command sections</button>
+        <div class="customize-block">
+          <h2>Or combine sections</h2>
+          <div class="toggles-grid" id="section-toggles"></div>
+          <button type="button" class="btn ghost" id="start-btn">Start custom quiz</button>
+        </div>
+        <p class="standalone">
+          Standalone skins:
+          <a href="cmd_scenario_quiz.html">Windows CMD window</a> ·
+          <a href="linux_quiz.html">Linux drill</a>
+        </p>
+      </div>
+    </div>
+
+    <div data-screen="quiz" hidden>
+      <h1>Chapter 6 — Commands</h1>
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span id="progress-label">Question 1 of 10</span>
+          <span id="score-live">0 correct</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      </div>
+      <div class="card">
+        <div class="section-badge" id="section-badge">6.1</div>
+        <p class="scenario-label">Situation</p>
+        <p class="scenario" id="scenario-text">—</p>
+        <div class="terminal" id="terminal">
+          <span class="pfx" id="prompt-pfx">C:\&gt;</span>
+          <input id="answer-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="type the command…">
+        </div>
+        <div class="btn-row" style="margin-top:0;">
+          <button type="button" class="btn" id="submit-btn">Enter</button>
+          <button type="button" class="btn ghost" id="hint-btn">Hint</button>
+          <button type="button" class="btn ghost" id="skip-btn">Show answer / skip</button>
+        </div>
+        <div class="hint-line" id="hint-line" hidden></div>
+        <div class="feedback" id="feedback" hidden></div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="next-btn" hidden>Next question</button>
+        </div>
+      </div>
+    </div>
+
+    <div data-screen="results" hidden>
+      <h1>Results</h1>
+      <div class="card">
+        <p class="subtitle" style="margin:0;">Your score</p>
+        <div class="results-big" id="results-score">0 / 0</div>
+        <p id="results-pct" style="margin:0; color:var(--muted);">0%</p>
+        <div class="btn-row">
+          <button type="button" class="btn" id="retry-btn">Retry missed</button>
+          <button type="button" class="btn ghost" id="restart-btn">New quiz</button>
+        </div>
+        <div class="review-list" id="review-list"></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function () {
+  "use strict";
+
+  const SECTIONS = [
+    { id: "6.1", title: "Windows Command Prompt", count: 23 },
+    { id: "6.2", title: "Linux Features & Tools", count: 33 },
+  ];
+
+  const BANK = [
+    // ---- 6.1 Windows CMD ----
+    { section:"6.1", shell:"cmd", scenario:"You're sitting at C:\\Users\\jsmith and need to move into the Documents subfolder inside your current location.", hint:"The command that changes your working directory takes the folder name as its argument.", display:"cd Documents", explain:"cd (or chdir) changes the working directory. No leading backslash is needed to go into a subfolder of where you already are.", accepted:["cd Documents","chdir Documents"], validate:(t)=> (t[0]==="cd"||t[0]==="chdir") && t[1]==="documents" && t.length===2 },
+    { section:"6.1", shell:"cmd", scenario:"List everything in your current directory — files, subfolders, sizes, and the free space left on the drive.", hint:"One of the shortest commands in the whole toolkit.", display:"dir", explain:"dir lists directory contents along with file sizes and free space on the volume.", accepted:["dir"], validate:(t)=> t[0]==="dir" && t.length===1 },
+    { section:"6.1", shell:"cmd", scenario:"You need full TCP/IP details for this machine — not just the IP address, but DNS servers and DHCP info too.", hint:"Start with the network config command, then add the switch that means 'give me everything.'", display:"ipconfig /all", explain:"ipconfig alone shows the basics; /all expands it to DNS servers, DHCP status, MAC address, and more.", accepted:["ipconfig /all"], validate:(t)=> t[0]==="ipconfig" && t.includes("/all") },
+    { section:"6.1", shell:"cmd", scenario:"Check whether the host at 8.8.8.8 is reachable, and see the round-trip time.", hint:"Uses ICMP echo requests — it's usually the very first thing you try.", display:"ping 8.8.8.8", explain:"ping sends ICMP echo requests to test reachability and measure round-trip time.", accepted:["ping 8.8.8.8"], validate:(t)=> t[0]==="ping" && t[1]==="8.8.8.8" && t.length===2 },
+    { section:"6.1", shell:"cmd", scenario:"You suspect something on this machine is listening on a port it shouldn't be. Show every active connection and listening port.", hint:"The switch that means 'show all' is a single letter.", display:"netstat -a", explain:"netstat -a lists all active connections and listening ports.", accepted:["netstat -a","netstat /a"], validate:(t)=> t[0]==="netstat" && (t.includes("-a")||t.includes("/a")) },
+    { section:"6.1", shell:"cmd", scenario:"Find out what IP address example.com currently resolves to.", hint:"This tool queries DNS directly and takes the domain name as its argument.", display:"nslookup example.com", explain:"nslookup queries DNS servers for name-to-IP (or IP-to-name) records.", accepted:["nslookup example.com"], validate:(t)=> t[0]==="nslookup" && t.length===2 && t[1].length>0 },
+    { section:"6.1", shell:"cmd", scenario:"Check which network drives and shared folders are currently mapped on this computer.", hint:"Two words — 'net' plus the sub-command for mapped drives/shares.", display:"net use", explain:"net use with no arguments lists current mapped drives and shared connections.", accepted:["net use"], validate:(t)=> t[0]==="net" && t[1]==="use" && t.length===2 },
+    { section:"6.1", shell:"cmd", scenario:"Pull up the account details for the local user 'jsmith'.", hint:"Same family as the last one, but the sub-command manages accounts instead of drives.", display:"net user jsmith", explain:"net user shows or manages local user accounts; giving a username shows that account's details.", accepted:["net user jsmith"], validate:(t)=> t[0]==="net" && t[1]==="user" && t[2]==="jsmith" && t.length===3 },
+    { section:"6.1", shell:"cmd", scenario:"Map every hop a packet takes on its way to google.com, one router at a time.", hint:"Think 'trace the route.'", display:"tracert google.com", explain:"tracert maps the hop-by-hop route to a destination using ICMP TTL-exceeded replies.", accepted:["tracert google.com"], validate:(t)=> t[0]==="tracert" && t.length===2 && t[1].length>0 },
+    { section:"6.1", shell:"cmd", scenario:"You want both the route AND ongoing round-trip time / packet-loss stats at every hop to 192.168.1.1.", hint:"It's described as ping and tracert combined into one tool.", display:"pathping 192.168.1.1", explain:"pathping first maps the route like tracert, then measures latency and packet loss at each hop over time like ping.", accepted:["pathping 192.168.1.1"], validate:(t)=> t[0]==="pathping" && t[1]==="192.168.1.1" && t.length===2 },
+    { section:"6.1", shell:"cmd", scenario:"Scan the current drive for file system errors and have it fix anything it finds.", hint:"The switch is a single letter meaning 'fix.'", display:"chkdsk /f", explain:"chkdsk checks a disk for logical file-system errors; /f tells it to fix any it finds.", accepted:["chkdsk /f"], validate:(t)=> t[0]==="chkdsk" && t.includes("/f") },
+    { section:"6.1", shell:"cmd", scenario:"You need to fully format drive D: using the NTFS file system. (This wipes everything on it — be sure before you run it.)", hint:"Command, then the drive letter with a colon, then the file-system switch.", display:"format D: /FS:NTFS", explain:"format erases and prepares a volume for use; /FS: specifies the file system to use.", accepted:["format D: /FS:NTFS","format d: /fs:ntfs"], validate:(t)=> t[0]==="format" && t[1]==="d:" && t.some(x=>x==="/fs:ntfs") },
+    { section:"6.1", shell:"cmd", scenario:"Open the interactive console for managing disks, partitions, and volumes.", hint:"One word, no arguments — it drops you into its own prompt.", display:"diskpart", explain:"diskpart opens an interactive disk-partitioning console for managing disks and volumes.", accepted:["diskpart"], validate:(t)=> t[0]==="diskpart" && t.length===1 },
+    { section:"6.1", shell:"cmd", scenario:"Create a new folder called Reports inside your current directory.", hint:"Two-letter command that stands for 'make directory.'", display:"md Reports", explain:"md (or mkdir) creates a new folder at the given path.", accepted:["md Reports","mkdir Reports"], validate:(t)=> (t[0]==="md"||t[0]==="mkdir") && t[1]==="reports" && t.length===2 },
+    { section:"6.1", shell:"cmd", scenario:"Delete the empty folder named Temp.", hint:"Two-letter or longer form command that stands for 'remove directory.'", display:"rmdir Temp", explain:"rmdir (or rd) deletes a folder; it must be empty unless the /s switch is used.", accepted:["rmdir Temp","rd Temp"], validate:(t)=> (t[0]==="rmdir"||t[0]==="rd") && t[1]==="temp" && t.length===2 },
+    { section:"6.1", shell:"cmd", scenario:"Copy an entire folder tree — including empty subfolders — from C:\\Projects to D:\\Backup, using the built-in tool that's more robust than a plain copy/paste.", hint:"The switch that includes empty subfolders is a single capital letter.", display:"robocopy C:\\Projects D:\\Backup /E", explain:"robocopy is a robust copy tool with retry and logging built in; /E copies subfolders including empty ones.", accepted:["robocopy C:\\Projects D:\\Backup /E","robocopy C:\\Projects D:\\Backup /e"], validate:(t)=> t[0]==="robocopy" && t.length>=4 && /^c:\\?projects\\?$/i.test(t[1]) && /^d:\\?backup\\?$/i.test(t[2]) && t.includes("/e") },
+    { section:"6.1", shell:"cmd", scenario:"Two terminal tabs look identical and you need to confirm which physical machine this one actually is.", hint:"Prints the computer's network name — nothing more.", display:"hostname", explain:"hostname prints the computer's network name, handy for telling identical-looking sessions apart.", accepted:["hostname"], validate:(t)=> t[0]==="hostname" && t.length===1 },
+    { section:"6.1", shell:"cmd", scenario:"Confirm exactly which Windows edition and build number this PC is running.", hint:"Opens a small 'About Windows' dialog box.", display:"winver", explain:"winver opens the About Windows dialog showing OS edition and build number.", accepted:["winver"], validate:(t)=> t[0]==="winver" && t.length===1 },
+    { section:"6.1", shell:"cmd", scenario:"Show your currently logged-in username plus your full group memberships, SID, and privileges.", hint:"Command that answers 'who am I,' plus the switch for everything.", display:"whoami /all", explain:"whoami shows the current user; /all adds group memberships, SID, and privileges.", accepted:["whoami /all"], validate:(t)=> t[0]==="whoami" && t.includes("/all") },
+    { section:"6.1", shell:"cmd", scenario:"You've never used robocopy before. Pull up its built-in help and see the full list of parameters — without leaving the command line or searching the web.", hint:"Almost any command shows its own help if you add a two-character switch after it.", display:"robocopy /?", explain:"Appending /? to almost any command-line tool shows its built-in help, syntax, and parameters.", accepted:["robocopy /?"], validate:(t)=> t.length===2 && t[1]==="/?" && ["cd","chdir","dir","ipconfig","ping","netstat","nslookup","net","tracert","pathping","chkdsk","format","diskpart","md","mkdir","rmdir","rd","robocopy","hostname","winver","whoami","gpupdate","gpresult","sfc"].includes(t[0]) },
+    { section:"6.1", shell:"cmd", scenario:"This PC is domain-joined and you just changed a Group Policy setting on the server. Force it to refresh right now instead of waiting for the normal cycle.", hint:"Command plus a switch meaning 'don't wait, do it now.'", display:"gpupdate /force", explain:"gpupdate refreshes Group Policy settings; /force applies all policies immediately rather than only changed ones on the normal cycle.", accepted:["gpupdate /force"], validate:(t)=> t[0]==="gpupdate" && t.includes("/force") },
+    { section:"6.1", shell:"cmd", scenario:"Get a readable summary of which Group Policy settings currently apply to this computer and the logged-in user.", hint:"Similar name to the last command, but this one reports instead of refreshing.", display:"gpresult /r", explain:"gpresult displays a summary of Group Policy settings currently applied; /r prints the summary report.", accepted:["gpresult /r"], validate:(t)=> t[0]==="gpresult" && t.includes("/r") },
+    { section:"6.1", shell:"cmd", scenario:"You suspect a Windows system file has been corrupted. Scan all protected system files and repair anything that's damaged.", hint:"Short for 'System File Checker,' followed by the switch that means 'scan right now.'", display:"sfc /scannow", explain:"sfc (System File Checker) scans protected system files for corruption and repairs them when possible; /scannow triggers the scan immediately.", accepted:["sfc /scannow"], validate:(t)=> t[0]==="sfc" && t.includes("/scannow") },
+
+    // ---- 6.2 Linux ----
+    { section:"6.2", shell:"linux", scenario:"You're in a directory and want to see every entry — including hidden dotfiles — along with permissions, owner, and size for each. What command (with flags) do you run?", hint:"Base command is ls — combine the long-format flag with the show-hidden flag.", display:"ls -la", explain:"ls -la lists all entries (-a, including hidden dotfiles) in long format (-l, showing permissions, owner, and size).", accepted:["ls -la","ls -al","ls -l -a","ls -a -l"] },
+    { section:"6.2", shell:"linux", scenario:"A script needs to know the full absolute path of whatever directory it's currently running from. What single command prints that?", hint:"Three letters — stands for 'print working directory'.", display:"pwd", explain:"pwd prints the full absolute pathname of the current working directory.", accepted:["pwd"] },
+    { section:"6.2", shell:"linux", scenario:"You need to rename report_draft.txt to report_final.txt in the current folder. What command do you run?", hint:"Same command handles both moving and renaming — just give source then destination.", display:"mv report_draft.txt report_final.txt", explain:"mv moves or renames files; giving a new filename as the destination renames it.", accepted:["mv report_draft.txt report_final.txt"] },
+    { section:"6.2", shell:"linux", scenario:"You want to back up an entire 'Projects' directory, subfolders and all, into a new folder called 'Projects_backup'. What command copies it recursively?", hint:"cp normally copies single files — add the recursive flag to copy a whole directory tree.", display:"cp -r Projects Projects_backup", explain:"cp -r copies directories recursively, duplicating the whole folder structure into the destination.", accepted:["cp -r Projects Projects_backup","cp -R Projects Projects_backup"] },
+    { section:"6.2", shell:"linux", scenario:"An old 'Downloads' folder is full of junk and needs to be permanently deleted, including every file and subfolder inside it. What command removes it?", hint:"rm alone only deletes files — add the flag that makes it recurse into directories.", display:"rm -r Downloads", explain:"rm -r removes directories and their contents recursively (add -f to skip prompts and ignore missing files).", accepted:["rm -r Downloads","rm -rf Downloads","rm -fr Downloads"] },
+    { section:"6.2", shell:"linux", scenario:"A deployment script, app.py, needs to be executable by its owner, and readable + executable (but not writable) by the group and everyone else. What chmod command sets exactly that?", hint:"Owner gets full rwx (7), group and others get r-x (5) — three digits total.", display:"chmod 755 app.py", explain:"chmod 755 sets rwx for the owner and r-x for group and others, a common permission set for executable scripts.", accepted:["chmod 755 app.py"] },
+    { section:"6.2", shell:"linux", scenario:"Ownership on notes.txt is wrong — it needs to belong to user jsmith and group jsmith, and changing it requires elevated privileges. What command fixes it?", hint:"chown takes user:group as its first argument, and changing another user's files needs sudo.", display:"sudo chown jsmith:jsmith notes.txt", explain:"sudo chown jsmith:jsmith notes.txt changes both the user and group ownership of the file, with sudo providing the needed privilege.", accepted:["sudo chown jsmith:jsmith notes.txt"] },
+    { section:"6.2", shell:"linux", scenario:"You need to search recursively through /var/log for the case-insensitive word 'error', with matching line numbers shown. What command do you run?", hint:"Three flags needed: recursive, case-insensitive, and line numbers — the letters are r, i, and n, in any order.", display:"grep -rin error /var/log", explain:"grep -r searches recursively, -i ignores case, and -n prints line numbers next to each match.", accepted:["grep -rin error /var/log","grep -rni error /var/log","grep -nri error /var/log","grep -nir error /var/log","grep -irn error /var/log","grep -inr error /var/log","grep -r -i -n error /var/log","grep -i -n -r error /var/log","grep -i -r -n error /var/log","grep -n -r -i error /var/log","grep -n -i -r error /var/log","grep -r -n -i error /var/log"] },
+    { section:"6.2", shell:"linux", scenario:"You're hunting for every .txt file inside /home/jsmith, no matter how deeply nested. What command finds them by name pattern?", hint:"find takes a starting path, then a flag for matching filenames against a pattern.", display:"find /home/jsmith -name \"*.txt\"", explain:"find /home/jsmith -name \"*.txt\" recursively searches that path for files matching the given name pattern.", accepted:["find /home/jsmith -name *.txt","find /home/jsmith -name \"*.txt\"","find /home/jsmith -name '*.txt'"] },
+    { section:"6.2", shell:"linux", scenario:"A drive at /dev/sda1 may have filesystem corruption after a bad shutdown. What command checks it and forces a repair even if it looks clean, run with elevated rights?", hint:"The command name is short for 'file system check' — add the flag that forces the check.", display:"sudo fsck -f /dev/sda1", explain:"fsck -f checks a filesystem for consistency and forces the check even on a volume that appears clean; it typically needs root privileges on system disks.", accepted:["sudo fsck -f /dev/sda1","fsck -f /dev/sda1"] },
+    { section:"6.2", shell:"linux", scenario:"You just want to see which filesystems are currently mounted, with no other arguments at all. What single command do you run?", hint:"Run the mount command by itself, with nothing after it.", display:"mount", explain:"Running mount with no arguments lists all currently mounted filesystems.", accepted:["mount"] },
+    { section:"6.2", shell:"linux", scenario:"You need to fully switch your terminal session identity over to the root account — environment and all — not just run a single elevated command. What do you type?", hint:"It's the 'switch user' command plus a dash, which loads root's full login environment.", display:"su -", explain:"su - switches the session to the root account (by default) and loads its login environment, unlike sudo which only elevates a single command.", accepted:["su -"] },
+    { section:"6.2", shell:"linux", scenario:"Before installing anything on this Debian-based system, you want to refresh the package index. What command do you run, with the privilege it requires?", hint:"The package manager on Debian/Ubuntu systems, plus its update subcommand.", display:"sudo apt update", explain:"sudo apt update refreshes apt's local package index from configured repositories on Debian-based distributions.", accepted:["sudo apt update"] },
+    { section:"6.2", shell:"linux", scenario:"You're on a Red Hat-based distro and need to install the htop monitoring tool. What command do you run?", hint:"The package manager on Fedora/RHEL systems, plus its install subcommand and the package name.", display:"sudo dnf install htop", explain:"sudo dnf install htop installs the htop package on Red Hat-based distributions using DNF.", accepted:["sudo dnf install htop"] },
+    { section:"6.2", shell:"linux", scenario:"You want to check this machine's current IP addresses using the modern tool that replaced the old ifconfig utility. What command do you run?", hint:"It's a two-letter command plus a subcommand for addresses.", display:"ip addr", explain:"ip addr (the modern replacement for ifconfig) shows network interfaces and their assigned IP addresses.", accepted:["ip addr","ip a"] },
+    { section:"6.2", shell:"linux", scenario:"You want to confirm basic reachability to 8.8.8.8, sending exactly 4 ICMP echo requests instead of pinging forever. What command do you run?", hint:"The count flag limits how many echo requests are sent before it stops.", display:"ping -c 4 8.8.8.8", explain:"ping -c 4 8.8.8.8 sends exactly 4 ICMP echo requests to that host and reports round-trip latency.", accepted:["ping -c 4 8.8.8.8"] },
+    { section:"6.2", shell:"linux", scenario:"You want just the HTTP response headers from https://example.com, without downloading the full page body. What command do you run?", hint:"curl transfers data from a URL — add the flag that fetches headers only.", display:"curl -I https://example.com", explain:"curl -I fetches only the HTTP headers for a URL instead of the full response body.", accepted:["curl -I https://example.com"] },
+    { section:"6.2", shell:"linux", scenario:"DNS resolution for example.com looks off, and you want to directly query the name servers for its records. What command do you run?", hint:"Short for 'Domain Information Groper' — just the command and the domain.", display:"dig example.com", explain:"dig example.com queries DNS name servers directly for that domain's resolution and record information.", accepted:["dig example.com"] },
+    { section:"6.2", shell:"linux", scenario:"A connection to example.com feels slow, and you want to see the hop-by-hop path packets take to get there. What command do you run?", hint:"The command name literally describes what it does — traces the route.", display:"traceroute example.com", explain:"traceroute example.com shows each network hop along the path packets take to reach that destination.", accepted:["traceroute example.com"] },
+    { section:"6.2", shell:"linux", scenario:"You've forgotten the exact flags for grep and want to pull up its full manual page right in the terminal. What command do you run?", hint:"It's the manual-page viewer, followed by the command you want documentation for.", display:"man grep", explain:"man grep displays the reference manual page for the grep command, including its syntax and flags.", accepted:["man grep"] },
+    { section:"6.2", shell:"linux", scenario:"You want to print the entire contents of /etc/hosts straight to the terminal. What command do you run?", hint:"Short for 'concatenate' — just the command and the file path.", display:"cat /etc/hosts", explain:"cat /etc/hosts prints the full contents of that file to the terminal.", accepted:["cat /etc/hosts"] },
+    { section:"6.2", shell:"linux", scenario:"The system feels sluggish and you want a real-time view of CPU and memory usage plus running processes. What single command do you run?", hint:"Three letters, no flags needed — shows a live-updating process view.", display:"top", explain:"top displays a real-time view of running processes and overall system resource usage.", accepted:["top"] },
+    { section:"6.2", shell:"linux", scenario:"You want a snapshot of every process running on the system, for every user, not just your own account. What command do you run?", hint:"ps reports process info — the flags here mean 'all users' and 'full detail'.", display:"ps aux", explain:"ps aux reports a snapshot of all running processes for all users on the system.", accepted:["ps aux","ps -aux"] },
+    { section:"6.2", shell:"linux", scenario:"You suspect the 'Documents' folder is eating up disk space and want a single, human-readable total for just that folder. What command do you run?", hint:"du estimates space usage — combine the 'summarize' flag with the 'human-readable' flag.", display:"du -sh Documents", explain:"du -sh Documents summarizes (-s) the total disk usage of that folder in human-readable units (-h).", accepted:["du -sh Documents"] },
+    { section:"6.2", shell:"linux", scenario:"You want to see how much space is used versus free across every mounted filesystem, shown in human-readable units. What command do you run?", hint:"Short for 'disk free' — add the flag for readable sizes instead of raw byte counts.", display:"df -h", explain:"df -h reports total, used, and available space on mounted filesystems in human-readable units.", accepted:["df -h"] },
+    { section:"6.2", shell:"linux", scenario:"You need to quickly edit Documents/notes.txt from the terminal, using a simple, beginner-friendly editor rather than a modal one like vi. What command opens it?", hint:"It's named after the editor itself, followed by the file path.", display:"nano Documents/notes.txt", explain:"nano Documents/notes.txt opens that file in the nano text editor, a straightforward non-modal editor.", accepted:["nano Documents/notes.txt"] },
+    { section:"6.2", shell:"linux", scenario:"You need to check which local user accounts exist, along with each one's UID, GID, home directory, and default shell. Which system file holds that info?", hint:"It's ironically not where passwords live anymore — just account metadata.", display:"/etc/passwd", explain:"/etc/passwd stores local user account information including UID, GID, home directory, and default shell.", accepted:["/etc/passwd","etc/passwd"] },
+    { section:"6.2", shell:"linux", scenario:"You're auditing where encrypted user passwords and password-aging policy actually live — a file readable only by root. Which file is this?", hint:"Its name suggests something hidden or protected — root-only access.", display:"/etc/shadow", explain:"/etc/shadow is the root-only file that stores encrypted passwords and password aging policies.", accepted:["/etc/shadow","etc/shadow"] },
+    { section:"6.2", shell:"linux", scenario:"A machine needs to resolve a specific hostname to an IP locally, before ever querying DNS. Which file lets you add that static mapping?", hint:"Same filename you cat'd earlier in this quiz — a local hostname-to-IP lookup table.", display:"/etc/hosts", explain:"/etc/hosts is a static lookup table mapping hostnames to IP addresses, checked before DNS.", accepted:["/etc/hosts","etc/hosts"] },
+    { section:"6.2", shell:"linux", scenario:"You need to check which partitions are set to automatically mount at boot, and with what options. Which config file defines this?", hint:"Short for 'file systems table'.", display:"/etc/fstab", explain:"/etc/fstab defines static filesystem mounts, partitions, and mount options applied at boot.", accepted:["/etc/fstab","etc/fstab"] },
+    { section:"6.2", shell:"linux", scenario:"DNS queries are failing, and you want to check which name servers and search domains are configured locally on this machine. Which file do you check?", hint:"Short for 'resolver configuration'.", display:"/etc/resolv.conf", explain:"/etc/resolv.conf contains the local DNS server addresses and search domain preferences the system uses.", accepted:["/etc/resolv.conf","etc/resolv.conf"] },
+    { section:"6.2", shell:"linux", scenario:"A service isn't starting on boot, and you're told to check the modern system that initializes user space, boots the OS, and manages services on this distro. What's this system called?", hint:"One word, ends in 'd' like many Linux daemons.", display:"systemd", explain:"systemd is the primary system and service manager on most modern Linux distributions, responsible for boot and service management.", accepted:["systemd"] },
+    { section:"6.2", shell:"linux", scenario:"You want to confirm exactly which core piece of software is managing this machine's hardware resources, memory, and CPU scheduling. What's this component called?", hint:"It's the core of the OS — the word literally means 'core' or 'seed'.", display:"kernel", explain:"The kernel is the core OS component managing hardware resources, memory, CPU cycles, and low-level device drivers.", accepted:["kernel"] },
+    { section:"6.2", shell:"linux", scenario:"The machine won't boot, and you're told to check the software (such as GRUB) responsible for loading the kernel into memory during startup. What's this component called?", hint:"It's named for the very first thing that runs when the machine powers on.", display:"bootloader", explain:"The bootloader (e.g. GRUB) loads the Linux kernel into system memory during the initial boot sequence.", accepted:["bootloader"] },
+  ];
+
+  const state = {
+    pool: [],
+    order: [],
+    index: 0,
+    correct: 0,
+    attempts: 0,
+    answered: false,
+    missed: [],
+  };
+
+  const $ = (sel) => document.querySelector(sel);
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function tokenize(raw) {
+    return raw.trim().split(/\s+/).map((s) => s.toLowerCase());
+  }
+
+  function normalizeAccepted(s) {
+    return s
+      .toLowerCase()
+      .replace(/[“”"]/g, '"')
+      .replace(/[‘’']/g, "'")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function isCorrect(q, raw) {
+    const tokens = tokenize(raw);
+    if (typeof q.validate === "function") {
+      try { return Boolean(q.validate(tokens, raw)); } catch (_) { return false; }
+    }
+    const norm = normalizeAccepted(raw);
+    return (q.accepted || []).some((a) => normalizeAccepted(a) === norm);
+  }
+
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function showScreen(id) {
+    document.querySelectorAll("[data-screen]").forEach((el) => {
+      el.hidden = el.dataset.screen !== id;
+    });
+  }
+
+  function getSelectedSections() {
+    return [...document.querySelectorAll("#section-toggles input:checked")].map((el) => el.value);
+  }
+
+  function setSectionSelection(ids) {
+    document.querySelectorAll("#section-toggles input").forEach((el) => {
+      el.checked = ids.length ? ids.includes(el.value) : true;
+    });
+  }
+
+  function updateSetupHeading(sections) {
+    const el = $("#setup-focus");
+    if (!sections || !sections.length) {
+      el.textContent = "Click a section to start instantly, or combine both OS command sets.";
+      return;
+    }
+    const labels = sections.map((id) => {
+      const s = SECTIONS.find((x) => x.id === id);
+      return s ? `${s.id} (${s.count})` : id;
+    });
+    el.textContent = `Ready: ${labels.join(", ")}`;
+  }
+
+  function renderSetup() {
+    const container = $("#section-filters");
+    container.innerHTML = "";
+    SECTIONS.forEach((s) => {
+      const card = document.createElement("button");
+      card.type = "button";
+      card.className = "section-card";
+      card.innerHTML = `<span class="section-card-id">${s.id}</span><span class="section-card-title">${s.title}</span><span class="section-card-count">${s.count} scenarios</span>`;
+      card.addEventListener("click", () => startQuiz([s.id]));
+      container.appendChild(card);
+    });
+    $("#term-count").textContent = String(BANK.length);
+
+    const toggles = $("#section-toggles");
+    toggles.innerHTML = "";
+    SECTIONS.forEach((s) => {
+      const label = document.createElement("label");
+      label.className = "check-pill";
+      label.innerHTML = `<input type="checkbox" value="${s.id}" checked> <span>${s.title}</span> <em>(${s.count})</em>`;
+      label.querySelector("input").addEventListener("change", () => updateSetupHeading(getSelectedSections()));
+      toggles.appendChild(label);
+    });
+    updateSetupHeading();
+  }
+
+  function startQuiz(forcedSections) {
+    const sections = forcedSections || getSelectedSections();
+    if (!sections.length) {
+      alert("Select at least one section.");
+      return;
+    }
+    state.pool = BANK.filter((q) => sections.includes(q.section));
+    if (!state.pool.length) {
+      alert("No scenarios in the selected sections.");
+      return;
+    }
+    state.order = shuffle(state.pool);
+    state.index = 0;
+    state.correct = 0;
+    state.missed = [];
+    showScreen("quiz");
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    const q = state.order[state.index];
+    state.answered = false;
+    state.attempts = 0;
+
+    $("#progress-label").textContent = `Question ${state.index + 1} of ${state.order.length}`;
+    $("#progress-fill").style.width = `${(state.index / state.order.length) * 100}%`;
+    $("#score-live").textContent = `${state.correct} correct`;
+    $("#section-badge").textContent = q.section;
+    $("#section-badge").title = q.section === "6.1" ? "Windows Command Prompt" : "Linux Features & Tools";
+    $("#scenario-text").textContent = q.scenario;
+
+    const term = $("#terminal");
+    const pfx = $("#prompt-pfx");
+    term.classList.toggle("cmd", q.shell === "cmd");
+    pfx.textContent = q.shell === "cmd" ? "C:\\>" : "jsmith@linuxbox ~ $";
+
+    const input = $("#answer-input");
+    input.value = "";
+    input.disabled = false;
+    input.focus();
+    $("#submit-btn").disabled = false;
+    $("#submit-btn").textContent = "Enter";
+    $("#skip-btn").textContent = "Show answer / skip";
+    $("#hint-line").hidden = true;
+    $("#feedback").hidden = true;
+    $("#next-btn").hidden = true;
+  }
+
+  function submitAnswer() {
+    const input = $("#answer-input");
+    if (input.disabled) return;
+    const raw = input.value;
+    if (!raw.trim()) return;
+    const q = state.order[state.index];
+    state.attempts += 1;
+    const ok = isCorrect(q, raw);
+    const fb = $("#feedback");
+
+    if (ok) {
+      if (state.attempts === 1) state.correct += 1;
+      fb.className = "feedback good";
+      fb.innerHTML = `<strong>Correct.</strong> <span class="accepted">${escapeHtml(q.display)}</span><span class="explain">${escapeHtml(q.explain)}</span>`;
+      fb.hidden = false;
+      input.disabled = true;
+      $("#submit-btn").disabled = true;
+      $("#next-btn").hidden = false;
+      $("#next-btn").textContent = state.index + 1 >= state.order.length ? "See results" : "Next question";
+      $("#score-live").textContent = `${state.correct} correct`;
+      return;
+    }
+
+    fb.className = "feedback bad";
+    if (state.attempts >= 2) {
+      fb.innerHTML = `<strong>Not quite.</strong> Expected <span class="accepted">${escapeHtml(q.display)}</span><span class="explain">${escapeHtml(q.explain)}</span>`;
+      state.missed.push(q);
+      input.disabled = true;
+      $("#submit-btn").disabled = true;
+      $("#next-btn").hidden = false;
+      $("#next-btn").textContent = state.index + 1 >= state.order.length ? "See results" : "Next question";
+    } else {
+      fb.innerHTML = `<strong>'${escapeHtml(raw)}' isn't the expected command.</strong> Try again.`;
+    }
+    fb.hidden = false;
+  }
+
+  function showAnswerOrNext() {
+    const input = $("#answer-input");
+    if (!input.disabled) {
+      const q = state.order[state.index];
+      const fb = $("#feedback");
+      fb.className = "feedback bad";
+      fb.innerHTML = `Answer: <span class="accepted">${escapeHtml(q.display)}</span><span class="explain">${escapeHtml(q.explain)}</span>`;
+      fb.hidden = false;
+      if (!state.missed.includes(q)) state.missed.push(q);
+      input.disabled = true;
+      $("#submit-btn").disabled = true;
+      $("#next-btn").hidden = false;
+      $("#next-btn").textContent = state.index + 1 >= state.order.length ? "See results" : "Next question";
+      return;
+    }
+    nextQuestion();
+  }
+
+  function nextQuestion() {
+    if (state.index + 1 >= state.order.length) {
+      showResults();
+      return;
+    }
+    state.index += 1;
+    renderQuestion();
+  }
+
+  function showResults() {
+    showScreen("results");
+    const total = state.order.length;
+    const pct = Math.round((state.correct / total) * 100);
+    $("#results-score").textContent = `${state.correct} / ${total}`;
+    $("#results-pct").textContent = `${pct}%`;
+    const review = $("#review-list");
+    review.innerHTML = "";
+    if (!state.missed.length) {
+      review.innerHTML = '<p class="all-good">Perfect score — command line locked in.</p>';
+      return;
+    }
+    state.missed.forEach((q) => {
+      const item = document.createElement("div");
+      item.className = "review-item";
+      item.innerHTML = `<div class="review-meta">${q.section}</div><p>${escapeHtml(q.scenario)}</p><strong>${escapeHtml(q.display)}</strong>`;
+      review.appendChild(item);
+    });
+  }
+
+  function retryMissed() {
+    if (!state.missed.length) {
+      showScreen("setup");
+      return;
+    }
+    state.order = shuffle(state.missed.slice());
+    state.index = 0;
+    state.correct = 0;
+    state.missed = [];
+    showScreen("quiz");
+    renderQuestion();
+  }
+
+  function init() {
+    renderSetup();
+    $("#start-btn").addEventListener("click", () => startQuiz());
+    $("#start-all-btn").addEventListener("click", () => {
+      const all = SECTIONS.map((s) => s.id);
+      setSectionSelection(all);
+      startQuiz(all);
+    });
+    $("#submit-btn").addEventListener("click", submitAnswer);
+    $("#hint-btn").addEventListener("click", () => {
+      const q = state.order[state.index];
+      const line = $("#hint-line");
+      line.textContent = q.hint;
+      line.hidden = false;
+    });
+    $("#skip-btn").addEventListener("click", showAnswerOrNext);
+    $("#next-btn").addEventListener("click", nextQuestion);
+    $("#retry-btn").addEventListener("click", retryMissed);
+    $("#restart-btn").addEventListener("click", () => showScreen("setup"));
+    $("#answer-input").addEventListener("keydown", (e) => {
+      if (e.key !== "Enter") return;
+      e.preventDefault();
+      if ($("#answer-input").disabled) nextQuestion();
+      else submitAnswer();
+    });
+
+    const params = new URLSearchParams(location.search);
+    const section = params.get("section");
+    const sections = params.get("sections");
+    const start = params.get("start") === "1";
+    let selected = [];
+    if (section) selected = [section];
+    else if (sections) selected = sections.split(",").map((s) => s.trim()).filter(Boolean);
+    if (selected.length) {
+      setSectionSelection(selected);
+      updateSetupHeading(selected);
+      if (start) {
+        startQuiz(selected);
+        return;
+      }
+    } else if (start) {
+      startQuiz(SECTIONS.map((s) => s.id));
+      return;
+    }
+    showScreen("setup");
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>

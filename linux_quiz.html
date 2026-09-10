@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>6.2 Linux — Command Drill</title>
+<style>
+  .backlink{
+    font-family:var(--mono); font-size:12px; color:#9fb3ad;
+    margin-bottom:14px;
+  }
+  .backlink a{ color:#9fd9c2; text-decoration:none; }
+  .backlink a:hover{ text-decoration:underline; }
+  :root{
+    --bg-1:#1c2a3a;
+    --bg-2:#0f1720;
+    --panel:#f4f1ea;
+    --panel-edge:#e4dfd2;
+    --ink:#1c2a2b;
+    --ink-soft:#5b6a68;
+    --accent:#2f7d6b;
+    --accent-dark:#215a4d;
+    --bad:#b3452f;
+    --good:#2f7d6b;
+    --mono: 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+    --serif: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; font-family:var(--serif); }
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(255,255,255,0.06), transparent 40%),
+      linear-gradient(155deg, var(--bg-1), var(--bg-2));
+    color:var(--ink);
+    padding:32px 16px 60px;
+    display:flex;
+    justify-content:center;
+  }
+  .wrap{ width:100%; max-width:640px; }
+
+  .header{
+    color:#f2efe6;
+    margin-bottom:22px;
+  }
+  .eyebrow-row{
+    display:flex; align-items:baseline; justify-content:space-between;
+    font-family:var(--mono); font-size:11px; letter-spacing:.04em; color:#9fb3ad;
+    margin-bottom:6px;
+  }
+  h1{
+    font-size:28px; margin:0 0 6px; font-weight:600; letter-spacing:-0.01em;
+  }
+  .sub{ font-size:14px; color:#c3cdc9; max-width:46ch; line-height:1.5; }
+
+  .progress-track{
+    height:4px; background:rgba(255,255,255,0.14); border-radius:3px; margin-top:18px; overflow:hidden;
+  }
+  .progress-fill{ height:100%; background:linear-gradient(90deg,#4fae95,#2f7d6b); width:0%; transition:width .35s ease; }
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--panel-edge);
+    border-radius:14px;
+    padding:28px 26px 24px;
+    box-shadow:0 24px 50px rgba(0,0,0,0.35);
+  }
+
+  .q-meta{
+    font-family:var(--mono); font-size:11px; color:var(--ink-soft);
+    display:flex; justify-content:space-between; margin-bottom:14px;
+  }
+  .q-tag{
+    display:inline-block; padding:2px 8px; border-radius:20px;
+    background:rgba(47,125,107,0.12); color:var(--accent-dark); font-weight:600;
+  }
+
+  .scenario{
+    font-size:17px; line-height:1.55; margin:0 0 22px; color:var(--ink);
+  }
+  .scenario b{ color:var(--accent-dark); }
+
+  form{ display:flex; flex-direction:column; gap:10px; }
+  .answer-row{ display:flex; gap:8px; }
+
+  .terminal{
+    flex:1;
+    display:flex;
+    align-items:center;
+    background:#161b1a;
+    border-radius:8px;
+    border:1.5px solid #0a0d0c;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03);
+    padding:0 4px 0 14px;
+    overflow:hidden;
+  }
+  .terminal.focused{ border-color:var(--accent); box-shadow: inset 0 1px 3px rgba(0,0,0,0.5), 0 0 0 3px rgba(47,125,107,0.25); }
+  .terminal .prompt-user{
+    font-family:var(--mono); font-size:14px; white-space:nowrap;
+    color:#6bbf9a;
+  }
+  .terminal .prompt-path{ color:#7aa2c9; }
+  .terminal .prompt-sym{ color:#e8e3d3; margin:0 8px 0 2px; }
+
+  input[type=text]{
+    flex:1;
+    font-family:var(--mono);
+    font-size:14.5px;
+    padding:13px 12px 13px 0;
+    border:none;
+    background:transparent;
+    color:#e8f2ec;
+    outline:none;
+    caret-color:#6bbf9a;
+  }
+  input[type=text]::placeholder{ color:#5b6b64; }
+  input[type=text]:disabled{ color:#7f8f88; }
+
+  button{
+    font-family:var(--serif);
+    font-size:14px; font-weight:600;
+    padding:12px 18px;
+    border-radius:8px;
+    border:none;
+    cursor:pointer;
+    background:var(--accent);
+    color:#fff;
+    transition:background .15s ease, transform .1s ease;
+  }
+  button:hover{ background:var(--accent-dark); }
+  button:active{ transform:scale(0.97); }
+  button:disabled{ background:#c9c2ad; cursor:default; }
+
+  .hint-line{
+    font-size:12.5px; color:var(--ink-soft); margin-top:2px;
+  }
+  .hint-btn{
+    background:none; border:none; color:var(--accent-dark); text-decoration:underline;
+    cursor:pointer; font-size:12.5px; padding:0; font-family:var(--serif);
+  }
+
+  .feedback{
+    margin-top:16px; padding:14px 16px; border-radius:8px; font-size:14px; line-height:1.5;
+    display:none;
+  }
+  .feedback.show{ display:block; }
+  .feedback.correct{ background:rgba(47,125,107,0.1); border:1px solid rgba(47,125,107,0.35); color:var(--accent-dark); }
+  .feedback.incorrect{ background:rgba(179,69,47,0.08); border:1px solid rgba(179,69,47,0.3); color:var(--bad); }
+  .feedback .accepted{ font-family:var(--mono); font-weight:600; }
+
+  .next-row{ margin-top:16px; display:none; justify-content:flex-end; }
+  .next-row.show{ display:flex; }
+
+  .done-card{ text-align:center; padding:40px 26px; }
+  .done-card .score{ font-size:44px; font-weight:700; color:var(--accent-dark); margin:6px 0 2px; }
+  .done-card .score-label{ font-family:var(--mono); font-size:12px; color:var(--ink-soft); letter-spacing:.04em; }
+  .done-card p{ color:var(--ink-soft); font-size:14px; line-height:1.6; margin:16px 0 22px; }
+  .restart-btn{ background:var(--accent); }
+
+  .missed-list{ text-align:left; margin-top:8px; border-top:1px solid var(--panel-edge); padding-top:14px; }
+  .missed-item{ font-size:13px; margin-bottom:10px; line-height:1.5; }
+  .missed-item .scen{ color:var(--ink-soft); }
+  .missed-item .ans{ font-family:var(--mono); color:var(--accent-dark); font-weight:600; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="backlink">
+    <a href="Chapter 6 Practice Quiz.html">← Chapter 6 Practice Quiz</a>
+    · <a href="index.html">All guides</a>
+  </div>
+  <div class="header">
+    <div class="eyebrow-row">
+      <span id="topLabel">6.2 · Linux features &amp; tools</span>
+      <span id="scoreLabel">Score 0/0</span>
+    </div>
+    <h1>Command Drill</h1>
+    <div class="sub">Read the scenario, then type the exact command, shortcut, path, or term that solves it. Order shuffles every run.</div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <div class="card" id="quizCard">
+    <div class="q-meta">
+      <span class="q-tag" id="qNum">Question 1</span>
+      <span id="qTotal">of 15</span>
+    </div>
+    <p class="scenario" id="scenarioText"></p>
+    <form id="answerForm">
+      <div class="answer-row">
+        <div class="terminal" id="terminalWrap">
+          <span class="prompt-user">jsmith@linuxbox</span><span class="prompt-path">&nbsp;~&nbsp;</span><span class="prompt-sym">$</span>
+          <input type="text" id="answerInput" autocomplete="off" spellcheck="false" placeholder="type command…">
+        </div>
+        <button type="submit" id="submitBtn">Submit</button>
+      </div>
+      <div><button type="button" class="hint-btn" id="hintBtn">Need a hint?</button></div>
+      <div class="hint-line" id="hintLine" style="display:none;"></div>
+    </form>
+    <div class="feedback" id="feedback"></div>
+    <div class="next-row" id="nextRow">
+      <button type="button" id="nextBtn">Next question →</button>
+    </div>
+  </div>
+
+  <div class="card done-card" id="doneCard" style="display:none;">
+    <div class="score-label">FINAL SCORE</div>
+    <div class="score" id="finalScore">0/15</div>
+    <p id="finalMsg"></p>
+    <div class="missed-list" id="missedList"></div>
+    <button class="restart-btn" id="restartBtn">Shuffle &amp; retry</button>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    scenario: "You're in a directory and want to see every entry — including hidden dotfiles — along with permissions, owner, and size for each. What command (with flags) do you run?",
+    accepted: ["ls -la","ls -al","ls -l -a","ls -a -l"],
+    display: "ls -la",
+    hint: "Base command is ls — combine the long-format flag with the show-hidden flag.",
+    explain: "ls -la lists all entries (-a, including hidden dotfiles) in long format (-l, showing permissions, owner, and size)."
+  },
+  {
+    scenario: "A script needs to know the full absolute path of whatever directory it's currently running from. What single command prints that?",
+    accepted: ["pwd"],
+    display: "pwd",
+    hint: "Three letters — stands for 'print working directory'.",
+    explain: "pwd prints the full absolute pathname of the current working directory."
+  },
+  {
+    scenario: "You need to rename report_draft.txt to report_final.txt in the current folder. What command do you run?",
+    accepted: ["mv report_draft.txt report_final.txt"],
+    display: "mv report_draft.txt report_final.txt",
+    hint: "Same command handles both moving and renaming — just give source then destination.",
+    explain: "mv moves or renames files; giving a new filename as the destination renames it."
+  },
+  {
+    scenario: "You want to back up an entire 'Projects' directory, subfolders and all, into a new folder called 'Projects_backup'. What command copies it recursively?",
+    accepted: ["cp -r Projects Projects_backup","cp -R Projects Projects_backup"],
+    display: "cp -r Projects Projects_backup",
+    hint: "cp normally copies single files — add the recursive flag to copy a whole directory tree.",
+    explain: "cp -r copies directories recursively, duplicating the whole folder structure into the destination."
+  },
+  {
+    scenario: "An old 'Downloads' folder is full of junk and needs to be permanently deleted, including every file and subfolder inside it. What command removes it?",
+    accepted: ["rm -r Downloads","rm -rf Downloads","rm -fr Downloads"],
+    display: "rm -r Downloads",
+    hint: "rm alone only deletes files — add the flag that makes it recurse into directories.",
+    explain: "rm -r removes directories and their contents recursively (add -f to skip prompts and ignore missing files)."
+  },
+  {
+    scenario: "A deployment script, app.py, needs to be executable by its owner, and readable + executable (but not writable) by the group and everyone else. What chmod command sets exactly that?",
+    accepted: ["chmod 755 app.py"],
+    display: "chmod 755 app.py",
+    hint: "Owner gets full rwx (7), group and others get r-x (5) — three digits total.",
+    explain: "chmod 755 sets rwx for the owner and r-x for group and others, a common permission set for executable scripts."
+  },
+  {
+    scenario: "Ownership on notes.txt is wrong — it needs to belong to user jsmith and group jsmith, and changing it requires elevated privileges. What command fixes it?",
+    accepted: ["sudo chown jsmith:jsmith notes.txt"],
+    display: "sudo chown jsmith:jsmith notes.txt",
+    hint: "chown takes user:group as its first argument, and changing another user's files needs sudo.",
+    explain: "sudo chown jsmith:jsmith notes.txt changes both the user and group ownership of the file, with sudo providing the needed privilege."
+  },
+  {
+    scenario: "You need to search recursively through /var/log for the case-insensitive word 'error', with matching line numbers shown. What command do you run?",
+    accepted: [
+      "grep -rin error /var/log","grep -rni error /var/log","grep -nri error /var/log",
+      "grep -nir error /var/log","grep -irn error /var/log","grep -inr error /var/log",
+      "grep -r -i -n error /var/log","grep -i -n -r error /var/log","grep -i -r -n error /var/log",
+      "grep -n -r -i error /var/log","grep -n -i -r error /var/log","grep -r -n -i error /var/log"
+    ],
+    display: "grep -rin error /var/log",
+    hint: "Three flags needed: recursive, case-insensitive, and line numbers — the letters are r, i, and n, in any order.",
+    explain: "grep -r searches recursively, -i ignores case, and -n prints line numbers next to each match."
+  },
+  {
+    scenario: "You're hunting for every .txt file inside /home/jsmith, no matter how deeply nested. What command finds them by name pattern?",
+    accepted: [
+      "find /home/jsmith -name *.txt","find /home/jsmith -name \"*.txt\"","find /home/jsmith -name '*.txt'"
+    ],
+    display: "find /home/jsmith -name \"*.txt\"",
+    hint: "find takes a starting path, then a flag for matching filenames against a pattern.",
+    explain: "find /home/jsmith -name \"*.txt\" recursively searches that path for files matching the given name pattern."
+  },
+  {
+    scenario: "A drive at /dev/sda1 may have filesystem corruption after a bad shutdown. What command checks it and forces a repair even if it looks clean, run with elevated rights?",
+    accepted: ["sudo fsck -f /dev/sda1","fsck -f /dev/sda1"],
+    display: "sudo fsck -f /dev/sda1",
+    hint: "The command name is short for 'file system check' — add the flag that forces the check.",
+    explain: "fsck -f checks a filesystem for consistency and forces the check even on a volume that appears clean; it typically needs root privileges on system disks."
+  },
+  {
+    scenario: "You just want to see which filesystems are currently mounted, with no other arguments at all. What single command do you run?",
+    accepted: ["mount"],
+    display: "mount",
+    hint: "Run the mount command by itself, with nothing after it.",
+    explain: "Running mount with no arguments lists all currently mounted filesystems."
+  },
+  {
+    scenario: "You need to fully switch your terminal session identity over to the root account — environment and all — not just run a single elevated command. What do you type?",
+    accepted: ["su -"],
+    display: "su -",
+    hint: "It's the 'switch user' command plus a dash, which loads root's full login environment.",
+    explain: "su - switches the session to the root account (by default) and loads its login environment, unlike sudo which only elevates a single command."
+  },
+  {
+    scenario: "Before installing anything on this Debian-based system, you want to refresh the package index. What command do you run, with the privilege it requires?",
+    accepted: ["sudo apt update"],
+    display: "sudo apt update",
+    hint: "The package manager on Debian/Ubuntu systems, plus its update subcommand.",
+    explain: "sudo apt update refreshes apt's local package index from configured repositories on Debian-based distributions."
+  },
+  {
+    scenario: "You're on a Red Hat-based distro and need to install the htop monitoring tool. What command do you run?",
+    accepted: ["sudo dnf install htop"],
+    display: "sudo dnf install htop",
+    hint: "The package manager on Fedora/RHEL systems, plus its install subcommand and the package name.",
+    explain: "sudo dnf install htop installs the htop package on Red Hat-based distributions using DNF."
+  },
+  {
+    scenario: "You want to check this machine's current IP addresses using the modern tool that replaced the old ifconfig utility. What command do you run?",
+    accepted: ["ip addr","ip a"],
+    display: "ip addr",
+    hint: "It's a two-letter command plus a subcommand for addresses.",
+    explain: "ip addr (the modern replacement for ifconfig) shows network interfaces and their assigned IP addresses."
+  },
+  {
+    scenario: "You want to confirm basic reachability to 8.8.8.8, sending exactly 4 ICMP echo requests instead of pinging forever. What command do you run?",
+    accepted: ["ping -c 4 8.8.8.8"],
+    display: "ping -c 4 8.8.8.8",
+    hint: "The count flag limits how many echo requests are sent before it stops.",
+    explain: "ping -c 4 8.8.8.8 sends exactly 4 ICMP echo requests to that host and reports round-trip latency."
+  },
+  {
+    scenario: "You want just the HTTP response headers from https://example.com, without downloading the full page body. What command do you run?",
+    accepted: ["curl -I https://example.com"],
+    display: "curl -I https://example.com",
+    hint: "curl transfers data from a URL — add the flag that fetches headers only.",
+    explain: "curl -I fetches only the HTTP headers for a URL instead of the full response body."
+  },
+  {
+    scenario: "DNS resolution for example.com looks off, and you want to directly query the name servers for its records. What command do you run?",
+    accepted: ["dig example.com"],
+    display: "dig example.com",
+    hint: "Short for 'Domain Information Groper' — just the command and the domain.",
+    explain: "dig example.com queries DNS name servers directly for that domain's resolution and record information."
+  },
+  {
+    scenario: "A connection to example.com feels slow, and you want to see the hop-by-hop path packets take to get there. What command do you run?",
+    accepted: ["traceroute example.com"],
+    display: "traceroute example.com",
+    hint: "The command name literally describes what it does — traces the route.",
+    explain: "traceroute example.com shows each network hop along the path packets take to reach that destination."
+  },
+  {
+    scenario: "You've forgotten the exact flags for grep and want to pull up its full manual page right in the terminal. What command do you run?",
+    accepted: ["man grep"],
+    display: "man grep",
+    hint: "It's the manual-page viewer, followed by the command you want documentation for.",
+    explain: "man grep displays the reference manual page for the grep command, including its syntax and flags."
+  },
+  {
+    scenario: "You want to print the entire contents of /etc/hosts straight to the terminal. What command do you run?",
+    accepted: ["cat /etc/hosts"],
+    display: "cat /etc/hosts",
+    hint: "Short for 'concatenate' — just the command and the file path.",
+    explain: "cat /etc/hosts prints the full contents of that file to the terminal."
+  },
+  {
+    scenario: "The system feels sluggish and you want a real-time view of CPU and memory usage plus running processes. What single command do you run?",
+    accepted: ["top"],
+    display: "top",
+    hint: "Three letters, no flags needed — shows a live-updating process view.",
+    explain: "top displays a real-time view of running processes and overall system resource usage."
+  },
+  {
+    scenario: "You want a snapshot of every process running on the system, for every user, not just your own account. What command do you run?",
+    accepted: ["ps aux","ps -aux"],
+    display: "ps aux",
+    hint: "ps reports process info — the flags here mean 'all users' and 'full detail'.",
+    explain: "ps aux reports a snapshot of all running processes for all users on the system."
+  },
+  {
+    scenario: "You suspect the 'Documents' folder is eating up disk space and want a single, human-readable total for just that folder. What command do you run?",
+    accepted: ["du -sh Documents"],
+    display: "du -sh Documents",
+    hint: "du estimates space usage — combine the 'summarize' flag with the 'human-readable' flag.",
+    explain: "du -sh Documents summarizes (-s) the total disk usage of that folder in human-readable units (-h)."
+  },
+  {
+    scenario: "You want to see how much space is used versus free across every mounted filesystem, shown in human-readable units. What command do you run?",
+    accepted: ["df -h"],
+    display: "df -h",
+    hint: "Short for 'disk free' — add the flag for readable sizes instead of raw byte counts.",
+    explain: "df -h reports total, used, and available space on mounted filesystems in human-readable units."
+  },
+  {
+    scenario: "You need to quickly edit Documents/notes.txt from the terminal, using a simple, beginner-friendly editor rather than a modal one like vi. What command opens it?",
+    accepted: ["nano Documents/notes.txt"],
+    display: "nano Documents/notes.txt",
+    hint: "It's named after the editor itself, followed by the file path.",
+    explain: "nano Documents/notes.txt opens that file in the nano text editor, a straightforward non-modal editor."
+  },
+  {
+    scenario: "You need to check which local user accounts exist, along with each one's UID, GID, home directory, and default shell. Which system file holds that info?",
+    accepted: ["/etc/passwd","etc/passwd"],
+    display: "/etc/passwd",
+    hint: "It's ironically not where passwords live anymore — just account metadata.",
+    explain: "/etc/passwd stores local user account information including UID, GID, home directory, and default shell."
+  },
+  {
+    scenario: "You're auditing where encrypted user passwords and password-aging policy actually live — a file readable only by root. Which file is this?",
+    accepted: ["/etc/shadow","etc/shadow"],
+    display: "/etc/shadow",
+    hint: "Its name suggests something hidden or protected — root-only access.",
+    explain: "/etc/shadow is the root-only file that stores encrypted passwords and password aging policies."
+  },
+  {
+    scenario: "A machine needs to resolve a specific hostname to an IP locally, before ever querying DNS. Which file lets you add that static mapping?",
+    accepted: ["/etc/hosts","etc/hosts"],
+    display: "/etc/hosts",
+    hint: "Same filename you cat'd earlier in this quiz — a local hostname-to-IP lookup table.",
+    explain: "/etc/hosts is a static lookup table mapping hostnames to IP addresses, checked before DNS."
+  },
+  {
+    scenario: "You need to check which partitions are set to automatically mount at boot, and with what options. Which config file defines this?",
+    accepted: ["/etc/fstab","etc/fstab"],
+    display: "/etc/fstab",
+    hint: "Short for 'file systems table'.",
+    explain: "/etc/fstab defines static filesystem mounts, partitions, and mount options applied at boot."
+  },
+  {
+    scenario: "DNS queries are failing, and you want to check which name servers and search domains are configured locally on this machine. Which file do you check?",
+    accepted: ["/etc/resolv.conf","etc/resolv.conf"],
+    display: "/etc/resolv.conf",
+    hint: "Short for 'resolver configuration'.",
+    explain: "/etc/resolv.conf contains the local DNS server addresses and search domain preferences the system uses."
+  },
+  {
+    scenario: "A service isn't starting on boot, and you're told to check the modern system that initializes user space, boots the OS, and manages services on this distro. What's this system called?",
+    accepted: ["systemd"],
+    display: "systemd",
+    hint: "One word, ends in 'd' like many Linux daemons.",
+    explain: "systemd is the primary system and service manager on most modern Linux distributions, responsible for boot and service management."
+  },
+  {
+    scenario: "You want to confirm exactly which core piece of software is managing this machine's hardware resources, memory, and CPU scheduling. What's this component called?",
+    accepted: ["kernel"],
+    display: "kernel",
+    hint: "It's the core of the OS — the word literally means 'core' or 'seed'.",
+    explain: "The kernel is the core OS component managing hardware resources, memory, CPU cycles, and low-level device drivers."
+  },
+  {
+    scenario: "The machine won't boot, and you're told to check the software (such as GRUB) responsible for loading the kernel into memory during startup. What's this component called?",
+    accepted: ["bootloader"],
+    display: "bootloader",
+    hint: "It's named for the very first thing that runs when the machine powers on.",
+    explain: "The bootloader (e.g. GRUB) loads the Linux kernel into system memory during the initial boot sequence."
+  }
+];
+
+function normalize(s){
+  return s
+    .toLowerCase()
+    .replace(/⌘/g,'command')
+    .replace(/[.]/g,'')
+    .replace(/[-–—]/g,'+')
+    .replace(/\s+/g,' ')
+    .replace(/\s*\+\s*/g,'+')
+    .trim();
+}
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+let order = shuffle(QUESTIONS);
+let idx = 0;
+let score = 0;
+let missed = [];
+let answered = false;
+
+const scenarioText = document.getElementById('scenarioText');
+const qNum = document.getElementById('qNum');
+const qTotal = document.getElementById('qTotal');
+const answerForm = document.getElementById('answerForm');
+const answerInput = document.getElementById('answerInput');
+const submitBtn = document.getElementById('submitBtn');
+const feedback = document.getElementById('feedback');
+const nextRow = document.getElementById('nextRow');
+const nextBtn = document.getElementById('nextBtn');
+const hintBtn = document.getElementById('hintBtn');
+const hintLine = document.getElementById('hintLine');
+const scoreLabel = document.getElementById('scoreLabel');
+const progressFill = document.getElementById('progressFill');
+const quizCard = document.getElementById('quizCard');
+const doneCard = document.getElementById('doneCard');
+const finalScore = document.getElementById('finalScore');
+const finalMsg = document.getElementById('finalMsg');
+const missedList = document.getElementById('missedList');
+const restartBtn = document.getElementById('restartBtn');
+
+qTotal.textContent = 'of ' + order.length;
+
+function renderQuestion(){
+  answered = false;
+  const q = order[idx];
+  qNum.textContent = 'Question ' + (idx+1);
+  scenarioText.textContent = q.scenario;
+  answerInput.value = '';
+  answerInput.disabled = false;
+  submitBtn.disabled = false;
+  submitBtn.textContent = 'Submit';
+  feedback.className = 'feedback';
+  feedback.innerHTML = '';
+  nextRow.className = 'next-row';
+  hintLine.style.display = 'none';
+  hintBtn.style.display = 'inline';
+  scoreLabel.textContent = 'Score ' + score + '/' + idx;
+  progressFill.style.width = (idx/order.length*100) + '%';
+  setTimeout(()=>answerInput.focus(), 30);
+}
+
+function checkAnswer(e){
+  e.preventDefault();
+  if(answered) return;
+  const q = order[idx];
+  const userVal = normalize(answerInput.value);
+  const isCorrect = q.accepted.some(a => normalize(a) === userVal);
+  answered = true;
+  answerInput.disabled = true;
+  submitBtn.disabled = true;
+  hintBtn.style.display = 'none';
+  nextRow.className = 'next-row show';
+
+  if(isCorrect){
+    score++;
+    feedback.className = 'feedback show correct';
+    feedback.innerHTML = '<strong>Correct.</strong> ' + q.explain;
+  } else {
+    missed.push(q);
+    feedback.className = 'feedback show incorrect';
+    feedback.innerHTML = '<strong>Not quite.</strong> Expected answer: <span class="accepted">' + q.display + '</span><br>' + q.explain;
+  }
+  scoreLabel.textContent = 'Score ' + score + '/' + (idx+1);
+  progressFill.style.width = ((idx+1)/order.length*100) + '%';
+
+  if(idx === order.length - 1){
+    nextBtn.textContent = 'See results →';
+  }
+}
+
+function nextQuestion(){
+  idx++;
+  if(idx >= order.length){
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults(){
+  quizCard.style.display = 'none';
+  doneCard.style.display = 'block';
+  finalScore.textContent = score + '/' + order.length;
+  const pct = Math.round(score/order.length*100);
+  let msg;
+  if(pct === 100) msg = "Clean sweep. You know these tools cold.";
+  else if(pct >= 80) msg = "Strong run — just a couple of gaps to shore up.";
+  else if(pct >= 50) msg = "Decent foundation. Review the missed ones below and run it again.";
+  else msg = "Worth another pass — review the missed items below, then reshuffle.";
+  finalMsg.textContent = msg;
+
+  missedList.innerHTML = '';
+  if(missed.length){
+    const heading = document.createElement('div');
+    heading.style.fontFamily = 'var(--mono)';
+    heading.style.fontSize = '11px';
+    heading.style.letterSpacing = '.04em';
+    heading.style.color = 'var(--ink-soft)';
+    heading.style.marginBottom = '10px';
+    heading.textContent = 'MISSED (' + missed.length + ')';
+    missedList.appendChild(heading);
+    missed.forEach(q=>{
+      const item = document.createElement('div');
+      item.className = 'missed-item';
+      item.innerHTML = '<span class="scen">' + q.scenario + '</span><br>→ <span class="ans">' + q.display + '</span>';
+      missedList.appendChild(item);
+    });
+  }
+}
+
+function restart(){
+  order = shuffle(QUESTIONS);
+  idx = 0; score = 0; missed = [];
+  quizCard.style.display = 'block';
+  doneCard.style.display = 'none';
+  qTotal.textContent = 'of ' + order.length;
+  renderQuestion();
+}
+
+hintBtn.addEventListener('click', ()=>{
+  hintLine.style.display = 'block';
+  hintLine.textContent = order[idx].hint;
+});
+
+answerForm.addEventListener('submit', checkAnswer);
+nextBtn.addEventListener('click', nextQuestion);
+restartBtn.addEventListener('click', restart);
+
+renderQuestion();
+</script>
+</body>
+</html>

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6.1 Windows CMD — Scenario Drill</title>
+<style>
+  .backlink{
+    font-family:"Segoe UI",Tahoma,sans-serif;
+    font-size:12.5px;
+    margin-bottom:12px;
+    text-align:center;
+  }
+  .backlink a{ color:#4ec9b0; text-decoration:none; }
+  .backlink a:hover{ text-decoration:underline; }
+  :root{
+    --bg:#0c0c0c;
+    --panel:#141414;
+    --fg:#cccccc;
+    --fg-bright:#ffffff;
+    --dim:#7a7a7a;
+    --accent:#4ec9b0;
+    --warn:#dcdcaa;
+    --err:#e05f5f;
+    --border:#2b2b2b;
+    --titlebar:#1e1e1e;
+  }
+  *{ box-sizing:border-box; }
+  html,body{
+    height:100%;
+    margin:0;
+    background:#2e2e2e;
+    font-family:"Cascadia Mono","Consolas","Lucida Console",monospace;
+    color:var(--fg);
+  }
+  .stage{
+    min-height:100%;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:24px 14px;
+  }
+  .window{
+    width:720px;
+    max-width:100%;
+    background:var(--bg);
+    border:1px solid #000;
+    box-shadow:0 20px 60px rgba(0,0,0,.55);
+  }
+  .titlebar{
+    background:var(--titlebar);
+    color:#ddd;
+    font-family:"Segoe UI",Tahoma,sans-serif;
+    font-size:12.5px;
+    padding:7px 10px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid var(--border);
+  }
+  .titlebar .left{ display:flex; align-items:center; gap:7px; }
+  .titlebar .icon{
+    width:12px;height:12px;border-radius:2px;
+    background:linear-gradient(135deg,#111 0 50%, #555 50% 100%);
+  }
+  .titlebar .btns span{
+    display:inline-flex; width:26px; height:18px;
+    align-items:center; justify-content:center;
+    font-size:11px; color:#ccc; margin-left:1px;
+  }
+  .titlebar .btns span.close:hover{ background:#c0392b; color:#fff; }
+  .titlebar .btns span:not(.close):hover{ background:#333; }
+
+  .progressbar{
+    height:3px; background:#1c1c1c;
+  }
+  .progressbar-fill{
+    height:100%; background:var(--accent);
+    width:0%; transition:width .3s ease;
+  }
+
+  .body{ padding:18px 20px 20px; }
+
+  .metarow{
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-family:"Segoe UI",Tahoma,sans-serif; font-size:11.5px;
+    color:var(--dim); margin-bottom:14px; letter-spacing:.2px;
+  }
+  .metarow .score{ color:var(--accent); }
+
+  .scenario-label{
+    font-family:"Segoe UI",Tahoma,sans-serif;
+    font-size:11px; color:var(--dim); margin-bottom:6px;
+  }
+  .scenario{
+    font-size:14.5px; line-height:1.55; color:var(--fg-bright);
+    margin-bottom:16px;
+    padding-left:12px; border-left:2px solid var(--border);
+  }
+
+  .promptline{
+    display:flex; align-items:center; gap:0;
+    background:#0a0a0a; border:1px solid var(--border);
+    padding:9px 10px; font-size:14px;
+  }
+  .promptline .pfx{ color:var(--accent); white-space:pre; user-select:none; }
+  .promptline input{
+    flex:1; background:transparent; border:none; outline:none;
+    color:var(--fg-bright); font-family:inherit; font-size:14px;
+    padding-left:6px; min-width:0;
+  }
+  .promptline input::placeholder{ color:#555; }
+
+  .controls{
+    display:flex; gap:8px; margin-top:12px;
+  }
+  button{
+    font-family:"Segoe UI",Tahoma,sans-serif;
+    font-size:12.5px;
+    background:#1e1e1e; color:#ddd; border:1px solid var(--border);
+    padding:7px 14px; cursor:pointer;
+  }
+  button:hover{ background:#262626; }
+  button.primary{ background:#204d43; border-color:#2f6e5f; color:#d5fff2; }
+  button.primary:hover{ background:#276054; }
+  button:disabled{ opacity:.4; cursor:default; }
+  button.primary:disabled:hover{ background:#204d43; }
+
+  .feedback{
+    margin-top:14px; font-size:13px; line-height:1.55;
+    white-space:pre-wrap;
+  }
+  .feedback.correct{ color:var(--accent); }
+  .feedback.wrong{ color:var(--err); }
+  .feedback .out{ color:var(--fg); display:block; margin-top:6px; }
+  .feedback .explain{ color:var(--dim); display:block; margin-top:8px; }
+  .feedback .answer{ color:var(--warn); }
+
+  .hint{
+    margin-top:10px; font-size:12px; color:var(--dim);
+    font-family:"Segoe UI",Tahoma,sans-serif;
+  }
+
+  .end-screen{ text-align:center; padding:10px 0 4px; }
+  .end-score{ font-size:38px; color:var(--fg-bright); margin:6px 0 2px; }
+  .end-score span{ color:var(--accent); }
+  .end-label{ font-family:"Segoe UI",Tahoma,sans-serif; font-size:12.5px; color:var(--dim); margin-bottom:18px; }
+  .end-verdict{ font-size:14px; margin-bottom:20px; }
+  .end-verdict.pass{ color:var(--accent); }
+  .end-verdict.fail{ color:var(--err); }
+
+  .missed-list{
+    text-align:left; font-size:12.5px; margin:0 auto 18px; max-width:480px;
+    border-top:1px solid var(--border); padding-top:12px;
+  }
+  .missed-list .mi{ margin-bottom:9px; }
+  .missed-list .mq{ color:var(--dim); }
+  .missed-list .ma{ color:var(--warn); }
+
+  .hidden{ display:none !important; }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div>
+  <div class="backlink">
+    <a href="Chapter 6 Practice Quiz.html">← Chapter 6 Practice Quiz</a>
+    · <a href="index.html">All guides</a>
+  </div>
+  <div class="window">
+    <div class="titlebar">
+      <div class="left">
+        <span class="icon"></span>
+        <span>6.1 Command Prompt — Scenario Drill</span>
+      </div>
+      <div class="btns">
+        <span>—</span><span>▢</span><span class="close">✕</span>
+      </div>
+    </div>
+    <div class="progressbar"><div class="progressbar-fill" id="progressFill"></div></div>
+
+    <div class="body">
+
+      <div id="quizArea">
+        <div class="metarow">
+          <span id="qCounter">Question 1 of 23</span>
+          <span class="score" id="scoreCounter">Score: 0</span>
+        </div>
+
+        <div class="scenario-label">SITUATION</div>
+        <div class="scenario" id="scenarioText">Loading…</div>
+
+        <div class="promptline">
+          <span class="pfx" id="promptPrefix">C:\&gt;</span>
+          <input id="answerInput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="type the command…">
+        </div>
+
+        <div class="controls">
+          <button class="primary" id="submitBtn">Enter</button>
+          <button id="hintBtn">Hint</button>
+          <button id="skipBtn">Show answer / skip</button>
+        </div>
+
+        <div class="hint hidden" id="hintBox"></div>
+        <div class="feedback hidden" id="feedbackBox"></div>
+      </div>
+
+      <div id="endArea" class="end-screen hidden">
+        <div class="end-label">DRILL COMPLETE</div>
+        <div class="end-score"><span id="finalScore">0</span> / 23</div>
+        <div class="end-verdict" id="finalVerdict"></div>
+        <div class="missed-list hidden" id="missedList"></div>
+        <button class="primary" id="restartBtn">Run it again (new order)</button>
+      </div>
+
+    </div>
+  </div>
+  </div>
+</div>
+
+<script>
+(function(){
+
+  // ---------- Question bank ----------
+  // validate(tokens, raw) -> boolean. tokens are lowercase, whitespace-split.
+  const bank = [
+    {
+      scenario: "You're sitting at C:\\Users\\jsmith and need to move into the Documents subfolder inside your current location.",
+      hint: "The command that changes your working directory takes the folder name as its argument.",
+      answer: "cd Documents",
+      explain: "cd (or chdir) changes the working directory. No leading backslash is needed to go into a subfolder of where you already are.",
+      validate: (t) => (t[0]==='cd'||t[0]==='chdir') && t[1]==='documents' && t.length===2
+    },
+    {
+      scenario: "List everything in your current directory — files, subfolders, sizes, and the free space left on the drive.",
+      hint: "One of the shortest commands in the whole toolkit.",
+      answer: "dir",
+      explain: "dir lists directory contents along with file sizes and free space on the volume.",
+      validate: (t) => t[0]==='dir' && t.length===1
+    },
+    {
+      scenario: "You need full TCP/IP details for this machine — not just the IP address, but DNS servers and DHCP info too.",
+      hint: "Start with the network config command, then add the switch that means 'give me everything.'",
+      answer: "ipconfig /all",
+      explain: "ipconfig alone shows the basics; /all expands it to DNS servers, DHCP status, MAC address, and more.",
+      validate: (t) => t[0]==='ipconfig' && t.includes('/all')
+    },
+    {
+      scenario: "Check whether the host at 8.8.8.8 is reachable, and see the round-trip time.",
+      hint: "Uses ICMP echo requests — it's usually the very first thing you try.",
+      answer: "ping 8.8.8.8",
+      explain: "ping sends ICMP echo requests to test reachability and measure round-trip time.",
+      validate: (t) => t[0]==='ping' && t[1]==='8.8.8.8' && t.length===2
+    },
+    {
+      scenario: "You suspect something on this machine is listening on a port it shouldn't be. Show every active connection and listening port.",
+      hint: "The switch that means 'show all' is a single letter.",
+      answer: "netstat -a",
+      explain: "netstat -a lists all active connections and listening ports.",
+      validate: (t) => t[0]==='netstat' && (t.includes('-a')||t.includes('/a'))
+    },
+    {
+      scenario: "Find out what IP address example.com currently resolves to.",
+      hint: "This tool queries DNS directly and takes the domain name as its argument.",
+      answer: "nslookup example.com",
+      explain: "nslookup queries DNS servers for name-to-IP (or IP-to-name) records.",
+      validate: (t) => t[0]==='nslookup' && t.length===2 && t[1].length>0
+    },
+    {
+      scenario: "Check which network drives and shared folders are currently mapped on this computer.",
+      hint: "Two words — 'net' plus the sub-command for mapped drives/shares. Run it with no extra arguments to just list what's connected.",
+      answer: "net use",
+      explain: "net use with no arguments lists current mapped drives and shared connections.",
+      validate: (t) => t[0]==='net' && t[1]==='use' && t.length===2
+    },
+    {
+      scenario: "Pull up the account details for the local user 'jsmith'.",
+      hint: "Same family as the last one, but the sub-command manages accounts instead of drives.",
+      answer: "net user jsmith",
+      explain: "net user shows or manages local user accounts; giving a username shows that account's details.",
+      validate: (t) => t[0]==='net' && t[1]==='user' && t[2]==='jsmith' && t.length===3
+    },
+    {
+      scenario: "Map every hop a packet takes on its way to google.com, one router at a time.",
+      hint: "Think 'trace the route.'",
+      answer: "tracert google.com",
+      explain: "tracert maps the hop-by-hop route to a destination using ICMP TTL-exceeded replies.",
+      validate: (t) => t[0]==='tracert' && t.length===2 && t[1].length>0
+    },
+    {
+      scenario: "You want both the route AND ongoing round-trip time / packet-loss stats at every hop to 192.168.1.1.",
+      hint: "It's described as ping and tracert combined into one tool.",
+      answer: "pathping 192.168.1.1",
+      explain: "pathping first maps the route like tracert, then measures latency and packet loss at each hop over time like ping.",
+      validate: (t) => t[0]==='pathping' && t[1]==='192.168.1.1' && t.length===2
+    },
+    {
+      scenario: "Scan the current drive for file system errors and have it fix anything it finds.",
+      hint: "The switch is a single letter meaning 'fix.'",
+      answer: "chkdsk /f",
+      explain: "chkdsk checks a disk for logical file-system errors; /f tells it to fix any it finds.",
+      validate: (t) => t[0]==='chkdsk' && t.includes('/f')
+    },
+    {
+      scenario: "You need to fully format drive D: using the NTFS file system. (This wipes everything on it — be sure before you run it.)",
+      hint: "Command, then the drive letter with a colon, then the file-system switch.",
+      answer: "format D: /FS:NTFS",
+      explain: "format erases and prepares a volume for use; /FS: specifies the file system to use.",
+      validate: (t) => t[0]==='format' && t[1]==='d:' && t.some(x=>x==='/fs:ntfs')
+    },
+    {
+      scenario: "Open the interactive console for managing disks, partitions, and volumes.",
+      hint: "One word, no arguments — it drops you into its own prompt.",
+      answer: "diskpart",
+      explain: "diskpart opens an interactive disk-partitioning console for managing disks and volumes.",
+      validate: (t) => t[0]==='diskpart' && t.length===1
+    },
+    {
+      scenario: "Create a new folder called Reports inside your current directory.",
+      hint: "Two-letter command that stands for 'make directory.'",
+      answer: "md Reports",
+      explain: "md (or mkdir) creates a new folder at the given path.",
+      validate: (t) => (t[0]==='md'||t[0]==='mkdir') && t[1]==='reports' && t.length===2
+    },
+    {
+      scenario: "Delete the empty folder named Temp.",
+      hint: "Two-letter or longer form command that stands for 'remove directory.' The folder must already be empty.",
+      answer: "rmdir Temp",
+      explain: "rmdir (or rd) deletes a folder; it must be empty unless the /s switch is used.",
+      validate: (t) => (t[0]==='rmdir'||t[0]==='rd') && t[1]==='temp' && t.length===2
+    },
+    {
+      scenario: "Copy an entire folder tree — including empty subfolders — from C:\\Projects to D:\\Backup, using the built-in tool that's more robust than a plain copy/paste.",
+      hint: "The switch that includes empty subfolders is a single capital letter.",
+      answer: "robocopy C:\\Projects D:\\Backup /E",
+      explain: "robocopy is a robust copy tool with retry and logging built in; /E copies subfolders including empty ones.",
+      validate: (t) => t[0]==='robocopy' && t.length>=4 && /^c:\\?projects\\?$/i.test(t[1]) && /^d:\\?backup\\?$/i.test(t[2]) && t.includes('/e')
+    },
+    {
+      scenario: "Two terminal tabs look identical and you need to confirm which physical machine this one actually is.",
+      hint: "Prints the computer's network name — nothing more.",
+      answer: "hostname",
+      explain: "hostname prints the computer's network name, handy for telling identical-looking sessions apart.",
+      validate: (t) => t[0]==='hostname' && t.length===1
+    },
+    {
+      scenario: "Confirm exactly which Windows edition and build number this PC is running.",
+      hint: "Opens a small 'About Windows' dialog box.",
+      answer: "winver",
+      explain: "winver opens the About Windows dialog showing OS edition and build number.",
+      validate: (t) => t[0]==='winver' && t.length===1
+    },
+    {
+      scenario: "Show your currently logged-in username plus your full group memberships, SID, and privileges.",
+      hint: "Command that answers 'who am I,' plus the switch for everything.",
+      answer: "whoami /all",
+      explain: "whoami shows the current user; /all adds group memberships, SID, and privileges.",
+      validate: (t) => t[0]==='whoami' && t.includes('/all')
+    },
+    {
+      scenario: "You've never used robocopy before. Pull up its built-in help and see the full list of parameters — without leaving the command line or searching the web.",
+      hint: "Almost any command shows its own help if you add a two-character switch after it.",
+      answer: "robocopy /?",
+      explain: "Appending /? to almost any command-line tool shows its built-in help, syntax, and parameters.",
+      validate: (t) => t.length===2 && t[1]==='/?' && knownCommands.includes(t[0])
+    },
+    {
+      scenario: "This PC is domain-joined and you just changed a Group Policy setting on the server. Force it to refresh right now instead of waiting for the normal cycle.",
+      hint: "Command plus a switch meaning 'don't wait, do it now.'",
+      answer: "gpupdate /force",
+      explain: "gpupdate refreshes Group Policy settings; /force applies all policies immediately rather than only changed ones on the normal cycle.",
+      validate: (t) => t[0]==='gpupdate' && t.includes('/force')
+    },
+    {
+      scenario: "Get a readable summary of which Group Policy settings currently apply to this computer and the logged-in user.",
+      hint: "Similar name to the last command, but this one reports instead of refreshing. The switch prints a summary report.",
+      answer: "gpresult /r",
+      explain: "gpresult displays a summary of Group Policy settings currently applied; /r prints the summary report.",
+      validate: (t) => t[0]==='gpresult' && t.includes('/r')
+    },
+    {
+      scenario: "You suspect a Windows system file has been corrupted. Scan all protected system files and repair anything that's damaged.",
+      hint: "Short for 'System File Checker,' followed by the switch that means 'scan right now.'",
+      answer: "sfc /scannow",
+      explain: "sfc (System File Checker) scans protected system files for corruption and repairs them when possible; /scannow triggers the scan immediately.",
+      validate: (t) => t[0]==='sfc' && t.includes('/scannow')
+    }
+  ];
+
+  const knownCommands = ['cd','chdir','dir','ipconfig','ping','netstat','nslookup','net','tracert','pathping','chkdsk','format','diskpart','md','mkdir','rmdir','rd','robocopy','hostname','winver','whoami','gpupdate','gpresult','sfc'];
+
+  // ---------- State ----------
+  let order = [];
+  let idx = 0;
+  let score = 0;
+  let attemptsOnCurrent = 0;
+  let missed = []; // {scenario, answer}
+
+  const qCounter = document.getElementById('qCounter');
+  const scoreCounter = document.getElementById('scoreCounter');
+  const scenarioText = document.getElementById('scenarioText');
+  const answerInput = document.getElementById('answerInput');
+  const submitBtn = document.getElementById('submitBtn');
+  const hintBtn = document.getElementById('hintBtn');
+  const skipBtn = document.getElementById('skipBtn');
+  const hintBox = document.getElementById('hintBox');
+  const feedbackBox = document.getElementById('feedbackBox');
+  const progressFill = document.getElementById('progressFill');
+  const quizArea = document.getElementById('quizArea');
+  const endArea = document.getElementById('endArea');
+  const finalScore = document.getElementById('finalScore');
+  const finalVerdict = document.getElementById('finalVerdict');
+  const missedList = document.getElementById('missedList');
+  const restartBtn = document.getElementById('restartBtn');
+
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i],a[j]] = [a[j],a[i]];
+    }
+    return a;
+  }
+
+  function tokenize(raw){
+    return raw.trim().split(/\s+/).map(s=>s.toLowerCase());
+  }
+
+  function startQuiz(){
+    order = shuffle(bank.map((_,i)=>i));
+    idx = 0;
+    score = 0;
+    missed = [];
+    endArea.classList.add('hidden');
+    quizArea.classList.remove('hidden');
+    loadQuestion();
+  }
+
+  function loadQuestion(){
+    attemptsOnCurrent = 0;
+    hintBox.classList.add('hidden');
+    feedbackBox.classList.add('hidden');
+    feedbackBox.className = 'feedback hidden';
+    answerInput.value = '';
+    answerInput.disabled = false;
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Enter';
+    skipBtn.textContent = 'Show answer / skip';
+
+    const q = bank[order[idx]];
+    qCounter.textContent = `Question ${idx+1} of ${bank.length}`;
+    scoreCounter.textContent = `Score: ${score}`;
+    scenarioText.textContent = q.scenario;
+    progressFill.style.width = ((idx)/bank.length*100)+'%';
+    answerInput.focus();
+  }
+
+  function submitAnswer(){
+    if(answerInput.disabled) return;
+    const raw = answerInput.value;
+    if(raw.trim()===''){ return; }
+    const q = bank[order[idx]];
+    const tokens = tokenize(raw);
+    attemptsOnCurrent++;
+
+    let ok = false;
+    try{ ok = q.validate(tokens, raw); }catch(e){ ok = false; }
+
+    if(ok){
+      if(attemptsOnCurrent===1) score++;
+      feedbackBox.className = 'feedback correct';
+      feedbackBox.innerHTML = `✓ Correct.<span class="out">${q.explain}</span>`;
+      feedbackBox.classList.remove('hidden');
+      answerInput.disabled = true;
+      submitBtn.disabled = true;
+      skipBtn.textContent = 'Next →';
+    } else {
+      feedbackBox.className = 'feedback wrong';
+      if(attemptsOnCurrent >= 2){
+        feedbackBox.innerHTML = `'${escapeHtml(raw)}' is not recognized as the expected command.<span class="explain">Correct answer: <span class="answer">${q.answer}</span> — ${q.explain}</span>`;
+        missed.push({scenario:q.scenario, answer:q.answer});
+        answerInput.disabled = true;
+        submitBtn.disabled = true;
+        skipBtn.textContent = 'Next →';
+      } else {
+        feedbackBox.innerHTML = `'${escapeHtml(raw)}' is not recognized as the expected command, operable program or batch file.<span class="explain">Try again.</span>`;
+      }
+    }
+    feedbackBox.classList.remove('hidden');
+  }
+
+  function escapeHtml(s){
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function nextOrSkip(){
+    if(!answerInput.disabled){
+      // used as "show answer" before a correct submit
+      const q = bank[order[idx]];
+      feedbackBox.className = 'feedback wrong';
+      feedbackBox.innerHTML = `Answer: <span class="answer">${q.answer}</span><span class="explain">${q.explain}</span>`;
+      feedbackBox.classList.remove('hidden');
+      missed.push({scenario:q.scenario, answer:q.answer});
+      answerInput.disabled = true;
+      submitBtn.disabled = true;
+      skipBtn.textContent = 'Next →';
+      return;
+    }
+    idx++;
+    if(idx >= bank.length){
+      finishQuiz();
+    } else {
+      loadQuestion();
+    }
+  }
+
+  function finishQuiz(){
+    progressFill.style.width = '100%';
+    quizArea.classList.add('hidden');
+    endArea.classList.remove('hidden');
+    finalScore.textContent = score;
+    const pct = Math.round(score/bank.length*100);
+    if(pct >= 80){
+      finalVerdict.className = 'end-verdict pass';
+      finalVerdict.textContent = `${pct}% — solid. You know your way around the command line.`;
+    } else if(pct >= 50){
+      finalVerdict.className = 'end-verdict pass';
+      finalVerdict.textContent = `${pct}% — decent, but a few of these need another pass.`;
+    } else {
+      finalVerdict.className = 'end-verdict fail';
+      finalVerdict.textContent = `${pct}% — worth reviewing the missed commands below before trying again.`;
+    }
+
+    if(missed.length>0){
+      missedList.classList.remove('hidden');
+      missedList.innerHTML = '<div style="color:var(--dim);margin-bottom:8px;">MISSED</div>' +
+        missed.map(m=>`<div class="mi"><div class="mq">${escapeHtml(m.scenario)}</div><div class="ma">→ ${escapeHtml(m.answer)}</div></div>`).join('');
+    } else {
+      missedList.classList.add('hidden');
+    }
+  }
+
+  submitBtn.addEventListener('click', submitAnswer);
+  answerInput.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter'){
+      e.preventDefault();
+      if(answerInput.disabled){ nextOrSkip(); }
+      else { submitAnswer(); }
+    }
+  });
+  skipBtn.addEventListener('click', nextOrSkip);
+  hintBtn.addEventListener('click', ()=>{
+    const q = bank[order[idx]];
+    hintBox.textContent = '💡 ' + q.hint;
+    hintBox.classList.remove('hidden');
+  });
+  restartBtn.addEventListener('click', startQuiz);
+
+  startQuiz();
+})();
+</script>
+</body>
+</html>
