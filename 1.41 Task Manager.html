@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.41 Task Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#121820;
+    --muted:#4a5568;
+    --paper:#eef2f7;
+    --line:rgba(18,24,32,0.12);
+    --accent:#0067c0;
+    --accent-soft:#d8e8f8;
+    --good:#166534;
+    --warn:#9a3412;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(0,103,192,0.14), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.08), transparent 50%),
+      linear-gradient(180deg, #e4ebf3 0%, var(--paper) 40%, #e8eef5 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#f4f8fc;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,28,56,0.25) 0%, rgba(8,28,56,0.72) 52%, rgba(8,28,56,0.94) 100%),
+      url("1.41/Processes.png") center/cover no-repeat;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:34ch;
+    color:#dceaf8;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:48ch;
+    color:#a8c0d8;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#dceaf8;
+    color:#0a3d62;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#dceaf8;
+    border:1px solid rgba(220,234,248,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(238,242,247,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+    position:relative;
+  }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+  .visual.mark{
+    flex-direction:column;
+    gap:0.45rem;
+    padding:1.2rem;
+    text-align:center;
+  }
+  .visual.mark .glyph{
+    font-size:2.4rem;
+    line-height:1;
+  }
+  .visual.mark .caption{
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--accent);
+  }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body ul{
+    margin:0.5rem 0 0.7rem;
+    padding-left:1.2rem;
+  }
+  .body li{ margin-bottom:0.35rem; }
+  .body kbd{
+    font-family:"Cascadia Mono","Consolas",monospace;
+    font-size:0.82em;
+    background:rgba(18,24,32,0.06);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:0.1rem 0.4rem;
+  }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(0,103,192,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">1.41</p>
+    <h1>Task Manager</h1>
+    <p>What Task Manager shows, what each tab does, and every common way to launch <code style="color:#dceaf8;">taskmgr.exe</code>.</p>
+    <div class="hero-cta">
+      <a href="#functions">Browse functions</a>
+      <a class="ghost" href="#launch">Launch methods</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#task-manager">Overview</a>
+    <a href="#processes">Processes</a>
+    <a href="#performance">Performance</a>
+    <a href="#startup">Startup</a>
+    <a href="#services">Services</a>
+    <a href="#users">Users</a>
+    <a href="#launch">Launch</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="overview">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Overview</span>
+        <h2>Task Manager (taskmgr.exe)</h2>
+        <p>Windows tool for monitoring running work and controlling apps, startup items, users, and services.</p>
+      </div>
+
+      <article class="term" id="task-manager">
+        <div class="visual photo">
+          <img src="1.41/Processes.png" alt="Task Manager Processes tab" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Task Manager</h3>
+          <span class="aka">taskmgr.exe</span>
+          <p>Built-in Windows utility that shows what is running on the PC, how hard the hardware is working, and gives you controls to end hung apps, manage sign-in programs, work with services, and manage user sessions.</p>
+          <ul class="tags">
+            <li>Processes</li>
+            <li>Performance</li>
+            <li>Startup apps</li>
+            <li>Services</li>
+            <li>Users</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="functions">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Functions</h2>
+        <p>Each major Task Manager area and what it is used for on the exam and on the job.</p>
+      </div>
+
+      <article class="term" id="processes">
+        <div class="visual photo">
+          <img src="1.41/Processes.png" alt="Task Manager Processes" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Processes</h3>
+          <p>Displays active running programs, background processes, and system tasks along with their individual, real-time resource utilization (CPU, Memory, Disk, Network, GPU).</p>
+          <p>Also allows force-closing non-responsive applications with <strong>End task</strong>.</p>
+          <div class="note">Use Processes when an app is frozen or you need to see which process is burning CPU, RAM, disk, network, or GPU.</div>
+        </div>
+      </article>
+
+      <article class="term" id="performance">
+        <div class="visual photo">
+          <img src="1.41/Performance.png" alt="Task Manager Performance" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Performance</h3>
+          <p>Displays live hardware utilization graphs and system-wide totals for CPU, RAM, storage drives, network adapters, and GPU.</p>
+          <ul class="tags">
+            <li>CPU</li>
+            <li>Memory</li>
+            <li>Disk</li>
+            <li>Network</li>
+            <li>GPU</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="startup">
+        <div class="visual photo">
+          <img src="1.41/Startup (Startup Apps).png" alt="Task Manager Startup apps" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Startup (Startup Apps)</h3>
+          <p>Controls which user-space applications automatically execute upon sign-in and tracks their startup impact.</p>
+          <div class="note">Disabling high-impact startup apps is a common fix for slow logons.</div>
+        </div>
+      </article>
+
+      <article class="term" id="services">
+        <div class="visual photo">
+          <img src="1.41/Services.png" alt="Task Manager Services" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Services</h3>
+          <p>Allows administrators to view, manually start, stop, or restart background system services running without a user interface.</p>
+        </div>
+      </article>
+
+      <article class="term" id="users">
+        <div class="visual photo">
+          <img src="1.41/Users.png" alt="Task Manager Users" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Users</h3>
+          <p>Displays signed-in user sessions, itemizes resource consumption per account, and allows administrators to end user processes, disconnect sessions, or sign users off.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="launch">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Launch methods</h2>
+        <p>Every common way to open Task Manager — memorize these for the exam.</p>
+      </div>
+
+      <article class="term" id="launch-keyboard">
+        <div class="visual mark">
+          <span class="glyph" aria-hidden="true">⌨️</span>
+          <span class="caption">Shortcut</span>
+        </div>
+        <div class="body">
+          <h3>Keyboard shortcut</h3>
+          <p><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Esc</kbd> opens Task Manager directly.</p>
+        </div>
+      </article>
+
+      <article class="term" id="launch-security">
+        <div class="visual mark">
+          <span class="glyph" aria-hidden="true">🔒</span>
+          <span class="caption">Security</span>
+        </div>
+        <div class="body">
+          <h3>Security screen</h3>
+          <p><kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Delete</kbd> → Select <strong>Task Manager</strong>.</p>
+        </div>
+      </article>
+
+      <article class="term" id="launch-taskbar">
+        <div class="visual mark">
+          <span class="glyph" aria-hidden="true">📌</span>
+          <span class="caption">Taskbar</span>
+        </div>
+        <div class="body">
+          <h3>Context menu</h3>
+          <p>Right-click the Taskbar → Select <strong>Task Manager</strong>.</p>
+        </div>
+      </article>
+
+      <article class="term" id="launch-power-user">
+        <div class="visual mark">
+          <span class="glyph" aria-hidden="true">⊞</span>
+          <span class="caption">Win + X</span>
+        </div>
+        <div class="body">
+          <h3>Power User menu</h3>
+          <p>Right-click the Start button (or press <kbd>Win</kbd> + <kbd>X</kbd>) → Select <strong>Task Manager</strong>.</p>
+        </div>
+      </article>
+
+      <article class="term" id="launch-run">
+        <div class="visual mark">
+          <span class="glyph" aria-hidden="true">▶</span>
+          <span class="caption">Run</span>
+        </div>
+        <div class="body">
+          <h3>Run dialog</h3>
+          <p>Press <kbd>Win</kbd> + <kbd>R</kbd> → Type <strong>taskmgr</strong> or <strong>taskmgr.exe</strong> → Press Enter.</p>
+        </div>
+      </article>
+
+      <article class="term" id="launch-cli">
+        <div class="visual mark">
+          <span class="glyph" aria-hidden="true">💻</span>
+          <span class="caption">CLI</span>
+        </div>
+        <div class="body">
+          <h3>Command line</h3>
+          <p>Type <strong>taskmgr</strong> or <strong>taskmgr.exe</strong> in Command Prompt (<code>cmd.exe</code>) or PowerShell → Press Enter.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Images in the <code>1.41</code> folder. Study notes for Core 2 — companion to objective 1.4. Executable: <code>taskmgr.exe</code>.
+    Related interactive lab: <a href="1.4 Microsoft Windows Operating System Features and Tools.html">1.4 Features and Tools</a>.
+  </div>
+</footer>
+
+<script src="study-lightbox.js"></script>
+<script src="study-editor.js"></script>
+</body>
+</html>

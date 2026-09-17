@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.62 Windows Settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --ink:#121820;
+    --muted:#4a5568;
+    --paper:#eef2f7;
+    --line:rgba(18,24,32,0.12);
+    --accent:#0067c0;
+    --accent-soft:#d8e8f8;
+    --good:#166534;
+    --warn:#9a3412;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(0,103,192,0.14), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.08), transparent 50%),
+      linear-gradient(180deg, #e4ebf3 0%, var(--paper) 40%, #e8eef5 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#f4f8fc;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,28,56,0.25) 0%, rgba(8,28,56,0.72) 52%, rgba(8,28,56,0.94) 100%),
+      url("1.62/System (Settings).png") center/cover no-repeat;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:40ch;
+    color:#dceaf8;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:52ch;
+    color:#a8c0d8;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#dceaf8;
+    color:#0a3d62;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#dceaf8;
+    border:1px solid rgba(220,234,248,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(238,242,247,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body ul{ margin:0.5rem 0 0.7rem; padding-left:1.2rem; }
+  .body li{ margin-bottom:0.35rem; }
+  .body code{
+    font-family:"Cascadia Mono","Consolas",monospace;
+    font-size:0.86em;
+    background:rgba(18,24,32,0.06);
+    border-radius:5px;
+    padding:0.05rem 0.35rem;
+  }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(0,103,192,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">1.62</p>
+    <h1>Windows Settings</h1>
+    <p>Modern Settings categories: System, Devices, Network &amp; Internet, Personalization, Apps, Accounts, and more.</p>
+    <div class="hero-cta">
+      <a href="#system-devices">Start with System</a><a class="ghost" href="#time-privacy-update">Updates &amp; privacy</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#system-settings">System</a><a href="#devices-settings">Devices</a><a href="#network-internet">Network</a><a href="#personalization">Personalization</a><a href="#apps">Apps</a><a href="#accounts">Accounts</a><a href="#time-language">Time</a><a href="#gaming">Gaming</a><a href="#privacy">Privacy</a><a href="#update-security">Update</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="system-devices">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>System, devices, and network</h2>
+        <p>Display, peripherals, and connectivity in the modern Settings app.</p>
+      </div>
+      
+      <article class="term" id="system-settings">
+        <div class="visual photo">
+          <img src="1.62/System (Settings).png" alt="System (Settings)" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>System (Settings)</h3>
+          <span class="aka">Settings › System</span>
+          <p>Manage Display resolution, Sound outputs, Notifications, Focus Assist, Storage Sense drive cleanup, and Remote Desktop access.</p>
+          
+          
+        </div>
+      </article>
+      <article class="term" id="devices-settings">
+        <div class="visual photo">
+          <img src="1.62/Devices (Settings).png" alt="Devices (Settings)" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Devices (Settings)</h3>
+          <span class="aka">Settings › Devices</span>
+          <p>Pair Bluetooth devices, add printers or scanners, adjust touchpad sensitivity, and manage USB connection notifications.</p>
+          
+          
+        </div>
+      </article>
+      <article class="term" id="network-internet">
+        <div class="visual photo">
+          <img src="1.62/Network and Internet.png" alt="Network and Internet" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Network and Internet</h3>
+          <span class="aka">Settings › Network &amp; Internet</span>
+          <p>Toggle Wi-Fi or Ethernet, configure VPN connections, set up proxy servers, view Data Usage limits, and perform Network Reset.</p>
+          
+          
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="personal-apps">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Personalization, apps, and accounts</h2>
+        <p>Look and feel, default apps, and sign-in identities.</p>
+      </div>
+      
+      <article class="term" id="personalization">
+        <div class="visual photo">
+          <img src="1.62/Personalization.png" alt="Personalization" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Personalization</h3>
+          <span class="aka">Settings › Personalization</span>
+          <p>Customize Desktop background, colors, Lock Screen images, system Themes, Fonts, and Start menu or Taskbar behaviors.</p>
+          
+          
+        </div>
+      </article>
+      <article class="term" id="apps">
+        <div class="visual photo">
+          <img src="1.62/Apps.png" alt="Apps" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Apps</h3>
+          <span class="aka">Settings › Apps</span>
+          <p>Uninstall modern UWP apps and legacy software, set default apps by protocol or file type, and manage startup applications.</p>
+          
+          
+        </div>
+      </article>
+      <article class="term" id="accounts">
+        <div class="visual photo">
+          <img src="1.62/Accounts.png" alt="Accounts" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Accounts</h3>
+          <span class="aka">Settings › Accounts</span>
+          <p>Sign in with Microsoft account, manage Work or School connections, set up Windows Hello PIN or biometrics, and manage family accounts.</p>
+          
+          
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="time-privacy-update">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Time, gaming, privacy, and updates</h2>
+        <p>Language packs, Game Mode, permissions, and Windows Update.</p>
+      </div>
+      
+      <article class="term" id="time-language">
+        <div class="visual photo">
+          <img src="1.62/Time and Language.png" alt="Time and Language" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Time and Language</h3>
+          <span class="aka">Settings › Time &amp; Language</span>
+          <p>Set time zone automatically, sync clock servers, add language packs, configure regional formats, and adjust speech or keyboard input.</p>
+          
+          
+        </div>
+      </article>
+      <article class="term" id="gaming">
+        <div class="visual photo">
+          <img src="1.62/Gaming.png" alt="Gaming" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Gaming</h3>
+          <span class="aka">Settings › Gaming</span>
+          <p>Configure Xbox Game Bar, adjust Game Mode settings for hardware performance allocation, and manage screen recording options.</p>
+          
+          
+        </div>
+      </article>
+      <article class="term" id="privacy">
+        <div class="visual photo">
+          <img src="1.62/Privacy and Security.png" alt="Privacy" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Privacy</h3>
+          <span class="aka">Settings › Privacy</span>
+          <p>Control app permissions for hardware like Camera and Microphone, manage background app permissions, and configure diagnostic data.</p>
+          
+          
+        </div>
+      </article>
+      <article class="term" id="update-security">
+        <div class="visual photo">
+          <img src="1.62/Update.png" alt="Update and Security" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Update and Security</h3>
+          <span class="aka">Settings › Update &amp; Security</span>
+          <p>Manage Windows Update schedules, Delivery Optimization, Windows Security Defender, File History Backup, and Reset This PC recovery.</p>
+          
+          
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    Images in the <code>1.62</code> folder. Study notes for Core 2 objective 1.6 — Windows Settings app.
+    Related interactive lab: <a href="1.6 Configure Microsoft Windows Settings.html">1.6 Configure Microsoft Windows Settings</a>.
+  </div>
+</footer>
+
+<script src="study-lightbox.js"></script>
+<script src="study-editor.js"></script>
+</body>
+</html>

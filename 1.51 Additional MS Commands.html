@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.51 Additional MS Commands</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#121820;
+    --muted:#4a5568;
+    --paper:#eef2f7;
+    --line:rgba(18,24,32,0.12);
+    --accent:#0067c0;
+    --accent-soft:#d8e8f8;
+    --good:#166534;
+    --warn:#9a3412;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(0,103,192,0.14), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.08), transparent 50%),
+      linear-gradient(180deg, #e4ebf3 0%, var(--paper) 40%, #e8eef5 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#f4f8fc;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,28,56,0.25) 0%, rgba(8,28,56,0.72) 52%, rgba(8,28,56,0.94) 100%),
+      linear-gradient(135deg, #0a3d62 0%, #1e5f8f 45%, #5aa9c9 100%);
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:38ch;
+    color:#dceaf8;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:52ch;
+    color:#a8c0d8;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#dceaf8;
+    color:#0a3d62;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#dceaf8;
+    border:1px solid rgba(220,234,248,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(238,242,247,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:0.45rem;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+    padding:1.1rem;
+    text-align:center;
+  }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+  .visual .glyph{
+    font-family:"Cascadia Mono","Consolas",monospace;
+    font-size:0.95rem;
+    font-weight:700;
+    color:var(--accent);
+    word-break:break-word;
+    line-height:1.35;
+  }
+  .visual .caption{
+    font-size:0.68rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--sky);
+  }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.35rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+    font-family:"Cascadia Mono","Consolas",monospace;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body code, footer code, .note code{
+    font-family:"Cascadia Mono","Consolas",monospace;
+    font-size:0.86em;
+    background:rgba(18,24,32,0.06);
+    border-radius:5px;
+    padding:0.05rem 0.35rem;
+  }
+  .body kbd{
+    font-family:"Cascadia Mono","Consolas",monospace;
+    font-size:0.82em;
+    background:rgba(18,24,32,0.06);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:0.1rem 0.4rem;
+  }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(0,103,192,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+  .note.warn{
+    border-left-color:var(--danger);
+    background:rgba(180,35,24,0.08);
+    color:#7a271a;
+  }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">1.51</p>
+    <h1>Additional MS Commands</h1>
+    <p>Exam-focused switches, help syntax aliases, loopback testing, elevation, account auditing, and drive-letter navigation quirks.</p>
+    <div class="hero-cta">
+      <a href="#switches">Tool switches</a>
+      <a class="ghost" href="#scenarios">Troubleshooting</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#ipconfig-release-renew">ipconfig</a>
+    <a href="#dir-s">dir /s</a>
+    <a href="#format-q">format /q</a>
+    <a href="#rmdir">rmdir</a>
+    <a href="#sfc">sfc</a>
+    <a href="#cd-root">cd \</a>
+    <a href="#help-syntax">help</a>
+    <a href="#md-mkdir">md / mkdir</a>
+    <a href="#loopback">loopback</a>
+    <a href="#elevation">elevation</a>
+    <a href="#net-user">net user</a>
+    <a href="#drive-letter">G:</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="switches">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Specific tool switches &amp; parameters</h2>
+        <p>Flags that change how common Windows commands behave on the exam.</p>
+      </div>
+
+      <article class="term" id="ipconfig-release-renew">
+        <div class="visual">
+          <span class="glyph">ipconfig /release<br>ipconfig /renew</span>
+          <span class="caption">DHCP refresh</span>
+        </div>
+        <div class="body">
+          <h3>ipconfig /release and ipconfig /renew</h3>
+          <span class="aka">DHCP lease refresh</span>
+          <p>Commands used to refresh DHCP configurations for network adapters.</p>
+          <p><code>ipconfig /release</code> drops the current DHCP address; <code>ipconfig /renew</code> requests a new lease from the DHCP server.</p>
+          <ul class="tags">
+            <li>/release</li>
+            <li>/renew</li>
+            <li>DHCP</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="dir-s">
+        <div class="visual">
+          <span class="glyph">dir /s *.exe</span>
+          <span class="caption">recurse</span>
+        </div>
+        <div class="body">
+          <h3>dir /s</h3>
+          <span class="aka">dir /s [pattern]</span>
+          <p>The <code>/s</code> flag recurses through subdirectories when listing files (for example, <code>dir /s *.exe</code>).</p>
+        </div>
+      </article>
+
+      <article class="term" id="format-q">
+        <div class="visual">
+          <span class="glyph">format /q</span>
+          <span class="caption">quick format</span>
+        </div>
+        <div class="body">
+          <h3>format /q</h3>
+          <span class="aka">quick format</span>
+          <p>The quick format option removes file system references without performing a full overwrite of every sector on the volume.</p>
+          <div class="note warn">Faster than a full format, but less thorough for wiping recoverable data.</div>
+        </div>
+      </article>
+
+      <article class="term" id="rmdir">
+        <div class="visual">
+          <span class="glyph">rmdir /s /q</span>
+          <span class="caption">folder delete</span>
+        </div>
+        <div class="body">
+          <h3>rmdir /s and rmdir /q</h3>
+          <span class="aka">rd /s /q</span>
+          <p>Used in folder-deletion scenarios: <code>/s</code> removes directory trees (the folder and everything inside), and <code>/q</code> enables quiet mode (no confirmation prompts).</p>
+          <ul class="tags">
+            <li>/s — tree</li>
+            <li>/q — quiet</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="sfc">
+        <div class="visual">
+          <span class="glyph">sfc /scannow</span>
+          <span class="caption">system files</span>
+        </div>
+        <div class="body">
+          <h3>sfc — system file replacement</h3>
+          <span class="aka">System File Checker</span>
+          <p>SFC specifically replaces incorrect or corrupted system file versions with correct Microsoft versions from a known-good store (often the component store / WinSxS).</p>
+          <div class="note">Common form: <code>sfc /scannow</code> (run elevated).</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="variations">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Command variations &amp; navigation shortcuts</h2>
+        <p>Equivalent syntax and directory shortcuts you are expected to recognize.</p>
+      </div>
+
+      <article class="term" id="cd-root">
+        <div class="visual">
+          <span class="glyph">cd \</span>
+          <span class="caption">root of drive</span>
+        </div>
+        <div class="body">
+          <h3>cd \</h3>
+          <span class="aka">change to drive root</span>
+          <p>Changes the working directory directly to the root directory of the current drive (for example, from <code>C:\Users\Andre\Documents</code> to <code>C:\</code>).</p>
+        </div>
+      </article>
+
+      <article class="term" id="help-syntax">
+        <div class="visual">
+          <span class="glyph">help dir<br>dir /?</span>
+          <span class="caption">help syntax</span>
+        </div>
+        <div class="body">
+          <h3>help [command] vs [command] /?</h3>
+          <span class="aka">equivalent help forms</span>
+          <p><code>help [command]</code> is a valid alternative syntax for displaying command-specific help, alongside <code>[command] /?</code>.</p>
+          <p>Example: <code>help ipconfig</code> and <code>ipconfig /?</code> both show usage for ipconfig.</p>
+        </div>
+      </article>
+
+      <article class="term" id="md-mkdir">
+        <div class="visual">
+          <span class="glyph">md<br>mkdir</span>
+          <span class="caption">aliases</span>
+        </div>
+        <div class="body">
+          <h3>md vs mkdir</h3>
+          <span class="aka">make directory</span>
+          <p>There is no functional difference between <code>md</code> and <code>mkdir</code> in Windows — both create directories.</p>
+        </div>
+      </article>
+
+      <article class="term" id="drive-letter">
+        <div class="visual">
+          <span class="glyph">G:<br>cd G:</span>
+          <span class="caption">drive change</span>
+        </div>
+        <div class="body">
+          <h3>Changing directory to a letter drive (e.g. G:)</h3>
+          <span class="aka">CMD vs PowerShell</span>
+          <p>To switch to another drive letter in <strong>Command Prompt (cmd.exe)</strong>, type the drive alone — for example <code>G:</code> — not <code>cd G:</code>.</p>
+          <p><code>cd G:</code> (or <code>Set-Location G:</code>) is how you change to that drive in <strong>PowerShell</strong>. In classic CMD, <code>cd G:</code> does not switch you onto the G: drive the way students often expect.</p>
+          <div class="note warn">Remember for the exam: <code>cd G:</code> works as a drive change in PowerShell; in CMD use <code>G:</code> by itself (and <code>cd \</code> or <code>cd folder</code> for paths on the current drive).</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="scenarios">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Troubleshooting &amp; administrative scenarios</h2>
+        <p>Loopback testing, elevation failures, and account auditing with net user.</p>
+      </div>
+
+      <article class="term" id="loopback">
+        <div class="visual">
+          <span class="glyph">ping 127.0.0.1</span>
+          <span class="caption">loopback</span>
+        </div>
+        <div class="body">
+          <h3>Loopback testing (ping 127.0.0.1)</h3>
+          <span class="aka">IPv4 loopback</span>
+          <p>Using the loopback address verifies that the local TCP/IP stack is functioning properly — replies mean the network stack on this PC is alive, independent of the NIC or remote network.</p>
+          <ul class="tags">
+            <li>127.0.0.1</li>
+            <li>::1 (IPv6)</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="elevation">
+        <div class="visual">
+          <span class="glyph">diskpart<br>Access is denied</span>
+          <span class="caption">UAC / admin</span>
+        </div>
+        <div class="body">
+          <h3>Elevation issues</h3>
+          <span class="aka">Access is denied</span>
+          <p>Encountering an “Access is denied” error when running <code>diskpart</code> is typically caused by failing to launch the terminal with administrative privileges.</p>
+          <div class="note">Fix: open Command Prompt or PowerShell with <strong>Run as administrator</strong>, then retry <code>diskpart</code>.</div>
+        </div>
+      </article>
+
+      <article class="term" id="net-user">
+        <div class="visual">
+          <span class="glyph">net user username</span>
+          <span class="caption">account audit</span>
+        </div>
+        <div class="body">
+          <h3>net user [username] — account auditing</h3>
+          <span class="aka">net user Andre</span>
+          <p>Running <code>net user</code> with a specific username reveals account status details such as lockout/disabled state, last logon time, and password requirements.</p>
+          <div class="note"><code>net user</code> alone lists local accounts; <code>net user name</code> shows that account’s detailed properties.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Images go in the <code>1.51</code> folder when available. Study notes for Core 2 — companion to objective 1.5.
+    Related interactive lab: <a href="1.5 Microsoft Command-Line Tools.html">1.5 Microsoft Command-Line Tools</a>.
+  </div>
+</footer>
+
+<script src="study-lightbox.js"></script>
+<script src="study-editor.js"></script>
+</body>
+</html>

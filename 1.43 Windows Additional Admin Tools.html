@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.43 Windows Additional Admin Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#121820;
+    --muted:#4a5568;
+    --paper:#eef2f7;
+    --line:rgba(18,24,32,0.12);
+    --accent:#0067c0;
+    --accent-soft:#d8e8f8;
+    --good:#166534;
+    --warn:#9a3412;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(0,103,192,0.14), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.08), transparent 50%),
+      linear-gradient(180deg, #e4ebf3 0%, var(--paper) 40%, #e8eef5 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#f4f8fc;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,28,56,0.25) 0%, rgba(8,28,56,0.72) 52%, rgba(8,28,56,0.94) 100%),
+      url("1.43/msinfo32.exe.png") center/cover no-repeat;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:38ch;
+    color:#dceaf8;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:52ch;
+    color:#a8c0d8;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#dceaf8;
+    color:#0a3d62;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#dceaf8;
+    border:1px solid rgba(220,234,248,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(238,242,247,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body ul{
+    margin:0.5rem 0 0.7rem;
+    padding-left:1.2rem;
+  }
+  .body li{ margin-bottom:0.35rem; }
+  .body code{
+    font-family:"Cascadia Mono","Consolas",monospace;
+    font-size:0.86em;
+    background:rgba(18,24,32,0.06);
+    border-radius:5px;
+    padding:0.05rem 0.35rem;
+  }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(0,103,192,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+  .note.warn{
+    border-left-color:var(--danger);
+    background:rgba(180,35,24,0.08);
+    color:#7a271a;
+  }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">1.43</p>
+    <h1>Windows Additional Admin Tools</h1>
+    <p>System Information, Resource Monitor, System Configuration, Disk Cleanup, Defrag/Optimize, and Registry Editor.</p>
+    <div class="hero-cta">
+      <a href="#msinfo32">System Information</a>
+      <a class="ghost" href="#regedit">Jump to Registry</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#msinfo32">msinfo32</a>
+    <a href="#resmon">resmon</a>
+    <a href="#msconfig">msconfig</a>
+    <a href="#msconfig-general">General</a>
+    <a href="#msconfig-boot">Boot</a>
+    <a href="#cleanmgr">cleanmgr</a>
+    <a href="#dfrgui">dfrgui</a>
+    <a href="#regedit">regedit</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="info-monitor">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Information and monitoring</h2>
+        <p>Inventory the system and watch live resource use per process.</p>
+      </div>
+
+      <article class="term" id="msinfo32">
+        <div class="visual photo">
+          <img src="1.43/msinfo32.exe.png" alt="System Information msinfo32.exe" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>System Information</h3>
+          <span class="aka">msinfo32.exe</span>
+          <p>System Information utility that displays details about hardware resources, components, and the software environment.</p>
+          <ul class="tags">
+            <li>Hardware resources</li>
+            <li>Components</li>
+            <li>Software environment</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="resmon">
+        <div class="visual photo">
+          <img src="1.43/resmon.exe.png" alt="Resource Monitor resmon.exe" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Resource Monitor</h3>
+          <span class="aka">resmon.exe</span>
+          <p>Resource Monitor, providing detailed real-time graphs for CPU, Memory, Disk, and Network usage alongside per-process resource breakdowns.</p>
+          <ul class="tags">
+            <li>CPU</li>
+            <li>Memory</li>
+            <li>Disk</li>
+            <li>Network</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="startup-config">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>System Configuration (msconfig)</h2>
+        <p>Troubleshoot startup, change boot options, and manage services.</p>
+      </div>
+
+      <article class="term" id="msconfig">
+        <div class="visual photo">
+          <img src="1.43/msconfig.exe General.png" alt="System Configuration msconfig.exe" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>System Configuration</h3>
+          <span class="aka">msconfig.exe</span>
+          <p>System Configuration utility used to troubleshoot system startup issues, modify boot options, and manage services.</p>
+        </div>
+      </article>
+
+      <article class="term" id="msconfig-general">
+        <div class="visual photo">
+          <img src="1.43/msconfig.exe General.png" alt="msconfig General tab" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>msconfig — General tab</h3>
+          <span class="aka">msconfig.exe → General</span>
+          <p>Location within System Configuration used to select startup modes: Normal, Diagnostic, or Selective.</p>
+          <ul class="tags">
+            <li>Normal startup</li>
+            <li>Diagnostic startup</li>
+            <li>Selective startup</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="msconfig-boot">
+        <div class="visual photo">
+          <img src="1.43/msconfig.exe Boot.png" alt="msconfig Boot tab" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>msconfig — Boot tab</h3>
+          <span class="aka">msconfig.exe → Boot</span>
+          <p>Location used to configure Safe Boot parameters, enable boot logging, choose default OS in multiboot setups, and set hardware resource limits (e.g., max RAM/CPUs).</p>
+          <ul class="tags">
+            <li>Safe Boot</li>
+            <li>Boot logging</li>
+            <li>Default OS</li>
+            <li>Max memory / CPUs</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="disk-registry">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Disk tools and Registry</h2>
+        <p>Free space, optimize drives, and edit low-level Windows settings.</p>
+      </div>
+
+      <article class="term" id="cleanmgr">
+        <div class="visual photo">
+          <img src="1.43/cleanmgr.exe.png" alt="Disk Cleanup cleanmgr.exe" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Disk Cleanup</h3>
+          <span class="aka">cleanmgr.exe</span>
+          <p>Disk Cleanup utility designed to reclaim storage space by removing temporary, unnecessary, and cached files.</p>
+        </div>
+      </article>
+
+      <article class="term" id="dfrgui">
+        <div class="visual photo">
+          <img src="1.43/dfrgui.exe.png" alt="Defragment and Optimize Drives dfrgui.exe" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Defragment and Optimize Drives</h3>
+          <span class="aka">dfrgui.exe</span>
+          <p>Defragment and Optimize Drives utility used to optimize HDD storage layout and run TRIM commands on SSDs.</p>
+          <div class="note">HDDs get defragmented; SSDs get optimized with TRIM — Windows chooses the right action for the drive type.</div>
+        </div>
+      </article>
+
+      <article class="term" id="regedit">
+        <div class="visual photo">
+          <img src="1.43/regedit.exe.png" alt="Registry Editor regedit.exe" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Registry Editor</h3>
+          <span class="aka">regedit.exe</span>
+          <p>Registry Editor, used to view and modify Windows' hierarchical configuration database of low-level OS settings.</p>
+          <div class="note warn">Always back up the registry (or create a restore point) before changing keys — bad edits can break Windows.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Images in the <code>1.43</code> folder. Study notes for Core 2 — companion to objective 1.4.
+    Related interactive lab: <a href="1.4 Microsoft Windows Operating System Features and Tools.html">1.4 Features and Tools</a>.
+  </div>
+</footer>
+
+<script src="study-lightbox.js"></script>
+<script src="study-editor.js"></script>
+</body>
+</html>

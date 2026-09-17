@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>1.2 OS Installation and Boot Methods</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&amp;family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#1a1820;
@@ -251,7 +250,347 @@
     .hero-inner{ margin-bottom:3rem; }
   }
 </style>
-</head>
+<style>
+    .visual.photo img,
+    .visual.logo img {
+      cursor: zoom-in;
+      transition: opacity 0.15s ease;
+    }
+    .visual.photo img:hover,
+    .visual.logo img:hover {
+      opacity: 0.92;
+    }
+    .study-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: rgba(8, 12, 20, 0.92);
+      backdrop-filter: blur(6px);
+    }
+    .study-lightbox[hidden] {
+      display: none;
+    }
+    .study-lightbox__panel {
+      position: relative;
+      max-width: min(96vw, 1200px);
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .study-lightbox__img {
+      max-width: 100%;
+      max-height: calc(92vh - 3rem);
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      background: #fff;
+    }
+    .study-lightbox__caption {
+      margin: 0;
+      color: #e2e8f0;
+      font: 500 0.95rem/1.4 "Segoe UI", system-ui, sans-serif;
+      text-align: center;
+      max-width: 60ch;
+    }
+    .study-lightbox__close {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      border: 0;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      font-size: 1.6rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .study-lightbox__close:hover {
+      background: rgba(255, 255, 255, 0.24);
+    }
+    body.study-lightbox-open {
+      overflow: hidden;
+    }
+  </style><style>
+    .visual.photo img,
+    .visual.logo img {
+      cursor: zoom-in;
+      transition: opacity 0.15s ease;
+    }
+    .visual.photo img:hover,
+    .visual.logo img:hover {
+      opacity: 0.92;
+    }
+    .study-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: rgba(8, 12, 20, 0.92);
+      backdrop-filter: blur(6px);
+    }
+    .study-lightbox[hidden] {
+      display: none;
+    }
+    .study-lightbox__panel {
+      position: relative;
+      max-width: min(96vw, 1200px);
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .study-lightbox__img {
+      max-width: 100%;
+      max-height: calc(92vh - 3rem);
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      background: #fff;
+    }
+    .study-lightbox__caption {
+      margin: 0;
+      color: #e2e8f0;
+      font: 500 0.95rem/1.4 "Segoe UI", system-ui, sans-serif;
+      text-align: center;
+      max-width: 60ch;
+    }
+    .study-lightbox__close {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      border: 0;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      font-size: 1.6rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .study-lightbox__close:hover {
+      background: rgba(255, 255, 255, 0.24);
+    }
+    body.study-lightbox-open {
+      overflow: hidden;
+    }
+  </style><style>
+    .visual.photo img,
+    .visual.logo img {
+      cursor: zoom-in;
+      transition: opacity 0.15s ease;
+    }
+    .visual.photo img:hover,
+    .visual.logo img:hover {
+      opacity: 0.92;
+    }
+    .study-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: rgba(8, 12, 20, 0.92);
+      backdrop-filter: blur(6px);
+    }
+    .study-lightbox[hidden] {
+      display: none;
+    }
+    .study-lightbox__panel {
+      position: relative;
+      max-width: min(96vw, 1200px);
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .study-lightbox__img {
+      max-width: 100%;
+      max-height: calc(92vh - 3rem);
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      background: #fff;
+    }
+    .study-lightbox__caption {
+      margin: 0;
+      color: #e2e8f0;
+      font: 500 0.95rem/1.4 "Segoe UI", system-ui, sans-serif;
+      text-align: center;
+      max-width: 60ch;
+    }
+    .study-lightbox__close {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      border: 0;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      font-size: 1.6rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .study-lightbox__close:hover {
+      background: rgba(255, 255, 255, 0.24);
+    }
+    body.study-lightbox-open {
+      overflow: hidden;
+    }
+  </style><style>
+    .visual.photo img,
+    .visual.logo img {
+      cursor: zoom-in;
+      transition: opacity 0.15s ease;
+    }
+    .visual.photo img:hover,
+    .visual.logo img:hover {
+      opacity: 0.92;
+    }
+    .study-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: rgba(8, 12, 20, 0.92);
+      backdrop-filter: blur(6px);
+    }
+    .study-lightbox[hidden] {
+      display: none;
+    }
+    .study-lightbox__panel {
+      position: relative;
+      max-width: min(96vw, 1200px);
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .study-lightbox__img {
+      max-width: 100%;
+      max-height: calc(92vh - 3rem);
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      background: #fff;
+    }
+    .study-lightbox__caption {
+      margin: 0;
+      color: #e2e8f0;
+      font: 500 0.95rem/1.4 "Segoe UI", system-ui, sans-serif;
+      text-align: center;
+      max-width: 60ch;
+    }
+    .study-lightbox__close {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      border: 0;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      font-size: 1.6rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .study-lightbox__close:hover {
+      background: rgba(255, 255, 255, 0.24);
+    }
+    body.study-lightbox-open {
+      overflow: hidden;
+    }
+  </style><style>
+    .visual.photo img,
+    .visual.logo img {
+      cursor: zoom-in;
+      transition: opacity 0.15s ease;
+    }
+    .visual.photo img:hover,
+    .visual.logo img:hover {
+      opacity: 0.92;
+    }
+    .study-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: rgba(8, 12, 20, 0.92);
+      backdrop-filter: blur(6px);
+    }
+    .study-lightbox[hidden] {
+      display: none;
+    }
+    .study-lightbox__panel {
+      position: relative;
+      max-width: min(96vw, 1200px);
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .study-lightbox__img {
+      max-width: 100%;
+      max-height: calc(92vh - 3rem);
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      background: #fff;
+    }
+    .study-lightbox__caption {
+      margin: 0;
+      color: #e2e8f0;
+      font: 500 0.95rem/1.4 "Segoe UI", system-ui, sans-serif;
+      text-align: center;
+      max-width: 60ch;
+    }
+    .study-lightbox__close {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      border: 0;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      font-size: 1.6rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .study-lightbox__close:hover {
+      background: rgba(255, 255, 255, 0.24);
+    }
+    body.study-lightbox-open {
+      overflow: hidden;
+    }
+  </style></head>
 <body>
 
 <header class="hero">
@@ -386,7 +725,7 @@
         </div>
         <div class="body">
           <h3>USB</h3>
-          <p>The USB device must be <strong>bootable</strong>. The computer must support booting from USB.</p>
+          <p>The USB device must be <strong>bootable</strong>. The computer must support booting from USB.<br><br>Installing the operating system onto the USB drive is not required when preparing bootable installation media.<br><br><b data-path-to-node="1" data-index-in-node="0">Installing the operating system onto the USB drive</b> turns the flash drive into a live or persistent OS drive (where the operating system actually runs <i data-path-to-node="1" data-index-in-node="150">from</i> the USB), rather than an installer.</p>
         </div>
       </article>
 
@@ -397,7 +736,7 @@
         <div class="body">
           <h3>Network — PXE</h3>
           <span class="aka">Preboot eXecution Environment (“Pixie”)</span>
-          <p>Perform a remote network installation. The computer must support booting with PXE.</p>
+          <p>Perform a remote network installation. The computer must support booting with PXE.<br><br>When use of physical media is not feasible.</p>
         </div>
       </article>
 
@@ -408,7 +747,7 @@
         <div class="body">
           <h3>Solid-state / flash drives</h3>
           <p>Store many OS installation files. Often used as the target drive or as installation media depending on the deployment method.</p>
-        </div>
+        <p>Improved File Transfer Speed compared to HDD<br>Quicker Boot Time<br>Faster app loading</p></div>
       </article>
 
       <article class="term" id="internet-boot">
@@ -417,7 +756,7 @@
         </div>
         <div class="body">
           <h3>Internet-based</h3>
-          <p>Boot or install across the internet. Examples include Linux distributions, macOS Recovery installation, and Windows updates.</p>
+          <p>Boot or install across the internet. Examples include Linux distributions, macOS Recovery installation, and Windows updates.<br><br>Primarily suited for single users, remote workers, or when local network infrastructure is not available<br><br>Relies on external servers, cloud services, or vendor websites for installation files<br><br>Technicians should consider&nbsp;Cryptographic hash values<br><br></p>
         </div>
       </article>
 
@@ -427,7 +766,7 @@
         </div>
         <div class="body">
           <h3>External / hot-swappable drive</h3>
-          <p>Some external drives can mount an <strong>ISO image</strong> (optical drive image). Can also boot from USB.</p>
+          <p>Some external drives can mount an <strong>ISO image</strong> (optical drive image). Can also boot from USB.<br><b data-path-to-node="0" data-index-in-node="22">The BIOS/UEFI boot order must prioritize the external drive</b>.<br><br><b data-path-to-node="2,0,0" data-index-in-node="0">Hot-swapping:</b> Refers to the ability to replace or add computer components (such as storage drives or power supplies) while the system remains continuously powered on and fully operational, without causing system downtime or data corruption.<br><br></p>
         </div>
       </article>
 
@@ -437,7 +776,7 @@
         </div>
         <div class="body">
           <h3>Internal hard drive (partition)</h3>
-          <p>Install and boot from separate drives, or create and boot from a new partition on an existing internal drive.</p>
+          <p>Install and boot from separate drives, or create and boot from a new partition on an existing internal drive.<br>1.&nbsp;&nbsp;Initialize the drive<br>2.&nbsp;Partition the drive<br>3.&nbsp;Format the drive &amp; Assign drive letter<br></p>
         </div>
       </article>
 
@@ -447,7 +786,7 @@
         </div>
         <div class="body">
           <h3>Multiboot</h3>
-          <p>Pick from two or more operating systems from a boot menu — Windows, Linux, etc.</p>
+          <p>Pick from two or more operating systems from a boot menu — Windows, Linux, etc.<br><br>Utilizing different operating systems for specific tasks<br><br>Each operating system requires its own dedicated system partition or separate physical drive to house its boot files, kernel, system directories, and specific file system structures (e.g., NTFS for Windows, Ext4 for Linux, APFS for macOS).</p>
         </div>
       </article>
     </div>
@@ -556,7 +895,7 @@
         </div>
         <div class="body">
           <h3>Third-party drivers</h3>
-          <p>Load alternate third-party drivers when necessary — disk controller drivers, storage drivers, etc.</p>
+          <p>Load alternate third-party drivers when necessary — disk controller drivers, storage drivers, etc.<br><br>Modern NVMe drives, RAID controllers, or specialized motherboard chipsets (such as Intel VMD or AMD RAID) often require dedicated storage controller drivers during OS setup.</p>
         </div>
       </article>
 
@@ -727,5 +1066,11 @@
 </footer>
 
   <script src="study-lightbox.js"></script>
-</body>
-</html>
+<script src="study-editor.js"></script>
+
+
+
+
+
+
+</body></html>

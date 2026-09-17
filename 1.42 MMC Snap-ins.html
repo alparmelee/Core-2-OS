@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.42 MMC Snap-ins</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#121820;
+    --muted:#4a5568;
+    --paper:#eef2f7;
+    --line:rgba(18,24,32,0.12);
+    --accent:#0067c0;
+    --accent-soft:#d8e8f8;
+    --good:#166534;
+    --warn:#9a3412;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(0,103,192,0.14), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.08), transparent 50%),
+      linear-gradient(180deg, #e4ebf3 0%, var(--paper) 40%, #e8eef5 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#f4f8fc;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,28,56,0.25) 0%, rgba(8,28,56,0.72) 52%, rgba(8,28,56,0.94) 100%),
+      url("1.42/MMC snap-ins.png") center/cover no-repeat;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:36ch;
+    color:#dceaf8;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:50ch;
+    color:#a8c0d8;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#dceaf8;
+    color:#0a3d62;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#dceaf8;
+    border:1px solid rgba(220,234,248,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(238,242,247,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+  .visual.mark{
+    flex-direction:column;
+    gap:0.45rem;
+    padding:1.2rem;
+    text-align:center;
+  }
+  .visual.mark .glyph{ font-size:2.2rem; line-height:1; }
+  .visual.mark .caption{
+    font-size:0.68rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--accent);
+    word-break:break-all;
+  }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body ul{
+    margin:0.5rem 0 0.7rem;
+    padding-left:1.2rem;
+  }
+  .body li{ margin-bottom:0.35rem; }
+  .body code{
+    font-family:"Cascadia Mono","Consolas",monospace;
+    font-size:0.86em;
+    background:rgba(18,24,32,0.06);
+    border-radius:5px;
+    padding:0.05rem 0.35rem;
+  }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(0,103,192,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+  .note.warn{
+    border-left-color:var(--danger);
+    background:rgba(180,35,24,0.08);
+    color:#7a271a;
+  }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">1.42</p>
+    <h1>MMC Snap-ins</h1>
+    <p>Event Viewer, Disk Management, Task Scheduler, Device Manager, Certificates, Local Users and Groups, Performance Monitor, and Local Group Policy Editor.</p>
+    <div class="hero-cta">
+      <a href="#event-viewer">Start with Event Viewer</a>
+      <a class="ghost" href="#gpedit">Jump to Group Policy</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#mmc">MMC</a>
+    <a href="#event-viewer">Event Viewer</a>
+    <a href="#disk-management">Disk Mgmt</a>
+    <a href="#task-scheduler">Task Scheduler</a>
+    <a href="#device-manager">Device Mgr</a>
+    <a href="#certificate-manager">Certificates</a>
+    <a href="#lusrmgr">Users &amp; Groups</a>
+    <a href="#perfmon">PerfMon</a>
+    <a href="#gpedit">gpedit</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="overview">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Overview</span>
+        <h2>Microsoft Management Console</h2>
+        <p>Snap-ins are the tools you load into MMC (<code>mmc.exe</code>) — or open directly with their <code>.msc</code> file.</p>
+      </div>
+
+      <article class="term" id="mmc">
+        <div class="visual photo">
+          <img src="1.42/MMC snap-ins.png" alt="Microsoft Management Console snap-ins" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>MMC snap-ins</h3>
+          <span class="aka">Microsoft Management Console</span>
+          <p>Administrative tools that plug into MMC so you can manage Windows from a console. Most can also be launched alone by running their <code>.msc</code> filename.</p>
+          <ul class="tags">
+            <li>eventvwr.msc</li>
+            <li>diskmgmt.msc</li>
+            <li>taskschd.msc</li>
+            <li>devmgmt.msc</li>
+            <li>certmgr.msc</li>
+            <li>lusrmgr.msc</li>
+            <li>perfmon.msc</li>
+            <li>gpedit.msc</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="logs">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Event Viewer</h2>
+        <p>Monitor system health and troubleshoot issues by managing event logs.</p>
+      </div>
+
+      <article class="term" id="event-viewer">
+        <div class="visual photo">
+          <img src="1.42/Event Viewer.png" alt="Event Viewer" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Event Viewer</h3>
+          <span class="aka">eventvwr.msc</span>
+          <p>A utility used to monitor system health and troubleshoot issues by managing event logs.</p>
+        </div>
+      </article>
+
+      <article class="term" id="app-system-logs">
+        <div class="visual photo">
+          <img src="1.42/Application &amp; System Logs.png" alt="Application and System logs" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Application &amp; System Logs</h3>
+          <p>Categorized into Information (normal operations), Warning (non-critical issues), and Error (serious problems) events.</p>
+          <ul class="tags">
+            <li>Information</li>
+            <li>Warning</li>
+            <li>Error</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="security-log">
+        <div class="visual photo">
+          <img src="1.42/Security Log.png" alt="Security log" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Security Log</h3>
+          <p>Records audit events reporting the Success or Failure of security-related actions.</p>
+          <ul class="tags">
+            <li>Success</li>
+            <li>Failure</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="storage-schedule">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Storage and scheduling</h2>
+        <p>Manage disks/volumes and automate work with Task Scheduler.</p>
+      </div>
+
+      <article class="term" id="disk-management">
+        <div class="visual photo">
+          <img src="1.42/Disk Management.png" alt="Disk Management" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Disk Management</h3>
+          <span class="aka">diskmgmt.msc</span>
+          <p>The standalone graphical utility designed specifically for viewing, formatting, partitioning, and managing storage devices and volumes.</p>
+          <div class="note warn">Formatting or deleting a volume can erase data — keep a backup before making disk changes.</div>
+        </div>
+      </article>
+
+      <article class="term" id="task-scheduler">
+        <div class="visual photo">
+          <img src="1.42/Task Scheduler.png" alt="Task Scheduler" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Task Scheduler</h3>
+          <span class="aka">taskschd.msc</span>
+          <p>An administrative tool used to automate and schedule the execution of programs, scripts, or tasks at pre-defined times, intervals, or triggers.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="hardware-identity">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Hardware, certificates, and accounts</h2>
+        <p>Drivers, digital certificates, and local users/groups.</p>
+      </div>
+
+      <article class="term" id="device-manager">
+        <div class="visual photo">
+          <img src="1.42/Device Manager.png" alt="Device Manager" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Device Manager</h3>
+          <span class="aka">devmgmt.msc</span>
+          <p>The primary graphical interface used to view, configure, update, enable/disable, and troubleshoot installed hardware components and their associated drivers.</p>
+        </div>
+      </article>
+
+      <article class="term" id="certificate-manager">
+        <div class="visual photo">
+          <img src="1.42/Certificate Manager.png" alt="Certificate Manager" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Certificate Manager</h3>
+          <span class="aka">certmgr.msc</span>
+          <p>An MMC snap-in used to view, import, export, and delete digital certificates and key pairs for the currently logged-in user account.</p>
+        </div>
+      </article>
+
+      <article class="term" id="lusrmgr">
+        <div class="visual photo">
+          <img src="1.42/Local Users and Groups.png" alt="Local Users and Groups" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Local Users and Groups</h3>
+          <span class="aka">lusrmgr.msc</span>
+          <p>An MMC snap-in used to create, remove, and manage local user accounts and group memberships (included in Windows Pro, Enterprise, and Education editions, but omitted from Home editions).</p>
+          <div class="note">Not available in Windows Home — use Settings or <code>net user</code> / <code>net localgroup</code> there instead.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="monitor-policy">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part D</span>
+        <h2>Performance and policy</h2>
+        <p>Long-term metrics and local computer/user policy settings.</p>
+      </div>
+
+      <article class="term" id="perfmon">
+        <div class="visual photo">
+          <img src="1.42/Performance Monitor.png" alt="Performance Monitor" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Performance Monitor</h3>
+          <span class="aka">perfmon.exe / perfmon.msc</span>
+          <p>A system monitoring utility used to analyze program and system performance in real time and collect long-term diagnostic logs using Data Collector Sets.</p>
+          <ul class="tags">
+            <li>Real-time counters</li>
+            <li>Data Collector Sets</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="term" id="gpedit">
+        <div class="visual photo">
+          <img src="1.42/Local Group Policy Editor.png" alt="Local Group Policy Editor" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Local Group Policy Editor</h3>
+          <span class="aka">gpedit.msc</span>
+          <p>An administrative snap-in used to configure policies that control operating system behaviors, security parameters, user rights, and computer settings.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Images in the <code>1.42</code> folder. Study notes for Core 2 — companion to objective 1.4.
+    Related interactive lab: <a href="1.4 Microsoft Windows Operating System Features and Tools.html">1.4 Features and Tools</a>.
+  </div>
+</footer>
+
+<script src="study-lightbox.js"></script>
+<script src="study-editor.js"></script>
+</body>
+</html>

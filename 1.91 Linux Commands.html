@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.91 Linux Commands</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --ink:#121820;
+    --muted:#4a5568;
+    --paper:#eef2f7;
+    --line:rgba(18,24,32,0.12);
+    --accent:#0f766e;
+    --accent-soft:#ccfbf1;
+    --sky:#0e4d7b;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(15,118,110,0.14), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.08), transparent 50%),
+      linear-gradient(180deg, #e4efec 0%, var(--paper) 40%, #e8f0ee 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#f0fdfa;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(6,40,36,0.25) 0%, rgba(6,40,36,0.72) 52%, rgba(6,40,36,0.94) 100%),
+      url("1.91/ls.png") center/cover no-repeat;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:40ch;
+    color:#ccfbf1;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:54ch;
+    color:#99f6e4;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#ccfbf1;
+    color:#134e4a;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#ccfbf1;
+    border:1px solid rgba(204,251,241,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(238,242,247,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:1rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:0.45rem;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+    padding:1.1rem;
+    text-align:center;
+  }
+  .visual.photo{
+    padding:0;
+    min-height:0;
+    width:100%;
+    max-width:420px;
+    aspect-ratio:16 / 9; /* 1920×1080 */
+    background:#0a0a0a;
+    overflow:hidden;
+  }
+  .visual.photo img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    display:block;
+  }
+  .visual .glyph{
+    font-family:"Cascadia Mono","Consolas",monospace;
+    font-size:1.15rem;
+    font-weight:700;
+    color:var(--accent);
+    word-break:break-all;
+  }
+  .visual .caption{
+    font-size:0.68rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--sky);
+  }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.35rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+    font-family:"Cascadia Mono","Consolas",monospace;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body code, footer code{
+    font-family:"Cascadia Mono","Consolas",monospace;
+    font-size:0.86em;
+    background:rgba(18,24,32,0.06);
+    border-radius:5px;
+    padding:0.05rem 0.35rem;
+  }
+
+  .demo{
+    margin:0.85rem 0 0;
+    padding:0.9rem 1.05rem;
+    border-left:4px solid var(--accent);
+    background:rgba(15,118,110,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.9rem;
+  }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">1.91</p>
+    <h1>Linux Commands</h1>
+    <p>Core CLI tools from ls through df — file ops, permissions, packages, networking, and process/disk utilities.</p>
+    <div class="hero-cta"><a href="#files">Browse terms</a><a class="ghost" href="1.9 Linux Features and Tools.html">Open 1.9 interactive lab</a></div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap"><a href="#files">Files &amp; directories</a><a href="#perms">Permissions &amp; ownership</a><a href="#search">Search &amp; filesystems</a><a href="#priv">Privilege &amp; packages</a><a href="#net">Network tools</a><a href="#sys">Docs, processes &amp; disk</a></div>
+</nav>
+
+<main>
+
+  <section id="files">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Files &amp; directories</h2>
+      </div>
+      
+      <article class="term" id="ls">
+        <div class="visual photo">
+          <img src="1.91/ls.png" alt="ls" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>ls</h3>
+          <span class="aka">ls -la</span>
+          <p>Command used to list files and directory contents within the current or specified path.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>ls</strong> in the command index (loads <code>ls -la</code> into the prompt).</div>
+        </div>
+      </article>
+      <article class="term" id="pwd">
+        <div class="visual photo">
+          <img src="1.91/pwd.png" alt="pwd" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>pwd</h3>
+          <span class="aka">pwd</span>
+          <p>Print Working Directory command that outputs the full absolute path of the current directory.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>pwd</strong> in the command index (loads <code>pwd</code> into the prompt).</div>
+        </div>
+      </article>
+      <article class="term" id="mv">
+        <div class="visual photo">
+          <img src="1.91/mv.png" alt="mv" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>mv</h3>
+          <span class="aka">mv notes.txt Documents/</span>
+          <p>Command used to move files or directories, as well as rename them.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>mv</strong> in the command index (loads <code>mv notes.txt Documents/</code> into the prompt).</div>
+        </div>
+      </article>
+      <article class="term" id="cp">
+        <div class="visual photo">
+          <img src="1.91/cp.png" alt="cp" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>cp</h3>
+          <span class="aka">cp -r Documents Documents_backup</span>
+          <p>Command used to copy files and directories from a source location to a destination.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>cp</strong> in the command index (loads <code>cp -r Documents Documents_backup</code> into the prompt).</div>
+        </div>
+      </article>
+      <article class="term" id="rm">
+        <div class="visual photo">
+          <img src="1.91/rm.png" alt="rm" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>rm</h3>
+          <span class="aka">rm -r Downloads</span>
+          <p>Command used to remove or delete files and directories permanently from the filesystem.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>rm</strong> in the command index (loads <code>rm -r Downloads</code> into the prompt).</div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="perms">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Permissions &amp; ownership</h2>
+      </div>
+      
+      <article class="term" id="chmod">
+        <div class="visual photo">
+          <img src="1.91/chmod.png" alt="chmod" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>chmod</h3>
+          <span class="aka">chmod 755 project/app.py</span>
+          <p>Change Mode command used to modify file and directory read, write, and execute permissions.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>chmod</strong> in the command index (loads <code>chmod 755 project/app.py</code> into the prompt).</div>
+        </div>
+      </article>
+      <article class="term" id="chown">
+        <div class="visual photo">
+          <img src="1.91/chowner.png" alt="chown" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>chown</h3>
+          <span class="aka">sudo chown jsmith:jsmith notes.txt</span>
+          <p>Change Owner command used to modify the user and/or group ownership of files and directories.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>chown</strong> in the command index (loads <code>sudo chown jsmith:jsmith notes.txt</code> into the prompt).</div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="search">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Search &amp; filesystems</h2>
+      </div>
+      
+      <article class="term" id="grep">
+        <div class="visual photo">
+          <img src="1.91/grep.png" alt="grep" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>grep</h3>
+          <span class="aka">grep -in error /var/log/syslog</span>
+          <p>Global Regular Expression Print command used to search for specific text or patterns within files or command output.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>grep</strong> in the command index (loads <code>grep -in error /var/log/syslog</code> into the prompt).</div>
+        </div>
+      </article>
+      <article class="term" id="find">
+        <div class="visual photo">
+          <img src="1.91/Find.png" alt="find" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>find</h3>
+          <span class="aka">find /home/jsmith -name &quot;*.txt&quot;</span>
+          <p>Search utility used to locate files and directories within a directory hierarchy based on criteria like name, size, or permissions.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>find</strong> in the command index (loads <code>find /home/jsmith -name &quot;*.txt&quot;</code> into the prompt).</div>
+        </div>
+      </article>
+      <article class="term" id="fsck">
+        <div class="visual photo">
+          <img src="1.91/fsck.png" alt="fsck" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>fsck</h3>
+          <span class="aka">sudo fsck -f /dev/sda1</span>
+          <p>File System Check utility used to inspect, repair, and report errors on Linux filesystems.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>fsck</strong> in the command index (loads <code>sudo fsck -f /dev/sda1</code> into the prompt).</div>
+        </div>
+      </article>
+      <article class="term" id="mount">
+        <div class="visual photo">
+          <img src="1.91/mount.png" alt="mount" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>mount</h3>
+          <span class="aka">mount</span>
+          <p>Command used to attach external storage devices, partitions, or network shares to a designated point in the directory tree.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>mount</strong> in the command index (loads <code>mount</code> into the prompt).</div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="priv">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part D</span>
+        <h2>Privilege &amp; packages</h2>
+      </div>
+      
+      <article class="term" id="su">
+        <div class="visual photo">
+          <img src="1.91/su.png" alt="su" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>su</h3>
+          <span class="aka">su -</span>
+          <p>Switch User utility used to change the current terminal session identity to another user account or the root account.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>su</strong> in the command index (loads <code>su -</code> into the prompt).</div>
+        </div>
+      </article>
+      <article class="term" id="sudo">
+        <div class="visual photo">
+          <img src="1.91/sudo.png" alt="sudo" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>sudo</h3>
+          <span class="aka">sudo apt update</span>
+          <p>Superuser Do command allowing authorized users to execute specific commands with elevated security permissions.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>sudo</strong> in the command index (loads <code>sudo apt update</code> into the prompt).</div>
+        </div>
+      </article>
+      <article class="term" id="apt">
+        <div class="visual photo">
+          <img src="1.91/apt.png" alt="apt" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>apt</h3>
+          <span class="aka">sudo apt install htop</span>
+          <p>Advanced Package Tool used on Debian-based distributions (like Ubuntu) to install, update, upgrade, and remove software packages.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>apt</strong> in the command index (loads <code>sudo apt install htop</code> into the prompt).</div>
+        </div>
+      </article>
+      <article class="term" id="dnf">
+        <div class="visual photo">
+          <img src="1.91/dnf.png" alt="dnf" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>dnf</h3>
+          <span class="aka">sudo dnf install htop</span>
+          <p>Dandified YUM package manager used on Red Hat-based distributions (like Fedora and RHEL) to manage software installations and dependencies.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>dnf</strong> in the command index (loads <code>sudo dnf install htop</code> into the prompt).</div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="net">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part E</span>
+        <h2>Network tools</h2>
+      </div>
+      
+      <article class="term" id="ip">
+        <div class="visual photo">
+          <img src="1.91/ip.png" alt="ip" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>ip</h3>
+          <span class="aka">ip addr</span>
+          <p>Modern network configuration utility used to manage network interfaces, routing tables, and IP addresses.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>ip</strong> in the command index (loads <code>ip addr</code> into the prompt).</div>
+        </div>
+      </article>
+      <article class="term" id="ping">
+        <div class="visual photo">
+          <img src="1.91/ping.png" alt="ping" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>ping</h3>
+          <span class="aka">ping -c 4 8.8.8.8</span>
+          <p>Network utility that sends ICMP Echo Request packets to a destination to test basic reachability and latency.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>ping</strong> in the command index (loads <code>ping -c 4 8.8.8.8</code> into the prompt).</div>
+        </div>
+      </article>
+      <article class="term" id="curl">
+        <div class="visual photo">
+          <img src="1.91/curl.png" alt="curl" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>curl</h3>
+          <span class="aka">curl -I https://example.com</span>
+          <p>Command-line tool used to transfer data to or from a server using protocols like HTTP, HTTPS, FTP, and SFTP.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>curl</strong> in the command index (loads <code>curl -I https://example.com</code> into the prompt).</div>
+        </div>
+      </article>
+      <article class="term" id="dig">
+        <div class="visual photo">
+          <img src="1.91/dig.png" alt="dig" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>dig</h3>
+          <span class="aka">dig example.com</span>
+          <p>Domain Information Groper utility used to query DNS name servers for troubleshooting domain resolution and record lookups.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>dig</strong> in the command index (loads <code>dig example.com</code> into the prompt).</div>
+        </div>
+      </article>
+      <article class="term" id="traceroute">
+        <div class="visual photo">
+          <img src="1.91/traceroute.png" alt="traceroute" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>traceroute</h3>
+          <span class="aka">traceroute example.com</span>
+          <p>Network diagnostic tool that tracks and displays the path (hops) packets take to reach a destination address.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>traceroute</strong> in the command index (loads <code>traceroute example.com</code> into the prompt).</div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="sys">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part F</span>
+        <h2>Docs, processes &amp; disk</h2>
+      </div>
+      
+      <article class="term" id="man">
+        <div class="visual photo">
+          <img src="1.91/man.png" alt="man" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>man</h3>
+          <span class="aka">man grep</span>
+          <p>System manual page viewer providing detailed documentation, usage flags, and syntax examples for Linux commands.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>man</strong> in the command index (loads <code>man grep</code> into the prompt).</div>
+        </div>
+      </article>
+      <article class="term" id="cat">
+        <div class="visual photo">
+          <img src="1.91/cat.png" alt="cat" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>cat</h3>
+          <span class="aka">cat /etc/hosts</span>
+          <p>Concatenate command used to view file contents, combine multiple files, or create new files directly in the terminal.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>cat</strong> in the command index (loads <code>cat /etc/hosts</code> into the prompt).</div>
+        </div>
+      </article>
+      <article class="term" id="top">
+        <div class="visual photo">
+          <img src="1.91/top.png" alt="top" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>top</h3>
+          <span class="aka">top</span>
+          <p>Real-time process monitor that displays system resource usage, CPU load, memory consumption, and active processes.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>top</strong> in the command index (loads <code>top</code> into the prompt).</div>
+        </div>
+      </article>
+      <article class="term" id="ps">
+        <div class="visual photo">
+          <img src="1.91/ps.png" alt="ps" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>ps</h3>
+          <span class="aka">ps aux</span>
+          <p>Process Status command that snapshot-reports currently running processes, their Process IDs (PIDs), and resource usage.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>ps</strong> in the command index (loads <code>ps aux</code> into the prompt).</div>
+        </div>
+      </article>
+      <article class="term" id="du">
+        <div class="visual photo">
+          <img src="1.91/du.png" alt="du" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>du</h3>
+          <span class="aka">du -sh Documents</span>
+          <p>Disk Usage command used to estimate and display disk space consumed by specific files or directories.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>du</strong> in the command index (loads <code>du -sh Documents</code> into the prompt).</div>
+        </div>
+      </article>
+      <article class="term" id="df">
+        <div class="visual photo">
+          <img src="1.91/df.png" alt="df" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>df</h3>
+          <span class="aka">df -h</span>
+          <p>Disk Free command that displays total, used, and available space on mounted filesystems.</p>
+          <div class="demo">Try it in the <a href="1.9 Linux Features and Tools.html">1.9 Linux lab</a> — click <strong>df</strong> in the command index (loads <code>df -h</code> into the prompt).</div>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    Images in the <code>1.91</code> folder. Study notes for Core 2 objective 1.9 — Linux commands (26 terms).
+    Related interactive lab: <a href="1.9 Linux Features and Tools.html">1.9 Linux Features and Tools.html</a>.
+  </div>
+</footer>
+
+<script src="study-lightbox.js"></script>
+<script src="study-editor.js"></script>
+</body>
+</html>

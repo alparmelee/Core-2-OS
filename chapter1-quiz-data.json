@@ -27,10 +27,34 @@
       "count": 16
     },
     {
+      "id": "1.41",
+      "title": "Task Manager",
+      "file": "1.41 Task Manager.html",
+      "count": 12
+    },
+    {
+      "id": "1.42",
+      "title": "MMC Snap-ins",
+      "file": "1.42 MMC Snap-ins.html",
+      "count": 11
+    },
+    {
+      "id": "1.43",
+      "title": "Windows Additional Admin Tools",
+      "file": "1.43 Windows Additional Admin Tools.html",
+      "count": 8
+    },
+    {
       "id": "1.5",
       "title": "Command-Line Tools",
       "file": "1.5 Microsoft Command-Line Tools.html",
       "count": 23
+    },
+    {
+      "id": "1.51",
+      "title": "Additional MS Commands",
+      "file": "1.51 Additional MS Commands.html",
+      "count": 12
     },
     {
       "id": "1.6",
@@ -39,9 +63,27 @@
       "count": 36
     },
     {
+      "id": "1.61",
+      "title": "Control Panel",
+      "file": "1.61 Control Panel.html",
+      "count": 19
+    },
+    {
+      "id": "1.62",
+      "title": "Windows Settings",
+      "file": "1.62 Windows Settings.html",
+      "count": 10
+    },
+    {
       "id": "1.7",
       "title": "Windows Networking",
       "file": "1.7 Configure Microsoft Windows Networking.html",
+      "count": 23
+    },
+    {
+      "id": "1.71",
+      "title": "Windows Networking Study Guide",
+      "file": "1.71 Windows Networking.html",
       "count": 23
     },
     {
@@ -51,10 +93,28 @@
       "count": 37
     },
     {
+      "id": "1.81",
+      "title": "macOS Features and Tools Study Guide",
+      "file": "1.81 macOS Features and Tools.html",
+      "count": 37
+    },
+    {
       "id": "1.9",
       "title": "Linux Features and Tools",
       "file": "1.9 Linux Features and Tools.html",
       "count": 36
+    },
+    {
+      "id": "1.91",
+      "title": "Linux Commands",
+      "file": "1.91 Linux Commands.html",
+      "count": 26
+    },
+    {
+      "id": "1.92",
+      "title": "Linux Features and Tools Study Guide",
+      "file": "1.92 Linux Features and Tools.html",
+      "count": 10
     },
     {
       "id": "1.10",
@@ -268,7 +328,7 @@
       "sectionTitle": "OS Installation and Boot Methods",
       "category": "Boot methods",
       "name": "USB",
-      "definition": "The USB device must be bootable. The computer must support booting from USB."
+      "definition": "The USB device must be bootable. The computer must support booting from USB.Installing the operating system onto the USB drive is not required when preparing bootable installation media.Installing the operating system onto the USB drive turns the flash drive into a live or persistent OS drive (where the operating system actually runs from the USB), rather than an installer."
     },
     {
       "id": "1.2-6",
@@ -276,7 +336,7 @@
       "sectionTitle": "OS Installation and Boot Methods",
       "category": "Boot methods",
       "name": "Network — PXE",
-      "definition": "Perform a remote network installation. The computer must support booting with PXE."
+      "definition": "Perform a remote network installation. The computer must support booting with PXE.When use of physical media is not feasible."
     },
     {
       "id": "1.2-7",
@@ -292,7 +352,7 @@
       "sectionTitle": "OS Installation and Boot Methods",
       "category": "Boot methods",
       "name": "Internet-based",
-      "definition": "Boot or install across the internet. Examples include Linux distributions, macOS Recovery installation, and Windows updates."
+      "definition": "Boot or install across the internet. Examples include Linux distributions, macOS Recovery installation, and Windows updates.Primarily suited for single users, remote workers, or when local network infrastructure is not availableRelies on external servers, cloud services, or vendor websites for installation filesTechnicians should consider Cryptographic hash values"
     },
     {
       "id": "1.2-9",
@@ -300,7 +360,7 @@
       "sectionTitle": "OS Installation and Boot Methods",
       "category": "Boot methods",
       "name": "External / hot-swappable drive",
-      "definition": "Some external drives can mount an ISO image (optical drive image). Can also boot from USB."
+      "definition": "Some external drives can mount an ISO image (optical drive image). Can also boot from USB.The BIOS/UEFI boot order must prioritize the external drive.Hot-swapping: Refers to the ability to replace or add computer components (such as storage drives or power supplies) while the system remains continuously powered on and fully operational, without causing system downtime or data corruption."
     },
     {
       "id": "1.2-10",
@@ -308,7 +368,7 @@
       "sectionTitle": "OS Installation and Boot Methods",
       "category": "Boot methods",
       "name": "Internal hard drive (partition)",
-      "definition": "Install and boot from separate drives, or create and boot from a new partition on an existing internal drive."
+      "definition": "Install and boot from separate drives, or create and boot from a new partition on an existing internal drive.1. Initialize the drive2. Partition the drive3. Format the drive & Assign drive letter"
     },
     {
       "id": "1.2-11",
@@ -316,7 +376,7 @@
       "sectionTitle": "OS Installation and Boot Methods",
       "category": "Boot methods",
       "name": "Multiboot",
-      "definition": "Pick from two or more operating systems from a boot menu — Windows, Linux, etc."
+      "definition": "Pick from two or more operating systems from a boot menu — Windows, Linux, etc.Utilizing different operating systems for specific tasksEach operating system requires its own dedicated system partition or separate physical drive to house its boot files, kernel, system directories, and specific file system structures (e.g., NTFS for Windows, Ext4 for Linux, APFS for macOS)."
     },
     {
       "id": "1.2-12",
@@ -380,7 +440,7 @@
       "sectionTitle": "OS Installation and Boot Methods",
       "category": "Formatting and other considerations",
       "name": "Third-party drivers",
-      "definition": "Load alternate third-party drivers when necessary — disk controller drivers, storage drivers, etc."
+      "definition": "Load alternate third-party drivers when necessary — disk controller drivers, storage drivers, etc.Modern NVMe drives, RAID controllers, or specialized motherboard chipsets (such as Intel VMD or AMD RAID) often require dedicated storage controller drivers during OS setup."
     },
     {
       "id": "1.2-20",
@@ -492,7 +552,7 @@
       "sectionTitle": "Microsoft Windows Editions",
       "category": "Windows 10 editions",
       "name": "Windows 10 Home",
-      "definition": "Designed for home users and purchased at a retail store. Integration with Microsoft account and OneDrive backup. Includes Windows Defender. You can use Cortana to talk to your OS."
+      "definition": "Designed for home users and purchased at a retail store. Integration with Microsoft account and OneDrive backup. Includes Windows Defender. You can use Cortana to talk to your OS.Cannot function as an RDP host."
     },
     {
       "id": "1.3-3",
@@ -556,7 +616,7 @@
       "sectionTitle": "Microsoft Windows Editions",
       "category": "Features that differ by edition",
       "name": "Domain vs Workgroup",
-      "definition": "Centralized network management. User accounts and security policies are managed by a central server (Domain Controller)."
+      "definition": "Centralized network management. User accounts and security policies are managed by a central server (Domain Controller).Single set of credentialsAdministered centrallyClient-server networking architecture"
     },
     {
       "id": "1.3-11",
@@ -743,6 +803,254 @@
       "definition": "The big, huge master database — hierarchical structure used by almost everything. Used by the kernel, device drivers, services, SAM, the user interface, and applications. Always back up your registry before editing."
     },
     {
+      "id": "1.41-0",
+      "section": "1.41",
+      "sectionTitle": "Task Manager",
+      "category": "Task Manager (taskmgr.exe)",
+      "name": "Task Manager",
+      "definition": "Built-in Windows utility that shows what is running on the PC, how hard the hardware is working, and gives you controls to end hung apps, manage sign-in programs, work with services, and manage user sessions."
+    },
+    {
+      "id": "1.41-1",
+      "section": "1.41",
+      "sectionTitle": "Task Manager",
+      "category": "Functions",
+      "name": "Processes",
+      "definition": "Displays active running programs, background processes, and system tasks along with their individual, real-time resource utilization (CPU, Memory, Disk, Network, GPU)."
+    },
+    {
+      "id": "1.41-2",
+      "section": "1.41",
+      "sectionTitle": "Task Manager",
+      "category": "Functions",
+      "name": "Performance",
+      "definition": "Displays live hardware utilization graphs and system-wide totals for CPU, RAM, storage drives, network adapters, and GPU."
+    },
+    {
+      "id": "1.41-3",
+      "section": "1.41",
+      "sectionTitle": "Task Manager",
+      "category": "Functions",
+      "name": "Startup (Startup Apps)",
+      "definition": "Controls which user-space applications automatically execute upon sign-in and tracks their startup impact."
+    },
+    {
+      "id": "1.41-4",
+      "section": "1.41",
+      "sectionTitle": "Task Manager",
+      "category": "Functions",
+      "name": "Services",
+      "definition": "Allows administrators to view, manually start, stop, or restart background system services running without a user interface."
+    },
+    {
+      "id": "1.41-5",
+      "section": "1.41",
+      "sectionTitle": "Task Manager",
+      "category": "Functions",
+      "name": "Users",
+      "definition": "Displays signed-in user sessions, itemizes resource consumption per account, and allows administrators to end user processes, disconnect sessions, or sign users off."
+    },
+    {
+      "id": "1.41-6",
+      "section": "1.41",
+      "sectionTitle": "Task Manager",
+      "category": "Launch methods",
+      "name": "Keyboard shortcut",
+      "definition": "Ctrl + Shift + Esc opens Task Manager directly."
+    },
+    {
+      "id": "1.41-7",
+      "section": "1.41",
+      "sectionTitle": "Task Manager",
+      "category": "Launch methods",
+      "name": "Security screen",
+      "definition": "Ctrl + Alt + Delete → Select Task Manager."
+    },
+    {
+      "id": "1.41-8",
+      "section": "1.41",
+      "sectionTitle": "Task Manager",
+      "category": "Launch methods",
+      "name": "Context menu",
+      "definition": "Right-click the Taskbar → Select Task Manager."
+    },
+    {
+      "id": "1.41-9",
+      "section": "1.41",
+      "sectionTitle": "Task Manager",
+      "category": "Launch methods",
+      "name": "Power User menu",
+      "definition": "Right-click the Start button (or press Win + X) → Select Task Manager."
+    },
+    {
+      "id": "1.41-10",
+      "section": "1.41",
+      "sectionTitle": "Task Manager",
+      "category": "Launch methods",
+      "name": "Run dialog",
+      "definition": "Press Win + R → Type taskmgr or taskmgr.exe → Press Enter."
+    },
+    {
+      "id": "1.41-11",
+      "section": "1.41",
+      "sectionTitle": "Task Manager",
+      "category": "Launch methods",
+      "name": "Command line",
+      "definition": "Type taskmgr or taskmgr.exe in Command Prompt (cmd.exe) or PowerShell → Press Enter."
+    },
+    {
+      "id": "1.42-0",
+      "section": "1.42",
+      "sectionTitle": "MMC Snap-ins",
+      "category": "Microsoft Management Console",
+      "name": "MMC snap-ins",
+      "definition": "Administrative tools that plug into MMC so you can manage Windows from a console. Most can also be launched alone by running their .msc filename."
+    },
+    {
+      "id": "1.42-1",
+      "section": "1.42",
+      "sectionTitle": "MMC Snap-ins",
+      "category": "Event Viewer",
+      "name": "Event Viewer",
+      "definition": "A utility used to monitor system health and troubleshoot issues by managing event logs."
+    },
+    {
+      "id": "1.42-2",
+      "section": "1.42",
+      "sectionTitle": "MMC Snap-ins",
+      "category": "Event Viewer",
+      "name": "Application & System Logs",
+      "definition": "Categorized into Information (normal operations), Warning (non-critical issues), and Error (serious problems) events."
+    },
+    {
+      "id": "1.42-3",
+      "section": "1.42",
+      "sectionTitle": "MMC Snap-ins",
+      "category": "Event Viewer",
+      "name": "Security Log",
+      "definition": "Records audit events reporting the Success or Failure of security-related actions."
+    },
+    {
+      "id": "1.42-4",
+      "section": "1.42",
+      "sectionTitle": "MMC Snap-ins",
+      "category": "Storage and scheduling",
+      "name": "Disk Management",
+      "definition": "The standalone graphical utility designed specifically for viewing, formatting, partitioning, and managing storage devices and volumes."
+    },
+    {
+      "id": "1.42-5",
+      "section": "1.42",
+      "sectionTitle": "MMC Snap-ins",
+      "category": "Storage and scheduling",
+      "name": "Task Scheduler",
+      "definition": "An administrative tool used to automate and schedule the execution of programs, scripts, or tasks at pre-defined times, intervals, or triggers."
+    },
+    {
+      "id": "1.42-6",
+      "section": "1.42",
+      "sectionTitle": "MMC Snap-ins",
+      "category": "Hardware, certificates, and accounts",
+      "name": "Device Manager",
+      "definition": "The primary graphical interface used to view, configure, update, enable/disable, and troubleshoot installed hardware components and their associated drivers."
+    },
+    {
+      "id": "1.42-7",
+      "section": "1.42",
+      "sectionTitle": "MMC Snap-ins",
+      "category": "Hardware, certificates, and accounts",
+      "name": "Certificate Manager",
+      "definition": "An MMC snap-in used to view, import, export, and delete digital certificates and key pairs for the currently logged-in user account."
+    },
+    {
+      "id": "1.42-8",
+      "section": "1.42",
+      "sectionTitle": "MMC Snap-ins",
+      "category": "Hardware, certificates, and accounts",
+      "name": "Local Users and Groups",
+      "definition": "An MMC snap-in used to create, remove, and manage local user accounts and group memberships (included in Windows Pro, Enterprise, and Education editions, but omitted from Home editions)."
+    },
+    {
+      "id": "1.42-9",
+      "section": "1.42",
+      "sectionTitle": "MMC Snap-ins",
+      "category": "Performance and policy",
+      "name": "Performance Monitor",
+      "definition": "A system monitoring utility used to analyze program and system performance in real time and collect long-term diagnostic logs using Data Collector Sets."
+    },
+    {
+      "id": "1.42-10",
+      "section": "1.42",
+      "sectionTitle": "MMC Snap-ins",
+      "category": "Performance and policy",
+      "name": "Local Group Policy Editor",
+      "definition": "An administrative snap-in used to configure policies that control operating system behaviors, security parameters, user rights, and computer settings."
+    },
+    {
+      "id": "1.43-0",
+      "section": "1.43",
+      "sectionTitle": "Windows Additional Admin Tools",
+      "category": "Information and monitoring",
+      "name": "System Information",
+      "definition": "System Information utility that displays details about hardware resources, components, and the software environment."
+    },
+    {
+      "id": "1.43-1",
+      "section": "1.43",
+      "sectionTitle": "Windows Additional Admin Tools",
+      "category": "Information and monitoring",
+      "name": "Resource Monitor",
+      "definition": "Resource Monitor, providing detailed real-time graphs for CPU, Memory, Disk, and Network usage alongside per-process resource breakdowns."
+    },
+    {
+      "id": "1.43-2",
+      "section": "1.43",
+      "sectionTitle": "Windows Additional Admin Tools",
+      "category": "System Configuration (msconfig)",
+      "name": "System Configuration",
+      "definition": "System Configuration utility used to troubleshoot system startup issues, modify boot options, and manage services."
+    },
+    {
+      "id": "1.43-3",
+      "section": "1.43",
+      "sectionTitle": "Windows Additional Admin Tools",
+      "category": "System Configuration (msconfig)",
+      "name": "msconfig — General tab",
+      "definition": "Location within System Configuration used to select startup modes: Normal, Diagnostic, or Selective."
+    },
+    {
+      "id": "1.43-4",
+      "section": "1.43",
+      "sectionTitle": "Windows Additional Admin Tools",
+      "category": "System Configuration (msconfig)",
+      "name": "msconfig — Boot tab",
+      "definition": "Location used to configure Safe Boot parameters, enable boot logging, choose default OS in multiboot setups, and set hardware resource limits (e.g., max RAM/CPUs)."
+    },
+    {
+      "id": "1.43-5",
+      "section": "1.43",
+      "sectionTitle": "Windows Additional Admin Tools",
+      "category": "Disk tools and Registry",
+      "name": "Disk Cleanup",
+      "definition": "Disk Cleanup utility designed to reclaim storage space by removing temporary, unnecessary, and cached files."
+    },
+    {
+      "id": "1.43-6",
+      "section": "1.43",
+      "sectionTitle": "Windows Additional Admin Tools",
+      "category": "Disk tools and Registry",
+      "name": "Defragment and Optimize Drives",
+      "definition": "Defragment and Optimize Drives utility used to optimize HDD storage layout and run TRIM commands on SSDs."
+    },
+    {
+      "id": "1.43-7",
+      "section": "1.43",
+      "sectionTitle": "Windows Additional Admin Tools",
+      "category": "Disk tools and Registry",
+      "name": "Registry Editor",
+      "definition": "Registry Editor, used to view and modify Windows' hierarchical configuration database of low-level OS settings."
+    },
+    {
       "id": "1.5-0",
       "section": "1.5",
       "sectionTitle": "Command-Line Tools",
@@ -925,6 +1233,102 @@
       "category": "",
       "name": "sfc",
       "definition": "System File Checker — scans the integrity of protected Windows system files and repairs corrupted ones when possible. sfc /scannow"
+    },
+    {
+      "id": "1.51-0",
+      "section": "1.51",
+      "sectionTitle": "Additional MS Commands",
+      "category": "Specific tool switches & parameters",
+      "name": "ipconfig /release and ipconfig /renew",
+      "definition": "Commands used to refresh DHCP configurations for network adapters."
+    },
+    {
+      "id": "1.51-1",
+      "section": "1.51",
+      "sectionTitle": "Additional MS Commands",
+      "category": "Specific tool switches & parameters",
+      "name": "dir /s",
+      "definition": "The /s flag recurses through subdirectories when listing files (for example, dir /s *.exe)."
+    },
+    {
+      "id": "1.51-2",
+      "section": "1.51",
+      "sectionTitle": "Additional MS Commands",
+      "category": "Specific tool switches & parameters",
+      "name": "format /q",
+      "definition": "The quick format option removes file system references without performing a full overwrite of every sector on the volume."
+    },
+    {
+      "id": "1.51-3",
+      "section": "1.51",
+      "sectionTitle": "Additional MS Commands",
+      "category": "Specific tool switches & parameters",
+      "name": "rmdir /s and rmdir /q",
+      "definition": "Used in folder-deletion scenarios: /s removes directory trees (the folder and everything inside), and /q enables quiet mode (no confirmation prompts)."
+    },
+    {
+      "id": "1.51-4",
+      "section": "1.51",
+      "sectionTitle": "Additional MS Commands",
+      "category": "Specific tool switches & parameters",
+      "name": "sfc — system file replacement",
+      "definition": "SFC specifically replaces incorrect or corrupted system file versions with correct Microsoft versions from a known-good store (often the component store / WinSxS)."
+    },
+    {
+      "id": "1.51-5",
+      "section": "1.51",
+      "sectionTitle": "Additional MS Commands",
+      "category": "Command variations & navigation shortcuts",
+      "name": "cd \\",
+      "definition": "Changes the working directory directly to the root directory of the current drive (for example, from C:\\Users\\Andre\\Documents to C:\\)."
+    },
+    {
+      "id": "1.51-6",
+      "section": "1.51",
+      "sectionTitle": "Additional MS Commands",
+      "category": "Command variations & navigation shortcuts",
+      "name": "help [command] vs [command] /?",
+      "definition": "help [command] is a valid alternative syntax for displaying command-specific help, alongside [command] /?."
+    },
+    {
+      "id": "1.51-7",
+      "section": "1.51",
+      "sectionTitle": "Additional MS Commands",
+      "category": "Command variations & navigation shortcuts",
+      "name": "md vs mkdir",
+      "definition": "There is no functional difference between md and mkdir in Windows — both create directories."
+    },
+    {
+      "id": "1.51-8",
+      "section": "1.51",
+      "sectionTitle": "Additional MS Commands",
+      "category": "Command variations & navigation shortcuts",
+      "name": "Changing directory to a letter drive (e.g. G:)",
+      "definition": "To switch to another drive letter in Command Prompt (cmd.exe), type the drive alone — for example G: — not cd G:."
+    },
+    {
+      "id": "1.51-9",
+      "section": "1.51",
+      "sectionTitle": "Additional MS Commands",
+      "category": "Troubleshooting & administrative scenarios",
+      "name": "Loopback testing (ping 127.0.0.1)",
+      "definition": "Using the loopback address verifies that the local TCP/IP stack is functioning properly — replies mean the network stack on this PC is alive, independent of the NIC or remote network."
+    },
+    {
+      "id": "1.51-10",
+      "section": "1.51",
+      "sectionTitle": "Additional MS Commands",
+      "category": "Troubleshooting & administrative scenarios",
+      "name": "Elevation issues",
+      "definition": "Encountering an “Access is denied” error when running diskpart is typically caused by failing to launch the terminal with administrative privileges."
+    },
+    {
+      "id": "1.51-11",
+      "section": "1.51",
+      "sectionTitle": "Additional MS Commands",
+      "category": "Troubleshooting & administrative scenarios",
+      "name": "net user [username] — account auditing",
+      "definition": "Running net user with a specific username reveals account status details such as lockout/disabled state, last logon time, and password requirements."
     },
     {
       "id": "1.6-0",
@@ -1215,6 +1619,238 @@
       "definition": "Sign in with Microsoft account, manage Work or School connections, set up Windows Hello PIN or biometrics, and manage family accounts. Settings › Accounts"
     },
     {
+      "id": "1.61-0",
+      "section": "1.61",
+      "sectionTitle": "Control Panel",
+      "category": "Network, apps, and system",
+      "name": "Internet Options",
+      "definition": "Control Panel › Network and Sharing Center > Internet Options"
+    },
+    {
+      "id": "1.61-1",
+      "section": "1.61",
+      "sectionTitle": "Control Panel",
+      "category": "Network, apps, and system",
+      "name": "Devices and Printers",
+      "definition": "Add peripheral devices, view connected hardware, set default printer, manage print queues, and configure printer properties.Allows users to add/remove wired and wireless devicesProvides a simplified view of all connected devicesAllows users to troubleshoot a device that is not working properly"
+    },
+    {
+      "id": "1.61-2",
+      "section": "1.61",
+      "sectionTitle": "Control Panel",
+      "category": "Network, apps, and system",
+      "name": "Programs and Features",
+      "definition": "Uninstall desktop applications, view installed updates, and turn optional Windows features on or off."
+    },
+    {
+      "id": "1.61-3",
+      "section": "1.61",
+      "sectionTitle": "Control Panel",
+      "category": "Network, apps, and system",
+      "name": "Network and Sharing Center",
+      "definition": "View network topology, map network drives, change adapter IP or DNS settings, set network profiles, and configure advanced sharing."
+    },
+    {
+      "id": "1.61-4",
+      "section": "1.61",
+      "sectionTitle": "Control Panel",
+      "category": "Network, apps, and system",
+      "name": "Windows Defender Firewall",
+      "definition": "Configure inbound and outbound traffic rules, allow applications through firewall, enable profiles, and set logging options."
+    },
+    {
+      "id": "1.61-5",
+      "section": "1.61",
+      "sectionTitle": "Control Panel",
+      "category": "Accounts, hardware, and tools",
+      "name": "Mail",
+      "definition": "Set up local email client profiles, configure Exchange, IMAP, or POP3 accounts, and manage data files like PST and OST."
+    },
+    {
+      "id": "1.61-6",
+      "section": "1.61",
+      "sectionTitle": "Control Panel",
+      "category": "Accounts, hardware, and tools",
+      "name": "Sound",
+      "definition": "Select default playback and recording audio devices, configure speaker properties, adjust volume, and manage auto-muting."
+    },
+    {
+      "id": "1.61-7",
+      "section": "1.61",
+      "sectionTitle": "Control Panel",
+      "category": "Accounts, hardware, and tools",
+      "name": "User Accounts",
+      "definition": "Manage local user profiles, change account types, manage saved Windows credentials, and adjust User Account Control settings."
+    },
+    {
+      "id": "1.61-8",
+      "section": "1.61",
+      "sectionTitle": "Control Panel",
+      "category": "Accounts, hardware, and tools",
+      "name": "Device Manager",
+      "definition": "View and troubleshoot hardware, update, roll back, or disable drivers, and resolve hardware resource conflicts."
+    },
+    {
+      "id": "1.61-9",
+      "section": "1.61",
+      "sectionTitle": "Control Panel",
+      "category": "Accounts, hardware, and tools",
+      "name": "Indexing Options",
+      "definition": "Modify search indexing locations and file types to rebuild search catalogs and accelerate File Explorer search."
+    },
+    {
+      "id": "1.61-10",
+      "section": "1.61",
+      "sectionTitle": "Control Panel",
+      "category": "Accounts, hardware, and tools",
+      "name": "Administrative Tools",
+      "definition": "Access core management consoles including Computer Management, Event Viewer, Services, Local Security Policy, and Task Scheduler."
+    },
+    {
+      "id": "1.61-11",
+      "section": "1.61",
+      "sectionTitle": "Control Panel",
+      "category": "File Explorer Options and Power Options",
+      "name": "File Explorer Options",
+      "definition": "Configure global settings for file browsing, folder views, search behavior, and hidden file visibility."
+    },
+    {
+      "id": "1.61-12",
+      "section": "1.61",
+      "sectionTitle": "Control Panel",
+      "category": "File Explorer Options and Power Options",
+      "name": "File Explorer Options — General",
+      "definition": "Set default opening location like This PC or Quick Access, clear history, and manage folder opening behavior."
+    },
+    {
+      "id": "1.61-13",
+      "section": "1.61",
+      "sectionTitle": "Control Panel",
+      "category": "File Explorer Options and Power Options",
+      "name": "File Explorer Options — Hide extensions",
+      "definition": "Uncheck \"Hide extensions for known file types\" to display full file extensions for identifying malware files."
+    },
+    {
+      "id": "1.61-14",
+      "section": "1.61",
+      "sectionTitle": "Control Panel",
+      "category": "File Explorer Options and Power Options",
+      "name": "File Explorer Options — View hidden files",
+      "definition": "Select \"Show hidden files, folders, and drives\" under the View tab to reveal system or hidden items."
+    },
+    {
+      "id": "1.61-15",
+      "section": "1.61",
+      "sectionTitle": "Control Panel",
+      "category": "File Explorer Options and Power Options",
+      "name": "Power Options",
+      "definition": "Manage computer energy usage, sleep behaviors, power plan profiles, and hardware button actions."
+    },
+    {
+      "id": "1.61-16",
+      "section": "1.61",
+      "sectionTitle": "Control Panel",
+      "category": "File Explorer Options and Power Options",
+      "name": "Lid actions and Fast Startup",
+      "definition": "Choose what closing the lid does — Do Nothing, Sleep, Hibernate, or Shut Down."
+    },
+    {
+      "id": "1.61-17",
+      "section": "1.61",
+      "sectionTitle": "Control Panel",
+      "category": "File Explorer Options and Power Options",
+      "name": "Sleep states and USB selective suspend",
+      "definition": "Sleep/suspend keeps RAM powered while placing CPU and components into low-power states for fast instant-on resumption."
+    },
+    {
+      "id": "1.61-18",
+      "section": "1.61",
+      "sectionTitle": "Control Panel",
+      "category": "File Explorer Options and Power Options",
+      "name": "Ease of Access",
+      "definition": "Configure accessibility features including Display scale, Narrator, Magnifier, High Contrast, Sticky Keys, and Mouse pointer size.Aimed at users with disabilities"
+    },
+    {
+      "id": "1.62-0",
+      "section": "1.62",
+      "sectionTitle": "Windows Settings",
+      "category": "System, devices, and network",
+      "name": "System (Settings)",
+      "definition": "Manage Display resolution, Sound outputs, Notifications, Focus Assist, Storage Sense drive cleanup, and Remote Desktop access."
+    },
+    {
+      "id": "1.62-1",
+      "section": "1.62",
+      "sectionTitle": "Windows Settings",
+      "category": "System, devices, and network",
+      "name": "Devices (Settings)",
+      "definition": "Pair Bluetooth devices, add printers or scanners, adjust touchpad sensitivity, and manage USB connection notifications."
+    },
+    {
+      "id": "1.62-2",
+      "section": "1.62",
+      "sectionTitle": "Windows Settings",
+      "category": "System, devices, and network",
+      "name": "Network and Internet",
+      "definition": "Toggle Wi-Fi or Ethernet, configure VPN connections, set up proxy servers, view Data Usage limits, and perform Network Reset."
+    },
+    {
+      "id": "1.62-3",
+      "section": "1.62",
+      "sectionTitle": "Windows Settings",
+      "category": "Personalization, apps, and accounts",
+      "name": "Personalization",
+      "definition": "Customize Desktop background, colors, Lock Screen images, system Themes, Fonts, and Start menu or Taskbar behaviors."
+    },
+    {
+      "id": "1.62-4",
+      "section": "1.62",
+      "sectionTitle": "Windows Settings",
+      "category": "Personalization, apps, and accounts",
+      "name": "Apps",
+      "definition": "Uninstall modern UWP apps and legacy software, set default apps by protocol or file type, and manage startup applications."
+    },
+    {
+      "id": "1.62-5",
+      "section": "1.62",
+      "sectionTitle": "Windows Settings",
+      "category": "Personalization, apps, and accounts",
+      "name": "Accounts",
+      "definition": "Sign in with Microsoft account, manage Work or School connections, set up Windows Hello PIN or biometrics, and manage family accounts."
+    },
+    {
+      "id": "1.62-6",
+      "section": "1.62",
+      "sectionTitle": "Windows Settings",
+      "category": "Time, gaming, privacy, and updates",
+      "name": "Time and Language",
+      "definition": "Set time zone automatically, sync clock servers, add language packs, configure regional formats, and adjust speech or keyboard input."
+    },
+    {
+      "id": "1.62-7",
+      "section": "1.62",
+      "sectionTitle": "Windows Settings",
+      "category": "Time, gaming, privacy, and updates",
+      "name": "Gaming",
+      "definition": "Configure Xbox Game Bar, adjust Game Mode settings for hardware performance allocation, and manage screen recording options."
+    },
+    {
+      "id": "1.62-8",
+      "section": "1.62",
+      "sectionTitle": "Windows Settings",
+      "category": "Time, gaming, privacy, and updates",
+      "name": "Privacy",
+      "definition": "Control app permissions for hardware like Camera and Microphone, manage background app permissions, and configure diagnostic data."
+    },
+    {
+      "id": "1.62-9",
+      "section": "1.62",
+      "sectionTitle": "Windows Settings",
+      "category": "Time, gaming, privacy, and updates",
+      "name": "Update and Security",
+      "definition": "Manage Windows Update schedules, Delivery Optimization, Windows Security Defender, File History Backup, and Reset This PC recovery."
+    },
+    {
       "id": "1.7-0",
       "section": "1.7",
       "sectionTitle": "Windows Networking",
@@ -1397,6 +2033,190 @@
       "category": "",
       "name": "Metered connections and limitations",
       "definition": "Setting a data-cap constraint on Wi-Fi or cellular connections to restrict background data usage and defer automatic Windows updates. Settings → Wi-Fi → Properties → Metered connection"
+    },
+    {
+      "id": "1.71-0",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Domain, shares, and printers",
+      "name": "Domain joined vs. workgroup",
+      "definition": "Compares centralized authentication using Active Directory and domain controllers against decentralized peer-to-peer administrative groups."
+    },
+    {
+      "id": "1.71-1",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Domain, shares, and printers",
+      "name": "Share permissionsNetwork assets like folders and devices made accessible across the network using NTFS and share permissions.",
+      "definition": "NTFS permissions Share permissions"
+    },
+    {
+      "id": "1.71-2",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Domain, shares, and printers",
+      "name": "Printers",
+      "definition": "Print server Workgroup share"
+    },
+    {
+      "id": "1.71-3",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Domain, shares, and printers",
+      "name": "File servers",
+      "definition": "Centralized storage systems in a domain environment providing authenticated file shares and access controls.Project Folder path located on a shared Windows file server FS1\\\\FS1|ProjectsSMB - Commonly used by Windows servers to share files, printers, and other resources over a network?"
+    },
+    {
+      "id": "1.71-4",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Domain, shares, and printers",
+      "name": "Mapped drives",
+      "definition": "Mounting network shared folders to a local drive letter for quick access in File Explorer.Correct syntax for mapping a network drive using the Windows command-line interpreternet use Z: \\\\Server\\Share"
+    },
+    {
+      "id": "1.71-5",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Local OS firewall",
+      "name": "Local OS firewall settings",
+      "definition": "Software-based security rules configured to allow or block inbound and outbound network traffic on a host."
+    },
+    {
+      "id": "1.71-6",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Local OS firewall",
+      "name": "Application restrictions and exceptions",
+      "definition": "Rules configured to allow specific programs or block executable binaries through network ports."
+    },
+    {
+      "id": "1.71-7",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Local OS firewall",
+      "name": "Firewall Configuration and Advanced Settings",
+      "definition": "Setting firewall profiles like Public, Private, and Domain to enforce distinct traffic filtering rules."
+    },
+    {
+      "id": "1.71-8",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Client IP configuration",
+      "name": "Client network configuration",
+      "definition": "Setting adapter parameters including IP addressing, subnetting, gateway routing, and name resolution."
+    },
+    {
+      "id": "1.71-9",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Client IP configuration",
+      "name": "IP addressing scheme",
+      "definition": "System of unique logical numbers like IPv4 or IPv6 assigned to network host interfaces.IP AddressSubnet MaskDefault MaskDNS Server address"
+    },
+    {
+      "id": "1.71-10",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Client IP configuration",
+      "name": "DNS settings",
+      "definition": "Configured IP addresses of servers that resolve human-readable domain names to IP addresses."
+    },
+    {
+      "id": "1.71-11",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Client IP configuration",
+      "name": "Subnet mask",
+      "definition": "A 32-bit mask that separates an IP address into its network ID and host ID portions."
+    },
+    {
+      "id": "1.71-12",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Client IP configuration",
+      "name": "Gateway",
+      "definition": "The IP address of the local router interface that forwards out-of-subnet traffic to external networks."
+    },
+    {
+      "id": "1.71-13",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Client IP configuration",
+      "name": "Static vs. dynamic",
+      "definition": "Choosing manually assigned permanent IP settings versus automatic configuration via DHCP."
+    },
+    {
+      "id": "1.71-14",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Connection types",
+      "name": "Establish network connections",
+      "definition": "Configuring local client network adapters to connect to local and remote infrastructure."
+    },
+    {
+      "id": "1.71-15",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Connection types",
+      "name": "Virtual private network (VPN)",
+      "definition": "Encrypted tunnel created over a public network to provide secure remote access to a private network."
+    },
+    {
+      "id": "1.71-16",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Connection types",
+      "name": "Wireless",
+      "definition": "Connecting to local area networks using Wi-Fi radio standards and security protocols like WPA3."
+    },
+    {
+      "id": "1.71-17",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Connection types",
+      "name": "Wired",
+      "definition": "Physical Ethernet cable connection linking a local network interface card directly to a switch or router port."
+    },
+    {
+      "id": "1.71-18",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Connection types",
+      "name": "Wireless wide area network (WWAN) / cellular",
+      "definition": "Connecting laptops or mobile devices to internet services using cellular data networks like 4G LTE or 5G."
+    },
+    {
+      "id": "1.71-19",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Profiles, proxy, UNC, and metered links",
+      "name": "Proxy settings",
+      "definition": "Redirecting client web traffic through an intermediate proxy server for security inspection, caching, or content filtering."
+    },
+    {
+      "id": "1.71-20",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Profiles, proxy, UNC, and metered links",
+      "name": "Public network vs private network",
+      "definition": "Network location profiles that automatically adjust firewall rules, hiding the device on public Wi-Fi or enabling discovery on trusted private networks."
+    },
+    {
+      "id": "1.71-21",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Profiles, proxy, UNC, and metered links",
+      "name": "File Explorer navigation – network paths",
+      "definition": "Accessing shared resources using Universal Naming Convention paths like \\\\ServerName\\ShareName."
+    },
+    {
+      "id": "1.71-22",
+      "section": "1.71",
+      "sectionTitle": "Windows Networking Study Guide",
+      "category": "Profiles, proxy, UNC, and metered links",
+      "name": "Metered connections and limitations",
+      "definition": "Setting a data-cap constraint on Wi-Fi or cellular connections to restrict background data usage and defer automatic Windows updates.Pauses Large Downloads"
     },
     {
       "id": "1.8-0",
@@ -1695,6 +2515,302 @@
       "definition": "Troubleshooting feature (Command+Option+Escape) used to immediately terminate non-responsive or malfunctioning applications. ⌘+Option+Esc"
     },
     {
+      "id": "1.81-0",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Install & uninstall",
+      "name": ".dmg",
+      "definition": "Disk Image file format used to distribute software on macOS. Mounts like a virtual volume containing application installers or bundle folders."
+    },
+    {
+      "id": "1.81-1",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Install & uninstall",
+      "name": ".pkg",
+      "definition": "Installer package format containing an installation wizard, scripts, and payload files used to install software across system directories."
+    },
+    {
+      "id": "1.81-2",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Install & uninstall",
+      "name": ".app",
+      "definition": "Application bundle directory structure in macOS that appears as a single executable file to the end user."
+    },
+    {
+      "id": "1.81-3",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Install & uninstall",
+      "name": "App Store",
+      "definition": "Official Apple digital distribution platform for discovering, purchasing, and securely downloading vetted macOS applications."
+    },
+    {
+      "id": "1.81-4",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Install & uninstall",
+      "name": "Uninstallation Process",
+      "definition": "Removal method for macOS apps — typically dragging a .app bundle from /Applications to the Trash, or running a dedicated uninstaller script for .pkg-installed software."
+    },
+    {
+      "id": "1.81-5",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Filesystem paths",
+      "name": "/Applications",
+      "definition": "Root directory storing installed applications accessible to all system users."
+    },
+    {
+      "id": "1.81-6",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Filesystem paths",
+      "name": "/Users",
+      "definition": "System folder containing individual user profile directories, including home folders, personal data, and desktop configurations."
+    },
+    {
+      "id": "1.81-7",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Filesystem paths",
+      "name": "/Library",
+      "definition": "System-wide configuration folder storing shared application support files, drivers, and global preferences accessible by all users."
+    },
+    {
+      "id": "1.81-8",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Filesystem paths",
+      "name": "/System",
+      "definition": "Core OS directory containing critical macOS operating system files, system frameworks, and kernel components protected by System Integrity Protection (SIP)."
+    },
+    {
+      "id": "1.81-9",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Filesystem paths",
+      "name": "~/Library",
+      "definition": "User-specific Library folder (at /Users/<name>/Library) containing individual app preferences, caches, application support files, and user data."
+    },
+    {
+      "id": "1.81-10",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "System Settings",
+      "name": "Apple ID and Corporate Restrictions",
+      "definition": "Identity management for Apple services that organizations can manage via Mobile Device Management (MDM) enrollment profiles to enforce security policies and restrict features."
+    },
+    {
+      "id": "1.81-11",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "System Settings",
+      "name": "Updates/Patches",
+      "definition": "Routine operating system and application updates deployed via System Settings to resolve vulnerabilities, fix bugs, and optimize system performance."
+    },
+    {
+      "id": "1.81-12",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "System Settings",
+      "name": "Rapid Security Response (RSR)",
+      "definition": "Automated macOS security mechanism delivering critical security fixes between standard software updates, without requiring a full OS reboot."
+    },
+    {
+      "id": "1.81-13",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "System Settings",
+      "name": "Displays",
+      "definition": "System Settings pane used to adjust screen resolution, arrangement, orientation, color profiles, and relative placement in multi-monitor setups."
+    },
+    {
+      "id": "1.81-14",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "System Settings",
+      "name": "Networks",
+      "definition": "System Settings menu for managing network adapters, Wi-Fi connections, Ethernet interfaces, IPv4/IPv6 settings, DNS configuration, and proxies."
+    },
+    {
+      "id": "1.81-15",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "System Settings",
+      "name": "Printers & Scanners",
+      "definition": "System interface for adding, configuring, sharing, and troubleshooting printing and scanning hardware on local or network connections."
+    },
+    {
+      "id": "1.81-16",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "System Settings",
+      "name": "Privacy",
+      "definition": "System Settings pane for managing per-application permissions to device sensors and user data, including Location Services, Camera, Microphone, and Contacts."
+    },
+    {
+      "id": "1.81-17",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "System Settings",
+      "name": "Accessibility",
+      "definition": "System Settings menu providing custom input and display options for accessibility, plus permissions for apps needing system-level control and automation."
+    },
+    {
+      "id": "1.81-18",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Security & backup",
+      "name": "Backups",
+      "definition": "Best practice of using utilities like Time Machine or third-party tools to maintain regular data copies on external or network drives."
+    },
+    {
+      "id": "1.81-19",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Security & backup",
+      "name": "Antivirus",
+      "definition": "Security best practice of running endpoint protection or relying on built-in macOS security layers (XProtect, MRT) to detect and block malicious software."
+    },
+    {
+      "id": "1.81-20",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Security & backup",
+      "name": "Time Machine",
+      "definition": "Automated macOS backup feature that maintains hourly snapshots for 24 hours, daily backups for a month, and weekly backups for prior months."
+    },
+    {
+      "id": "1.81-21",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Security & backup",
+      "name": "Keychain",
+      "definition": "Encrypted password management database in macOS that securely stores user passwords, certificates, keys, and private application credentials, unlocked via login."
+    },
+    {
+      "id": "1.81-22",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Security & backup",
+      "name": "FileVault",
+      "definition": "Built-in macOS Full Disk Encryption (FDE) feature that protects system drive data using AES encryption linked to user credentials or a recovery key."
+    },
+    {
+      "id": "1.81-23",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Desktop UI & window management",
+      "name": "Multiple Desktops",
+      "definition": "Feature allowing users to create separate virtual workspace environments (\"Spaces\") to organize open application windows."
+    },
+    {
+      "id": "1.81-24",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Desktop UI & window management",
+      "name": "Mission Control",
+      "definition": "Window management interface launched via trackpad gestures or Control+Up Arrow that displays all open windows, full-screen apps, and virtual desktop Spaces."
+    },
+    {
+      "id": "1.81-25",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Desktop UI & window management",
+      "name": "Spotlight",
+      "definition": "System-wide indexing and search utility launched via Command+Space to locate local files, launch applications, perform calculations, and fetch web data."
+    },
+    {
+      "id": "1.81-26",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Desktop UI & window management",
+      "name": "Gestures",
+      "definition": "Multi-touch trackpad and mouse input shortcuts allowing users to navigate, swipe, pinch, or tap to trigger system functions like Mission Control or desktop switching."
+    },
+    {
+      "id": "1.81-27",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Desktop UI & window management",
+      "name": "Finder",
+      "definition": "Primary macOS desktop file manager used to browse, organize, launch, rename, and manage files, network shares, and connected media."
+    },
+    {
+      "id": "1.81-28",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Desktop UI & window management",
+      "name": "Dock",
+      "definition": "Desktop shortcut bar providing quick access to pinned apps, open applications (indicated by a dot below the icon), folders, and the Trash."
+    },
+    {
+      "id": "1.81-29",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Desktop UI & window management",
+      "name": "Force Quit",
+      "definition": "Troubleshooting feature (Command+Option+Escape) used to immediately terminate non-responsive or malfunctioning applications."
+    },
+    {
+      "id": "1.81-30",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Apple ecosystem",
+      "name": "iCloud",
+      "definition": "Apple cloud storage and synchronization infrastructure that links user data across macOS, iOS, and iPadOS devices."
+    },
+    {
+      "id": "1.81-31",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Apple ecosystem",
+      "name": "iMessage",
+      "definition": "Messaging service integrated into the macOS Messages application for secure text, media, and data communication across Apple devices."
+    },
+    {
+      "id": "1.81-32",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Apple ecosystem",
+      "name": "FaceTime",
+      "definition": "Built-in audio and video conferencing application integrated with macOS and iOS."
+    },
+    {
+      "id": "1.81-33",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Apple ecosystem",
+      "name": "iCloud Drive",
+      "definition": "Cloud-based file storage and synchronization folder built into the macOS file system, similar to Google Drive or Dropbox."
+    },
+    {
+      "id": "1.81-34",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Apple ecosystem",
+      "name": "Continuity",
+      "definition": "Ecosystem integration allowing Apple devices to share features seamlessly, such as using an iPhone as a Mac webcam, AirDrop file sharing, and Universal Clipboard."
+    },
+    {
+      "id": "1.81-35",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Admin tools",
+      "name": "Disk Utility",
+      "definition": "System administration utility used to format, partition, repair (First Aid), erase, and create disk images of local storage drives and volumes."
+    },
+    {
+      "id": "1.81-36",
+      "section": "1.81",
+      "sectionTitle": "macOS Features and Tools Study Guide",
+      "category": "Admin tools",
+      "name": "Terminal",
+      "definition": "Command-line interface application providing shell access (zsh/bash) for file manipulation, system configuration, scripting, and administrative functions."
+    },
+    {
       "id": "1.9-0",
       "section": "1.9",
       "sectionTitle": "Linux Features and Tools",
@@ -1983,6 +3099,294 @@
       "definition": "Superuser account on a Linux system possessing unrestricted system privileges and administrative authority. sudo -i"
     },
     {
+      "id": "1.91-0",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Files & directories",
+      "name": "ls",
+      "definition": "Command used to list files and directory contents within the current or specified path."
+    },
+    {
+      "id": "1.91-1",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Files & directories",
+      "name": "pwd",
+      "definition": "Print Working Directory command that outputs the full absolute path of the current directory."
+    },
+    {
+      "id": "1.91-2",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Files & directories",
+      "name": "mv",
+      "definition": "Command used to move files or directories, as well as rename them."
+    },
+    {
+      "id": "1.91-3",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Files & directories",
+      "name": "cp",
+      "definition": "Command used to copy files and directories from a source location to a destination."
+    },
+    {
+      "id": "1.91-4",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Files & directories",
+      "name": "rm",
+      "definition": "Command used to remove or delete files and directories permanently from the filesystem."
+    },
+    {
+      "id": "1.91-5",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Permissions & ownership",
+      "name": "chmod",
+      "definition": "Change Mode command used to modify file and directory read, write, and execute permissions."
+    },
+    {
+      "id": "1.91-6",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Permissions & ownership",
+      "name": "chown",
+      "definition": "Change Owner command used to modify the user and/or group ownership of files and directories."
+    },
+    {
+      "id": "1.91-7",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Search & filesystems",
+      "name": "grep",
+      "definition": "Global Regular Expression Print command used to search for specific text or patterns within files or command output."
+    },
+    {
+      "id": "1.91-8",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Search & filesystems",
+      "name": "find",
+      "definition": "Search utility used to locate files and directories within a directory hierarchy based on criteria like name, size, or permissions."
+    },
+    {
+      "id": "1.91-9",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Search & filesystems",
+      "name": "fsck",
+      "definition": "File System Check utility used to inspect, repair, and report errors on Linux filesystems."
+    },
+    {
+      "id": "1.91-10",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Search & filesystems",
+      "name": "mount",
+      "definition": "Command used to attach external storage devices, partitions, or network shares to a designated point in the directory tree."
+    },
+    {
+      "id": "1.91-11",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Privilege & packages",
+      "name": "su",
+      "definition": "Switch User utility used to change the current terminal session identity to another user account or the root account."
+    },
+    {
+      "id": "1.91-12",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Privilege & packages",
+      "name": "sudo",
+      "definition": "Superuser Do command allowing authorized users to execute specific commands with elevated security permissions."
+    },
+    {
+      "id": "1.91-13",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Privilege & packages",
+      "name": "apt",
+      "definition": "Advanced Package Tool used on Debian-based distributions (like Ubuntu) to install, update, upgrade, and remove software packages."
+    },
+    {
+      "id": "1.91-14",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Privilege & packages",
+      "name": "dnf",
+      "definition": "Dandified YUM package manager used on Red Hat-based distributions (like Fedora and RHEL) to manage software installations and dependencies."
+    },
+    {
+      "id": "1.91-15",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Network tools",
+      "name": "ip",
+      "definition": "Modern network configuration utility used to manage network interfaces, routing tables, and IP addresses."
+    },
+    {
+      "id": "1.91-16",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Network tools",
+      "name": "ping",
+      "definition": "Network utility that sends ICMP Echo Request packets to a destination to test basic reachability and latency."
+    },
+    {
+      "id": "1.91-17",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Network tools",
+      "name": "curl",
+      "definition": "Command-line tool used to transfer data to or from a server using protocols like HTTP, HTTPS, FTP, and SFTP."
+    },
+    {
+      "id": "1.91-18",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Network tools",
+      "name": "dig",
+      "definition": "Domain Information Groper utility used to query DNS name servers for troubleshooting domain resolution and record lookups."
+    },
+    {
+      "id": "1.91-19",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Network tools",
+      "name": "traceroute",
+      "definition": "Network diagnostic tool that tracks and displays the path (hops) packets take to reach a destination address."
+    },
+    {
+      "id": "1.91-20",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Docs, processes & disk",
+      "name": "man",
+      "definition": "System manual page viewer providing detailed documentation, usage flags, and syntax examples for Linux commands."
+    },
+    {
+      "id": "1.91-21",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Docs, processes & disk",
+      "name": "cat",
+      "definition": "Concatenate command used to view file contents, combine multiple files, or create new files directly in the terminal."
+    },
+    {
+      "id": "1.91-22",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Docs, processes & disk",
+      "name": "top",
+      "definition": "Real-time process monitor that displays system resource usage, CPU load, memory consumption, and active processes."
+    },
+    {
+      "id": "1.91-23",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Docs, processes & disk",
+      "name": "ps",
+      "definition": "Process Status command that snapshot-reports currently running processes, their Process IDs (PIDs), and resource usage."
+    },
+    {
+      "id": "1.91-24",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Docs, processes & disk",
+      "name": "du",
+      "definition": "Disk Usage command used to estimate and display disk space consumed by specific files or directories."
+    },
+    {
+      "id": "1.91-25",
+      "section": "1.91",
+      "sectionTitle": "Linux Commands",
+      "category": "Docs, processes & disk",
+      "name": "df",
+      "definition": "Disk Free command that displays total, used, and available space on mounted filesystems."
+    },
+    {
+      "id": "1.92-0",
+      "section": "1.92",
+      "sectionTitle": "Linux Features and Tools Study Guide",
+      "category": "Editors & key files",
+      "name": "nano",
+      "definition": "User-friendly, terminal-based text editor commonly used for quick configuration edits without complex modal modes."
+    },
+    {
+      "id": "1.92-1",
+      "section": "1.92",
+      "sectionTitle": "Linux Features and Tools Study Guide",
+      "category": "Editors & key files",
+      "name": "/etc/passwd",
+      "definition": "Local system file storing user account information, including user IDs (UID), group IDs (GID), home directories, and default shells."
+    },
+    {
+      "id": "1.92-2",
+      "section": "1.92",
+      "sectionTitle": "Linux Features and Tools Study Guide",
+      "category": "Editors & key files",
+      "name": "/etc/shadow",
+      "definition": "Secured system file accessible only by root that stores encrypted user account passwords and password aging policies."
+    },
+    {
+      "id": "1.92-3",
+      "section": "1.92",
+      "sectionTitle": "Linux Features and Tools Study Guide",
+      "category": "Editors & key files",
+      "name": "/etc/hosts",
+      "definition": "Static lookup table used to map hostnames directly to IP addresses locally before querying DNS servers."
+    },
+    {
+      "id": "1.92-4",
+      "section": "1.92",
+      "sectionTitle": "Linux Features and Tools Study Guide",
+      "category": "Editors & key files",
+      "name": "/etc/fstab",
+      "definition": "Filesystem table configuration file that defines static file system mounts, partitions, and options applied at system boot."
+    },
+    {
+      "id": "1.92-5",
+      "section": "1.92",
+      "sectionTitle": "Linux Features and Tools Study Guide",
+      "category": "Editors & key files",
+      "name": "/etc/resolv.conf",
+      "definition": "System configuration file containing local DNS server addresses and search domain preferences."
+    },
+    {
+      "id": "1.92-6",
+      "section": "1.92",
+      "sectionTitle": "Linux Features and Tools Study Guide",
+      "category": "System core & root",
+      "name": "systemd",
+      "definition": "Primary system and service manager for modern Linux OSs that initializes user space, boots the OS, and manages system processes."
+    },
+    {
+      "id": "1.92-7",
+      "section": "1.92",
+      "sectionTitle": "Linux Features and Tools Study Guide",
+      "category": "System core & root",
+      "name": "kernel",
+      "definition": "Core component of the Linux operating system that manages hardware resources, system memory, CPU cycles, and low-level device drivers."
+    },
+    {
+      "id": "1.92-8",
+      "section": "1.92",
+      "sectionTitle": "Linux Features and Tools Study Guide",
+      "category": "System core & root",
+      "name": "bootloader",
+      "definition": "Software program (such as GRUB) that loads the Linux kernel into system memory during the initial boot sequence."
+    },
+    {
+      "id": "1.92-9",
+      "section": "1.92",
+      "sectionTitle": "Linux Features and Tools Study Guide",
+      "category": "System core & root",
+      "name": "Root Account",
+      "definition": "Superuser account on a Linux system possessing unrestricted system privileges and administrative authority."
+    },
+    {
       "id": "1.10-0",
       "section": "1.10",
       "sectionTitle": "Installing Applications",
@@ -2191,5 +3595,5 @@
       "definition": "Administrative process of provisioning, purchasing, and revoking subscription licenses (e.g., Microsoft 365, Google Workspace) to managed user accounts. Admin Center → Licenses"
     }
   ],
-  "total": 265
+  "total": 433
 }

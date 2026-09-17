@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.61 Control Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&amp;family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --ink:#121820;
+    --muted:#4a5568;
+    --paper:#eef2f7;
+    --line:rgba(18,24,32,0.12);
+    --accent:#0067c0;
+    --accent-soft:#d8e8f8;
+    --good:#166534;
+    --warn:#9a3412;
+    --sky:#0e4d7b;
+    --danger:#b42318;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(0,103,192,0.14), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.08), transparent 50%),
+      linear-gradient(180deg, #e4ebf3 0%, var(--paper) 40%, #e8eef5 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#f4f8fc;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,28,56,0.25) 0%, rgba(8,28,56,0.72) 52%, rgba(8,28,56,0.94) 100%),
+      url("1.61/System (Control Panel).png") center/cover no-repeat;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:40ch;
+    color:#dceaf8;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:52ch;
+    color:#a8c0d8;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#dceaf8;
+    color:#0a3d62;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#dceaf8;
+    border:1px solid rgba(220,234,248,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(238,242,247,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+  }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.4rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body ul{ margin:0.5rem 0 0.7rem; padding-left:1.2rem; }
+  .body li{ margin-bottom:0.35rem; }
+  .body code{
+    font-family:"Cascadia Mono","Consolas",monospace;
+    font-size:0.86em;
+    background:rgba(18,24,32,0.06);
+    border-radius:5px;
+    padding:0.05rem 0.35rem;
+  }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  .note{
+    margin:0.85rem 0 0;
+    padding:0.95rem 1.1rem;
+    border-left:4px solid var(--accent);
+    background:rgba(0,103,192,0.08);
+    border-radius:0 12px 12px 0;
+    color:var(--muted);
+    font-size:0.94rem;
+  }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term{ grid-template-columns:1fr; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+
+</style>
+<style>
+    .visual.photo img,
+    .visual.logo img {
+      cursor: zoom-in;
+      transition: opacity 0.15s ease;
+    }
+    .visual.photo img:hover,
+    .visual.logo img:hover {
+      opacity: 0.92;
+    }
+    .study-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: rgba(8, 12, 20, 0.92);
+      backdrop-filter: blur(6px);
+    }
+    .study-lightbox[hidden] {
+      display: none;
+    }
+    .study-lightbox__panel {
+      position: relative;
+      max-width: min(96vw, 1200px);
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .study-lightbox__img {
+      max-width: 100%;
+      max-height: calc(92vh - 3rem);
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      background: #fff;
+    }
+    .study-lightbox__caption {
+      margin: 0;
+      color: #e2e8f0;
+      font: 500 0.95rem/1.4 "Segoe UI", system-ui, sans-serif;
+      text-align: center;
+      max-width: 60ch;
+    }
+    .study-lightbox__close {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      border: 0;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      font-size: 1.6rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .study-lightbox__close:hover {
+      background: rgba(255, 255, 255, 0.24);
+    }
+    body.study-lightbox-open {
+      overflow: hidden;
+    }
+  </style></head>
+<body class="">
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">1.61</p>
+    <h1>Control Panel</h1>
+    <p>Classic Windows applets for Internet Options, devices, programs, networking, power, File Explorer Options, and more.</p>
+    <div class="hero-cta">
+      <a href="#network-apps">Browse applets</a><a class="ghost" href="#explorer-power">Power &amp; Explorer</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#internet-options">Internet</a><a href="#devices-printers">Devices</a><a href="#programs-features">Programs</a><a href="#network-sharing">Network</a><a href="#system-cp">System</a><a href="#firewall">Firewall</a><a href="#mail">Mail</a><a href="#sound">Sound</a><a href="#user-accounts">Users</a><a href="#device-manager">Dev Mgr</a><a href="#indexing">Indexing</a><a href="#admin-tools">Admin Tools</a><a href="#file-explorer-options">Explorer</a><a href="#power-options">Power</a><a href="#ease-of-access">Ease of Access</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="network-apps">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Network, apps, and system</h2>
+        <p>Core Control Panel applets for connectivity, software, and computer identity.</p>
+      </div>
+      
+      <article class="term" id="internet-options">
+        <div class="visual photo">
+          <img src="1.61/Internet Options.png" alt="Internet Options" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Internet Options</h3>
+          <span class="aka">Control Panel › Internet Options</span>
+          <p><span style="color: rgb(14, 77, 123); font-size: 12.16px; font-weight: 600; background-color: rgba(14, 77, 123, 0.08);">Control Panel ›&nbsp; Network and Sharing Center &gt; Internet Options</span></p><p><span style="color: rgb(14, 77, 123); font-size: 12.16px; font-weight: 600; background-color: rgba(14, 77, 123, 0.08);">Windows Run dialog box &gt; inetcpl.cpl</span></p>
+          
+          
+        <p>Configure browser proxy settings, security zones, certificate management, privacy settings, and temporary internet files.<br><br></p><li><p data-path-to-node="4,0,1,0,0"><b data-path-to-node="4,0,1,0,0" data-index-in-node="0">General:</b> Delete browsing history, temporary files, cookies, cache.</p></li><li><p data-path-to-node="4,0,1,1,0"><b data-path-to-node="4,0,1,1,0" data-index-in-node="0">Security:</b> Security zones (Internet vs. Local Intranet vs. Trusted Sites) and custom security levels.<br><b data-path-to-node="3,0,0" data-index-in-node="0">Privacy:</b> Pop-up Blocker settings, location tracking permissions, and basic cookie blocking behaviors.<br><b data-path-to-node="0,3,0" data-index-in-node="0">Content:</b> Manages digital certificates, AutoComplete preferences for forms/passwords, and RSS feed subscriptions.</p></li><li><p data-path-to-node="4,0,1,2,0"><b data-path-to-node="4,0,1,2,0" data-index-in-node="0">Connections:</b> Proxy settings, LAN settings, and VPN setups.<br><b data-path-to-node="0,5,0" data-index-in-node="0">Programs:</b> Controls default browser selections, enables or disables browser add-ons and extensions, and specifies default web editors.</p></li><li><p data-path-to-node="4,0,1,3,0"><b data-path-to-node="4,0,1,3,0" data-index-in-node="0">Advanced:</b> Resetting Internet Explorer/system web settings back to defaults, enabling/disabling TLS versions.<br></p></li></div>
+      </article>
+      <article class="term" id="devices-printers">
+        <div class="visual photo">
+          <img src="1.61/Devices and Printers.png" alt="Devices and Printers" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Devices and Printers</h3>
+          <span class="aka">Control Panel › Devices and Printers</span>
+          <p>Add peripheral devices, view connected hardware, set default printer, manage print queues, and configure printer properties.<br><br>Allows users to add/remove wired and wireless devices<br>Provides a simplified view of all connected devices<br>Allows users to troubleshoot a device that is not working properly</p>
+          
+          
+        </div>
+      </article>
+      <article class="term" id="programs-features">
+        <div class="visual photo">
+          <img src="1.61/Program and Features.png" alt="Programs and Features" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Programs and Features</h3>
+          <span class="aka">Control Panel › Programs and Features</span>
+          <p>Uninstall desktop applications, <br>view installed updates, <br>and turn optional Windows features on or off.</p>
+          
+          
+        </div>
+      </article>
+      <article class="term" id="network-sharing">
+        <div class="visual photo">
+          <img src="1.61/Network and Sharing Center.png" alt="Network and Sharing Center" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Network and Sharing Center</h3>
+          <span class="aka">Control Panel › Network and Sharing Center</span><div>
+          <p>View network topology, map network drives, change adapter IP or DNS settings, set network profiles, and configure advanced sharing.<br><br></p><li><p data-path-to-node="1,0,0"><b data-path-to-node="1,0,0" data-index-in-node="0">View active networks</b></p></li><li><p data-path-to-node="1,1,0"><b data-path-to-node="1,1,0" data-index-in-node="0">Set up a new connection or network</b></p></li><li><p data-path-to-node="1,2,0"><b data-path-to-node="1,2,0" data-index-in-node="0">Troubleshoot network problems</b></p></li>
+          
+          
+        <p><br></p><p>Provide Access To:<br>Network adapter settings<br>Advanced sharing settings<br>Media streaming options</p></div></div>
+      </article>
+      <article class="term" id="system-cp">
+        <div class="visual photo">
+          <img src="1.61/System (Control Panel).png" alt="System (Control Panel)" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>System (Control Panel)</h3>
+          <span class="aka">Control Panel › System</span><div><span class="aka">Windows Start &gt; System</span></div><div><span class="aka">Control Panel &gt; System and Security &gt; System</span></div><div><span class="aka">Windows Start &gt; Settings &gt; System &gt; About page<br></span>
+          <p>View basic system specs, rename computer, join Active Directory domain or workgroup, and access System Protection restore points.</p>
+          
+          
+        </div></div>
+      </article>
+      <article class="term" id="firewall">
+        <div class="visual photo">
+          <img src="1.61/Windows Defender Firewall.png" alt="Windows Defender Firewall" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Windows Defender Firewall</h3>
+          <span class="aka">Control Panel › Windows Defender Firewall</span>
+          <p>Configure inbound and outbound traffic rules, allow applications through firewall, enable profiles, and set logging options.</p>
+          
+          
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="accounts-hardware">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Accounts, hardware, and tools</h2>
+        <p>Mail, sound, users, Device Manager, indexing, and Administrative Tools.</p>
+      </div>
+      
+      <article class="term" id="mail">
+        <div class="visual photo">
+          <img src="1.61/Mail.png" alt="Mail" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Mail</h3>
+          <span class="aka">Control Panel › Mail</span>
+          <p>Set up local email client profiles, configure Exchange, IMAP, or POP3 accounts, and manage data files like PST and OST.</p>
+          
+          
+        </div>
+      </article>
+      <article class="term" id="sound">
+        <div class="visual photo">
+          <img src="1.61/Sound.png" alt="Sound" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Sound</h3>
+          <span class="aka">Control Panel › Sound</span>
+          <p>Select default playback and recording audio devices, configure speaker properties, adjust volume, and manage auto-muting.</p>
+          
+          
+        </div>
+      </article>
+      <article class="term" id="user-accounts">
+        <div class="visual photo">
+          <img src="1.61/User Accounts.png" alt="User Accounts" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>User Accounts</h3>
+          <span class="aka">Control Panel › User Accounts</span>
+          <p>Manage local user profiles, change account types, manage saved Windows credentials, and adjust User Account Control settings.</p>
+          
+          
+        </div>
+      </article>
+      <article class="term" id="device-manager">
+        <div class="visual photo">
+          <img src="1.61/Device Manager.png" alt="Device Manager" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Device Manager</h3>
+          <span class="aka">Control Panel › Device Manager</span>
+          <p>View and troubleshoot hardware, update, roll back, or disable drivers, and resolve hardware resource conflicts.</p>
+          
+          
+        </div>
+      </article>
+      <article class="term" id="indexing">
+        <div class="visual photo">
+          <img src="1.61/Indexing Options.png" alt="Indexing Options" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Indexing Options</h3>
+          <span class="aka">Control Panel › Indexing Options</span>
+          <p>Modify search indexing locations and file types to rebuild search catalogs and accelerate File Explorer search.</p>
+          
+          
+        </div>
+      </article>
+      <article class="term" id="admin-tools">
+        <div class="visual photo">
+          <img src="1.61/Administrative Tools.png" alt="Administrative Tools" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Administrative Tools</h3>
+          <span class="aka">Control Panel › Administrative Tools</span>
+          <p>Access core management consoles including Computer Management, Event Viewer, Services, Local Security Policy, and Task Scheduler.</p>
+          <ul class="tags"><li>Computer Management</li><li>Event Viewer</li><li>Services</li><li>Local Security Policy</li><li>Task Scheduler</li></ul>
+          
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="explorer-power">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>File Explorer Options and Power Options</h2>
+        <p>Folder visibility settings and energy / sleep behaviors.</p>
+      </div>
+      
+      <article class="term" id="file-explorer-options">
+        <div class="visual photo">
+          <img src="1.61/File Explorer Options.png" alt="File Explorer Options" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>File Explorer Options</h3>
+          <span class="aka">Control Panel › File Explorer Options</span><div><p>Configure global settings for file browsing, folder views, search behavior, and hidden file visibility.<br></p>
+          
+          
+        </div></div>
+      </article>
+      <article class="term" id="feo-general">
+        <div class="visual photo">
+          <img src="1.61/File Explorer Options General.png" alt="File Explorer Options — General" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>File Explorer Options — General</h3>
+          <span class="aka">File Explorer Options › General tab</span>
+          <p>Set default opening location like This PC or Quick Access, clear history, and manage folder opening behavior.</p>
+          
+          
+        </div>
+      </article>
+      <article class="term" id="feo-hide-ext">
+        <div class="visual photo">
+          <img src="1.61/File Explorer Options Hide Extensions.png" alt="File Explorer Options — Hide extensions" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>File Explorer Options — Hide extensions</h3>
+          <span class="aka">File Explorer Options › View tab</span>
+          <p>Uncheck "Hide extensions for known file types" to display full file extensions for identifying malware files.</p>
+          
+          
+        </div>
+      </article>
+      <article class="term" id="feo-hidden">
+        <div class="visual photo">
+          <img src="1.61/File Explorer Options  View hidden files.png" alt="File Explorer Options — View hidden files" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>File Explorer Options — View hidden files</h3>
+          <span class="aka">File Explorer Options › View tab</span><div><span style="color: rgb(14, 77, 123); font-size: 12.16px; font-weight: 600; background-color: rgba(14, 77, 123, 0.08);">Windows Logo + E &gt; View &gt; Hidden Items</span><font color="#0e4d7b"><span style="font-size: 12.16px;"><b><br></b></span></font><div><div><div>
+          <p>Select "Show hidden files, folders, and drives" under the View tab to reveal system or hidden items.</p>
+          
+          
+        </div></div></div></div></div>
+      </article>
+      <article class="term" id="power-options">
+        <div class="visual photo">
+          <img src="1.61/Power Options.png" alt="Power Options" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Power Options</h3>
+          <span class="aka">Control Panel › Power Options</span>
+          <p>Manage computer energy usage, sleep behaviors, power plan profiles, and hardware button actions.</p>
+          <ul class="tags"><li>Balanced</li><li>Power Saver</li><li>High Performance</li></ul>
+          
+        </div>
+      </article>
+      <article class="term" id="power-lid-fast">
+        <div class="visual photo">
+          <img src="1.61/Power Closing the Lid &amp; Turn on Fast Startup.png" alt="Lid actions and Fast Startup" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Lid actions and Fast Startup</h3>
+          <span class="aka">Power Options › System Settings</span>
+          <p>Choose what closing the lid does — Do Nothing, Sleep, Hibernate, or Shut Down.</p><p>Turn on fast startup: a hybrid boot state that saves the Windows kernel session state to disk during shutdown to reduce boot times.<br><br></p><p class="MsoNormal"><b>Hibernate:<o:p></o:p></b></p><p>Saves the system state<br>Resumes full system operation more slowly than it does when waking from sleep mode<br>Turns the computer off after saving the system state to disk<br><br><b>Sleep Mode:</b><br></p><li><p class="MsoNormal">Requires a small
+amount of power to maintain system memory<o:p></o:p></p><p class="MsoNormal">Resumes full system
+operation faster than it does when recovering from hibernation mode<o:p></o:p></p><p data-path-to-node="1,0,0">
+
+
+
+</p><p class="MsoNormal">Keeps the system
+state<o:p></o:p></p></li><p><br></p>
+          
+          
+        </div>
+      </article>
+      <article class="term" id="power-sleep-usb">
+        <div class="visual photo">
+          <img src="1.61/USB Selective Suspend &amp; Sleep States.png" alt="Sleep states and USB selective suspend" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Sleep states and USB selective suspend</h3>
+          <span class="aka">Power Options › Sleep States / Advanced Settings</span>
+          <p>Sleep/suspend keeps RAM powered while placing CPU and components into low-power states for fast instant-on resumption.</p><p>Standby is a legacy low-power state that preserves the system session in memory while powering down non-essential hardware.</p><p>Hibernate saves active system memory to hiberfil.sys and powers off the system for long downtime.</p><p>USB selective suspend suspends power to individual USB ports when idle without affecting other USB devices.</p>
+          
+          
+        </div>
+      </article>
+      <article class="term" id="ease-of-access">
+        <div class="visual photo">
+          <img src="1.61/Ease of Access.png" alt="Ease of Access" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Ease of Access</h3>
+          <span class="aka">Control Panel › Ease of Access</span>
+          <p>Configure accessibility features including Display scale, Narrator, Magnifier, High Contrast, Sticky Keys, and Mouse pointer size.<br><br>Aimed at users with disabilities</p>
+          
+          
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    Images in the <code>1.61</code> folder. Study notes for Core 2 objective 1.6 — Control Panel applets.
+    Related interactive lab: <a href="1.6 Configure Microsoft Windows Settings.html">1.6 Configure Microsoft Windows Settings</a>.
+  </div>
+</footer>
+
+<script src="study-lightbox.js"></script>
+<script src="study-editor.js"></script>
+
+
+</body></html>

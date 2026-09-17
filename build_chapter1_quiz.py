@@ -13,11 +13,21 @@ CHAPTER1 = [
     ("1.2", "1.2 OS Installation and Boot Methods.html", "OS Installation and Boot Methods"),
     ("1.3", "1.3 Microsoft Windows Editions.html", "Microsoft Windows Editions"),
     ("1.4", "1.4 Microsoft Windows Operating System Features and Tools.html", "Windows Features and Tools"),
+    ("1.41", "1.41 Task Manager.html", "Task Manager"),
+    ("1.42", "1.42 MMC Snap-ins.html", "MMC Snap-ins"),
+    ("1.43", "1.43 Windows Additional Admin Tools.html", "Windows Additional Admin Tools"),
     ("1.5", "1.5 Microsoft Command-Line Tools.html", "Command-Line Tools"),
+    ("1.51", "1.51 Additional MS Commands.html", "Additional MS Commands"),
     ("1.6", "1.6 Configure Microsoft Windows Settings.html", "Configure Windows Settings"),
+    ("1.61", "1.61 Control Panel.html", "Control Panel"),
+    ("1.62", "1.62 Windows Settings.html", "Windows Settings"),
     ("1.7", "1.7 Configure Microsoft Windows Networking.html", "Windows Networking"),
+    ("1.71", "1.71 Windows Networking.html", "Windows Networking Study Guide"),
     ("1.8", "1.8 Common Features and Tools of the macOS Desktop Operating System.html", "macOS Features and Tools"),
+    ("1.81", "1.81 macOS Features and Tools.html", "macOS Features and Tools Study Guide"),
     ("1.9", "1.9 Linux Features and Tools.html", "Linux Features and Tools"),
+    ("1.91", "1.91 Linux Commands.html", "Linux Commands"),
+    ("1.92", "1.92 Linux Features and Tools.html", "Linux Features and Tools Study Guide"),
     ("1.10", "1.10 Installing Applications.html", "Installing Applications"),
     ("1.11", "1.11 Configure Cloud-Based Productivity Tools.html", "Cloud Productivity Tools"),
 ]
@@ -261,7 +271,7 @@ def main():
     for section_id, filename, title in CHAPTER1:
         path = ROOT / filename
         html = path.read_text(encoding="utf-8")
-        if section_id in ("1.1", "1.2", "1.3"):
+        if section_id in ("1.1", "1.2", "1.3", "1.41", "1.42", "1.43", "1.51", "1.61", "1.62", "1.71", "1.81", "1.91", "1.92"):
             terms = extract_study_guide_terms(html)
         else:
             terms = extract_simulator_terms(html, section_id)

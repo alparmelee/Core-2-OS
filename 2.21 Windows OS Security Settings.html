@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2.21 Windows OS Security Settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&amp;family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141820;
+    --muted:#4b5563;
+    --paper:#f0f2f5;
+    --line:rgba(20,24,32,0.12);
+    --accent:#b42318;
+    --accent-soft:#fde8e6;
+    --sky:#0e4d7b;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(180,35,24,0.12), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.07), transparent 50%),
+      linear-gradient(180deg, #e6e9ef 0%, var(--paper) 40%, #eceef2 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+  .hero{
+    position:relative; min-height:100vh; display:flex; align-items:flex-end;
+    color:#faf5f4; overflow:hidden;
+  }
+  .hero::before{
+    content:""; position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(20,12,12,0.3) 0%, rgba(20,12,12,0.72) 52%, rgba(20,12,12,0.94) 100%),
+      url("2.21/Defender Antivirus.png") center/cover no-repeat;
+  }
+  .hero-inner{ position:relative; z-index:1; width:min(1080px, calc(100% - 2.4rem)); margin:0 auto 4.2rem; }
+  .brand{ font-family:"Fraunces",serif; font-size:clamp(3.4rem, 10vw, 6.6rem); font-weight:700; line-height:0.92; letter-spacing:-0.03em; margin:0 0 0.85rem; }
+  .hero h1{ margin:0 0 0.65rem; font-size:clamp(1.05rem, 2.1vw, 1.35rem); font-weight:500; max-width:42ch; color:#f5e8e6; }
+  .hero > .hero-inner > p{ margin:0 0 1.5rem; max-width:56ch; color:#c9b4b0; }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{ text-decoration:none; font-weight:600; font-size:0.92rem; padding:0.7rem 1.15rem; border-radius:999px; background:#fde8e6; color:#7f1d1d; }
+  .hero-cta a.ghost{ background:transparent; color:#f5e8e6; border:1px solid rgba(245,232,230,0.4); }
+  .toc{ position:sticky; top:0; z-index:30; backdrop-filter:blur(12px); background:rgba(240,242,245,0.92); border-bottom:1px solid var(--line); }
+  .toc .wrap{ display:flex; gap:0.3rem; overflow-x:auto; padding:0.7rem 0; scrollbar-width:thin; }
+  .toc a{ flex:0 0 auto; text-decoration:none; color:var(--muted); font-size:0.78rem; font-weight:600; padding:0.42rem 0.75rem; border-radius:999px; }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{ display:inline-block; font-size:0.72rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--accent); margin-bottom:0.5rem; }
+  .section-head h2{ font-family:"Fraunces",serif; font-size:clamp(1.75rem, 3.4vw, 2.5rem); margin:0 0 0.5rem; letter-spacing:-0.02em; line-height:1.12; }
+  .section-head p{ margin:0; color:var(--muted); }
+  .term{ display:grid; grid-template-columns:minmax(240px, 320px) 1fr; gap:1.35rem 1.7rem; align-items:start; padding:1.45rem 0; border-top:1px solid var(--line); }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{ border:1px solid var(--line); border-radius:18px; min-height:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.45rem; overflow:hidden; background:linear-gradient(160deg, #fff, var(--accent-soft)); padding:1.1rem; text-align:center; }
+  .visual.photo{ padding:0; width:100%; max-width:none; aspect-ratio:16 / 9; background:#0a0a0a; overflow:hidden; }
+  .visual.photo img{ width:100%; height:100%; object-fit:contain; display:block; }
+  .visual .glyph{ font-size:1.05rem; font-weight:700; color:var(--accent); word-break:break-word; line-height:1.3; }
+  .visual .caption{ font-size:0.68rem; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:var(--sky); }
+  .body h3{ font-family:"Fraunces",serif; font-size:1.35rem; margin:0 0 0.55rem; letter-spacing:-0.01em; }
+  .aka{ display:inline-block; font-size:0.76rem; font-weight:600; color:var(--sky); background:rgba(14,77,123,0.08); padding:0.18rem 0.55rem; border-radius:999px; margin:0 0 0.65rem; }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body code, footer code{ font-family:"Cascadia Mono","Consolas",monospace; font-size:0.86em; background:rgba(18,24,32,0.06); border-radius:5px; padding:0.05rem 0.35rem; }
+  .demo{ margin:0.85rem 0 0; padding:0.9rem 1.05rem; border-left:4px solid var(--accent); background:rgba(180,35,24,0.08); border-radius:0 12px 12px 0; color:var(--muted); font-size:0.9rem; }
+  footer{ padding:2.4rem 0 3.2rem; color:var(--muted); font-size:0.84rem; }
+  footer .wrap{ border-top:1px solid var(--line); padding-top:1.2rem; }
+  @media (max-width:780px){ .term{ grid-template-columns:1fr; } .hero-inner{ margin-bottom:3rem; } }
+</style>
+<style>
+    .visual.photo img,
+    .visual.logo img {
+      cursor: zoom-in;
+      transition: opacity 0.15s ease;
+    }
+    .visual.photo img:hover,
+    .visual.logo img:hover {
+      opacity: 0.92;
+    }
+    .study-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: rgba(8, 12, 20, 0.92);
+      backdrop-filter: blur(6px);
+    }
+    .study-lightbox[hidden] {
+      display: none;
+    }
+    .study-lightbox__panel {
+      position: relative;
+      max-width: min(96vw, 1200px);
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .study-lightbox__img {
+      max-width: 100%;
+      max-height: calc(92vh - 3rem);
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      background: #fff;
+    }
+    .study-lightbox__caption {
+      margin: 0;
+      color: #e2e8f0;
+      font: 500 0.95rem/1.4 "Segoe UI", system-ui, sans-serif;
+      text-align: center;
+      max-width: 60ch;
+    }
+    .study-lightbox__close {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      border: 0;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      font-size: 1.6rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .study-lightbox__close:hover {
+      background: rgba(255, 255, 255, 0.24);
+    }
+    body.study-lightbox-open {
+      overflow: hidden;
+    }
+  </style><style>
+    .visual.photo img,
+    .visual.logo img {
+      cursor: zoom-in;
+      transition: opacity 0.15s ease;
+    }
+    .visual.photo img:hover,
+    .visual.logo img:hover {
+      opacity: 0.92;
+    }
+    .study-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: rgba(8, 12, 20, 0.92);
+      backdrop-filter: blur(6px);
+    }
+    .study-lightbox[hidden] {
+      display: none;
+    }
+    .study-lightbox__panel {
+      position: relative;
+      max-width: min(96vw, 1200px);
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .study-lightbox__img {
+      max-width: 100%;
+      max-height: calc(92vh - 3rem);
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      background: #fff;
+    }
+    .study-lightbox__caption {
+      margin: 0;
+      color: #e2e8f0;
+      font: 500 0.95rem/1.4 "Segoe UI", system-ui, sans-serif;
+      text-align: center;
+      max-width: 60ch;
+    }
+    .study-lightbox__close {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      border: 0;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      font-size: 1.6rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .study-lightbox__close:hover {
+      background: rgba(255, 255, 255, 0.24);
+    }
+    body.study-lightbox-open {
+      overflow: hidden;
+    }
+  </style><style>
+    .visual.photo img,
+    .visual.logo img {
+      cursor: zoom-in;
+      transition: opacity 0.15s ease;
+    }
+    .visual.photo img:hover,
+    .visual.logo img:hover {
+      opacity: 0.92;
+    }
+    .study-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: rgba(8, 12, 20, 0.92);
+      backdrop-filter: blur(6px);
+    }
+    .study-lightbox[hidden] {
+      display: none;
+    }
+    .study-lightbox__panel {
+      position: relative;
+      max-width: min(96vw, 1200px);
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .study-lightbox__img {
+      max-width: 100%;
+      max-height: calc(92vh - 3rem);
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      background: #fff;
+    }
+    .study-lightbox__caption {
+      margin: 0;
+      color: #e2e8f0;
+      font: 500 0.95rem/1.4 "Segoe UI", system-ui, sans-serif;
+      text-align: center;
+      max-width: 60ch;
+    }
+    .study-lightbox__close {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      border: 0;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      font-size: 1.6rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .study-lightbox__close:hover {
+      background: rgba(255, 255, 255, 0.24);
+    }
+    body.study-lightbox-open {
+      overflow: hidden;
+    }
+  </style></head>
+<body class="">
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">2.21</p>
+    <h1>Windows OS Security Settings</h1>
+    <p>Defender, Firewall, accounts, sign-in, NTFS/share permissions, BitLocker/EFS, and Active Directory — study notes for Core 2 objective 2.2.</p>
+    <div class="hero-cta">
+      <a href="#defender">Start studying</a>
+      <a class="ghost" href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">Open 2.2 interactive lab</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap"><a href="#defender">Defender</a><a href="#firewall">Firewall</a><a href="#users">Users</a><a href="#signin">Sign-in</a><a href="#perms">Permissions</a><a href="#encryption">Encryption</a><a href="#ad">Active Directory</a></div>
+</nav>
+
+<main>
+  <section id="defender">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Windows Defender Antivirus</h2>
+        <p>Built-in antivirus: real-time protection and definition updates.</p>
+      </div>
+      <article class="term" id="defender-overview">
+        <div class="visual photo">
+          <img src="2.21/Defender Antivirus.png" alt="Defender Antivirus" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Defender Antivirus</h3>
+          <span class="aka">Windows Security → Virus &amp; threat protection</span>
+          <p>The built-in antivirus for Windows — no additional third-party product is required. It lives inside the Windows Security app under Virus &amp; threat protection. The exact label may not read "Defender Antivirus"; the name has changed over time (Windows Defender → Windows Defender Antivirus → Microsoft Defender Antivirus).</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Defender Antivirus</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="defender-toggle">
+        <div class="visual photo">
+          <img src="2.21/Antivirus Activate deactivate.png" alt="Activate/deactivate" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Activate/deactivate</h3>
+          <span class="aka">Virus &amp; threat protection → Manage settings → Real-time protection</span>
+          <p>Don't disable your security protection except for temporary troubleshooting — it increases risk, so make sure you know what you're doing. Defender Antivirus operates in real time. Path: Windows Security app → Virus &amp; threat protection settings → Manage settings → Real-time protection.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Activate/deactivate</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="defender-updates">
+        <div class="visual photo">
+          <img src="2.21/Update definitions.png" alt="Update definitions" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Update definitions</h3>
+          <span class="aka">Virus &amp; threat protection → Protection updates → Check for updates</span>
+          <p>Antivirus is only as good as its latest signatures, so staying up to date matters. Go to Virus &amp; threat protection → Protection updates, and click "Check for updates." Automatic updates are normally configured by default.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Update definitions</strong> in the topic list.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="firewall">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Windows Firewall</h2>
+        <p>On/off by profile, port rules, and allowed apps.</p>
+      </div>
+      <article class="term" id="firewall-overview">
+        <div class="visual photo">
+          <img src="2.21/Firewall.png" alt="Firewall" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Firewall</h3>
+          <span class="aka">firewall.cpl  ·  Windows Security → Firewall &amp; network protection</span>
+          <p>Windows Firewall monitors inbound and outbound network traffic and blocks anything that doesn't match an allowed rule, forming the first line of defense between this PC and the network.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Firewall</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="firewall-toggle">
+        <div class="visual photo">
+          <img src="2.21/Firewall Activate deactivate.png" alt="Activate/deactivate" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Activate/deactivate</h3>
+          <span class="aka">Firewall &amp; network protection → each network profile</span>
+          <p>Activating or deactivating a firewall toggles its ability to monitor traffic — turning it off removes protection and leaves the system vulnerable to unauthorized network connections.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Activate/deactivate</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="firewall-ports">
+        <div class="visual photo">
+          <img src="2.21/Port security.png" alt="Port security" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Port security</h3>
+          <span class="aka">firewall.cpl → Advanced settings → Inbound rules</span>
+          <p>Port security controls network traffic by selectively opening or closing specific communication ports, to block unauthorized entry and restrict unnecessary network protocols.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Port security</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="firewall-appsec">
+        <div class="visual photo">
+          <img src="2.21/Application security.png" alt="Application security" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Application security</h3>
+          <span class="aka">firewall.cpl → Allow an app or feature</span>
+          <p>Application security allows or blocks specific programs from sending or receiving data across the network — regardless of which port they use.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Application security</strong> in the topic list.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="users">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Users &amp; Groups</h2>
+        <p>Local vs Microsoft accounts and Windows account types.</p>
+      </div>
+      <article class="term" id="ug-overview">
+        <div class="visual photo">
+          <img src="2.21/User and groups.png" alt="User and groups" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>User and groups</h3>
+          <span class="aka">lusrmgr.msc  ·  Settings → Accounts</span>
+          <p>Windows controls what a person can do through their account type and group memberships — from a fully locked-down Guest to an unrestricted Administrator.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>User and groups</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="ug-localms">
+        <div class="visual photo">
+          <img src="2.21/Local vs. Microsoft account.png" alt="Local vs. Microsoft account" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Local vs. Microsoft account</h3>
+          <span class="aka">Settings → Accounts</span>
+          <p>A <b>local account</b> stores credentials offline on a single PC and only grants access to that device.&nbsp;</p><p>A <b>Microsoft account</b> connects your sign-in to cloud services, syncing settings, files, and credentials across multiple devices. SSO (Single Sign On).</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Local vs. Microsoft account</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="ug-standard">
+        <div class="visual photo">
+          <img src="2.21/Standard account.png" alt="Standard account" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Standard account</h3>
+          <span class="aka">lusrmgr.msc → Users / Groups</span>
+          <p>A Standard account can run applications and change personal settings, but is blocked from installing system-wide software or modifying critical security settings without administrator approval.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Standard account</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="ug-admin">
+        <div class="visual photo">
+          <img src="2.21/Administrator.png" alt="Administrator" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Administrator</h3>
+          <span class="aka">lusrmgr.msc → Administrators group</span>
+          <p>An Administrator account has full, unrestricted control over the operating system — installing software, changing system configuration, and managing permissions for every other user.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Administrator</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="ug-guest">
+        <div class="visual photo">
+          <img src="2.21/Guest user.png" alt="Guest user" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Guest user</h3>
+          <span class="aka">lusrmgr.msc → Guests group</span>
+          <p>A Guest account is a restricted, temporary account for casual access. It prevents installing software, changing system settings, or accessing other users' private files.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Guest user</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="ug-poweruser">
+        <div class="visual photo">
+          <img src="2.21/Power user.png" alt="Power user" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Power user</h3>
+          <span class="aka">lusrmgr.msc → Power Users (legacy)</span>
+          <p>Power User is a legacy Windows group with elevated permissions — such as installing legacy applications and running some administrative tools — without full administrator control over the system.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Power user</strong> in the topic list.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="signin">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part D</span>
+        <h2>Sign-in Options</h2>
+        <p>Password, PIN, biometrics, SSO, and Windows Hello.</p>
+      </div>
+      <article class="term" id="signin-overview">
+        <div class="visual photo">
+          <img src="2.21/Log-in OS options.png" alt="Log-in OS options" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Log-in OS options</h3>
+          <span class="aka">Settings → Accounts → Sign-in options</span>
+          <p>Windows supports several ways to prove who you are before letting you in — from a classic password to biometrics and passwordless hardware-backed sign-in.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Log-in OS options</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="signin-password">
+        <div class="visual photo">
+          <img src="2.21/Username and password, PIN, Fingerprint, Facial, Windows Hello.png" alt="Username and password" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Username and password</h3>
+          <span class="aka">Settings → Accounts → Sign-in options → Password</span>
+          <p>The traditional authentication method: type a secret string of characters associated with your account name to verify your identity.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Username and password</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="signin-pin">
+        <div class="visual photo">
+          <img src="2.21/Username and password, PIN, Fingerprint, Facial, Windows Hello.png" alt="Personal identification number (PIN)" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Personal identification number (PIN)</h3>
+          <span class="aka">Settings → Accounts → Sign-in options → PIN</span>
+          <p>A short, device-bound numerical code tied specifically to your physical machine — it allows fast login without ever transmitting your main account password over the network.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Personal identification number (PIN)</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="signin-fingerprint">
+        <div class="visual photo">
+          <img src="2.21/Username and password, PIN, Fingerprint, Facial, Windows Hello.png" alt="Fingerprint" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Fingerprint</h3>
+          <span class="aka">Windows Hello fingerprint</span>
+          <p>A biometric authentication feature that scans the unique ridges of your finger to quickly verify your identity and unlock your device.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Fingerprint</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="signin-face">
+        <div class="visual photo">
+          <img src="2.21/Username and password, PIN, Fingerprint, Facial, Windows Hello.png" alt="Facial recognition" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Facial recognition</h3>
+          <span class="aka">Windows Hello face</span>
+          <p>A biometric security system that scans your face using specialized infrared or 3D cameras to instantly confirm your identity and grant access.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Facial recognition</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="signin-sso">
+        <div class="visual photo">
+          <img src="2.21/SSO.png" alt="SSO" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>SSO</h3>
+          <span class="aka">Single sign-on</span>
+          <p>Single sign-on lets you log in once with a single set of credentials and automatically gain access to multiple related applications and websites — no need to type your password again for each one.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>SSO</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="signin-hello">
+        <div class="visual photo">
+          <img src="2.21/Username and password, PIN, Fingerprint, Facial, Windows Hello.png" alt="Passwordless/Windows Hello" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Passwordless/Windows Hello</h3>
+          <span class="aka">Windows Hello / passwordless</span>
+          <p>Windows Hello enables passwordless sign-in by replacing text passwords with secure biometrics (facial recognition or fingerprint) or a device-bound PIN, backed by the computer's hardware security chip.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Passwordless/Windows Hello</strong> in the topic list.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="perms">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part E</span>
+        <h2>File &amp; Folder Permissions</h2>
+        <p>NTFS vs share, attributes, inheritance, Run as admin, and UAC.</p>
+      </div>
+      <article class="term" id="perm-ntfsshare">
+        <div class="visual photo">
+          <img src="2.21/NTFS vs. share permissions.png" alt="NTFS vs. share permissions" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>NTFS vs. share permissions</h3>
+          <span class="aka">Share tab vs Security (NTFS) tab</span>
+          <p><b>Share </b>permissions act like a guard at the front gate, controlling who gets in through the network. <br>- Exclusively to network users. <br>- Set only at the folder level.<br><br><b>NTFS</b> permissions act like individual lockboxes inside the house, controlling access to specific files and subfolders. If either one denies you, you can't get in.<br>- Apply to both network and local users<br>-Can be applied at the folder or file level.<br><br></p><p>A Windows resource with conflicting NTFS and share permissions will assume The least restrictive permission.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>NTFS vs. share permissions</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="perm-attributes">
+        <div class="visual photo">
+          <img src="2.21/File and folder attributes.png" alt="File and folder attributes" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>File and folder attributes</h3>
+          <span class="aka">File → Properties → Attributes</span>
+          <p>File and folder attributes are metadata flags stored by the file system that define specific operating behaviors and access characteristics — such as read-only, hidden, archived, or encrypted.<br><br></p><h3 data-path-to-node="9">Key Takeaways for Practice Exams</h3><ul data-path-to-node="10"><li><p data-path-to-node="10,0,0"><b data-path-to-node="10,0,0" data-index-in-node="0">Local Access:</b> Ignore Share permissions entirely; take the NTFS permission as-is.</p></li><li><p data-path-to-node="10,1,0"><b data-path-to-node="10,1,0" data-index-in-node="0">Remote Access:</b> Compare Share vs. NTFS and pick whichever one is more limiting:</p><ul data-path-to-node="10,1,1"><li><p data-path-to-node="10,1,1,0,0"><b data-path-to-node="10,1,1,0,0" data-index-in-node="0">Share (Read)</b> + <b data-path-to-node="10,1,1,0,0" data-index-in-node="15">NTFS (Modify)</b> = <b data-path-to-node="10,1,1,0,0" data-index-in-node="31">Read</b> (Read is more restrictive than Modify)</p></li><li><p data-path-to-node="10,1,1,1,0"><b data-path-to-node="10,1,1,1,0" data-index-in-node="0">Share (Full Control)</b> + <b data-path-to-node="10,1,1,1,0" data-index-in-node="23">NTFS (Read)</b> = <b data-path-to-node="10,1,1,1,0" data-index-in-node="37">Read</b> (Read is more restrictive than Full Control)</p></li></ul></li></ul>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>File and folder attributes</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="perm-inheritance">
+        <div class="visual photo">
+          <img src="2.21/Inheritance.png" alt="Inheritance" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Inheritance</h3>
+          <span class="aka">Security tab → Advanced → Inheritance</span>
+          <p>Permission inheritance is a mechanism where files and subfolders automatically receive (inherit) the access permissions of their parent folder.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Inheritance</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="perm-runas">
+        <div class="visual photo">
+          <img src="2.21/Run as administrator vs. standard user.png" alt="Run as administrator vs. standard user" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Run as administrator vs. standard user</h3>
+          <span class="aka">Right-click → Run as administrator</span>
+          <p>Running as an administrator grants full, unrestricted access to modify system files and settings. A standard user account operates with restricted permissions to prevent unauthorized system-wide changes and protect against malware.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Run as administrator vs. standard user</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="perm-uac">
+        <div class="visual photo">
+          <img src="2.21/User Account Control (UAC).png" alt="User Account Control (UAC)" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>User Account Control (UAC)</h3>
+          <span class="aka">UAC prompt / User Account Control settings</span>
+          <p>A Windows security feature that prevents unauthorized system changes by asking for your permission — or an administrator password — before running programs or making settings changes.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>User Account Control (UAC)</strong> in the topic list.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="encryption">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part F</span>
+        <h2>Encryption</h2>
+        <p>BitLocker, BitLocker To Go, and EFS.</p>
+      </div>
+      <article class="term" id="enc-bitlocker">
+        <div class="visual photo">
+          <img src="2.21/BitLocker.png" alt="BitLocker" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>BitLocker</h3>
+          <span class="aka">BitLocker Drive Encryption (not on Home)</span>
+          <p>BitLocker encrypts an entire volume, protecting all of your data including the OS. It's supported on all Windows editions except Home. If you lose your laptop, it doesn't matter without the password — data stays protected even if the physical drive is moved to another computer.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>BitLocker</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="enc-bitlockertogo">
+        <div class="visual photo">
+          <img src="2.21/BitLocker-To-Go.png" alt="BitLocker-To-Go" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>BitLocker-To-Go</h3>
+          <span class="aka">BitLocker To Go on removable drives</span>
+          <p>The same BitLocker protection, applied to encrypt removable USB flash drives.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>BitLocker-To-Go</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="enc-efs">
+        <div class="visual photo">
+          <img src="2.21/Encrypting File System (EFS).png" alt="Encrypting File System (EFS)" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Encrypting File System (EFS)</h3>
+          <span class="aka">File → Properties → Advanced → Encrypt contents (NTFS, not Home)</span>
+          <p>EFS encrypts at the file-system level and requires NTFS. It's supported on all Windows editions except Home. It uses your username and password to derive the encryption key — so an administrator password reset will make EFS-encrypted files inaccessible.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Encrypting File System (EFS)</strong> in the topic list.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="ad">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part G</span>
+        <h2>Active Directory</h2>
+        <p>Domain join, logon scripts, OUs, home folders, GPO, groups, and folder redirection.</p>
+      </div>
+      <article class="term" id="ad-overview">
+        <div class="visual photo">
+          <img src="2.21/Active Directory.png" alt="Active Directory" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Active Directory</h3>
+          <span class="aka">Active Directory Users and Computers</span>
+          <p>Active Directory is a central directory service that lets an organization manage user accounts, computers, and policy from one place, instead of configuring every machine by hand.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Active Directory</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="ad-join">
+        <div class="visual photo">
+          <img src="2.21/Joining domain.png" alt="Joining domain" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Joining domain</h3>
+          <span class="aka">sysdm.cpl → Computer Name → Change… → Domain</span>
+          <p>Registering a local computer with a central Active Directory domain controller so it can be managed globally and allow users to sign in with domain credentials.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Joining domain</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="ad-loginscript">
+        <div class="visual photo">
+          <img src="2.21/Assigning log-in script.png" alt="Assigning log-in script" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Assigning log-in script</h3>
+          <span class="aka">AD user → Profile → Logon script</span>
+          <p>Specifying an executable file or script that runs automatically whenever a user signs into the domain, to automate tasks like mapping drives or setting environment variables.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Assigning log-in script</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="ad-moveou">
+        <div class="visual photo">
+          <img src="2.21/Moving objects within organizational units.png" alt="Moving objects within organizational units" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Moving objects within organizational units</h3>
+          <span class="aka">Active Directory and Computers → drag object to another OU</span>
+          <p>Relocating user accounts, computers, or groups between organizational units (OUs) to reorganize administrative structure — and change which group policies automatically apply to them.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Moving objects within organizational units</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="ad-homefolder">
+        <div class="visual photo">
+          <img src="2.21/Assigning home folders.png" alt="Assigning home folders" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Assigning home folders</h3>
+          <span class="aka">AD user → Profile → Home folder</span>
+          <p>Configuring a dedicated private network storage path in a user's account properties, which automatically mounts as a personal drive on logon.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Assigning home folders</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="ad-grouppolicy">
+        <div class="visual photo">
+          <img src="2.21/Applying Group Policy.png" alt="Applying Group Policy" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Applying Group Policy</h3>
+          <span class="aka">Group Policy Management / gpedit.msc (local)</span>
+          <p>Enforcing centralized security settings, software deployments, and system configurations across domain users and computers using Group Policy Objects (GPOs).</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Applying Group Policy</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="ad-secgroups">
+        <div class="visual photo">
+          <img src="2.21/Selecting security groups.png" alt="Selecting security groups" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Selecting security groups</h3>
+          <span class="aka">AD user → Member Of</span>
+          <p>Adding user or computer objects to specific Active Directory security groups, to streamline granting permissions to network resources like shared folders and printers.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Selecting security groups</strong> in the topic list.</div>
+        </div>
+      </article>
+      <article class="term" id="ad-folderredirect">
+        <div class="visual photo">
+          <img src="2.21/Configuring folder redirection.png" alt="Configuring folder redirection" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Configuring folder redirection</h3>
+          <span class="aka">GPO → Folder Redirection</span>
+          <p>Diverting standard local user-profile folders (such as Documents or Desktop) to a central network share, so user files are automatically backed up and accessible from any domain machine.</p>
+          <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Configuring folder redirection</strong> in the topic list.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    Images in the <code>2.21</code> folder. Study notes for Core 2 objective 2.2 — 36 terms from Defender through folder redirection.
+    Related interactive lab: <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html</a>.
+  </div>
+</footer>
+
+<script src="study-lightbox.js"></script>
+<script src="study-editor.js"></script><script src="study-flashcards.js"></script><script src="study-flashcards.js"></script><script src="study-flashcards.js"></script>
+
+
+
+
+</body></html>

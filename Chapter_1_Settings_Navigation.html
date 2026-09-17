@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7.1 Chapter 1 Settings Navigation — Trimmed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#121820;
+    --muted:#4a5568;
+    --paper:#eef2f7;
+    --line:rgba(18,24,32,0.12);
+    --accent:#0f766e;
+    --accent-soft:#ccfbf1;
+    --sky:#0e4d7b;
+    --multi:#9a3412;
+    --multi-soft:#ffedd5;
+    --memorize:#0f766e;
+    --memorize-soft:#e3fbf6;
+    --memorize-line:#a7e8dc;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(15,118,110,0.14), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.08), transparent 50%),
+      linear-gradient(180deg, #e4f0ee 0%, var(--paper) 40%, #e8eef5 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(940px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    padding:3.4rem 0 2.2rem;
+    color:#f4f8fc;
+    background:linear-gradient(135deg, #0f766e, #0e4d7b);
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(2.4rem, 6vw, 3.4rem);
+    font-weight:700;
+    line-height:0.95;
+    letter-spacing:-0.02em;
+    margin:0 0 0.5rem;
+  }
+  .hero h1{
+    margin:0 0 0.55rem;
+    font-size:clamp(1rem, 2vw, 1.2rem);
+    font-weight:500;
+    color:#d7f5ef;
+  }
+  .hero p{
+    margin:0;
+    max-width:62ch;
+    color:#c3e6de;
+    font-size:0.95rem;
+  }
+  .hero p strong{ color:#fff; }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(238,242,247,0.94);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.6rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.38rem 0.7rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:2.2rem 0 0.3rem; }
+  .section-head{ margin-bottom:1.1rem; max-width:60rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.7rem;
+    font-weight:700;
+    letter-spacing:0.07em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.4rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.4rem, 2.6vw, 1.9rem);
+    margin:0 0 0.4rem;
+    letter-spacing:-0.01em;
+  }
+  .section-head p{ margin:0; color:var(--muted); font-size:0.92rem; }
+
+  .legend-line{
+    display:flex; flex-wrap:wrap; gap:1.1rem;
+    font-size:0.82rem; color:var(--muted);
+    margin-top:0.9rem;
+  }
+  .legend-line span{ display:flex; align-items:center; gap:0.4rem; }
+  .dot{ width:0.6rem; height:0.6rem; border-radius:50%; flex:0 0 auto; }
+  .dot.memorize{ background:var(--memorize); }
+  .dot.recognize{ background:var(--multi); }
+
+  /* master list */
+  .qr-group{ margin-bottom:1.3rem; }
+  .qr-group h3{
+    font-family:"Fraunces",serif;
+    font-size:1.02rem;
+    margin:0 0 0.4rem;
+    color:var(--sky);
+  }
+  .qr-list{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(280px,1fr));
+    gap:0.35rem 1.2rem;
+    list-style:none;
+    margin:0; padding:0;
+  }
+  .qr-list li{
+    display:flex;
+    justify-content:space-between;
+    gap:0.8rem;
+    padding:0.4rem 0;
+    border-bottom:1px dashed var(--line);
+    font-size:0.88rem;
+  }
+  .qr-list .qr-name{ color:var(--ink); }
+  .qr-list .qr-path{ color:var(--accent); font-weight:600; text-align:right; }
+  .qr-list code{ font-size:0.85em; }
+  .reuse-note{
+    margin:0.5rem 0 0;
+    font-size:0.82rem;
+    color:var(--muted);
+    font-style:italic;
+  }
+
+  /* multi-route cards */
+  .nav-card{
+    padding:1.05rem 0;
+    border-top:1px solid var(--line);
+  }
+  .nav-card:last-of-type{ border-bottom:1px solid var(--line); }
+  .nav-card h3{
+    font-family:"Fraunces",serif;
+    font-size:1.1rem;
+    margin:0 0 0.4rem;
+  }
+  .meta{ display:flex; flex-wrap:wrap; gap:0.4rem; margin:0 0 0.6rem; }
+  .meta span{
+    font-size:0.7rem; font-weight:600;
+    padding:0.15rem 0.5rem; border-radius:999px;
+  }
+  .src{ color:var(--sky); background:rgba(14,77,123,0.08); }
+  .routes-badge{ color:var(--multi); background:var(--multi-soft); }
+
+  .primary-route{
+    display:flex; align-items:flex-start; gap:0.6rem;
+    padding:0.65rem 0.85rem;
+    border-radius:10px;
+    background:var(--memorize-soft);
+    border:1px solid var(--memorize-line);
+  }
+  .primary-route .tag{
+    flex:0 0 auto; font-size:0.64rem; font-weight:700;
+    letter-spacing:0.04em; text-transform:uppercase;
+    color:#fff; background:var(--memorize);
+    padding:0.15rem 0.45rem; border-radius:5px; margin-top:0.1rem;
+  }
+  .primary-route .txt{ color:var(--ink); font-size:0.9rem; }
+
+  details.alt{ margin-top:0.45rem; }
+  details.alt summary{
+    cursor:pointer; list-style:none;
+    font-size:0.8rem; font-weight:600; color:var(--multi);
+    display:flex; align-items:center; gap:0.35rem;
+    padding:0.2rem 0;
+  }
+  details.alt summary::-webkit-details-marker{ display:none; }
+  details.alt summary::before{
+    content:"▸"; display:inline-block;
+    transition:transform 0.15s ease; font-size:0.75em;
+  }
+  details.alt[open] summary::before{ transform:rotate(90deg); }
+  details.alt .alt-list{
+    margin:0.4rem 0 0; padding-left:1.05rem; color:var(--muted);
+  }
+  details.alt .alt-list li{ margin-bottom:0.32rem; font-size:0.85rem; }
+  details.alt .alt-list li:last-child{ margin-bottom:0; }
+
+  code{
+    font-family:"Cascadia Mono","Consolas",monospace;
+    font-size:0.85em;
+    background:rgba(18,24,32,0.06);
+    border-radius:5px;
+    padding:0.05rem 0.32rem;
+  }
+
+  .skip-note{
+    font-size:0.85rem; color:var(--muted);
+    padding:0.8rem 0.95rem;
+    border:1px dashed var(--line);
+    border-radius:10px;
+    margin-top:0.3rem;
+  }
+
+  .mac-box{
+    padding:1rem 1.1rem;
+    border-radius:12px;
+    background:rgba(14,77,123,0.05);
+    border:1px solid var(--line);
+  }
+  .mac-box p{ margin:0 0 0.6rem; font-size:0.88rem; color:var(--muted); }
+  .mac-box p:last-child{ margin-bottom:0; }
+  .mac-box strong{ color:var(--ink); }
+
+  footer{
+    padding:1.8rem 0 2.6rem;
+    color:var(--muted);
+    font-size:0.8rem;
+  }
+  footer .wrap{ border-top:1px solid var(--line); padding-top:1rem; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="brand">7.1</p>
+    <h1>Chapter 1 Settings Navigation — trimmed to what's actually tested</h1>
+    <p>Cut to <strong>one path per config</strong>, and cut the configs themselves down to what shows up on Core 2. Everything low-yield (Indexing Options, Mail, Sound, Ease of Access, Certificate Manager) got dropped to one line at the bottom instead of its own section.</p>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#memorize">Memorize list</a>
+    <a href="#worth-recognizing">Worth recognizing too</a>
+    <a href="#macos">macOS</a>
+    <a href="#skip">Skipped items</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="memorize">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Drill this</span>
+        <h2>The memorize list</h2>
+        <p>One path each. This is the part to actually drill until it's automatic.</p>
+        <div class="legend-line">
+          <span><span class="dot memorize"></span>The path to know cold</span>
+          <span><span class="dot recognize"></span>= also has exam-favorite alternate wording, see next section</span>
+        </div>
+      </div>
+
+      <div class="qr-group">
+        <h3>Run dialog (Win + R)</h3>
+        <ul class="qr-list">
+          <li><span class="qr-name">Task Manager</span><span class="qr-path"><code>Ctrl+Shift+Esc</code></span></li>
+          <li><span class="qr-name">Event Viewer</span><span class="qr-path"><code>eventvwr.msc</code></span></li>
+          <li><span class="qr-name">Disk Management</span><span class="qr-path"><code>diskmgmt.msc</code></span></li>
+          <li><span class="qr-name">Task Scheduler</span><span class="qr-path"><code>taskschd.msc</code></span></li>
+          <li><span class="qr-name">Device Manager</span><span class="qr-path"><code>devmgmt.msc</code></span></li>
+          <li><span class="qr-name">Local Group Policy Editor</span><span class="qr-path"><code>gpedit.msc</code></span></li>
+          <li><span class="qr-name">Local Users and Groups</span><span class="qr-path"><code>lusrmgr.msc</code></span></li>
+          <li><span class="qr-name">Performance Monitor</span><span class="qr-path"><code>perfmon</code></span></li>
+          <li><span class="qr-name">System Properties (domain/workgroup)</span><span class="qr-path"><code>sysdm.cpl</code></span></li>
+          <li><span class="qr-name">Internet Options ⓘ</span><span class="qr-path"><code>inetcpl.cpl</code></span></li>
+          <li><span class="qr-name">Network Connections (adapters) ⓘ</span><span class="qr-path"><code>ncpa.cpl</code></span></li>
+          <li><span class="qr-name">Windows Firewall ⓘ</span><span class="qr-path"><code>firewall.cpl</code></span></li>
+          <li><span class="qr-name">System Information</span><span class="qr-path"><code>msinfo32</code></span></li>
+          <li><span class="qr-name">Resource Monitor</span><span class="qr-path"><code>resmon</code></span></li>
+          <li><span class="qr-name">System Configuration</span><span class="qr-path"><code>msconfig</code></span></li>
+          <li><span class="qr-name">Disk Cleanup</span><span class="qr-path"><code>cleanmgr</code></span></li>
+          <li><span class="qr-name">Registry Editor</span><span class="qr-path"><code>regedit</code></span></li>
+        </ul>
+        <p class="reuse-note">ⓘ = one command, multiple jobs. <code>inetcpl.cpl</code> also gets you to Proxy. <code>firewall.cpl</code> also gets you to "allow an app" and advanced rules. Learn the command once.</p>
+      </div>
+
+      <div class="qr-group">
+        <h3>Settings app (Win + I)</h3>
+        <ul class="qr-list">
+          <li><span class="qr-name">System</span><span class="qr-path">→ System</span></li>
+          <li><span class="qr-name">Devices</span><span class="qr-path">→ Devices</span></li>
+          <li><span class="qr-name">Network &amp; Internet</span><span class="qr-path">→ Network &amp; Internet</span></li>
+          <li><span class="qr-name">Apps</span><span class="qr-path">→ Apps</span></li>
+          <li><span class="qr-name">Accounts</span><span class="qr-path">→ Accounts</span></li>
+          <li><span class="qr-name">Update &amp; Security</span><span class="qr-path">→ Update &amp; Security</span></li>
+          <li><span class="qr-name">Computer info / About</span><span class="qr-path">→ System → About</span></li>
+          <li><span class="qr-name">VPN / Wi‑Fi / Ethernet</span><span class="qr-path">→ Network &amp; Internet → page</span></li>
+          <li><span class="qr-name">Printers &amp; scanners</span><span class="qr-path">→ Bluetooth &amp; devices</span></li>
+          <li><span class="qr-name">Advanced sharing settings</span><span class="qr-path">→ Network &amp; Internet → Advanced</span></li>
+        </ul>
+      </div>
+
+      <div class="qr-group">
+        <h3>Control Panel &amp; File Explorer</h3>
+        <ul class="qr-list">
+          <li><span class="qr-name">Devices and Printers</span><span class="qr-path">Control Panel</span></li>
+          <li><span class="qr-name">Programs and Features</span><span class="qr-path">Control Panel</span></li>
+          <li><span class="qr-name">Network and Sharing Center</span><span class="qr-path">Control Panel</span></li>
+          <li><span class="qr-name">User Accounts</span><span class="qr-path">Control Panel</span></li>
+          <li><span class="qr-name">File Explorer Options</span><span class="qr-path">Control Panel</span></li>
+          <li><span class="qr-name">Power Options</span><span class="qr-path">Control Panel</span></li>
+          <li><span class="qr-name">Show hidden files</span><span class="qr-path">Win+E → View → Hidden items</span></li>
+          <li><span class="qr-name">Map a network drive</span><span class="qr-path">This PC → Map network drive</span></li>
+          <li><span class="qr-name">UNC path</span><span class="qr-path"><code>\\Server\Share</code></span></li>
+          <li><span class="qr-name">TCP/IPv4 settings</span><span class="qr-path">Adapter → Properties → TCP/IPv4</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="worth-recognizing">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Conceptual-question insurance</span>
+        <h2>Worth recognizing too</h2>
+        <p>These are the ones where the exam is genuinely likely to describe the alternate route instead of the one you memorized. Open only to check yourself. Drill them in the <a href="windows-nav-recognize.html">Recognize trainer</a>.</p>
+      </div>
+
+      <article class="nav-card" id="internet-proxy">
+        <h3>Internet Options &amp; Proxy</h3>
+        <div class="meta"><span class="src">1.61 / 1.71</span><span class="routes-badge">recognize</span></div>
+        <div class="primary-route">
+          <span class="tag">Know</span>
+          <span class="txt"><code>inetcpl.cpl</code> → Connections tab → LAN settings for Proxy</span>
+        </div>
+        <details class="alt">
+          <summary>Also shows up as</summary>
+          <ul class="alt-list">
+            <li>Control Panel → Internet Options (same window, reached without Run)</li>
+            <li>Settings → Network &amp; Internet → Proxy (Win10 wording: "Network & Internet"; Win11: "Network & internet")</li>
+          </ul>
+        </details>
+      </article>
+
+      <article class="nav-card" id="firewall-combo">
+        <h3>Firewall, allow an app, advanced settings</h3>
+        <div class="meta"><span class="src">1.71</span><span class="routes-badge">recognize</span></div>
+        <div class="primary-route">
+          <span class="tag">Know</span>
+          <span class="txt"><code>firewall.cpl</code> — then pick "Allow an app…" or "Advanced settings" inside it</span>
+        </div>
+        <details class="alt">
+          <summary>Also shows up as</summary>
+          <ul class="alt-list">
+            <li>Control Panel → System and Security → Windows Defender Firewall → same two options</li>
+          </ul>
+        </details>
+      </article>
+
+      <article class="nav-card" id="client-config">
+        <h3>Network adapter settings</h3>
+        <div class="meta"><span class="src">1.71</span><span class="routes-badge">recognize</span></div>
+        <div class="primary-route">
+          <span class="tag">Know</span>
+          <span class="txt"><code>ncpa.cpl</code></span>
+        </div>
+        <details class="alt">
+          <summary>Also shows up as</summary>
+          <ul class="alt-list">
+            <li>Control Panel → Network and Sharing Center → Change adapter settings</li>
+          </ul>
+        </details>
+      </article>
+
+      <article class="nav-card" id="system-info">
+        <h3>System info / About</h3>
+        <div class="meta"><span class="src">1.61</span><span class="routes-badge">recognize</span></div>
+        <div class="primary-route">
+          <span class="tag">Know</span>
+          <span class="txt">Settings → System → About</span>
+        </div>
+        <details class="alt">
+          <summary>Also shows up as</summary>
+          <ul class="alt-list">
+            <li>Control Panel → System (older phrasing, same info)</li>
+          </ul>
+        </details>
+      </article>
+
+      <article class="nav-card" id="shared-resources">
+        <h3>Shared resources / advanced sharing</h3>
+        <div class="meta"><span class="src">1.71</span><span class="routes-badge">recognize</span></div>
+        <div class="primary-route">
+          <span class="tag">Know</span>
+          <span class="txt">Settings → Network &amp; Internet → Advanced sharing settings</span>
+        </div>
+        <details class="alt">
+          <summary>Also shows up as</summary>
+          <ul class="alt-list">
+            <li>Control Panel → Network and Sharing Center → Change advanced sharing settings</li>
+            <li>CLI: <code>net share</code> (lists active shares, not settings)</li>
+          </ul>
+        </details>
+      </article>
+
+      <article class="nav-card" id="printers">
+        <h3>Shared printers</h3>
+        <div class="meta"><span class="src">1.71</span><span class="routes-badge">recognize</span></div>
+        <div class="primary-route">
+          <span class="tag">Know</span>
+          <span class="txt">Settings → Bluetooth &amp; devices → Printers &amp; scanners</span>
+        </div>
+        <details class="alt">
+          <summary>Also shows up as</summary>
+          <ul class="alt-list">
+            <li>Control Panel → Devices and Printers → right-click → Sharing</li>
+          </ul>
+        </details>
+      </article>
+
+      <article class="nav-card" id="lusrmgr">
+        <h3>Local Users and Groups</h3>
+        <div class="meta"><span class="src">1.42</span><span class="routes-badge">edition-dependent, not a real alt</span></div>
+        <div class="primary-route">
+          <span class="tag">Know</span>
+          <span class="txt"><code>lusrmgr.msc</code> — Pro/Enterprise/Education only</span>
+        </div>
+        <details class="alt">
+          <summary>On Home edition, use instead</summary>
+          <ul class="alt-list">
+            <li>Settings → Accounts, or CLI <code>net user</code> / <code>net localgroup</code></li>
+          </ul>
+        </details>
+      </article>
+    </div>
+  </section>
+
+  <section id="macos">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Conceptual only — not in PBQs</span>
+        <h2>macOS</h2>
+        <p>This won't show up as a click-through simulation, just multiple-choice recognition. Skim it, don't drill it.</p>
+      </div>
+      <div class="mac-box">
+        <p><strong>System Settings pages:</strong> Apple ID, General, Displays, Network, Printers &amp; Scanners, Privacy &amp; Security, Accessibility.</p>
+        <p><strong>Shortcuts:</strong> Spotlight <code>⌘+Space</code>, Mission Control <code>Control+↑</code>, Force Quit <code>⌘+Option+Esc</code>.</p>
+        <p><strong>Know by name only:</strong> Time Machine, Disk Utility, Terminal, Keychain Access — launched from Spotlight/Launchpad.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="skip">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Cut for time</span>
+        <h2>Skipped, low-yield items</h2>
+      </div>
+      <div class="skip-note">
+        Recognize the name if you see it, but not worth a dedicated drill: <strong>Indexing Options</strong>, <strong>Mail</strong> applet, <strong>Sound</strong> applet, <strong>Ease of Access</strong>, <strong>Certificate Manager</strong> (<code>certmgr.msc</code>), <strong>Administrative Tools / Windows Tools</strong> folder naming, <strong>metered connections</strong> toggle, Power Options' System Settings vs. Advanced sub-pages, Performance Monitor's <code>.exe</code> vs <code>.msc</code> distinction. All of these are single Control-Panel-style lookups with no real "recognize the alternate" trap — if it comes up, it'll be a straightforward "where do you find X" question.
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Trimmed cheat sheet from Chapter 1 companions (1.41–1.43, 1.51, 1.61–1.62, 1.71, 1.81). Green = the one path to memorize. Collapsed orange = the alternate wording the exam might use instead — check yourself, don't study it directly.
+  </div>
+</footer>
+
+<script src="study-flashcards.js"></script>
+</body>
+</html>

@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Windows Navigation Trainer</title>
+<style>
+  :root{
+    --taskbar-h: 48px;
+    --accent: #0067c0;
+    --accent-dark: #004c8c;
+    --win-bg: #f3f3f3;
+    --win-border: #c6c6c6;
+    --titlebar: #ffffff;
+    --text: #1b1b1b;
+    --muted: #6b6b6b;
+  }
+  *{ box-sizing:border-box; }
+  html,body{
+    margin:0; padding:0; height:100%; overflow:hidden;
+    font-family:"Segoe UI Variable","Segoe UI",Tahoma,Arial,sans-serif;
+    color:var(--text);
+    -webkit-user-select:none; user-select:none;
+  }
+  input, textarea{ user-select:text; -webkit-user-select:text; }
+
+  /* ===================== DESKTOP ===================== */
+  #desktop{
+    position:fixed; inset:0;
+    background:
+      radial-gradient(1200px 700px at 15% 8%, rgba(255,255,255,0.10), transparent 60%),
+      radial-gradient(1000px 900px at 85% 100%, rgba(255,150,90,0.18), transparent 55%),
+      linear-gradient(160deg, #1a3fa0 0%, #2f5fd6 28%, #6a3fbf 62%, #9a3fbf 100%);
+    height:100%;
+  }
+  .desk-icon{
+    position:absolute;
+    width:76px; display:flex; flex-direction:column; align-items:center; gap:4px;
+    padding:6px; border-radius:4px; cursor:pointer;
+  }
+  .desk-icon:hover{ background:rgba(255,255,255,0.14); }
+  .desk-icon .glyph{ font-size:32px; filter:drop-shadow(0 1px 2px rgba(0,0,0,0.35)); }
+  .desk-icon .lbl{ font-size:12px; color:#fff; text-shadow:0 1px 2px rgba(0,0,0,0.6); text-align:center; line-height:1.2; }
+
+  /* ===================== QUIZ CARD ===================== */
+  #quizCard{
+    position:fixed; top:14px; left:14px; width:400px;
+    background:rgba(255,255,255,0.94); backdrop-filter:blur(10px);
+    border:1px solid rgba(0,0,0,0.08); border-radius:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+    padding:14px 16px 12px; z-index:9000;
+  }
+  #quizCard .top-row{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+  .badge{
+    font-size:10.5px; font-weight:700; letter-spacing:.03em;
+    padding:3px 8px; border-radius:999px; color:#fff;
+  }
+  .badge.run{ background:#7a3fd6; }
+  .badge.settings{ background:#0067c0; }
+  .badge.cpl{ background:#0f766e; }
+  .badge.explorer{ background:#b45309; }
+  #scoreLine{ font-size:11.5px; color:var(--muted); font-variant-numeric:tabular-nums; }
+  #questionText{ font-size:14.5px; line-height:1.42; margin:6px 0 10px; min-height:56px; }
+  #hintBox{
+    display:none; font-size:12.5px; background:#eef6ff; border:1px solid #cfe4fb;
+    color:#0b4a86; padding:7px 9px; border-radius:8px; margin-bottom:9px;
+  }
+  #hintBox code{ background:rgba(0,0,0,0.06); padding:1px 4px; border-radius:4px; }
+  .qbtns{ display:flex; gap:8px; }
+  .qbtn{
+    font-size:12.5px; font-weight:600; border:none; border-radius:7px; padding:7px 11px;
+    cursor:pointer; background:#e9e9e9; color:#333;
+  }
+  .qbtn:hover{ background:#ddd; }
+  .qbtn.primary{ background:var(--accent); color:#fff; }
+  .qbtn.primary:hover{ background:var(--accent-dark); }
+  #toast{
+    position:fixed; top:14px; left:50%; transform:translateX(-50%) translateY(-20px);
+    background:#1e8e3e; color:#fff; font-size:14px; font-weight:600;
+    padding:10px 18px; border-radius:10px; box-shadow:0 8px 20px rgba(0,0,0,0.3);
+    opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease;
+    z-index:10000;
+  }
+  #toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  #toast.skip{ background:#5b5b5b; }
+  #tipsLine{
+    position:fixed; top:14px; right:14px; z-index:9000;
+    background:rgba(0,0,0,0.45); color:#fff; font-size:11.5px; line-height:1.5;
+    padding:9px 12px; border-radius:10px; max-width:250px; backdrop-filter:blur(6px);
+  }
+  #tipsLine b{ font-weight:700; }
+
+  /* ===================== WINDOWS (generic) ===================== */
+  .window{
+    position:absolute; display:none; flex-direction:column;
+    background:var(--win-bg); border:1px solid var(--win-border); border-radius:8px;
+    box-shadow:0 16px 40px rgba(0,0,0,0.35); overflow:hidden;
+  }
+  .titlebar{
+    height:34px; background:var(--titlebar); border-bottom:1px solid #e3e3e3;
+    display:flex; align-items:center; padding:0 4px 0 10px; cursor:default; flex:0 0 auto;
+  }
+  .titlebar .ttl-icon{ font-size:14px; margin-right:7px; }
+  .titlebar .ttl-text{ font-size:12.5px; font-weight:600; flex:1; }
+  .win-controls{ display:flex; height:100%; }
+  .win-controls button{
+    width:42px; height:100%; border:none; background:transparent; cursor:pointer;
+    font-size:12px; color:#444;
+  }
+  .win-controls button:hover{ background:#e5e5e5; }
+  .win-controls button.close:hover{ background:#e81123; color:#fff; }
+  .win-body{ flex:1; overflow:auto; background:#fff; font-size:13px; }
+  .win-footer{ flex:0 0 auto; border-top:1px solid #e3e3e3; background:#f7f7f7; padding:8px 12px; display:flex; justify-content:flex-end; gap:8px; }
+  .btn{ font-size:12.5px; padding:5px 14px; border-radius:4px; border:1px solid #adadad; background:#e1e1e1; cursor:pointer; }
+  .btn:hover{ background:#d6d6d6; }
+  .btn.acc{ background:var(--accent); color:#fff; border-color:var(--accent-dark); }
+  .btn.acc:hover{ background:var(--accent-dark); }
+
+  /* ===================== RUN DIALOG ===================== */
+  #win-run{ width:420px; }
+  #win-run .win-body{ padding:16px 18px; background:#fff; overflow:visible; }
+  .run-row{ display:flex; align-items:center; gap:14px; margin-bottom:16px; }
+  .run-row .glyph{ font-size:30px; }
+  .run-row p{ margin:0; font-size:12.5px; color:#333; }
+  .run-field{ display:flex; align-items:center; gap:10px; margin-bottom:4px; }
+  .run-field label{ font-size:12.5px; }
+  .run-field input{
+    flex:1; font-size:13px; padding:5px 7px; border:1px solid #7a7a7a; border-radius:2px;
+  }
+  #runError{ display:none; font-size:12px; color:#a10000; margin-top:8px; }
+
+  /* generic error dialog */
+  #win-error{ width:380px; }
+  #win-error .win-body{ padding:16px 18px; display:flex; gap:12px; }
+  #win-error .glyph{ font-size:30px; }
+  #win-error p{ margin:0; font-size:12.5px; }
+
+  /* ===================== STUB APP WINDOW ===================== */
+  #win-stub{ width:560px; height:400px; }
+  #win-stub .win-body{ padding:0; }
+  .stub-wrap{ display:flex; height:100%; }
+  .stub-side{ width:150px; background:#f7f7f7; border-right:1px solid #e3e3e3; padding:10px 0; }
+  .stub-side div{ padding:7px 14px; font-size:12px; color:#333; border-left:3px solid transparent; }
+  .stub-side div.on{ background:#e5f1fb; border-left-color:var(--accent); color:var(--accent-dark); font-weight:600; }
+  .stub-main{ flex:1; padding:20px 22px; }
+  .stub-main h3{ margin:0 0 10px; font-size:14px; }
+  .stub-main p{ font-size:12.5px; color:#444; line-height:1.6; }
+  .stub-main table{ width:100%; border-collapse:collapse; font-size:12px; margin-top:8px; }
+  .stub-main td, .stub-main th{ border-bottom:1px solid #eee; padding:5px 4px; text-align:left; }
+
+  /* ===================== SETTINGS APP ===================== */
+  #win-settings{ width:820px; height:560px; }
+  .set-wrap{ display:flex; height:100%; }
+  .set-side{ width:220px; background:#f3f3f3; border-right:1px solid #e3e3e3; padding:14px 0; overflow-y:auto; }
+  .set-search{ margin:0 14px 12px; padding:6px 9px; font-size:12px; border:1px solid #ccc; border-radius:6px; color:#888; background:#fff; }
+  .set-item{
+    display:flex; align-items:center; gap:10px; padding:9px 16px; font-size:13px; cursor:pointer; color:#222;
+  }
+  .set-item .ico{ width:18px; text-align:center; }
+  .set-item:hover{ background:#e8e8e8; }
+  .set-item.on{ background:#e5f1fb; color:var(--accent-dark); font-weight:600; }
+  .set-content{ flex:1; padding:26px 34px; overflow-y:auto; }
+  .set-content h2{ font-size:19px; margin:0 0 18px; font-weight:600; }
+  .set-block{
+    background:#fff; border:1px solid #e5e5e5; border-radius:8px; margin-bottom:10px;
+  }
+  .set-link{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:13px 16px; font-size:13px; cursor:pointer; border-bottom:1px solid #f0f0f0;
+  }
+  .set-link:last-child{ border-bottom:none; }
+  .set-link:hover{ background:#f7fbff; }
+  .set-link .arrow{ color:#999; }
+  .set-link.done{ background:#f2fbf4; }
+  .set-static{ padding:13px 16px; font-size:13px; color:#444; border-bottom:1px solid #f0f0f0; }
+  .set-static:last-child{ border-bottom:none; }
+  .about-grid{ font-size:12.5px; }
+  .about-grid div{ display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px dashed #eee; }
+
+  /* ===================== CONTROL PANEL ===================== */
+  #win-cpl{ width:700px; height:520px; }
+  .cpl-crumb{ padding:8px 14px; font-size:12px; color:#555; background:#fafafa; border-bottom:1px solid #eee; }
+  .cpl-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:4px; padding:16px; }
+  .cpl-icon{
+    display:flex; flex-direction:column; align-items:center; text-align:center; gap:7px;
+    padding:14px 8px; border-radius:6px; cursor:pointer; font-size:11.5px; color:#333;
+  }
+  .cpl-icon:hover{ background:#eef6ff; }
+  .cpl-icon .glyph{ font-size:30px; }
+  .cpl-page{ padding:22px 26px; }
+  .cpl-page h2{ font-size:16px; margin:0 0 4px; }
+  .cpl-page .sub{ font-size:12px; color:#888; margin-bottom:16px; }
+  .cpl-link-row{
+    display:flex; align-items:center; gap:10px; padding:12px 14px; border:1px solid #eee; border-radius:8px;
+    margin-bottom:8px; cursor:pointer; font-size:13px;
+  }
+  .cpl-link-row:hover{ background:#f7fbff; }
+  .cpl-link-row .glyph{ font-size:18px; }
+  .cpl-back{ font-size:12px; color:var(--accent); cursor:pointer; margin-bottom:14px; display:inline-block; }
+
+  /* ===================== FILE EXPLORER ===================== */
+  #win-explorer{ width:820px; height:560px; }
+  .exp-toolbar{
+    display:flex; align-items:center; gap:6px; padding:6px 10px; border-bottom:1px solid #e3e3e3; background:#fafafa;
+    position:relative; flex:0 0 auto;
+  }
+  .exp-btn{ font-size:12px; padding:5px 10px; border-radius:4px; border:1px solid transparent; background:transparent; cursor:pointer; }
+  .exp-btn:hover{ background:#eee; border-color:#ddd; }
+  .exp-addr{
+    flex:1; font-size:12.5px; padding:5px 9px; border:1px solid #ccc; border-radius:4px; background:#fff;
+  }
+  .exp-viewmenu{
+    position:absolute; top:38px; left:70px; background:#fff; border:1px solid #ccc; border-radius:6px;
+    box-shadow:0 8px 18px rgba(0,0,0,0.18); padding:8px 0; display:none; z-index:20; width:190px;
+  }
+  .exp-viewmenu label{
+    display:flex; align-items:center; gap:8px; padding:7px 14px; font-size:12.5px; cursor:pointer;
+  }
+  .exp-viewmenu label:hover{ background:#f2f2f2; }
+  .exp-wrap{ flex:1; display:flex; overflow:hidden; }
+  .exp-side{ width:170px; background:#f7f7f7; border-right:1px solid #e3e3e3; padding:10px 0; overflow-y:auto; }
+  .exp-side .grp{ font-size:11px; color:#999; padding:7px 14px 3px; text-transform:uppercase; letter-spacing:.03em; }
+  .exp-side .it{ display:flex; align-items:center; gap:8px; padding:6px 14px; font-size:12.5px; cursor:pointer; }
+  .exp-side .it:hover{ background:#eee; }
+  .exp-main{ flex:1; padding:16px; overflow-y:auto; }
+  .exp-files{ display:grid; grid-template-columns:repeat(auto-fill,minmax(84px,1fr)); gap:14px; }
+  .exp-file{ display:flex; flex-direction:column; align-items:center; gap:5px; font-size:11.5px; text-align:center; color:#333; }
+  .exp-file .glyph{ font-size:30px; }
+  .exp-file.ghost{ opacity:0; animation:fadein .5s forwards; }
+  @keyframes fadein{ to{ opacity:0.75; } }
+
+  /* map network drive modal */
+  #win-mapdrive{ width:380px; }
+  #win-mapdrive .win-body{ padding:18px; }
+  #win-mapdrive .frow{ margin-bottom:12px; }
+  #win-mapdrive label{ display:block; font-size:12px; margin-bottom:4px; color:#444; }
+  #win-mapdrive select, #win-mapdrive input{ width:100%; font-size:12.5px; padding:5px 7px; border:1px solid #999; border-radius:3px; }
+
+  /* ===================== TASKBAR ===================== */
+  #taskbar{
+    position:fixed; left:0; right:0; bottom:0; height:var(--taskbar-h);
+    background:rgba(15,15,20,0.72); backdrop-filter:blur(18px);
+    display:flex; align-items:center; z-index:8000; border-top:1px solid rgba(255,255,255,0.06);
+  }
+  .tb-center{ position:absolute; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:4px; }
+  .tb-btn{
+    width:40px; height:40px; display:flex; align-items:center; justify-content:center;
+    border-radius:6px; cursor:pointer; color:#fff; font-size:18px;
+  }
+  .tb-btn:hover{ background:rgba(255,255,255,0.12); }
+  .tb-search{
+    display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.10); color:#e6e6e6;
+    border-radius:18px; padding:0 14px; height:32px; width:230px; margin-left:6px; cursor:text;
+  }
+  .tb-search input{
+    background:transparent; border:none; outline:none; color:#fff; font-size:12.5px; width:100%;
+  }
+  .tb-search input::placeholder{ color:#c9c9c9; }
+  .tb-right{ position:absolute; right:12px; display:flex; align-items:center; gap:10px; color:#fff; font-size:12px; }
+
+  /* ===================== START MENU ===================== */
+  #startMenu{
+    position:fixed; bottom:calc(var(--taskbar-h) + 8px); left:50%; transform:translateX(-50%);
+    width:560px; max-height:560px; background:rgba(32,32,36,0.86); backdrop-filter:blur(24px);
+    border-radius:12px; box-shadow:0 20px 50px rgba(0,0,0,0.5); display:none; flex-direction:column;
+    padding:22px 26px; z-index:8500; color:#fff;
+  }
+  #startMenu .sm-search{
+    display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.10);
+    border-radius:6px; padding:9px 12px; margin-bottom:20px;
+  }
+  #startMenu .sm-search input{ background:transparent; border:none; outline:none; color:#fff; font-size:13px; flex:1; }
+  #startMenu .sm-label{ font-size:12px; color:#bbb; margin-bottom:10px; font-weight:600; }
+  .sm-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:22px; }
+  .sm-tile{
+    display:flex; flex-direction:column; align-items:center; gap:8px; padding:14px 6px;
+    border-radius:8px; cursor:pointer; font-size:11.5px; text-align:center;
+  }
+  .sm-tile:hover{ background:rgba(255,255,255,0.10); }
+  .sm-tile .glyph{ font-size:26px; }
+
+  #dragHint{
+    position:fixed; bottom:60px; left:50%; transform:translateX(-50%); color:rgba(255,255,255,0.55);
+    font-size:11px; z-index:1;
+  }
+</style>
+</head>
+<body>
+
+<div id="desktop">
+  <div class="desk-icon" style="top:18px; left:18px;" onclick="openExplorer('thispc')">
+    <div class="glyph">🖥️</div><div class="lbl">This PC</div>
+  </div>
+  <div class="desk-icon" style="top:110px; left:18px;">
+    <div class="glyph">🗑️</div><div class="lbl">Recycle Bin</div>
+  </div>
+  <div id="dragHint">Tip: title bars can be dragged around, just like a real window.</div>
+</div>
+
+<div id="tipsLine">
+  <b>⊞ Win+R</b> — Run dialog<br>
+  <b>⊞ Win+I</b> — Settings<br>
+  <b>Ctrl+Shift+Esc</b> — Task Manager<br>
+  <span style="opacity:.75">If your browser eats the Windows key, use the taskbar search box instead — typing a command there works too.</span>
+</div>
+
+<!-- ===================== QUIZ CARD ===================== -->
+<div id="quizCard">
+  <div class="top-row">
+    <span id="qBadge" class="badge run">RUN DIALOG</span>
+    <span id="scoreLine">✅ 0 correct · 🔥 streak 0</span>
+  </div>
+  <div id="questionText">Loading question…</div>
+  <div id="hintBox"></div>
+  <div class="qbtns">
+    <button class="qbtn primary" onclick="showHint()">Hint</button>
+    <button class="qbtn" onclick="skipTask(true)">Show answer &amp; skip</button>
+    <button class="qbtn" onclick="skipTask(false)">Skip</button>
+    <button class="qbtn" onclick="resetScore()" title="Reset score">↺</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- ===================== RUN DIALOG ===================== -->
+<div id="win-run" class="window">
+  <div class="titlebar" id="run-titlebar">
+    <span class="ttl-icon">▶️</span><span class="ttl-text">Run</span>
+    <div class="win-controls"><button class="close" onclick="closeWin('win-run')">✕</button></div>
+  </div>
+  <div class="win-body">
+    <div class="run-row">
+      <div class="glyph">▶️</div>
+      <p>Type the name of a program, folder, document, or Internet resource, and Windows will open it for you.</p>
+    </div>
+    <div class="run-field">
+      <label for="runInput">Open:</label>
+      <input id="runInput" type="text" autocomplete="off" spellcheck="false" placeholder="">
+    </div>
+    <div id="runError">Windows cannot find <span id="runErrorVal"></span>. Check the spelling and try again.</div>
+  </div>
+  <div class="win-footer">
+    <button class="btn acc" onclick="submitRun()">OK</button>
+    <button class="btn" onclick="closeWin('win-run')">Cancel</button>
+    <button class="btn" disabled style="opacity:.5;">Browse…</button>
+  </div>
+</div>
+
+<!-- generic error dialog -->
+<div id="win-error" class="window">
+  <div class="titlebar"><span class="ttl-icon">⚠️</span><span class="ttl-text">Windows</span>
+    <div class="win-controls"><button class="close" onclick="closeWin('win-error')">✕</button></div>
+  </div>
+  <div class="win-body"><div class="glyph">⚠️</div><p id="errorMsg"></p></div>
+  <div class="win-footer"><button class="btn acc" onclick="closeWin('win-error')">OK</button></div>
+</div>
+
+<!-- ===================== STUB APP (reused for most .msc/.exe launches) ===================== -->
+<div id="win-stub" class="window">
+  <div class="titlebar" id="stub-titlebar">
+    <span class="ttl-icon" id="stubIcon">🗔</span><span class="ttl-text" id="stubTitle">App</span>
+    <div class="win-controls">
+      <button onclick="void 0">🗕</button><button onclick="void 0">🗖</button>
+      <button class="close" onclick="closeWin('win-stub')">✕</button>
+    </div>
+  </div>
+  <div class="win-body">
+    <div class="stub-wrap">
+      <div class="stub-side" id="stubSide"></div>
+      <div class="stub-main" id="stubMain"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SETTINGS APP ===================== -->
+<div id="win-settings" class="window">
+  <div class="titlebar" id="settings-titlebar">
+    <span class="ttl-icon">⚙️</span><span class="ttl-text">Settings</span>
+    <div class="win-controls">
+      <button onclick="void 0">🗕</button><button onclick="void 0">🗖</button>
+      <button class="close" onclick="closeWin('win-settings')">✕</button>
+    </div>
+  </div>
+  <div class="win-body">
+    <div class="set-wrap">
+      <div class="set-side">
+        <div class="set-search">🔍 Find a setting</div>
+        <div class="set-item" data-page="system" onclick="showSettingsPage('system')"><span class="ico">🖥️</span>System</div>
+        <div class="set-item" data-page="devices" onclick="showSettingsPage('devices')"><span class="ico">🖱️</span>Devices</div>
+        <div class="set-item" data-page="network" onclick="showSettingsPage('network')"><span class="ico">🌐</span>Network &amp; Internet</div>
+        <div class="set-item" data-page="personalization" onclick="showSettingsPage('personalization')"><span class="ico">🎨</span>Personalization</div>
+        <div class="set-item" data-page="apps" onclick="showSettingsPage('apps')"><span class="ico">📦</span>Apps</div>
+        <div class="set-item" data-page="accounts" onclick="showSettingsPage('accounts')"><span class="ico">👤</span>Accounts</div>
+        <div class="set-item" data-page="update" onclick="showSettingsPage('update')"><span class="ico">🔄</span>Update &amp; Security</div>
+      </div>
+      <div class="set-content" id="settingsContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CONTROL PANEL ===================== -->
+<div id="win-cpl" class="window">
+  <div class="titlebar" id="cpl-titlebar">
+    <span class="ttl-icon">🗄️</span><span class="ttl-text">Control Panel</span>
+    <div class="win-controls">
+      <button onclick="void 0">🗕</button><button onclick="void 0">🗖</button>
+      <button class="close" onclick="closeWin('win-cpl')">✕</button>
+    </div>
+  </div>
+  <div class="win-body">
+    <div class="cpl-crumb">Control Panel <span id="cplCrumb"></span></div>
+    <div id="cplContent"></div>
+  </div>
+</div>
+
+<!-- ===================== FILE EXPLORER ===================== -->
+<div id="win-explorer" class="window">
+  <div class="titlebar" id="explorer-titlebar">
+    <span class="ttl-icon">📁</span><span class="ttl-text" id="explorerTitle">File Explorer</span>
+    <div class="win-controls">
+      <button onclick="void 0">🗕</button><button onclick="void 0">🗖</button>
+      <button class="close" onclick="closeWin('win-explorer')">✕</button>
+    </div>
+  </div>
+  <div class="exp-toolbar">
+    <button class="exp-btn" disabled style="opacity:.4;">⟵</button>
+    <button class="exp-btn" disabled style="opacity:.4;">⟶</button>
+    <button class="exp-btn" onclick="toggleViewMenu()">View ▾</button>
+    <button class="exp-btn" onclick="openMapDrive()">🔗 Map network drive</button>
+    <input id="expAddr" class="exp-addr" type="text" placeholder="This PC" onkeydown="if(event.key==='Enter') submitExplorerAddress()">
+    <div class="exp-viewmenu" id="viewMenu">
+      <label><input type="checkbox" id="hiddenItemsChk" onchange="toggleHiddenItems(this.checked)"> Hidden items</label>
+      <label><input type="checkbox" checked disabled> File name extensions</label>
+    </div>
+  </div>
+  <div class="exp-wrap">
+    <div class="exp-side">
+      <div class="grp">Quick access</div>
+      <div class="it" onclick="explorerNav('desktop')">🖥️ Desktop</div>
+      <div class="it" onclick="explorerNav('documents')">📄 Documents</div>
+      <div class="grp">This PC</div>
+      <div class="it" onclick="explorerNav('thispc')">🖥️ This PC</div>
+      <div class="it" id="mappedDriveItem" style="display:none;" onclick="explorerNav('mapped')">💽 Data (Z:)</div>
+      <div class="grp">Network</div>
+      <div class="it" onclick="explorerNav('network')">🌐 Network</div>
+    </div>
+    <div class="exp-main" id="explorerMain"></div>
+  </div>
+</div>
+
+<!-- ===================== MAP NETWORK DRIVE ===================== -->
+<div id="win-mapdrive" class="window">
+  <div class="titlebar" id="mapdrive-titlebar">
+    <span class="ttl-icon">🔗</span><span class="ttl-text">Map Network Drive</span>
+    <div class="win-controls"><button class="close" onclick="closeWin('win-mapdrive')">✕</button></div>
+  </div>
+  <div class="win-body">
+    <p style="font-size:12.5px; color:#444; margin-top:0;">Specify the drive letter and the folder that you want to connect to.</p>
+    <div class="frow">
+      <label>Drive:</label>
+      <select id="driveLetter"><option>Z:</option><option>Y:</option><option>X:</option></select>
+    </div>
+    <div class="frow">
+      <label>Folder:</label>
+      <input id="driveFolder" type="text" placeholder="\\FileServer\Shared">
+    </div>
+  </div>
+  <div class="win-footer">
+    <button class="btn acc" onclick="finishMapDrive()">Finish</button>
+    <button class="btn" onclick="closeWin('win-mapdrive')">Cancel</button>
+  </div>
+</div>
+
+<!-- ===================== NETWORK CONNECTIONS (ncpa.cpl) ===================== -->
+<div id="win-ncpa" class="window" style="width:520px; height:360px;">
+  <div class="titlebar" id="ncpa-titlebar">
+    <span class="ttl-icon">🔌</span><span class="ttl-text">Network Connections</span>
+    <div class="win-controls"><button class="close" onclick="closeWin('win-ncpa')">✕</button></div>
+  </div>
+  <div class="win-body" style="padding:18px;">
+    <p style="font-size:12px; color:#666; margin-top:0;">Double-click an adapter to view its properties.</p>
+    <div class="cpl-link-row" ondblclick="openAdapterProps()" onclick="openAdapterProps()">
+      <span class="glyph">🖧</span>
+      <div><div style="font-weight:600;">Ethernet</div><div style="font-size:11.5px; color:#888;">Realtek PCIe GbE Family Controller — Enabled</div></div>
+    </div>
+    <div class="cpl-link-row" style="opacity:.55; cursor:default;">
+      <span class="glyph">📶</span>
+      <div><div style="font-weight:600;">Wi-Fi</div><div style="font-size:11.5px; color:#888;">Not connected</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- adapter properties -->
+<div id="win-adapterprops" class="window" style="width:400px;">
+  <div class="titlebar" id="adapterprops-titlebar">
+    <span class="ttl-icon">🖧</span><span class="ttl-text">Ethernet Properties</span>
+    <div class="win-controls"><button class="close" onclick="closeWin('win-adapterprops')">✕</button></div>
+  </div>
+  <div class="win-body" style="padding:14px 16px;">
+    <p style="font-size:12px; color:#666; margin:0 0 8px;">This connection uses the following items:</p>
+    <div id="tcpipRow" class="set-link" onclick="selectTcpIp()" style="border:1px solid #eee; border-radius:6px; padding:9px 12px;">
+      <span>🌐 Internet Protocol Version 4 (TCP/IPv4)</span><span class="arrow">›</span>
+    </div>
+    <div class="set-static" style="border:1px solid #eee; border-radius:6px; margin-top:6px; opacity:.6;">📡 Internet Protocol Version 6 (TCP/IPv6)</div>
+    <div class="set-static" style="border:1px solid #eee; border-radius:6px; margin-top:6px; opacity:.6;">🖨️ File and Printer Sharing</div>
+  </div>
+  <div class="win-footer">
+    <button class="btn acc" id="tcpipPropsBtn" onclick="tcpipProperties()" disabled style="opacity:.5;">Properties</button>
+    <button class="btn" onclick="closeWin('win-adapterprops')">Close</button>
+  </div>
+</div>
+
+<!-- tcp/ip properties (final target for static IP task) -->
+<div id="win-tcpip" class="window" style="width:380px;">
+  <div class="titlebar" id="tcpip-titlebar">
+    <span class="ttl-icon">🌐</span><span class="ttl-text">Internet Protocol Version 4 (TCP/IPv4) Properties</span>
+    <div class="win-controls"><button class="close" onclick="closeWin('win-tcpip')">✕</button></div>
+  </div>
+  <div class="win-body" style="padding:16px;">
+    <label style="display:block; font-size:12px; margin-bottom:8px;"><input type="radio" name="ipmode" checked> Obtain an IP address automatically</label>
+    <label style="display:block; font-size:12px; margin-bottom:10px;"><input type="radio" name="ipmode" id="staticIpRadio" onclick="pickStaticIp()"> Use the following IP address:</label>
+    <div style="padding-left:20px; opacity:.8; font-size:11.5px;">
+      <div>IP address: <input disabled style="width:120px;" value="192.168.1.50"></div>
+    </div>
+  </div>
+  <div class="win-footer"><button class="btn acc" onclick="closeWin('win-tcpip')">OK</button><button class="btn" onclick="closeWin('win-tcpip')">Cancel</button></div>
+</div>
+
+<!-- ===================== INTERNET PROPERTIES (inetcpl.cpl, shared) ===================== -->
+<div id="win-inetcpl" class="window" style="width:440px;">
+  <div class="titlebar" id="inetcpl-titlebar">
+    <span class="ttl-icon">🌐</span><span class="ttl-text">Internet Properties</span>
+    <div class="win-controls"><button class="close" onclick="closeWin('win-inetcpl')">✕</button></div>
+  </div>
+  <div class="win-body" style="padding:0;">
+    <div style="display:flex; border-bottom:1px solid #e3e3e3;">
+      <div class="tabbtn on" style="padding:8px 14px; font-size:12px; border-bottom:2px solid var(--accent); font-weight:600;">General</div>
+      <div class="tabbtn" style="padding:8px 14px; font-size:12px; color:#888;">Security</div>
+      <div class="tabbtn" style="padding:8px 14px; font-size:12px; color:#888;">Privacy</div>
+      <div class="tabbtn" style="padding:8px 14px; font-size:12px; cursor:pointer;" onclick="showConnectionsTab()">Connections</div>
+    </div>
+    <div id="inetcplBody" style="padding:18px;">
+      <p style="font-size:12.5px; color:#555;">Use this tab to change home page, browsing history, and appearance settings.</p>
+    </div>
+  </div>
+  <div class="win-footer"><button class="btn acc" onclick="closeWin('win-inetcpl')">OK</button><button class="btn" onclick="closeWin('win-inetcpl')">Cancel</button></div>
+</div>
+
+<!-- LAN settings (proxy) dialog -->
+<div id="win-lansettings" class="window" style="width:400px;">
+  <div class="titlebar" id="lansettings-titlebar">
+    <span class="ttl-icon">🌐</span><span class="ttl-text">Local Area Network (LAN) Settings</span>
+    <div class="win-controls"><button class="close" onclick="closeWin('win-lansettings')">✕</button></div>
+  </div>
+  <div class="win-body" style="padding:16px;">
+    <label style="display:block; font-size:12px; margin-bottom:10px;"><input type="checkbox"> Automatically detect settings</label>
+    <div style="border-top:1px solid #eee; padding-top:12px;">
+      <label style="display:block; font-size:12px; margin-bottom:8px; font-weight:600;"><input type="checkbox" checked> Use a proxy server for your LAN</label>
+      <div style="padding-left:20px; font-size:11.5px; color:#555;">Address: <input style="width:130px;" value="10.10.1.1"> Port: <input style="width:50px;" value="8080"></div>
+    </div>
+  </div>
+  <div class="win-footer"><button class="btn acc" onclick="closeWin('win-lansettings')">OK</button><button class="btn" onclick="closeWin('win-lansettings')">Cancel</button></div>
+</div>
+
+<!-- ===================== FIREWALL (firewall.cpl, shared) ===================== -->
+<div id="win-firewall" class="window" style="width:520px; height:400px;">
+  <div class="titlebar" id="firewall-titlebar">
+    <span class="ttl-icon">🛡️</span><span class="ttl-text">Windows Defender Firewall</span>
+    <div class="win-controls"><button class="close" onclick="closeWin('win-firewall')">✕</button></div>
+  </div>
+  <div class="win-body" style="padding:20px;">
+    <h3 style="margin:0 0 4px; font-size:14px;">Help protect your PC with Windows Defender Firewall</h3>
+    <p style="font-size:12px; color:#777; margin:0 0 18px;">Firewall status: <span style="color:#1e8e3e; font-weight:600;">On</span></p>
+    <div class="cpl-link-row" onclick="reach('firewall-allow-app'); flashDone(event.currentTarget)">
+      <span class="glyph">✅</span><div><div style="font-weight:600;">Allow an app or feature through Windows Defender Firewall</div><div style="font-size:11px; color:#888;">Whitelist a specific application</div></div>
+    </div>
+    <div class="cpl-link-row" onclick="reach('firewall-advanced'); flashDone(event.currentTarget)">
+      <span class="glyph">⚙️</span><div><div style="font-weight:600;">Advanced settings</div><div style="font-size:11px; color:#888;">Create custom inbound/outbound rules</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TASKBAR ===================== -->
+<div id="taskbar">
+  <div class="tb-center">
+    <div class="tb-btn" onclick="toggleStart()" title="Start">⊞</div>
+    <div class="tb-search" onclick="document.getElementById('tbSearchInput').focus()">
+      🔍
+      <input id="tbSearchInput" type="text" placeholder="Type here to search or run a command"
+        onkeydown="if(event.key==='Enter') handleCommandSubmit(this.value, true)">
+    </div>
+    <div class="tb-btn" onclick="openExplorer('thispc')" title="File Explorer">📁</div>
+    <div class="tb-btn" onclick="openSettings('system')" title="Settings">⚙️</div>
+    <div class="tb-btn" onclick="openControlPanel()" title="Control Panel">🗄️</div>
+    <div class="tb-btn" onclick="openRun()" title="Run (Win+R)">▶️</div>
+  </div>
+  <div class="tb-right"><span id="clock">--:--</span></div>
+</div>
+
+<!-- ===================== START MENU ===================== -->
+<div id="startMenu">
+  <div class="sm-search"><span>🔍</span><input type="text" placeholder="Type here to search or run a command"
+    onkeydown="if(event.key==='Enter') handleCommandSubmit(this.value, true)"></div>
+  <div class="sm-label">Pinned</div>
+  <div class="sm-grid">
+    <div class="sm-tile" onclick="openSettings('system'); toggleStart()"><span class="glyph">⚙️</span>Settings</div>
+    <div class="sm-tile" onclick="openControlPanel(); toggleStart()"><span class="glyph">🗄️</span>Control Panel</div>
+    <div class="sm-tile" onclick="openExplorer('thispc'); toggleStart()"><span class="glyph">📁</span>File Explorer</div>
+    <div class="sm-tile" onclick="openRun(); toggleStart()"><span class="glyph">▶️</span>Run</div>
+    <div class="sm-tile" onclick="openTaskManager(); toggleStart()"><span class="glyph">📊</span>Task Manager</div>
+    <div class="sm-tile" style="opacity:.4; cursor:default;"><span class="glyph">🌐</span>Edge</div>
+    <div class="sm-tile" style="opacity:.4; cursor:default;"><span class="glyph">✉️</span>Mail</div>
+    <div class="sm-tile" style="opacity:.4; cursor:default;"><span class="glyph">🗒️</span>Notepad</div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   WINDOW MANAGEMENT
+============================================================ */
+let zTop = 100;
+const positions = {}; // remember last position per window id, offset a little each open
+
+function bringFront(el){ el.style.zIndex = ++zTop; }
+
+function openWin(id, w, h){
+  const el = document.getElementById(id);
+  if (!positions[id]) {
+    positions[id] = { left: 260 + Math.random()*160, top: 90 + Math.random()*90 };
+  }
+  el.style.left = positions[id].left + 'px';
+  el.style.top = positions[id].top + 'px';
+  if (w) el.style.width = w + 'px';
+  if (h) el.style.height = h + 'px';
+  el.style.display = 'flex';
+  bringFront(el);
+  return el;
+}
+function closeWin(id){ document.getElementById(id).style.display = 'none'; }
+
+function makeDraggable(handleId, winId){
+  const handle = document.getElementById(handleId);
+  const win = document.getElementById(winId);
+  if (!handle || !win) return;
+  let dragging = false, ox = 0, oy = 0;
+  handle.addEventListener('mousedown', e => {
+    if (e.target.closest('.win-controls')) return;
+    dragging = true;
+    bringFront(win);
+    ox = e.clientX - win.offsetLeft;
+    oy = e.clientY - win.offsetTop;
+    document.body.style.userSelect = 'none';
+  });
+  window.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    const left = Math.max(0, e.clientX - ox);
+    const top = Math.max(0, e.clientY - oy);
+    win.style.left = left + 'px';
+    win.style.top = top + 'px';
+    positions[winId] = { left, top };
+  });
+  window.addEventListener('mouseup', () => { dragging = false; document.body.style.userSelect = ''; });
+}
+[
+  ['run-titlebar','win-run'], ['stub-titlebar','win-stub'], ['settings-titlebar','win-settings'],
+  ['cpl-titlebar','win-cpl'], ['explorer-titlebar','win-explorer'], ['mapdrive-titlebar','win-mapdrive'],
+  ['ncpa-titlebar','win-ncpa'], ['adapterprops-titlebar','win-adapterprops'], ['tcpip-titlebar','win-tcpip'],
+  ['inetcpl-titlebar','win-inetcpl'], ['lansettings-titlebar','win-lansettings'], ['firewall-titlebar','win-firewall']
+].forEach(([h,w]) => makeDraggable(h,w));
+
+document.querySelectorAll('.window').forEach(w => w.addEventListener('mousedown', () => bringFront(w)));
+
+/* ============================================================
+   CLOCK
+============================================================ */
+function tickClock(){
+  const d = new Date();
+  document.getElementById('clock').textContent =
+    d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+}
+tickClock(); setInterval(tickClock, 15000);
+
+/* ============================================================
+   START MENU
+============================================================ */
+function toggleStart(){
+  const sm = document.getElementById('startMenu');
+  sm.style.display = (sm.style.display === 'flex') ? 'none' : 'flex';
+  if (sm.style.display === 'flex') sm.querySelector('input').focus();
+}
+document.addEventListener('click', e => {
+  const sm = document.getElementById('startMenu');
+  if (sm.style.display === 'flex' && !sm.contains(e.target) && !e.target.closest('.tb-btn')) {
+    sm.style.display = 'none';
+  }
+});
+
+/* ============================================================
+   TOAST
+============================================================ */
+function toast(msg, kind){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = kind === 'skip' ? 'skip show' : 'show';
+  clearTimeout(toast._h);
+  toast._h = setTimeout(() => { t.className = t.className.replace('show',''); }, 1800);
+}
+
+/* ============================================================
+   QUIZ ENGINE
+============================================================ */
+const TASKS = [
+  // ---------- RUN DIALOG ----------
+  { id:'run-eventvwr', cat:'run', prompt:"A user says their app keeps crashing with no obvious cause. You need to check Windows logs for the error details.", hint:"Win + R → eventvwr.msc" },
+  { id:'run-diskmgmt', cat:'run', prompt:"You need to shrink a partition to make room for a new one on a user's drive.", hint:"Win + R → diskmgmt.msc" },
+  { id:'run-taskschd', cat:'run', prompt:"A backup script needs to run automatically every night at 2 AM.", hint:"Win + R → taskschd.msc" },
+  { id:'run-devmgmt', cat:'run', prompt:"A peripheral is showing a yellow warning triangle and you need to update or roll back its driver.", hint:"Win + R → devmgmt.msc" },
+  { id:'run-gpedit', cat:'run', prompt:"You need to disable USB storage devices using local Group Policy on this Pro-edition PC.", hint:"Win + R → gpedit.msc" },
+  { id:'run-lusrmgr', cat:'run', prompt:"You need to create a new local user account and add them to the Administrators group (Pro/Enterprise edition).", hint:"Win + R → lusrmgr.msc" },
+  { id:'run-perfmon', cat:'run', prompt:"You need to set up a custom data collector set to log CPU and memory usage over time.", hint:"Win + R → perfmon" },
+  { id:'run-sysdm', cat:'run', prompt:"You need to rename this computer and join it to a domain.", hint:"Win + R → sysdm.cpl" },
+  { id:'run-inetcpl', cat:'run', prompt:"You need to quickly open Internet Properties to adjust the browser security zone settings.", hint:"Win + R → inetcpl.cpl" },
+  { id:'run-ncpa', cat:'run', prompt:"You need to view and rename this PC's network adapters.", hint:"Win + R → ncpa.cpl" },
+  { id:'run-firewall', cat:'run', prompt:"You need to quickly check whether Windows Defender Firewall is currently turned on.", hint:"Win + R → firewall.cpl" },
+  { id:'run-msinfo32', cat:'run', prompt:"A support ticket asks for the computer's full hardware and BIOS summary in one place.", hint:"Win + R → msinfo32" },
+  { id:'run-resmon', cat:'run', prompt:"Task Manager isn't detailed enough — you need to see live disk and network activity per process.", hint:"Win + R → resmon" },
+  { id:'run-msconfig', cat:'run', prompt:"You need to change the default boot OS entry or force Safe Boot on next restart.", hint:"Win + R → msconfig" },
+  { id:'run-cleanmgr', cat:'run', prompt:"A user's C: drive is nearly full and you want to use the built-in cleanup tool.", hint:"Win + R → cleanmgr" },
+  { id:'run-regedit', cat:'run', prompt:"A KB article instructs you to manually add a DWORD value to a specific registry key.", hint:"Win + R → regedit" },
+  { id:'run-taskmgr', cat:'run', prompt:"An app has stopped responding and you need to force-end its process right now.", hint:"Ctrl + Shift + Esc" },
+
+  // ---------- SETTINGS APP ----------
+  { id:'settings-system', cat:'settings', prompt:"You need to change the display resolution or turn on Night Light.", hint:"Win + I → System" },
+  { id:'settings-devices', cat:'settings', prompt:"A user wants their mouse scroll direction reversed.", hint:"Win + I → Devices" },
+  { id:'settings-network', cat:'settings', prompt:"A laptop needs to connect to a new Wi-Fi network.", hint:"Win + I → Network & Internet" },
+  { id:'settings-apps', cat:'settings', prompt:"You need to uninstall an app the user no longer needs, the modern way.", hint:"Win + I → Apps" },
+  { id:'settings-accounts', cat:'settings', prompt:"A user wants to set up a PIN for Windows Hello sign-in.", hint:"Win + I → Accounts" },
+  { id:'settings-update', cat:'settings', prompt:"You need to check whether there are pending Windows Updates.", hint:"Win + I → Update & Security" },
+  { id:'settings-about', cat:'settings', prompt:"You need to find how much RAM is installed and the exact OS build number.", hint:"Win + I → System → About" },
+  { id:'settings-printers', cat:'settings', prompt:"You need to add a shared network printer using the modern Settings app.", hint:"Win + I → Devices → Printers & scanners" },
+  { id:'advanced-sharing', cat:'settings', prompt:"You need to turn off network discovery for a public network profile.", hint:"Win + I → Network & Internet → Advanced sharing settings (Control Panel → Network and Sharing Center → Change advanced sharing settings also works)" },
+
+  // ---------- CONTROL PANEL ----------
+  { id:'cpl-devices-printers', cat:'cpl', prompt:"Using the classic interface, you need to see every installed device and printer and set one as default.", hint:"Control Panel → Devices and Printers" },
+  { id:'cpl-programs-features', cat:'cpl', prompt:"A legacy desktop program isn't listed under Settings → Apps. Uninstall it the old-school way.", hint:"Control Panel → Programs and Features" },
+  { id:'cpl-network-sharing', cat:'cpl', prompt:"You need to open the classic Network and Sharing Center overview.", hint:"Control Panel → Network and Sharing Center" },
+  { id:'cpl-user-accounts', cat:'cpl', prompt:"Change a user's account type (Standard vs Administrator) using the classic Control Panel applet.", hint:"Control Panel → User Accounts" },
+  { id:'cpl-folder-options', cat:'cpl', prompt:"You need to make File Explorer always show file extensions, from the classic applet.", hint:"Control Panel → File Explorer Options" },
+  { id:'cpl-power-options', cat:'cpl', prompt:"Change what happens when a laptop's lid is closed.", hint:"Control Panel → Power Options" },
+  { id:'proxy-lan-settings', cat:'cpl', prompt:"An office requires a manual proxy server address and port for all browsing.", hint:"inetcpl.cpl (or Control Panel → Internet Options) → Connections tab → LAN settings" },
+  { id:'firewall-allow-app', cat:'cpl', prompt:"A specific application is being blocked and needs to be allowed through the firewall.", hint:"firewall.cpl (or Control Panel → Windows Defender Firewall) → Allow an app or feature" },
+  { id:'firewall-advanced', cat:'cpl', prompt:"You need to create a custom inbound rule for a nonstandard port.", hint:"firewall.cpl (or Control Panel → Windows Defender Firewall) → Advanced settings" },
+  { id:'cpl-change-adapter', cat:'cpl', prompt:"View the list of network adapters using the classic Control Panel route.", hint:"Control Panel → Network and Sharing Center → Change adapter settings (ncpa.cpl also works)" },
+  { id:'network-tcpip', cat:'cpl', prompt:"You need to manually assign a static IP address to the Ethernet adapter.", hint:"ncpa.cpl → double-click Ethernet → Properties → TCP/IPv4 → Properties" },
+
+  // ---------- FILE EXPLORER ----------
+  { id:'explorer-hidden-files', cat:'explorer', prompt:"A user insists a file exists, but it isn't showing up anywhere in File Explorer.", hint:"File Explorer → View → Hidden items" },
+  { id:'explorer-map-drive', cat:'explorer', prompt:"Map the shared folder \\\\FileServer\\Shared to drive letter Z: for this user.", hint:"File Explorer → This PC → Map network drive" },
+  { id:'explorer-unc', cat:'explorer', prompt:"Quickly browse a coworker's shared folder by its UNC path, without permanently mapping a drive.", hint:"File Explorer address bar → \\\\Server\\Share" },
+];
+
+const CAT_LABEL = { run:'RUN DIALOG', settings:'SETTINGS APP', cpl:'CONTROL PANEL', explorer:'FILE EXPLORER' };
+
+let score = 0, streak = 0, current = null, recentIds = [];
+
+function pickTask(){
+  let pool = TASKS.filter(t => !recentIds.includes(t.id));
+  if (pool.length === 0) { recentIds = []; pool = TASKS; }
+  const t = pool[Math.floor(Math.random() * pool.length)];
+  recentIds.push(t.id);
+  if (recentIds.length > 6) recentIds.shift();
+  return t;
+}
+
+function loadNewTask(){
+  current = pickTask();
+  document.getElementById('qBadge').className = 'badge ' + current.cat;
+  document.getElementById('qBadge').textContent = CAT_LABEL[current.cat];
+  document.getElementById('questionText').textContent = current.prompt;
+  document.getElementById('hintBox').style.display = 'none';
+  document.getElementById('hintBox').innerHTML = '';
+}
+
+function showHint(){
+  const hb = document.getElementById('hintBox');
+  hb.innerHTML = '💡 ' + current.hint;
+  hb.style.display = 'block';
+}
+
+function updateScoreLine(){
+  document.getElementById('scoreLine').textContent = `✅ ${score} correct · 🔥 streak ${streak}`;
+}
+
+function resetScore(){
+  score = 0; streak = 0; updateScoreLine();
+  toast('Score reset', 'skip');
+}
+
+function skipTask(showAnswer){
+  if (showAnswer) toast('Answer: ' + current.hint, 'skip');
+  streak = 0; updateScoreLine();
+  loadNewTask();
+}
+
+function closeAllWindows(){
+  document.querySelectorAll('.window').forEach(w => w.style.display = 'none');
+  document.getElementById('viewMenu').style.display = 'none';
+}
+
+/* Called any time the user completes a navigation action in the simulated OS */
+function reach(targetId){
+  if (!current) return;
+  if (current.id === targetId) {
+    score++; streak++;
+    updateScoreLine();
+    toast('✅ Correct — ' + current.hint);
+    setTimeout(() => { closeAllWindows(); loadNewTask(); }, 950);
+  }
+}
+
+/* ============================================================
+   RUN DIALOG LOGIC
+============================================================ */
+function openRun(){
+  const el = openWin('win-run', 420);
+  document.getElementById('runError').style.display = 'none';
+  const inp = document.getElementById('runInput');
+  inp.value = '';
+  setTimeout(() => inp.focus(), 30);
+}
+document.getElementById('runInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') submitRun();
+});
+
+const RUN_MAP = {
+  'eventvwr.msc': { title:'Event Viewer', icon:'🗒️', target:'run-eventvwr' },
+  'diskmgmt.msc': { title:'Disk Management', icon:'💽', target:'run-diskmgmt' },
+  'taskschd.msc': { title:'Task Scheduler', icon:'⏱️', target:'run-taskschd' },
+  'devmgmt.msc': { title:'Device Manager', icon:'🖧', target:'run-devmgmt' },
+  'gpedit.msc': { title:'Local Group Policy Editor', icon:'📋', target:'run-gpedit' },
+  'lusrmgr.msc': { title:'Local Users and Groups', icon:'👥', target:'run-lusrmgr' },
+  'perfmon': { title:'Performance Monitor', icon:'📈', target:'run-perfmon' },
+  'perfmon.exe': { title:'Performance Monitor', icon:'📈', target:'run-perfmon' },
+  'perfmon.msc': { title:'Performance Monitor', icon:'📈', target:'run-perfmon' },
+  'sysdm.cpl': { title:'System Properties', icon:'🖥️', target:'run-sysdm' },
+  'msinfo32': { title:'System Information', icon:'ℹ️', target:'run-msinfo32' },
+  'msinfo32.exe': { title:'System Information', icon:'ℹ️', target:'run-msinfo32' },
+  'resmon': { title:'Resource Monitor', icon:'📊', target:'run-resmon' },
+  'resmon.exe': { title:'Resource Monitor', icon:'📊', target:'run-resmon' },
+  'msconfig': { title:'System Configuration', icon:'🛠️', target:'run-msconfig' },
+  'msconfig.exe': { title:'System Configuration', icon:'🛠️', target:'run-msconfig' },
+  'cleanmgr': { title:'Disk Cleanup', icon:'🧹', target:'run-cleanmgr' },
+  'cleanmgr.exe': { title:'Disk Cleanup', icon:'🧹', target:'run-cleanmgr' },
+  'regedit': { title:'Registry Editor', icon:'📚', target:'run-regedit' },
+  'regedit.exe': { title:'Registry Editor', icon:'📚', target:'run-regedit' },
+};
+
+function submitRun(){
+  const raw = document.getElementById('runInput').value;
+  handleCommandSubmit(raw, false);
+}
+
+function handleCommandSubmit(raw, fromSearchBox){
+  const val = (raw || '').trim().toLowerCase();
+  if (!val) return;
+  document.getElementById('runError').style.display = 'none';
+
+  if (val === 'inetcpl.cpl') { closeWin('win-run'); openInetcpl(); reach('run-inetcpl'); if (fromSearchBox) clearSearchBoxes(); return; }
+  if (val === 'ncpa.cpl') { closeWin('win-run'); openNcpa(); reach('run-ncpa'); if (fromSearchBox) clearSearchBoxes(); return; }
+  if (val === 'firewall.cpl') { closeWin('win-run'); openFirewall(); reach('run-firewall'); if (fromSearchBox) clearSearchBoxes(); return; }
+
+  const hit = RUN_MAP[val];
+  if (hit) {
+    closeWin('win-run');
+    openStub(hit.title, hit.icon, genericStubBody(hit.title));
+    reach(hit.target);
+    if (fromSearchBox) clearSearchBoxes();
+    return;
+  }
+
+  // unrecognized command
+  if (fromSearchBox) {
+    // Start/taskbar search silently does nothing useful for junk text
+    return;
+  }
+  document.getElementById('runErrorVal').textContent = "'" + raw + "'";
+  document.getElementById('runError').style.display = 'block';
+}
+function clearSearchBoxes(){
+  document.getElementById('tbSearchInput').value = '';
+  const smi = document.querySelector('#startMenu input');
+  if (smi) smi.value = '';
+  document.getElementById('startMenu').style.display = 'none';
+}
+
+function genericStubBody(title){
+  return `<h3>${title}</h3><p>You've opened ${title}. In the real exam, arriving here is the whole task — what matters is the path you took to get here.</p>
+    <table><tr><th>Status</th><td>Running</td></tr><tr><th>Launched via</th><td>Run dialog</td></tr></table>`;
+}
+function openStub(title, icon, bodyHtml){
+  document.getElementById('stubTitle').textContent = title;
+  document.getElementById('stubIcon').textContent = icon;
+  document.getElementById('stubSide').innerHTML = '';
+  document.getElementById('stubMain').innerHTML = bodyHtml;
+  openWin('win-stub', 560, 400);
+}
+function openTaskManager(){
+  openStub('Task Manager', '📊', `<h3>Task Manager</h3><p>Processes are sorted by CPU usage. Right-click any process to End task.</p>
+    <table><tr><th>Process</th><th>CPU</th><th>Memory</th></tr>
+    <tr><td>Not Responding App</td><td>34%</td><td>512 MB</td></tr>
+    <tr><td>Explorer.exe</td><td>2%</td><td>120 MB</td></tr></table>`);
+  reach('run-taskmgr');
+}
+
+/* generic error dialog helper (used sparingly) */
+function showErrorDialog(msg){
+  document.getElementById('errorMsg').textContent = msg;
+  openWin('win-error', 380);
+}
+
+/* ============================================================
+   SETTINGS APP LOGIC
+============================================================ */
+function openSettings(page){
+  openWin('win-settings', 820, 560);
+  showSettingsPage(page || 'system');
+}
+function showSettingsPage(page){
+  document.querySelectorAll('.set-item').forEach(el => el.classList.toggle('on', el.dataset.page === page));
+  const c = document.getElementById('settingsContent');
+  const pages = {
+    system: `<h2>System</h2>
+      <div class="set-block">
+        <div class="set-static">🖥️ Display — resolution, night light, multiple monitors</div>
+        <div class="set-static">🔊 Sound — volume, output device</div>
+        <div class="set-link" id="lnk-about" onclick="settingsGoAbout()"><span>ℹ️ About — device specs, OS build, activation</span><span class="arrow">›</span></div>
+      </div>`,
+    devices: `<h2>Devices</h2>
+      <div class="set-block">
+        <div class="set-link" id="lnk-printers" onclick="settingsGoPrinters()"><span>🖨️ Printers &amp; scanners</span><span class="arrow">›</span></div>
+        <div class="set-static">🔵 Bluetooth &amp; other devices</div>
+        <div class="set-static">🖱️ Mouse — scroll wheel, pointer speed</div>
+      </div>`,
+    network: `<h2>Network &amp; Internet</h2>
+      <div class="set-block">
+        <div class="set-static">📶 Wi-Fi — manage known networks</div>
+        <div class="set-static">🔌 Ethernet</div>
+        <div class="set-link" onclick="reach('advanced-sharing'); flashDone(event.currentTarget)"><span>🔗 Advanced sharing settings</span><span class="arrow">›</span></div>
+        <div class="set-static" style="opacity:.65;">🌐 Proxy (memorize the Run-dialog route for this one — see hint)</div>
+      </div>`,
+    personalization: `<h2>Personalization</h2><div class="set-block"><div class="set-static">🎨 Background, colors, lock screen — not exam-tested here.</div></div>`,
+    apps: `<h2>Apps</h2><div class="set-block"><div class="set-static">📦 Apps &amp; features — search, select, Uninstall</div></div>`,
+    accounts: `<h2>Accounts</h2><div class="set-block"><div class="set-static">👤 Your info, sign-in options (PIN, Windows Hello), family &amp; other users</div></div>`,
+    update: `<h2>Update &amp; Security</h2><div class="set-block"><div class="set-static">🔄 Windows Update — check for updates, view history</div></div>`,
+  };
+  c.innerHTML = pages[page] || pages.system;
+  reach('settings-' + page);
+}
+function settingsGoAbout(){
+  document.getElementById('lnk-about').classList.add('done');
+  document.getElementById('settingsContent').innerHTML = `
+    <h2>About</h2>
+    <div class="set-block" style="padding:16px 18px;">
+      <div class="about-grid">
+        <div><span>Device name</span><span>DESKTOP-7QX2K</span></div>
+        <div><span>Installed RAM</span><span>16.0 GB</span></div>
+        <div><span>Processor</span><span>Intel Core i5-1240P</span></div>
+        <div><span>Edition</span><span>Windows 11 Pro</span></div>
+        <div><span>Version</span><span>23H2</span></div>
+        <div><span>OS build</span><span>22631.3527</span></div>
+      </div>
+    </div>`;
+  reach('settings-about');
+}
+function settingsGoPrinters(){
+  document.getElementById('lnk-printers').classList.add('done');
+  document.getElementById('settingsContent').innerHTML = `
+    <h2>Printers &amp; scanners</h2>
+    <div class="set-block"><div class="set-static">➕ Add a printer or scanner</div>
+    <div class="set-static">🖨️ HP LaserJet — Ready</div></div>`;
+  reach('settings-printers');
+}
+function flashDone(el){ el.classList.add('done'); }
+
+/* ============================================================
+   CONTROL PANEL LOGIC
+============================================================ */
+function openControlPanel(){
+  openWin('win-cpl', 700, 520);
+  document.getElementById('cplCrumb').textContent = '';
+  document.getElementById('cplContent').innerHTML = cplHome();
+}
+function cplHome(){
+  return `<div class="cpl-grid">
+    <div class="cpl-icon" onclick="cplOpen('devices-printers')"><span class="glyph">🖨️</span>Devices and Printers</div>
+    <div class="cpl-icon" onclick="cplOpen('programs-features')"><span class="glyph">📦</span>Programs and Features</div>
+    <div class="cpl-icon" onclick="cplOpen('network-sharing')"><span class="glyph">🌐</span>Network and Sharing Center</div>
+    <div class="cpl-icon" onclick="cplOpen('user-accounts')"><span class="glyph">👤</span>User Accounts</div>
+    <div class="cpl-icon" onclick="cplOpen('folder-options')"><span class="glyph">📁</span>File Explorer Options</div>
+    <div class="cpl-icon" onclick="cplOpen('power-options')"><span class="glyph">🔋</span>Power Options</div>
+    <div class="cpl-icon" onclick="cplOpen('internet-options')"><span class="glyph">🌍</span>Internet Options</div>
+    <div class="cpl-icon" onclick="cplOpen('firewall')"><span class="glyph">🛡️</span>Windows Defender Firewall</div>
+    <div class="cpl-icon" onclick="cplOpen('system')"><span class="glyph">🖥️</span>System</div>
+  </div>`;
+}
+function cplOpen(which){
+  const c = document.getElementById('cplContent');
+  document.getElementById('cplCrumb').textContent = '\u203A ' + ({
+    'devices-printers':'Devices and Printers','programs-features':'Programs and Features',
+    'network-sharing':'Network and Sharing Center','user-accounts':'User Accounts',
+    'folder-options':'File Explorer Options','power-options':'Power Options',
+    'internet-options':'Internet Options','firewall':'Windows Defender Firewall','system':'System'
+  })[which];
+
+  if (which === 'devices-printers') {
+    c.innerHTML = cplBack() + `<div class="cpl-page"><h2>Devices and Printers</h2><div class="sub">6 devices, 2 printers</div>
+      <div class="exp-files"><div class="exp-file"><div class="glyph">🖨️</div>HP LaserJet</div>
+      <div class="exp-file"><div class="glyph">🖥️</div>DESKTOP-7QX2K</div>
+      <div class="exp-file"><div class="glyph">🖱️</div>USB Mouse</div></div></div>`;
+    reach('cpl-devices-printers');
+  } else if (which === 'programs-features') {
+    c.innerHTML = cplBack() + `<div class="cpl-page"><h2>Programs and Features</h2><div class="sub">Uninstall or change a program</div>
+      <table style="width:100%; font-size:12.5px; border-collapse:collapse;">
+      <tr><th style="text-align:left; padding:6px;">Name</th><th style="text-align:left;">Version</th><th></th></tr>
+      <tr><td style="padding:6px;">Legacy Accounting Tool</td><td>4.2.1</td><td><button class="btn">Uninstall</button></td></tr>
+      <tr><td style="padding:6px;">Adobe Reader</td><td>2023</td><td><button class="btn">Uninstall</button></td></tr>
+      </table></div>`;
+    reach('cpl-programs-features');
+  } else if (which === 'network-sharing') {
+    c.innerHTML = cplBack() + `<div class="cpl-page"><h2>Network and Sharing Center</h2>
+      <div class="sub">View your basic network information and set up connections</div>
+      <div class="cpl-link-row" onclick="reach('cpl-change-adapter'); openNcpa(); flashDone(event.currentTarget)"><span class="glyph">🖧</span>Change adapter settings</div>
+      <div class="cpl-link-row" onclick="reach('advanced-sharing'); flashDone(event.currentTarget)"><span class="glyph">🔗</span>Change advanced sharing settings</div>
+      </div>`;
+    reach('cpl-network-sharing');
+  } else if (which === 'user-accounts') {
+    c.innerHTML = cplBack() + `<div class="cpl-page"><h2>User Accounts</h2><div class="sub">Make changes to your user account</div>
+      <div class="cpl-link-row"><span class="glyph">🔧</span>Change your account type</div></div>`;
+    reach('cpl-user-accounts');
+  } else if (which === 'folder-options') {
+    c.innerHTML = cplBack() + `<div class="cpl-page"><h2>File Explorer Options</h2><div class="sub">General / View / Search tabs</div>
+      <label style="display:block; font-size:12.5px; margin-bottom:8px;"><input type="checkbox" checked disabled> Always show icons, never thumbnails</label>
+      <label style="display:block; font-size:12.5px;"><input type="checkbox" id="cplHiddenChk" onchange="toggleHiddenItems(this.checked); reach('explorer-hidden-files')"> Show hidden files, folders, and drives</label>
+      </div>`;
+    reach('cpl-folder-options');
+  } else if (which === 'power-options') {
+    c.innerHTML = cplBack() + `<div class="cpl-page"><h2>Power Options</h2><div class="sub">Choose or customize a power plan</div>
+      <div class="cpl-link-row"><span class="glyph">💻</span>Choose what closing the lid does</div></div>`;
+    reach('cpl-power-options');
+  } else if (which === 'internet-options') {
+    openInetcpl();
+    reach('run-inetcpl');
+  } else if (which === 'firewall') {
+    openFirewall();
+    reach('run-firewall');
+  } else if (which === 'system') {
+    c.innerHTML = cplBack() + `<div class="cpl-page"><h2>System</h2><div class="sub">View basic information about your computer</div>
+      <div class="about-grid">
+        <div><span>Device name</span><span>DESKTOP-7QX2K</span></div>
+        <div><span>Installed RAM</span><span>16.0 GB</span></div>
+        <div><span>Edition</span><span>Windows 11 Pro</span></div>
+      </div></div>`;
+    reach('settings-about');
+  }
+}
+function cplBack(){ return `<div class="cpl-page" style="padding-bottom:0;"><span class="cpl-back" onclick="openControlPanel()">‹ Control Panel Home</span></div>`; }
+
+/* ============================================================
+   FILE EXPLORER LOGIC
+============================================================ */
+let hiddenShown = false;
+function openExplorer(where){
+  openWin('win-explorer', 820, 560);
+  explorerNav(where || 'thispc');
+}
+function toggleViewMenu(){
+  const vm = document.getElementById('viewMenu');
+  vm.style.display = (vm.style.display === 'block') ? 'none' : 'block';
+}
+document.addEventListener('click', e => {
+  const vm = document.getElementById('viewMenu');
+  if (vm.style.display === 'block' && !vm.contains(e.target) && e.target.closest('.exp-btn') === null) {
+    vm.style.display = 'none';
+  }
+});
+function toggleHiddenItems(checked){
+  hiddenShown = checked;
+  document.getElementById('hiddenItemsChk').checked = checked;
+  const cplChk = document.getElementById('cplHiddenChk');
+  if (cplChk) cplChk.checked = checked;
+  renderExplorerMain(document.getElementById('explorerTitle').textContent);
+  if (checked) reach('explorer-hidden-files');
+}
+function explorerNav(where){
+  const titles = { thispc:'This PC', desktop:'Desktop', documents:'Documents', network:'Network', mapped:'Data (Z:)' };
+  document.getElementById('explorerTitle').textContent = titles[where] || 'This PC';
+  document.getElementById('expAddr').value = titles[where] || 'This PC';
+  renderExplorerMain(titles[where] || 'This PC');
+}
+function renderExplorerMain(title){
+  const main = document.getElementById('explorerMain');
+  let files = `<div class="exp-file"><div class="glyph">📁</div>Documents</div>
+    <div class="exp-file"><div class="glyph">📁</div>Pictures</div>
+    <div class="exp-file"><div class="glyph">📄</div>notes.txt</div>`;
+  if (hiddenShown) {
+    files += `<div class="exp-file ghost"><div class="glyph">📄</div>desktop.ini</div>
+      <div class="exp-file ghost"><div class="glyph">📁</div>$RECYCLE.BIN</div>`;
+  }
+  main.innerHTML = `<div class="exp-files">${files}</div>`;
+}
+function submitExplorerAddress(){
+  const val = document.getElementById('expAddr').value.trim();
+  if (val.startsWith('\\\\')) {
+    document.getElementById('explorerTitle').textContent = val;
+    document.getElementById('explorerMain').innerHTML = `<p style="font-size:12.5px; color:#555;">Connecting to <b>${val}</b>…</p>
+      <div class="exp-files"><div class="exp-file"><div class="glyph">📁</div>Shared</div></div>`;
+    reach('explorer-unc');
+  }
+}
+function openMapDrive(){
+  document.getElementById('driveFolder').value = '';
+  openWin('win-mapdrive', 380);
+}
+function finishMapDrive(){
+  closeWin('win-mapdrive');
+  document.getElementById('mappedDriveItem').style.display = 'flex';
+  reach('explorer-map-drive');
+  toast('Drive Z: mapped to ' + (document.getElementById('driveFolder').value || '\\\\FileServer\\Shared'));
+}
+
+/* ============================================================
+   NETWORK CONNECTIONS / ADAPTER PROPERTIES / TCP-IP CHAIN
+============================================================ */
+function openNcpa(){ openWin('win-ncpa', 520, 360); }
+function openAdapterProps(){
+  document.getElementById('tcpipPropsBtn').disabled = true;
+  document.getElementById('tcpipPropsBtn').style.opacity = .5;
+  document.getElementById('tcpipRow').style.background = '';
+  openWin('win-adapterprops', 400);
+}
+function selectTcpIp(){
+  document.getElementById('tcpipRow').style.background = '#e5f1fb';
+  document.getElementById('tcpipPropsBtn').disabled = false;
+  document.getElementById('tcpipPropsBtn').style.opacity = 1;
+}
+function tcpipProperties(){
+  openWin('win-tcpip', 380);
+}
+function pickStaticIp(){ reach('network-tcpip'); }
+
+/* ============================================================
+   INTERNET PROPERTIES / LAN SETTINGS (proxy)
+============================================================ */
+function openInetcpl(){ openWin('win-inetcpl', 440); document.getElementById('inetcplBody').innerHTML = `<p style="font-size:12.5px; color:#555;">Use this tab to change home page, browsing history, and appearance settings.</p>`; }
+function showConnectionsTab(){
+  document.getElementById('inetcplBody').innerHTML = `
+    <p style="font-size:12.5px; color:#555; margin-top:0;">Set up an Internet connection or configure your LAN.</p>
+    <button class="btn acc" onclick="openLanSettings()">LAN settings</button>`;
+}
+function openLanSettings(){
+  openWin('win-lansettings', 400);
+  reach('proxy-lan-settings');
+}
+
+/* ============================================================
+   FIREWALL
+============================================================ */
+function openFirewall(){ openWin('win-firewall', 520, 400); }
+
+/* ============================================================
+   KEYBOARD SHORTCUTS
+============================================================ */
+document.addEventListener('keydown', e => {
+  const active = document.activeElement;
+  const typingSomewhere = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA');
+
+  // Win + R  (also Ctrl+Alt+R as a reliable fallback since browsers usually can't see the real Windows key)
+  if ((e.key === 'r' || e.key === 'R') && (e.metaKey || (e.ctrlKey && e.altKey))) {
+    e.preventDefault(); openRun(); return;
+  }
+  // Win + I (also Ctrl+Alt+I fallback)
+  if ((e.key === 'i' || e.key === 'I') && (e.metaKey || (e.ctrlKey && e.altKey))) {
+    e.preventDefault(); openSettings('system'); return;
+  }
+  // Ctrl+Shift+Esc -> Task Manager
+  if ((e.key === 'Escape' || e.code === 'Escape') && e.ctrlKey && e.shiftKey) {
+    e.preventDefault(); openTaskManager(); return;
+  }
+  // Esc closes topmost non-stub dialog quickly (quality of life) — skip if typing
+  if (e.key === 'Escape' && !typingSomewhere) {
+    document.getElementById('startMenu').style.display = 'none';
+  }
+});
+
+/* ============================================================
+   INIT
+============================================================ */
+loadNewTask();
+updateScoreLine();
+</script>
+</body>
+</html>

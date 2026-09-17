@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.81 macOS Features and Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --ink:#121820;
+    --muted:#4a5568;
+    --paper:#eef2f7;
+    --line:rgba(18,24,32,0.12);
+    --accent:#0071e3;
+    --accent-soft:#d6ebff;
+    --sky:#0e4d7b;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(0,113,227,0.12), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.08), transparent 50%),
+      linear-gradient(180deg, #e6edf5 0%, var(--paper) 40%, #eef2f7 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+  .hero{
+    position:relative; min-height:100vh; display:flex; align-items:flex-end;
+    color:#f4f8fc; overflow:hidden;
+  }
+  .hero::before{
+    content:""; position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,28,56,0.25) 0%, rgba(8,28,56,0.72) 52%, rgba(8,28,56,0.94) 100%),
+      linear-gradient(135deg, #0a3d62 0%, #0071e3 45%, #7dd3fc 100%);
+  }
+  .hero-inner{ position:relative; z-index:1; width:min(1080px, calc(100% - 2.4rem)); margin:0 auto 4.2rem; }
+  .brand{ font-family:"Fraunces",serif; font-size:clamp(3.4rem, 10vw, 6.6rem); font-weight:700; line-height:0.92; letter-spacing:-0.03em; margin:0 0 0.85rem; }
+  .hero h1{ margin:0 0 0.65rem; font-size:clamp(1.05rem, 2.1vw, 1.35rem); font-weight:500; max-width:40ch; color:#dceaf8; }
+  .hero > .hero-inner > p{ margin:0 0 1.5rem; max-width:54ch; color:#a8c0d8; }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{ text-decoration:none; font-weight:600; font-size:0.92rem; padding:0.7rem 1.15rem; border-radius:999px; background:#dceaf8; color:#0a3d62; }
+  .hero-cta a.ghost{ background:transparent; color:#dceaf8; border:1px solid rgba(220,234,248,0.4); }
+  .toc{ position:sticky; top:0; z-index:30; backdrop-filter:blur(12px); background:rgba(238,242,247,0.92); border-bottom:1px solid var(--line); }
+  .toc .wrap{ display:flex; gap:0.3rem; overflow-x:auto; padding:0.7rem 0; scrollbar-width:thin; }
+  .toc a{ flex:0 0 auto; text-decoration:none; color:var(--muted); font-size:0.78rem; font-weight:600; padding:0.42rem 0.75rem; border-radius:999px; }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{ display:inline-block; font-size:0.72rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--accent); margin-bottom:0.5rem; }
+  .section-head h2{ font-family:"Fraunces",serif; font-size:clamp(1.75rem, 3.4vw, 2.5rem); margin:0 0 0.5rem; letter-spacing:-0.02em; line-height:1.12; }
+  .section-head p{ margin:0; color:var(--muted); }
+  .term{ display:grid; grid-template-columns:minmax(150px, 220px) 1fr; gap:1.35rem 1.7rem; align-items:start; padding:1.45rem 0; border-top:1px solid var(--line); }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{ border:1px solid var(--line); border-radius:18px; min-height:150px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.45rem; overflow:hidden; background:linear-gradient(160deg, #fff, var(--accent-soft)); padding:1.1rem; text-align:center; }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+  .visual .glyph{ font-size:1.05rem; font-weight:700; color:var(--accent); word-break:break-word; line-height:1.3; }
+  .visual .caption{ font-size:0.68rem; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:var(--sky); }
+  .body h3{ font-family:"Fraunces",serif; font-size:1.35rem; margin:0 0 0.55rem; letter-spacing:-0.01em; }
+  .aka{ display:inline-block; font-size:0.76rem; font-weight:600; color:var(--sky); background:rgba(14,77,123,0.08); padding:0.18rem 0.55rem; border-radius:999px; margin:0 0 0.65rem; }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body code, footer code{ font-family:"Cascadia Mono","Consolas",monospace; font-size:0.86em; background:rgba(18,24,32,0.06); border-radius:5px; padding:0.05rem 0.35rem; }
+  .demo{ margin:0.85rem 0 0; padding:0.9rem 1.05rem; border-left:4px solid var(--accent); background:rgba(0,113,227,0.08); border-radius:0 12px 12px 0; color:var(--muted); font-size:0.9rem; }
+  footer{ padding:2.4rem 0 3.2rem; color:var(--muted); font-size:0.84rem; }
+  footer .wrap{ border-top:1px solid var(--line); padding-top:1.2rem; }
+  @media (max-width:780px){ .term{ grid-template-columns:1fr; } .hero-inner{ margin-bottom:3rem; } }
+
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">1.81</p>
+    <h1>macOS Features and Tools</h1>
+    <p>Installers, filesystem paths, System Settings, security/backup, desktop UI, Apple ecosystem, Disk Utility, and Terminal — from the 1.8 lab.</p>
+    <div class="hero-cta">
+      <a href="#install">Start studying</a>
+      <a class="ghost" href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">Open 1.8 interactive lab</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap"><a href="#install">Install</a><a href="#paths">Paths</a><a href="#settings">Settings</a><a href="#security">Security</a><a href="#desktop">Desktop</a><a href="#ecosystem">Ecosystem</a><a href="#admin">Admin</a></div>
+</nav>
+
+<main>
+
+  <section id="install">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Install &amp; uninstall</h2>
+        <p>How macOS packages apps and how you remove them.</p>
+      </div>
+      
+      <article class="term" id="dmg">
+        <div class="visual">
+          <span class="glyph">.dmg</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>.dmg</h3>
+          <span class="aka">↳ Double-click Installer.dmg in Finder</span>
+          <p>Disk Image file format used to distribute software on macOS. Mounts like a virtual volume containing application installers or bundle folders.</p>
+          <div class="demo">On a Mac: Double-click Installer.dmg in Finder. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>.dmg</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="pkg">
+        <div class="visual">
+          <span class="glyph">.pkg</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>.pkg</h3>
+          <span class="aka">↳ Double-click Sample.pkg in Finder</span>
+          <p>Installer package format containing an installation wizard, scripts, and payload files used to install software across system directories.</p>
+          <div class="demo">On a Mac: Double-click Sample.pkg in Finder. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>.pkg</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="app">
+        <div class="visual">
+          <span class="glyph">.app</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>.app</h3>
+          <span class="aka">↳ Finder → Applications</span>
+          <p>Application bundle directory structure in macOS that appears as a single executable file to the end user.</p>
+          <div class="demo">On a Mac: Finder → Applications. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>.app</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="app-store">
+        <div class="visual">
+          <span class="glyph">App Store</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>App Store</h3>
+          <span class="aka">↳ Open App Store</span>
+          <p>Official Apple digital distribution platform for discovering, purchasing, and securely downloading vetted macOS applications.</p>
+          <div class="demo">On a Mac: Open App Store. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>App Store</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="uninstallation-process">
+        <div class="visual">
+          <span class="glyph">Uninstallation Process</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Uninstallation Process</h3>
+          <span class="aka">↳ Select an app in Applications, then Move to Trash</span>
+          <p>Removal method for macOS apps — typically dragging a .app bundle from /Applications to the Trash, or running a dedicated uninstaller script for .pkg-installed software.</p>
+          <div class="demo">On a Mac: Select an app in Applications, then Move to Trash. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Uninstallation Process</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="paths">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Filesystem paths</h2>
+        <p>Key directories every A+ tech should recognize.</p>
+      </div>
+      
+      <article class="term" id="applications">
+        <div class="visual">
+          <span class="glyph">/Applications</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>/Applications</h3>
+          <span class="aka">↳ Finder → /Applications</span>
+          <p>Root directory storing installed applications accessible to all system users.</p>
+          <div class="demo">On a Mac: Finder → /Applications. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>/Applications</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="users">
+        <div class="visual">
+          <span class="glyph">/Users</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>/Users</h3>
+          <span class="aka">↳ Finder → /Users</span>
+          <p>System folder containing individual user profile directories, including home folders, personal data, and desktop configurations.</p>
+          <div class="demo">On a Mac: Finder → /Users. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>/Users</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="library">
+        <div class="visual">
+          <span class="glyph">/Library</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>/Library</h3>
+          <span class="aka">↳ Finder → /Library</span>
+          <p>System-wide configuration folder storing shared application support files, drivers, and global preferences accessible by all users.</p>
+          <div class="demo">On a Mac: Finder → /Library. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>/Library</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="system">
+        <div class="visual">
+          <span class="glyph">/System</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>/System</h3>
+          <span class="aka">↳ Finder → /System</span>
+          <p>Core OS directory containing critical macOS operating system files, system frameworks, and kernel components protected by System Integrity Protection (SIP).</p>
+          <div class="demo">On a Mac: Finder → /System. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>/System</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="tilde-library">
+        <div class="visual">
+          <span class="glyph">~/Library</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>~/Library</h3>
+          <span class="aka">↳ Finder → Users/jsmith/Library</span>
+          <p>User-specific Library folder (at /Users/&lt;name&gt;/Library) containing individual app preferences, caches, application support files, and user data.</p>
+          <div class="demo">On a Mac: Finder → Users/jsmith/Library. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>~/Library</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="settings">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>System Settings</h2>
+        <p>Identity, updates, displays, network, printers, privacy, and accessibility.</p>
+      </div>
+      
+      <article class="term" id="apple-id-and-corporate-restrictions">
+        <div class="visual">
+          <span class="glyph">Apple ID and Corporate Restrictions</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Apple ID and Corporate Restrictions</h3>
+          <span class="aka">↳ System Settings → Apple ID</span>
+          <p>Identity management for Apple services that organizations can manage via Mobile Device Management (MDM) enrollment profiles to enforce security policies and restrict features.</p>
+          <div class="demo">On a Mac: System Settings → Apple ID. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Apple ID and Corporate Restrictions</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="updates-patches">
+        <div class="visual">
+          <span class="glyph">Updates/Patches</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Updates/Patches</h3>
+          <span class="aka">↳ System Settings → General</span>
+          <p>Routine operating system and application updates deployed via System Settings to resolve vulnerabilities, fix bugs, and optimize system performance.</p>
+          <div class="demo">On a Mac: System Settings → General. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Updates/Patches</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="rapid-security-response-rsr">
+        <div class="visual">
+          <span class="glyph">Rapid Security Response (RSR)</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Rapid Security Response (RSR)</h3>
+          <span class="aka">↳ System Settings → General</span>
+          <p>Automated macOS security mechanism delivering critical security fixes between standard software updates, without requiring a full OS reboot.</p>
+          <div class="demo">On a Mac: System Settings → General. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Rapid Security Response (RSR)</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="displays">
+        <div class="visual">
+          <span class="glyph">Displays</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Displays</h3>
+          <span class="aka">↳ System Settings → Displays</span>
+          <p>System Settings pane used to adjust screen resolution, arrangement, orientation, color profiles, and relative placement in multi-monitor setups.</p>
+          <div class="demo">On a Mac: System Settings → Displays. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Displays</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="networks">
+        <div class="visual">
+          <span class="glyph">Networks</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Networks</h3>
+          <span class="aka">↳ System Settings → Network</span>
+          <p>System Settings menu for managing network adapters, Wi-Fi connections, Ethernet interfaces, IPv4/IPv6 settings, DNS configuration, and proxies.</p>
+          <div class="demo">On a Mac: System Settings → Network. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Networks</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="printers-scanners">
+        <div class="visual">
+          <span class="glyph">Printers &amp; Scanners</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Printers &amp; Scanners</h3>
+          <span class="aka">↳ System Settings → Printers &amp; Scanners</span>
+          <p>System interface for adding, configuring, sharing, and troubleshooting printing and scanning hardware on local or network connections.</p>
+          <div class="demo">On a Mac: System Settings → Printers &amp; Scanners. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Printers &amp; Scanners</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="privacy">
+        <div class="visual">
+          <span class="glyph">Privacy</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Privacy</h3>
+          <span class="aka">↳ System Settings → Privacy &amp; Security</span>
+          <p>System Settings pane for managing per-application permissions to device sensors and user data, including Location Services, Camera, Microphone, and Contacts.</p>
+          <div class="demo">On a Mac: System Settings → Privacy &amp; Security. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Privacy</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="accessibility">
+        <div class="visual">
+          <span class="glyph">Accessibility</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Accessibility</h3>
+          <span class="aka">↳ System Settings → Accessibility</span>
+          <p>System Settings menu providing custom input and display options for accessibility, plus permissions for apps needing system-level control and automation.</p>
+          <div class="demo">On a Mac: System Settings → Accessibility. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Accessibility</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="security">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part D</span>
+        <h2>Security &amp; backup</h2>
+        <p>Antivirus layers, encryption, credentials, and Time Machine.</p>
+      </div>
+      
+      <article class="term" id="backups">
+        <div class="visual">
+          <span class="glyph">Backups</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Backups</h3>
+          <span class="aka">↳ Open Time Machine</span>
+          <p>Best practice of using utilities like Time Machine or third-party tools to maintain regular data copies on external or network drives.</p>
+          <div class="demo">On a Mac: Open Time Machine. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Backups</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="antivirus">
+        <div class="visual">
+          <span class="glyph">Antivirus</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Antivirus</h3>
+          <span class="aka">↳ System Settings → Privacy &amp; Security</span>
+          <p>Security best practice of running endpoint protection or relying on built-in macOS security layers (XProtect, MRT) to detect and block malicious software.</p>
+          <div class="demo">On a Mac: System Settings → Privacy &amp; Security. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Antivirus</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="time-machine">
+        <div class="visual">
+          <span class="glyph">Time Machine</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Time Machine</h3>
+          <span class="aka">↳ Open Time Machine</span>
+          <p>Automated macOS backup feature that maintains hourly snapshots for 24 hours, daily backups for a month, and weekly backups for prior months.</p>
+          <div class="demo">On a Mac: Open Time Machine. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Time Machine</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="keychain">
+        <div class="visual">
+          <span class="glyph">Keychain</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Keychain</h3>
+          <span class="aka">↳ Open Keychain Access</span>
+          <p>Encrypted password management database in macOS that securely stores user passwords, certificates, keys, and private application credentials, unlocked via login.</p>
+          <div class="demo">On a Mac: Open Keychain Access. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Keychain</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="filevault">
+        <div class="visual">
+          <span class="glyph">FileVault</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>FileVault</h3>
+          <span class="aka">↳ System Settings → Privacy &amp; Security</span>
+          <p>Built-in macOS Full Disk Encryption (FDE) feature that protects system drive data using AES encryption linked to user credentials or a recovery key.</p>
+          <div class="demo">On a Mac: System Settings → Privacy &amp; Security. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>FileVault</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="desktop">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part E</span>
+        <h2>Desktop UI &amp; window management</h2>
+        <p>Finder, Dock, Spotlight, Mission Control, gestures, and Force Quit.</p>
+      </div>
+      
+      <article class="term" id="multiple-desktops">
+        <div class="visual">
+          <span class="glyph">Multiple Desktops</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Multiple Desktops</h3>
+          <span class="aka">↳ Mission Control (Control+↑)</span>
+          <p>Feature allowing users to create separate virtual workspace environments (&quot;Spaces&quot;) to organize open application windows.</p>
+          <div class="demo">On a Mac: Mission Control (Control+↑). Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Multiple Desktops</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="mission-control">
+        <div class="visual">
+          <span class="glyph">Mission Control</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Mission Control</h3>
+          <span class="aka">↳ Trigger Mission Control (Control+↑)</span>
+          <p>Window management interface launched via trackpad gestures or Control+Up Arrow that displays all open windows, full-screen apps, and virtual desktop Spaces.</p>
+          <div class="demo">On a Mac: Trigger Mission Control (Control+↑). Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Mission Control</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="spotlight">
+        <div class="visual">
+          <span class="glyph">Spotlight</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Spotlight</h3>
+          <span class="aka">↳ Trigger Spotlight (⌘+Space)</span>
+          <p>System-wide indexing and search utility launched via Command+Space to locate local files, launch applications, perform calculations, and fetch web data.</p>
+          <div class="demo">On a Mac: Trigger Spotlight (⌘+Space). Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Spotlight</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="gestures">
+        <div class="visual">
+          <span class="glyph">Gestures</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Gestures</h3>
+          <span class="aka">↳ Concept — trackpad input</span>
+          <p>Multi-touch trackpad and mouse input shortcuts allowing users to navigate, swipe, pinch, or tap to trigger system functions like Mission Control or desktop switching.</p>
+          <div class="demo">On a Mac: Concept — trackpad input. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Gestures</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="finder">
+        <div class="visual">
+          <span class="glyph">Finder</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Finder</h3>
+          <span class="aka">↳ Open Finder</span>
+          <p>Primary macOS desktop file manager used to browse, organize, launch, rename, and manage files, network shares, and connected media.</p>
+          <div class="demo">On a Mac: Open Finder. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Finder</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="dock">
+        <div class="visual">
+          <span class="glyph">Dock</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Dock</h3>
+          <span class="aka">↳ Look at the bottom of the screen</span>
+          <p>Desktop shortcut bar providing quick access to pinned apps, open applications (indicated by a dot below the icon), folders, and the Trash.</p>
+          <div class="demo">On a Mac: Look at the bottom of the screen. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Dock</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="force-quit">
+        <div class="visual">
+          <span class="glyph">Force Quit</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Force Quit</h3>
+          <span class="aka">↳ ⌘+Option+Esc</span>
+          <p>Troubleshooting feature (Command+Option+Escape) used to immediately terminate non-responsive or malfunctioning applications.</p>
+          <div class="demo">On a Mac: ⌘+Option+Esc. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Force Quit</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="ecosystem">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part F</span>
+        <h2>Apple ecosystem</h2>
+        <p>iCloud, messaging, FaceTime, Continuity, and Drive.</p>
+      </div>
+      
+      <article class="term" id="icloud">
+        <div class="visual">
+          <span class="glyph">iCloud</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>iCloud</h3>
+          <span class="aka">↳ See it via Apple ID pane</span>
+          <p>Apple cloud storage and synchronization infrastructure that links user data across macOS, iOS, and iPadOS devices.</p>
+          <div class="demo">On a Mac: See it via Apple ID pane. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>iCloud</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="imessage">
+        <div class="visual">
+          <span class="glyph">iMessage</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>iMessage</h3>
+          <span class="aka">↳ Concept — Messages app</span>
+          <p>Messaging service integrated into the macOS Messages application for secure text, media, and data communication across Apple devices.</p>
+          <div class="demo">On a Mac: Concept — Messages app. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>iMessage</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="facetime">
+        <div class="visual">
+          <span class="glyph">FaceTime</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>FaceTime</h3>
+          <span class="aka">↳ Concept — FaceTime app</span>
+          <p>Built-in audio and video conferencing application integrated with macOS and iOS.</p>
+          <div class="demo">On a Mac: Concept — FaceTime app. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>FaceTime</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="icloud-drive">
+        <div class="visual">
+          <span class="glyph">iCloud Drive</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>iCloud Drive</h3>
+          <span class="aka">↳ Finder → iCloud Drive</span>
+          <p>Cloud-based file storage and synchronization folder built into the macOS file system, similar to Google Drive or Dropbox.</p>
+          <div class="demo">On a Mac: Finder → iCloud Drive. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>iCloud Drive</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="continuity">
+        <div class="visual">
+          <span class="glyph">Continuity</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Continuity</h3>
+          <span class="aka">↳ Concept — cross-device features</span>
+          <p>Ecosystem integration allowing Apple devices to share features seamlessly, such as using an iPhone as a Mac webcam, AirDrop file sharing, and Universal Clipboard.</p>
+          <div class="demo">On a Mac: Concept — cross-device features. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Continuity</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="admin">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part G</span>
+        <h2>Admin tools</h2>
+        <p>Disk Utility and Terminal.</p>
+      </div>
+      
+      <article class="term" id="disk-utility">
+        <div class="visual">
+          <span class="glyph">Disk Utility</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Disk Utility</h3>
+          <span class="aka">↳ Open Disk Utility</span>
+          <p>System administration utility used to format, partition, repair (First Aid), erase, and create disk images of local storage drives and volumes.</p>
+          <div class="demo">On a Mac: Open Disk Utility. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Disk Utility</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+      <article class="term" id="terminal">
+        <div class="visual">
+          <span class="glyph">Terminal</span>
+          <span class="caption">macOS</span>
+        </div>
+        <div class="body">
+          <h3>Terminal</h3>
+          <span class="aka">↳ Open Terminal</span>
+          <p>Command-line interface application providing shell access (zsh/bash) for file manipulation, system configuration, scripting, and administrative functions.</p>
+          <div class="demo">On a Mac: Open Terminal. Practice in the <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 interactive lab</a> — click <strong>Terminal</strong> in the macOS Concept Index.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    Images go in the <code>1.81</code> folder when available. Study notes for Core 2 objective 1.8 (37 terms).
+    Related interactive lab: <a href="1.8 Common Features and Tools of the macOS Desktop Operating System.html">1.8 Common Features and Tools of the macOS Desktop Operating System.html</a>.
+  </div>
+</footer>
+
+<script src="study-lightbox.js"></script>
+<script src="study-editor.js"></script>
+</body>
+</html>

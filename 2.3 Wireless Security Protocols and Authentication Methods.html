@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>2.3 Wireless Security Protocols and Authentication Methods</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&amp;family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#121820;
@@ -253,7 +252,75 @@
     .hero-inner{ margin-bottom:3rem; }
   }
 </style>
-</head>
+<style>
+    .visual.photo img,
+    .visual.logo img {
+      cursor: zoom-in;
+      transition: opacity 0.15s ease;
+    }
+    .visual.photo img:hover,
+    .visual.logo img:hover {
+      opacity: 0.92;
+    }
+    .study-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: rgba(8, 12, 20, 0.92);
+      backdrop-filter: blur(6px);
+    }
+    .study-lightbox[hidden] {
+      display: none;
+    }
+    .study-lightbox__panel {
+      position: relative;
+      max-width: min(96vw, 1200px);
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .study-lightbox__img {
+      max-width: 100%;
+      max-height: calc(92vh - 3rem);
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      background: #fff;
+    }
+    .study-lightbox__caption {
+      margin: 0;
+      color: #e2e8f0;
+      font: 500 0.95rem/1.4 "Segoe UI", system-ui, sans-serif;
+      text-align: center;
+      max-width: 60ch;
+    }
+    .study-lightbox__close {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      border: 0;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      font-size: 1.6rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .study-lightbox__close:hover {
+      background: rgba(255, 255, 255, 0.24);
+    }
+    body.study-lightbox-open {
+      overflow: hidden;
+    }
+  </style></head>
 <body>
 
 <header class="hero">
@@ -322,7 +389,7 @@
               <p>Older, widely supported, but lacks WPA3’s protections against offline dictionary attacks.</p>
             </div>
           </div>
-        </div>
+        <p><br><b>WPA2/WPA3 Personal mode</b></p><p>- Simple to set up without requiring extra infastructure<br>- Commonly used in home or SOHO environments<br>- Authentication via a single, shared password<br><br><b>WPA2/WPA3 Enterprise mode</b><br><br>- Typically deployed in business or enterprise networks<br>- Authentication through 802.1X with a RADIUS server<br>- Provides unique login credentials for each user</p></div>
       </article>
 
       <article class="term" id="tkip">
@@ -439,5 +506,7 @@
 </footer>
 
   <script src="study-lightbox.js"></script>
-</body>
-</html>
+<script src="study-editor.js"></script><script src="study-flashcards.js"></script>
+
+
+</body></html>

@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.71 Windows Networking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&amp;family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --ink:#121820;
+    --muted:#4a5568;
+    --paper:#eef2f7;
+    --line:rgba(18,24,32,0.12);
+    --accent:#0067c0;
+    --accent-soft:#d8e8f8;
+    --sky:#0e4d7b;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(0,103,192,0.14), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.08), transparent 50%),
+      linear-gradient(180deg, #e4ebf3 0%, var(--paper) 40%, #e8eef5 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    color:#f4f8fc;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,28,56,0.25) 0%, rgba(8,28,56,0.72) 52%, rgba(8,28,56,0.94) 100%),
+      url("1.71/Domain joined vs. workgroup.png") center/cover no-repeat;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    width:min(1080px, calc(100% - 2.4rem));
+    margin:0 auto 4.2rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(3.4rem, 10vw, 6.6rem);
+    font-weight:700;
+    line-height:0.92;
+    letter-spacing:-0.03em;
+    margin:0 0 0.85rem;
+  }
+  .hero h1{
+    margin:0 0 0.65rem;
+    font-size:clamp(1.05rem, 2.1vw, 1.35rem);
+    font-weight:500;
+    max-width:40ch;
+    color:#dceaf8;
+  }
+  .hero > .hero-inner > p{
+    margin:0 0 1.5rem;
+    max-width:54ch;
+    color:#a8c0d8;
+  }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.92rem;
+    padding:0.7rem 1.15rem;
+    border-radius:999px;
+    background:#dceaf8;
+    color:#0a3d62;
+  }
+  .hero-cta a.ghost{
+    background:transparent;
+    color:#dceaf8;
+    border:1px solid rgba(220,234,248,0.4);
+  }
+
+  .toc{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:blur(12px);
+    background:rgba(238,242,247,0.92);
+    border-bottom:1px solid var(--line);
+  }
+  .toc .wrap{
+    display:flex; gap:0.3rem; overflow-x:auto;
+    padding:0.7rem 0; scrollbar-width:thin;
+  }
+  .toc a{
+    flex:0 0 auto;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.42rem 0.75rem;
+    border-radius:999px;
+  }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:0.5rem;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.75rem, 3.4vw, 2.5rem);
+    margin:0 0 0.5rem;
+    letter-spacing:-0.02em;
+    line-height:1.12;
+  }
+  .section-head p{ margin:0; color:var(--muted); }
+
+  .term{
+    display:grid;
+    grid-template-columns:minmax(150px, 220px) 1fr;
+    gap:1.35rem 1.7rem;
+    align-items:start;
+    padding:1.45rem 0;
+    border-top:1px solid var(--line);
+  }
+  .term.sub{
+    margin-left:1.2rem;
+    padding-left:1rem;
+    border-left:3px solid var(--accent-soft);
+  }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{
+    border:1px solid var(--line);
+    border-radius:18px;
+    min-height:150px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:0.45rem;
+    overflow:hidden;
+    background:linear-gradient(160deg, #fff, var(--accent-soft));
+    padding:1.1rem;
+    text-align:center;
+  }
+  .visual.photo{ padding:0; }
+  .visual.photo img{ width:100%; height:160px; object-fit:cover; }
+  .visual .glyph{ font-size:2rem; line-height:1; }
+  .visual .caption{
+    font-size:0.68rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--accent);
+    word-break:break-word;
+  }
+
+  .body h3{
+    font-family:"Fraunces",serif;
+    font-size:1.35rem;
+    margin:0 0 0.55rem;
+    letter-spacing:-0.01em;
+  }
+  .aka{
+    display:inline-block;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--sky);
+    background:rgba(14,77,123,0.08);
+    padding:0.18rem 0.55rem;
+    border-radius:999px;
+    margin:0 0 0.65rem;
+  }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body code, .demo code, footer code{
+    font-family:"Cascadia Mono","Consolas",monospace;
+    font-size:0.86em;
+    background:rgba(18,24,32,0.06);
+    border-radius:5px;
+    padding:0.05rem 0.35rem;
+  }
+  .body kbd, .demo kbd{
+    font-family:"Cascadia Mono","Consolas",monospace;
+    font-size:0.82em;
+    background:rgba(18,24,32,0.06);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:0.1rem 0.4rem;
+  }
+
+  .demo{
+    margin:0.85rem 0 0;
+    padding:0.9rem 1.05rem;
+    border-left:4px solid #c2410c;
+    background:rgba(194,65,12,0.08);
+    border-radius:0 12px 12px 0;
+    color:#9a3412;
+    font-size:0.9rem;
+  }
+  .demo strong.label{
+    display:block;
+    font-size:0.72rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    margin-bottom:0.4rem;
+    color:#c2410c;
+  }
+  .demo ol{
+    margin:0.35rem 0 0;
+    padding-left:1.2rem;
+  }
+  .demo li{ margin-bottom:0.3rem; }
+
+  .tags{
+    list-style:none;
+    margin:0.65rem 0 0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.4rem;
+  }
+  .tags li{
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:0.28rem 0.62rem;
+    border-radius:999px;
+  }
+
+  footer{
+    padding:2.4rem 0 3.2rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+  footer .wrap{
+    border-top:1px solid var(--line);
+    padding-top:1.2rem;
+  }
+
+  @media (max-width:780px){
+    .term, .term.sub{ grid-template-columns:1fr; margin-left:0; }
+    .hero-inner{ margin-bottom:3rem; }
+  }
+
+</style>
+<style>
+    .visual.photo img,
+    .visual.logo img {
+      cursor: zoom-in;
+      transition: opacity 0.15s ease;
+    }
+    .visual.photo img:hover,
+    .visual.logo img:hover {
+      opacity: 0.92;
+    }
+    .study-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: rgba(8, 12, 20, 0.92);
+      backdrop-filter: blur(6px);
+    }
+    .study-lightbox[hidden] {
+      display: none;
+    }
+    .study-lightbox__panel {
+      position: relative;
+      max-width: min(96vw, 1200px);
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .study-lightbox__img {
+      max-width: 100%;
+      max-height: calc(92vh - 3rem);
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      background: #fff;
+    }
+    .study-lightbox__caption {
+      margin: 0;
+      color: #e2e8f0;
+      font: 500 0.95rem/1.4 "Segoe UI", system-ui, sans-serif;
+      text-align: center;
+      max-width: 60ch;
+    }
+    .study-lightbox__close {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      border: 0;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      font-size: 1.6rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .study-lightbox__close:hover {
+      background: rgba(255, 255, 255, 0.24);
+    }
+    body.study-lightbox-open {
+      overflow: hidden;
+    }
+  </style></head>
+<body class="">
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">1.71</p>
+    <h1>Windows Networking</h1>
+    <p>Domain vs workgroup, shares, firewall, IP settings, VPN/Wi-Fi/Ethernet, proxy, UNC paths, and metered connections — with exact places to open on your real PC for screenshots.</p>
+    <div class="hero-cta">
+      <a href="#domain-workgroup">Start studying</a>
+      <a class="ghost" href="1.7 Configure Microsoft Windows Networking.html">Optional: 1.7 interactive lab</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#domain-joined-vs-workgroup">Domain</a><a href="#local-firewall">Firewall</a><a href="#client-config">IP config</a><a href="#establish-connections">Connections</a><a href="#proxy">Proxy</a><a href="#public-private">Profiles</a><a href="#unc-paths">UNC</a><a href="#metered">Metered</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="domain-workgroup">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Domain, shares, and printers</h2>
+        <p>How PCs join a network, and how folders, printers, and drives are shared.</p>
+      </div>
+      
+      <article class="term" id="domain-joined-vs-workgroup">
+        <div class="visual photo">
+          <img src="1.71/Domain joined vs. workgroup.png" alt="Domain joined vs. workgroup" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Domain joined vs. workgroup</h3>
+          <span class="aka">↳ System Properties (sysdm.cpl)</span>
+          <p>Compares centralized authentication using Active Directory and domain controllers against decentralized peer-to-peer administrative groups.<br><br></p><p>Domain - Centralized access control, Active Directory integration, Scalable across many devices</p><p>Workgroup - Limited to small networks, Manual Configuration per device, Local user-based access control</p>
+          <ul class="tags"><li>Active Directory</li><li>Workgroup</li></ul>
+          <div class="demo">
+            <strong class="label">Find it</strong>
+            <ol><li>Press Win + R, type sysdm.cpl, press Enter.</li><li>Open the Computer Name tab (shows Workgroup or Domain).</li></ol>
+          </div>
+        </div>
+      </article>
+      <article class="term term sub" id="shared-resources">
+        <div class="visual photo">
+          <img src="1.71/Shared resources.png" alt="Shared resources" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Shared resources<br><ul class="tags" style="font-family: Sora, sans-serif; font-size: medium; font-weight: 400; letter-spacing: normal;"><li style="background: none 0% 0% / auto repeat scroll padding-box border-box rgb(216, 232, 248); color: rgb(0, 103, 192);">NTFS permissions</li><li style="background: none 0% 0% / auto repeat scroll padding-box border-box rgb(216, 232, 248); color: rgb(0, 103, 192);">Share permissions</li></ul><span style="font-family: Sora, sans-serif; font-size: medium; font-weight: 400; letter-spacing: normal;">Network assets like folders and devices made accessible across the network using NTFS and share permissions.<br><br></span></h3>
+          <span class="aka">Advanced File Sharing</span><div><font color="#0e4d7b"><span style="font-size: 12.16px;"><b>Control Panel:<br></b></span></font><div><span style="color: rgb(14, 77, 123); font-size: 12.16px; font-weight: 600; background-color: rgba(14, 77, 123, 0.08);">Network and Internet (In category view) &gt; Network and Sharing Center &gt; Change advanced sharing settings<br></span><span style="color: rgb(14, 77, 123); font-size: 12.16px; font-weight: 600; background-color: rgba(14, 77, 123, 0.08);">Network Sharing Center (an icon view) &gt; Change advanced sharing settings<br><br></span><font color="#0e4d7b"><span style="font-size: 12.16px;"><b>Settings:<br></b></span></font><span style="color: rgb(14, 77, 123); font-size: 12.16px; font-weight: 600; background-color: rgba(14, 77, 123, 0.08);">Network and internet &gt; Advanced network settings &gt; Advanced sharing settings</span></div><div><font color="#0e4d7b"><span style="font-size: 12.16px;"><b><br></b></span></font><div><li><p data-path-to-node="0,0,0"><b data-path-to-node="0,0,0" data-index-in-node="0">Network discovery</b> allows a Windows system to locate and be located by other devices on a local network.</p></li><li><p data-path-to-node="0,1,0"><b data-path-to-node="0,1,0" data-index-in-node="0">File and printer sharing</b> enables remote network users to access designated folders and attached printers on the machine.</p></li><li><p data-path-to-node="0,2,0"><b data-path-to-node="0,2,0" data-index-in-node="0">Password-protected sharing</b> controls authentication by requiring remote users to enter a valid local account password to access shared resources.<br><br>$ -&nbsp;The character that indicates an administrative or hidden share in Windows.<br><span style="color: rgb(14, 77, 123); font-size: 12.16px; font-weight: 600; background-color: rgba(14, 77, 123, 0.08);"><br>Shared folders</span></p></li><li><p data-path-to-node="0,2,0"><font color="#0e4d7b"><span style="font-size: 12.16px;"><b>Control Panel &gt; Admin Tools/Windows Tools &gt; Computer Management &gt; System Tools &gt; Shared Folders &gt; Shares</b></span></font></p></li><li><p data-path-to-node="0,2,0"><font color="#0e4d7b"><span style="font-size: 12.16px;"><b>Windows CL &gt; Run Net share command<br></b></span></font><br></p></li></div></div></div></div>
+      </article>
+      <article class="term term sub" id="printers">
+        <div class="visual photo">
+          <img src="1.71/Printers.png" alt="Printers" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Printers</h3>
+          <span class="aka">↳ Settings → Bluetooth &amp; devices → Printers &amp; scanners</span><div>Networked printing devices managed centrally via print servers, or shared locally across workgroup computers.<font color="#0e4d7b"><span style="font-size: 12.16px;"><b><br></b></span></font><div><div><ul class="tags"><li style="background: none 0% 0% / auto repeat scroll padding-box border-box rgb(216, 232, 248); color: rgb(0, 103, 192);">Print server</li><li style="background: none 0% 0% / auto repeat scroll padding-box border-box rgb(216, 232, 248); color: rgb(0, 103, 192);">Workgroup share</li></ul><font color="#0e4d7b"><span style="font-size: 12.16px;"><b><div><font color="#0e4d7b"><span style="font-size: 12.16px;"><b><br></b></span></font></div>Control Panel:</b></span></font></div><div><span style="color: rgb(14, 77, 123); font-size: 12.16px; font-weight: 600; background-color: rgba(14, 77, 123, 0.08);">Control panel (icon view) &gt; Devices and Printers &gt; Right click on a selected printer &gt; Printer properties &gt; Sharing Tab<br></span><span style="color: rgb(14, 77, 123); font-size: 12.16px; font-weight: 600; background-color: rgba(14, 77, 123, 0.08);">Control Panel (category view) &gt; View devices and printers (under hardware and sound) &gt; RIght click printer &gt; printer properties &gt; Sharing tab</span></div><div><br></div><div>Settings:</div><div><font color="#0e4d7b"><span style="font-size: 12.16px; background-color: rgba(14, 77, 123, 0.08);"><b>Devices/ Bluetooth &amp; Devices &gt; Printers &amp; Scanners &gt; Left-click on a selected printer &gt; Manage &gt; Printer properties &gt; Sharing Tab</b></span></font></div></div></div></div>
+      </article>
+      <article class="term term sub" id="file-servers">
+        <div class="visual photo">
+          <img src="1.71/File servers.png" alt="File servers" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>File servers</h3>
+          <span class="aka">↳ File Explorer → Network</span>
+          <p>Centralized storage systems in a domain environment providing authenticated file shares and access controls.<br><br>Project Folder path located on a shared Windows file server FS1<br>\\FS1|Projects<br><br>SMB - C<font color="#333333" face="Arial, Verdana, sans-serif">ommonly used by Windows servers to share files, printers, and other resources over a network?</font></p>
+          
+          <div class="demo">
+            <strong class="label">Find it on your PC</strong>
+            <ol><li>Open File Explorer → Network (enable network discovery if prompted).</li></ol>
+          </div>
+        </div>
+      </article>
+      <article class="term term sub" id="mapped-drives">
+        <div class="visual photo">
+          <img src="1.71/Mapped drives.png" alt="Mapped drives" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Mapped drives</h3>
+          <span class="aka">↳ File Explorer → This PC → Map network drive…</span>
+          <p>Mounting network shared folders to a local drive letter for quick access in File Explorer.<br><br><font color="#333333" face="Arial, Verdana, sans-serif">Correct syntax for mapping a network drive using the Windows command-line interpreter<br>net use Z: \\Server\Share</font></p><p>File Explorer:<br><font color="#0e4d7b"><span style="font-size: 12.16px; background-color: rgba(14, 77, 123, 0.08);"><b>File Explorer &gt; Right Click "This PC" &gt; Select "Map network Drive"&nbsp; &gt; Choose X from the dropdown list, and enter&nbsp; \\server1\Documents</b></span></font></p>
+          
+          <div class="demo">
+            <strong class="label">Find it on your PC</strong>
+            <ol><li>Open File Explorer → This PC.</li><li>Click … (See more) or Computer tab → Map network drive.</li></ol>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="firewall">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Local OS firewall</h2>
+        <p>Host firewall rules, allowed apps, and network profiles.</p>
+      </div>
+      
+      <article class="term" id="local-firewall">
+        <div class="visual photo">
+          <img src="1.71/Local OS firewall settings.png" alt="Local OS firewall settings" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Local OS firewall settings</h3>
+          <span class="aka">↳ Windows Defender Firewall (firewall.cpl)</span>
+          <p>Software-based security rules configured to allow or block inbound and outbound network traffic on a host.</p>
+          
+          <div class="demo">
+            <strong class="label">Find it on your PC</strong>
+            <ol><li>Press Win + R, type firewall.cpl, press Enter.</li></ol>
+          </div>
+        </div>
+      </article>
+      <article class="term term sub" id="firewall-apps">
+        <div class="visual photo">
+          <img src="1.71/Application restrictions and exceptions.png" alt="Application restrictions and exceptions" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Application restrictions and exceptions</h3>
+          <span class="aka">↳ Firewall → Allow an app or feature through Windows Defender Firewall</span>
+          <p>Rules configured to allow specific programs or block executable binaries through network ports.</p>
+          
+          <div class="demo">
+            <strong class="label">Find it on your PC</strong>
+            <ol><li>Windows Control Panel (category view) &gt; System and Security &gt; Allow an app through Windows Firewall (under Windows Defender Firewall)<br></li><li><span style="font-size: 14.4px;">Windows Control Panel (icon view) &gt; Network and Sharing Center &gt; Windows Defender Firewall (bottom left pane) &gt; Allow an app or feature through Windows Defender Firewall</span></li><li><span style="font-size: 14.4px;">Windows Control Panel (icon view) &gt; Windows Defender Firewall &gt; Allow an app or feature through Windows Defender Firewall</span></li></ol>
+          </div>
+        </div>
+      </article>
+      <article class="term term sub" id="firewall-config">
+        <div class="visual photo">
+          <img src="1.71/Firewall Configuration.png" alt="Firewall Configuration" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Firewall Configuration and Advanced Settings</h3>
+          <span class="aka">↳ Firewall → Domain / Private / Public profiles</span>
+          <p>Setting firewall profiles like Public, Private, and Domain to enforce distinct traffic filtering rules.</p>
+          <ul class="tags"><li>Public</li><li>Private</li><li>Domain</li></ul><div><font color="#0067c0"><span style="font-size: 12.16px;"><b><br></b></span></font></div><div><font color="#0067c0"><span style="font-size: 12.16px;"><b>How to find Advanced Settings</b></span></font></div>
+          <div class="demo">
+            <strong class="label">Advanced Settings:</strong><strong class="label"><br>1.&nbsp;Windows Control Panel (category view) &gt; System and Security &gt; Windows Defender Firewall &gt; Advanced settings</strong><strong class="label"><br></strong><strong class="label">2.&nbsp;Windows Control Panel (icon view) &gt; Windows Defender Firewall &gt; Advanced settings</strong>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="ip-config">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Client IP configuration</h2>
+        <p>Adapter settings through Network Connections and TCP/IPv4 Properties.</p>
+      </div>
+      
+      <article class="term" id="client-config">
+        <div class="visual photo">
+          <img src="1.71/Client network configuration.png" alt="Client network configuration" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Client network configuration</h3>
+          <span class="aka">↳ Network Connections (ncpa.cpl) → Adapter Properties</span>
+          <p>Setting adapter parameters including IP addressing, subnetting, gateway routing, and name resolution.</p>
+          <ul class="tags"><li>ncpa.cpl</li></ul>
+          <div class="demo">
+            <span class="label"><strong class="label" style="font-weight: bold;">How to find the network connections applet</strong><ol style="font-weight: 400; color: rgb(154, 52, 18); font-size: 14.4px; letter-spacing: normal; text-transform: none;"><li>Windows Run Dialog Box &gt; type "ncpa.cpl" (without double quotes), and press Enter</li><li>Control Panel (category view) &gt; Network and Internet &gt; Network and Sharing Center &gt; Change adapter settings</li><li>Control Panel (icon view) &gt; Network and Sharing Center &gt; Change adapter settings<br></li></ol><div style=""><span style="font-size: 14.4px;"><br></span></div><div style=""><span class="label" style=""><b>Create network connection</b><br><ol style=""><li style=""><span style="font-size: 14.4px;">Windows Control Panel (icon view) &gt; Network and Sharing Center &gt; Set up a new connection or network</span></li><li style=""><span style="font-size: 14.4px;">Windows Control Panel (category view) &gt; View network status and tasks &gt; Set up a new connection or network</span><br></li></ol></span></div></span>
+          </div>
+        </div>
+      </article>
+      <article class="term term sub" id="ip-addressing">
+        <div class="visual photo">
+          <img src="1.71/IP addressing scheme.png" alt="IP addressing scheme" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>IP addressing scheme</h3>
+          <span class="aka">↳ Adapter Properties → Internet Protocol Version 4 (TCP/IPv4) → Properties</span>
+          <p>System of unique logical numbers like IPv4 or IPv6 assigned to network host interfaces.<br><br>IP Address<br>Subnet Mask<br>Default Mask<br>DNS Server address<br><br></p>
+          
+          <div class="demo">
+            <strong class="label">Find it on your PC</strong>
+            <ol><li><span style="font-size: 14.4px;">Right-click on the adapter &gt; Properties &gt; Internet Protocol version 4 (TCP/IPv4) &gt; Properties</span></li></ol>
+          </div>
+        </div>
+      </article>
+      <article class="term term sub" id="dns-settings">
+        <div class="visual photo">
+          <img src="1.71/DNS settings.png" alt="DNS settings" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>DNS settings</h3>
+          <span class="aka">↳ IPv4 Properties → Preferred / Alternate DNS server</span>
+          <p>Configured IP addresses of servers that resolve human-readable domain names to IP addresses.</p>
+          
+          <div class="demo">
+            <strong class="label">Find it on your PC</strong>
+            <ol><li>Same TCP/IPv4 Properties dialog — Preferred DNS server and Alternate DNS server fields.</li></ol>
+          </div>
+        </div>
+      </article>
+      <article class="term term sub" id="subnet-mask">
+        <div class="visual photo">
+          <img src="1.71/Subnet mask.png" alt="Subnet mask" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Subnet mask</h3>
+          <span class="aka">↳ IPv4 Properties → Subnet mask</span>
+          <p>A 32-bit mask that separates an IP address into its network ID and host ID portions.</p>
+          
+          <div class="demo">
+            <strong class="label">Find it on your PC</strong>
+            <ol><li>In TCP/IPv4 Properties (Use the following IP address), screenshot the Subnet mask field.</li><li>If DHCP is on, switch temporarily to “Use the following…” to reveal the field for a screenshot (don’t Apply if you only need a photo).</li></ol>
+          </div>
+        </div>
+      </article>
+      <article class="term term sub" id="gateway">
+        <div class="visual photo">
+          <img src="1.71/Gateway.png" alt="Gateway" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Gateway</h3>
+          <span class="aka">↳ IPv4 Properties → Default gateway</span>
+          <p>The IP address of the local router interface that forwards out-of-subnet traffic to external networks.</p>
+          
+          <div class="demo">
+            <strong class="label">Find it on your PC</strong>
+            <ol><li>In TCP/IPv4 Properties, screenshot the Default gateway field.</li></ol>
+          </div>
+        </div>
+      </article>
+      <article class="term term sub" id="static-dynamic">
+        <div class="visual photo">
+          <img src="1.71/Static vs. dynamic.png" alt="Static vs. dynamic" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Static vs. dynamic</h3>
+          <span class="aka">↳ IPv4 Properties → Obtain an IP address automatically / Use the following address</span>
+          <p>Choosing manually assigned permanent IP settings versus automatic configuration via DHCP.</p>
+          <ul class="tags"><li>DHCP</li><li>Static IP</li></ul>
+          <div class="demo">
+            <strong class="label">Find it on your PC</strong>
+            <ol><li>Open TCP/IPv4 Properties.</li></ol>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="connections">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part D</span>
+        <h2>Connection types</h2>
+        <p>Wi-Fi, Ethernet, VPN, cellular/WWAN, and related Settings panes.</p>
+      </div>
+      
+      <article class="term" id="establish-connections">
+        <div class="visual photo">
+          <img src="1.71/Establish network connections.png" alt="Establish network connections" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Establish network connections</h3>
+          <span class="aka">↳ Settings → Network &amp; Internet</span>
+          <p>Configuring local client network adapters to connect to local and remote infrastructure.<br><br></p></div>
+      </article>
+      <article class="term term sub" id="vpn">
+        <div class="visual photo">
+          <img src="1.71/Virtual private network (VPN).png" alt="Virtual private network (VPN)" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Virtual private network (VPN)</h3>
+          <span class="aka">↳ Settings → Network &amp; Internet → VPN</span>
+          <p>Encrypted tunnel created over a public network to provide secure remote access to a private network.</p>
+          
+          <div class="demo">
+            <strong class="label">Find it on your PC</strong>
+            <ol><li>Settings → Network &amp; Internet → VPN.</li></ol>
+          </div>
+        </div>
+      </article>
+      <article class="term term sub" id="wireless">
+        <div class="visual photo">
+          <img src="1.71/Wireless.png" alt="Wireless" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Wireless</h3>
+          <span class="aka">↳ Settings → Network &amp; Internet → Wi-Fi</span>
+          <p>Connecting to local area networks using Wi-Fi radio standards and security protocols like WPA3.</p>
+          <ul class="tags"><li>WPA3</li></ul>
+          <div class="demo">
+            <strong class="label">Find it on your PC</strong>
+            <ol><li>Settings → Network &amp; Internet → Wi-Fi.</li></ol>
+          </div>
+        </div>
+      </article>
+      <article class="term term sub" id="wired">
+        <div class="visual photo">
+          <img src="1.71/Wired.png" alt="Wired" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Wired</h3>
+          <span class="aka">↳ Settings → Network &amp; Internet → Ethernet</span>
+          <p>Physical Ethernet cable connection linking a local network interface card directly to a switch or router port.</p>
+          
+          <div class="demo">
+            <strong class="label">Find it on your PC</strong>
+            <ol><li>Settings → Network &amp; Internet → Ethernet.</li></ol>
+          </div>
+        </div>
+      </article>
+      <article class="term term sub" id="wwan">
+        <div class="visual photo">
+          <img src="1.71/Wireless wide area network (WWAN)  cellular.png" alt="Wireless wide area network (WWAN) / cellular" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Wireless wide area network (WWAN) / cellular</h3>
+          <span class="aka">↳ Settings → Network &amp; Internet → Mobile hotspot (and Cellular if present)</span>
+          <p>Connecting laptops or mobile devices to internet services using cellular data networks like 4G LTE or 5G.</p>
+          <ul class="tags"><li>4G LTE</li><li>5G</li></ul>
+          <div class="demo">
+            <strong class="label">Find it on your PC&nbsp;</strong>
+            <ol><li>Settings → Network &amp; Internet → Mobile hotspot (and Cellular on devices that have a modem).</li></ol>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="profiles-paths">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part E</span>
+        <h2>Profiles, proxy, UNC, and metered links</h2>
+        <p>Network location, proxy redirection, UNC paths, and metered connections.</p>
+      </div>
+      
+      <article class="term" id="proxy">
+        <div class="visual photo">
+          <img src="1.71/Proxy settings.png" alt="Proxy settings" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Proxy settings</h3>
+          <span class="aka">↳ Settings → Network &amp; Internet → Proxy</span>
+          <p>Redirecting client web traffic through an intermediate proxy server for security inspection, caching, or content filtering.</p>
+          
+          <div class="demo">
+            <strong class="label">Find it on your PC</strong>
+            <ol><li><span style="font-size: 14.4px;">Windows Control Panel (category view) &gt; Network and Internet &gt; Internet Options &gt; Connections tab &gt; LAN settings &gt; Proxy server&nbsp;</span></li><li><span style="font-size: 14.4px;">Windows Start &gt; Settings &gt; Network &amp; Internet (Windows 10) &gt; Proxy&nbsp;</span></li><li><span style="font-size: 14.4px;">Windows Control Panel (icon view) &gt; Internet Options &gt; Connections tab &gt; LAN settings &gt; Proxy server&nbsp;</span></li><li><span style="font-size: 14.4px;">Windows Run dialog box &gt; type "inetcpl.cpl" (without double quotes), and press Enter &gt; Connections tab &gt; LAN settings &gt; Proxy server&nbsp;</span></li><li><span style="font-size: 14.4px;">Windows Start &gt; Settings &gt; Network &amp; internet (Windows 11) &gt; Proxy</span></li></ol>
+          </div>
+        </div>
+      </article>
+      <article class="term" id="public-private">
+        <div class="visual photo">
+          <img src="1.71/Public network vs private network.png" alt="Public network vs private network" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Public network vs private network</h3>
+          <span class="aka">↳ Settings → Network &amp; Internet → [Wi-Fi/Ethernet] → network properties → Network profile type</span>
+          <p>Network location profiles that automatically adjust firewall rules, hiding the device on public Wi-Fi or enabling discovery on trusted private networks.</p>
+          <ul class="tags"><li>Public</li></ul><div><font color="#0067c0"><span style="font-size: 12.16px;"><b>The PC can't be used for file and printer sharing</b></span></font></div><div><font color="#0067c0"><b style="font-size: 12.16px;">Used for untrusted networks, such as a Wi-Fi network at a coffee shop</b><br><span style="font-size: 12.16px;"><b>The PC remains hidden from other devices on the network</b></span></font></div><div><ul class="tags"><li style="background: none 0% 0% / auto repeat scroll padding-box border-box rgb(216, 232, 248); color: rgb(0, 103, 192);">Private<br></li></ul><div><font color="#0067c0"><b style="font-size: 12.16px;">Used for trusted networks, such as home or work networks</b><br><b style="font-size: 12.16px;">Enables the PC to become discoverable to other devices on the network</b><br><span style="font-size: 12.16px;"><b>Enables the PC to be used for file and printer sharing</b></span></font></div></div>
+          <div class="demo">
+            <strong class="label">Access to a configuration interface used for modifying public/private network profile settings</strong>
+            <ol><li>Windows Control Panel (category view) &gt; View network status and tasks &gt; Change advanced sharing settings</li><li>Windows Control Panel (icon view) &gt; Network and Sharing Center &gt; Change advanced sharing settings</li></ol>
+          </div>
+        </div>
+      </article>
+      <article class="term" id="unc-paths">
+        <div class="visual photo">
+          <img src="1.71/File Explorer navigation – network paths.png" alt="File Explorer navigation – network paths" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>File Explorer navigation – network paths</h3>
+          <span class="aka">↳ File Explorer address bar → \\ServerName\ShareName</span>
+          <p>Accessing shared resources using Universal Naming Convention paths like \\ServerName\ShareName.</p>
+          <ul class="tags"><li>\\Server\Share</li></ul>
+          <div class="demo">
+            <strong class="label">Find it on your PC&nbsp;</strong>
+            <ol><li>Open File Explorer, click the address bar, type a UNC path (example: \\localhost or \\ServerName\ShareName), press Enter.</li></ol>
+          </div>
+        </div>
+      </article>
+      <article class="term" id="metered">
+        <div class="visual photo">
+          <img src="1.71/Metered connections and limitations.png" alt="Metered connections and limitations" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Metered connections and limitations</h3>
+          <span class="aka">↳ Settings → Wi-Fi → [network] → Metered connection</span>
+          <p>Setting a data-cap constraint on Wi-Fi or cellular connections to restrict background data usage and defer automatic Windows updates.<br><br>Pauses Large Downloads</p>
+          
+          <div class="demo">
+            <strong class="label">Find it on your PC</strong>
+            <ol><li>Settings → Network &amp; Internet → Wi-Fi → Hardware properties or your network’s properties.</li></ol>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    Images in the <code>1.71</code> folder. Orange boxes = steps on <strong>your Windows PC</strong> (Win&nbsp;+&nbsp;R shortcuts like <code>sysdm.cpl</code>, <code>ncpa.cpl</code>, <code>firewall.cpl</code>, or Settings → Network &amp; Internet).
+    Interactive practice: <a href="1.7 Configure Microsoft Windows Networking.html">1.7 lab</a>.
+  </div>
+</footer>
+
+<script src="study-lightbox.js"></script>
+<script src="study-editor.js"></script>
+
+
+</body></html>
