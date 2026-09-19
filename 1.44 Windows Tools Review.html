@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.44 Windows Tools Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101820;
+    --muted:#4b5563;
+    --paper:#eef3f8;
+    --line:rgba(16,24,32,0.12);
+    --accent:#1e40af;
+    --accent-soft:#dbeafe;
+    --good:#166534;
+    --good-soft:#dcfce7;
+    --danger:#b42318;
+    --danger-soft:#fee2e2;
+    --sky:#0e4d7b;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(30,64,175,0.12), transparent 55%),
+      linear-gradient(180deg, #e4eaf2 0%, var(--paper) 40%, #e8eef5 100%);
+    line-height:1.5;
+    min-height:100vh;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1240px, calc(100% - 2.2rem)); margin:0 auto; }
+
+  header{ padding:2.2rem 0 1.4rem; }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(2.2rem, 6vw, 3.4rem);
+    font-weight:700;
+    letter-spacing:-0.03em;
+    margin:0 0 0.35rem;
+    line-height:1;
+  }
+  header p{ margin:0; color:var(--muted); max-width:68ch; }
+  .modes{ display:flex; flex-wrap:wrap; gap:0.45rem; margin-top:1rem; }
+  .modes button{
+    font:inherit; font-weight:700; font-size:0.8rem;
+    border:1px solid var(--line); background:#fff; color:var(--ink);
+    border-radius:999px; padding:0.45rem 0.85rem; cursor:pointer;
+  }
+  .modes button.on{ background:var(--accent); color:#fff; border-color:var(--accent); }
+  .meta{ display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1rem; }
+  .pill{
+    font-size:0.78rem; font-weight:700;
+    padding:0.28rem 0.7rem; border-radius:999px;
+    background:var(--accent-soft); color:var(--accent);
+  }
+
+  .ticket{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:1.2rem 1.35rem;
+    margin-bottom:1.1rem;
+    box-shadow:0 10px 28px rgba(16,24,32,0.06);
+  }
+  .ticket .kicker{
+    font-size:0.72rem; font-weight:700; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--accent); margin:0 0 0.35rem;
+  }
+  .ticket h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.35rem, 3vw, 1.85rem);
+    margin:0 0 0.45rem;
+    letter-spacing:-0.02em;
+  }
+  .ticket p{ margin:0; color:var(--muted); }
+
+  .board{
+    display:grid;
+    grid-template-columns:1fr minmax(260px, 320px);
+    gap:1rem;
+    align-items:start;
+  }
+  @media (max-width:980px){ .board{ grid-template-columns:1fr; } }
+
+  .catalogs{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:0.85rem;
+  }
+  @media (max-width:700px){ .catalogs{ grid-template-columns:1fr; } }
+
+  .panel{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    overflow:hidden;
+  }
+  .panel[hidden]{ display:none !important; }
+  .panel h3{
+    margin:0; padding:0.85rem 1rem 0.35rem;
+    font-size:0.9rem;
+  }
+  .panel .sub{
+    margin:0; padding:0 1rem 0.55rem;
+    font-size:0.72rem; color:var(--muted); font-weight:600;
+  }
+  .search-wrap{ padding:0 1rem 0.65rem; }
+  .search-wrap input{
+    width:100%;
+    font:inherit;
+    font-size:0.86rem;
+    padding:0.55rem 0.7rem;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:#f8fafc;
+  }
+  .search-wrap input:focus{ outline:2px solid var(--accent); outline-offset:1px; background:#fff; }
+  .catalog{
+    list-style:none; margin:0; padding:0 0.55rem 0.8rem;
+    max-height:14.5rem; overflow:auto;
+  }
+  .catalog li{
+    display:flex; align-items:flex-start; justify-content:space-between; gap:0.5rem;
+    padding:0.45rem 0.55rem;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:0.82rem; font-weight:600;
+  }
+  .catalog li:hover{ background:var(--accent-soft); }
+  .catalog li.used{ opacity:0.4; cursor:default; }
+  .catalog li .meta-line{
+    display:block; font-size:0.68rem; font-weight:600; color:var(--muted);
+  }
+  .catalog li .overlap{
+    display:inline-block; margin-top:0.12rem;
+    font-size:0.64rem; font-weight:700; letter-spacing:0.03em;
+    text-transform:uppercase; color:var(--sky);
+  }
+  .catalog li .add{
+    flex:0 0 auto;
+    font-size:0.7rem; font-weight:700; letter-spacing:0.04em;
+    color:var(--accent);
+    padding-top:0.12rem;
+  }
+  .empty{ padding:0.2rem 1rem 0.85rem; color:var(--muted); font-size:0.8rem; }
+
+  .list{
+    list-style:none; margin:0; padding:0 0.7rem 0.9rem;
+    min-height:8rem;
+  }
+  .list li{
+    display:flex; align-items:flex-start; gap:0.55rem;
+    padding:0.55rem 0.65rem;
+    border:1px solid var(--line);
+    border-radius:10px;
+    margin-bottom:0.45rem;
+    font-size:0.86rem; font-weight:600;
+    background:#f8fafc;
+  }
+  .list li.ok{ background:var(--good-soft); border-color:#86efac; }
+  .list li.bad{ background:var(--danger-soft); border-color:#fca5a5; }
+  .list li .src{
+    display:block; font-size:0.68rem; font-weight:600; color:var(--muted);
+  }
+  .list li button{
+    margin-left:auto;
+    border:0; background:transparent; cursor:pointer;
+    color:var(--muted); font-weight:700;
+  }
+  .list li button:hover{ color:var(--danger); }
+
+  .actions{
+    display:flex; flex-wrap:wrap; gap:0.5rem;
+    padding:0 1.1rem 1.1rem;
+  }
+  .actions button{
+    font:inherit; font-weight:700; font-size:0.85rem;
+    border:0; border-radius:999px; padding:0.62rem 1rem; cursor:pointer;
+    background:#e2e8f0; color:var(--ink);
+  }
+  .actions button.primary{ background:var(--accent); color:#fff; }
+  .actions button:disabled{ opacity:0.4; cursor:default; }
+
+  .feedback{
+    display:none;
+    margin:0 1.1rem 1.1rem;
+    padding:0.8rem 0.95rem;
+    border-radius:12px;
+    font-size:0.88rem;
+  }
+  .feedback.show{ display:block; }
+  .feedback.pass{ background:var(--good-soft); color:var(--good); }
+  .feedback.fail{ background:var(--danger-soft); color:#7f1d1d; }
+  .feedback ul{ margin:0.4rem 0 0; padding-left:1.15rem; }
+
+  .done{
+    display:none;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:1.6rem 1.4rem;
+    text-align:center;
+  }
+  .done.show{ display:block; }
+  .done h2{ font-family:"Fraunces",serif; margin:0 0 0.4rem; }
+  .done p{ color:var(--muted); margin:0 0 1rem; }
+
+  .side-note{
+    padding:0 1.1rem 0.85rem;
+    font-size:0.75rem;
+    color:var(--muted);
+  }
+
+  footer{
+    padding:2rem 0 2.6rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <p class="brand">1.44</p>
+      <p>Scenario PBQ for Chapter 1 tools. Read the ticket, then search the matching catalog — Task Manager tabs, MMC snap-ins, admin utilities, Control Panel, or Windows Settings. Some tools appear in more than one box; adding either copy counts.</p>
+      <div class="modes" role="tablist" aria-label="Review set">
+        <button type="button" class="on" data-mode="all">All tickets</button>
+        <button type="button" data-mode="14">1.4 Task Mgr / MMC / Admin</button>
+        <button type="button" data-mode="16">1.6 Control Panel / Settings</button>
+      </div>
+      <div class="meta">
+        <span class="pill" id="progress">Problem 1 of 1</span>
+        <span class="pill" id="score">0 checked out</span>
+        <a class="pill" id="guideLink" href="1.41 Task Manager.html">Study guide</a>
+      </div>
+    </header>
+
+    <div id="play">
+      <section class="ticket" aria-live="polite">
+        <p class="kicker" id="ticketKicker">Service ticket</p>
+        <h2 id="problemName">Loading…</h2>
+        <p id="problemBlurb"></p>
+      </section>
+
+      <div class="board">
+        <div class="catalogs" id="catalogs">
+          <section class="panel" data-box="taskmgr">
+            <h3>Task Manager</h3>
+            <p class="sub">Tabs inside taskmgr.exe</p>
+            <div class="search-wrap">
+              <input data-search="taskmgr" type="search" placeholder="Processes, Startup, Users…" autocomplete="off">
+            </div>
+            <ul class="catalog" data-catalog="taskmgr"></ul>
+            <p class="empty" data-empty="taskmgr" hidden>No Task Manager tabs match.</p>
+          </section>
+          <section class="panel" data-box="mmc">
+            <h3>MMC snap-ins</h3>
+            <p class="sub">eventvwr, diskmgmt, gpedit…</p>
+            <div class="search-wrap">
+              <input data-search="mmc" type="search" placeholder="Event Viewer, Disk Management…" autocomplete="off">
+            </div>
+            <ul class="catalog" data-catalog="mmc"></ul>
+            <p class="empty" data-empty="mmc" hidden>No snap-ins match.</p>
+          </section>
+          <section class="panel" data-box="admin">
+            <h3>Admin tools</h3>
+            <p class="sub">msinfo32, msconfig, cleanmgr, regedit</p>
+            <div class="search-wrap">
+              <input data-search="admin" type="search" placeholder="Resource Monitor, Safe Boot…" autocomplete="off">
+            </div>
+            <ul class="catalog" data-catalog="admin"></ul>
+            <p class="empty" data-empty="admin" hidden>No admin tools match.</p>
+          </section>
+          <section class="panel" data-box="cp">
+            <h3>Control Panel</h3>
+            <p class="sub">Classic applets</p>
+            <div class="search-wrap">
+              <input data-search="cp" type="search" placeholder="Internet Options, Power, Firewall…" autocomplete="off">
+            </div>
+            <ul class="catalog" data-catalog="cp"></ul>
+            <p class="empty" data-empty="cp" hidden>No Control Panel applets match.</p>
+          </section>
+          <section class="panel" data-box="settings">
+            <h3>Windows Settings</h3>
+            <p class="sub">Modern Settings app</p>
+            <div class="search-wrap">
+              <input data-search="settings" type="search" placeholder="Accounts, Update, Privacy…" autocomplete="off">
+            </div>
+            <ul class="catalog" data-catalog="settings"></ul>
+            <p class="empty" data-empty="settings" hidden>No Settings pages match.</p>
+          </section>
+        </div>
+
+        <section class="panel">
+          <h3>Your list <span id="listCount" style="color:var(--muted); font-weight:600;">(0)</span></h3>
+          <p class="side-note">Most tickets need one tool. Overlap (Device Manager) counts from MMC or Control Panel — not twice.</p>
+          <ul class="list" id="chosen"></ul>
+          <p class="empty" id="listEmpty">Nothing added yet. Search a catalog and click a tool.</p>
+          <p class="feedback" id="feedback" role="status"></p>
+          <div class="actions">
+            <button type="button" class="primary" id="checkBtn">Check list</button>
+            <button type="button" id="nextBtn" disabled>Next problem</button>
+            <button type="button" id="clearBtn">Clear</button>
+            <button type="button" id="hintBtn">Hint</button>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="done" id="done">
+      <h2>Round complete</h2>
+      <p id="doneMsg"></p>
+      <div class="actions" style="justify-content:center; padding:0;">
+        <button type="button" class="primary" id="restartBtn">Start another round</button>
+      </div>
+    </div>
+
+    <footer>
+      Catalogs from
+      <a href="1.41 Task Manager.html">1.41 Task Manager</a>,
+      <a href="1.42 MMC Snap-ins.html">1.42 MMC</a>,
+      <a href="1.43 Windows Additional Admin Tools.html">1.43 Admin tools</a>,
+      <a href="1.61 Control Panel.html">1.61 Control Panel</a>, and
+      <a href="1.62 Windows Settings.html">1.62 Settings</a>.
+      Order does not matter; the set of tools does.
+    </footer>
+  </div>
+
+<script>
+const BOXES = {
+  taskmgr: { label: "Task Manager", set: "14" },
+  mmc: { label: "MMC snap-ins", set: "14" },
+  admin: { label: "Admin tools", set: "14" },
+  cp: { label: "Control Panel", set: "16" },
+  settings: { label: "Windows Settings", set: "16" }
+};
+
+const BOX_LABELS = {
+  taskmgr: "Task Manager",
+  mmc: "MMC snap-ins",
+  admin: "Admin tools",
+  cp: "Control Panel",
+  settings: "Windows Settings"
+};
+
+const ITEMS = [
+  { id: "tm-processes", name: "Processes", aka: "End task · CPU Memory Disk Network GPU", boxes: ["taskmgr"] },
+  { id: "tm-performance", name: "Performance", aka: "live graphs CPU RAM disk network GPU", boxes: ["taskmgr"] },
+  { id: "tm-startup", name: "Startup (Startup Apps)", aka: "startup impact disable apps at sign-in", boxes: ["taskmgr"] },
+  { id: "tm-services", name: "Services", aka: "start stop restart background services", boxes: ["taskmgr"] },
+  { id: "tm-users", name: "Users", aka: "signed-in sessions disconnect sign off", boxes: ["taskmgr"] },
+
+  { id: "event-viewer", name: "Event Viewer", aka: "eventvwr.msc logs", boxes: ["mmc"] },
+  { id: "app-system-logs", name: "Application & System Logs", aka: "Information Warning Error events", boxes: ["mmc"] },
+  { id: "security-log", name: "Security Log", aka: "audit Success Failure logon", boxes: ["mmc"] },
+  { id: "disk-management", name: "Disk Management", aka: "diskmgmt.msc partition format volume", boxes: ["mmc"] },
+  { id: "task-scheduler", name: "Task Scheduler", aka: "taskschd.msc automate scripts", boxes: ["mmc"] },
+  { id: "device-manager", name: "Device Manager", aka: "devmgmt.msc drivers hardware roll back", boxes: ["mmc", "cp"] },
+  { id: "certificate-manager", name: "Certificate Manager", aka: "certmgr.msc import export certificates", boxes: ["mmc"] },
+  { id: "lusrmgr", name: "Local Users and Groups", aka: "lusrmgr.msc local accounts Pro Enterprise", boxes: ["mmc"] },
+  { id: "perfmon", name: "Performance Monitor", aka: "perfmon.msc Data Collector Sets counters", boxes: ["mmc"] },
+  { id: "gpedit", name: "Local Group Policy Editor", aka: "gpedit.msc user rights security policy", boxes: ["mmc"] },
+
+  { id: "msinfo32", name: "System Information", aka: "msinfo32.exe hardware resources components software environment", boxes: ["admin"] },
+  { id: "resmon", name: "Resource Monitor", aka: "resmon.exe per-process CPU Memory Disk Network", boxes: ["admin"] },
+  { id: "msconfig", name: "System Configuration", aka: "msconfig.exe startup troubleshooting", boxes: ["admin"] },
+  { id: "msconfig-general", name: "msconfig — General tab", aka: "Normal Diagnostic Selective startup", boxes: ["admin"] },
+  { id: "msconfig-boot", name: "msconfig — Boot tab", aka: "Safe Boot boot logging default OS max RAM CPU", boxes: ["admin"] },
+  { id: "cleanmgr", name: "Disk Cleanup", aka: "cleanmgr.exe temp cache reclaim space", boxes: ["admin"] },
+  { id: "dfrgui", name: "Defragment and Optimize Drives", aka: "dfrgui.exe TRIM HDD SSD", boxes: ["admin"] },
+  { id: "regedit", name: "Registry Editor", aka: "regedit.exe HKLM hierarchical database", boxes: ["admin"] },
+
+  { id: "internet-options", name: "Internet Options", aka: "inetcpl.cpl proxy security zones cookies TLS", boxes: ["cp"] },
+  { id: "devices-printers", name: "Devices and Printers", aka: "default printer print queue peripherals", boxes: ["cp"] },
+  { id: "programs-features", name: "Programs and Features", aka: "uninstall Win32 Windows features optional", boxes: ["cp"] },
+  { id: "network-sharing", name: "Network and Sharing Center", aka: "adapter IP DNS network profile sharing", boxes: ["cp"] },
+  { id: "system-cp", name: "System (Control Panel)", aka: "rename computer domain workgroup System Protection", boxes: ["cp"] },
+  { id: "firewall", name: "Windows Defender Firewall", aka: "inbound outbound allow app through firewall", boxes: ["cp"] },
+  { id: "mail", name: "Mail", aka: "Outlook profile PST OST Exchange IMAP POP3", boxes: ["cp"] },
+  { id: "sound", name: "Sound", aka: "default playback recording speakers", boxes: ["cp"] },
+  { id: "user-accounts", name: "User Accounts", aka: "UAC credentials account type", boxes: ["cp"] },
+  { id: "indexing", name: "Indexing Options", aka: "search catalog File Explorer locations", boxes: ["cp"] },
+  { id: "admin-tools", name: "Administrative Tools", aka: "Computer Management Event Viewer Services Task Scheduler", boxes: ["cp"] },
+  { id: "feo-general", name: "File Explorer Options — General", aka: "This PC Quick Access folder history", boxes: ["cp"] },
+  { id: "feo-hide-ext", name: "File Explorer Options — Hide extensions", aka: "hide extensions known file types malware", boxes: ["cp"] },
+  { id: "feo-hidden", name: "File Explorer Options — View hidden files", aka: "show hidden files folders drives", boxes: ["cp"] },
+  { id: "power-options", name: "Power Options", aka: "Balanced Power Saver High Performance plans", boxes: ["cp"] },
+  { id: "power-lid-fast", name: "Lid actions and Fast Startup", aka: "close lid Hibernate Sleep Fast Startup", boxes: ["cp"] },
+  { id: "power-sleep-usb", name: "Sleep states and USB selective suspend", aka: "hiberfil.sys standby USB ports idle", boxes: ["cp"] },
+  { id: "ease-of-access", name: "Ease of Access", aka: "Narrator Magnifier High Contrast Sticky Keys", boxes: ["cp"] },
+
+  { id: "system-settings", name: "System (Settings)", aka: "Display Sound Notifications Storage Sense Remote Desktop", boxes: ["settings"] },
+  { id: "devices-settings", name: "Devices (Settings)", aka: "Bluetooth printers scanners touchpad USB", boxes: ["settings"] },
+  { id: "network-internet", name: "Network and Internet", aka: "Wi-Fi Ethernet VPN proxy Data Usage Network Reset", boxes: ["settings"] },
+  { id: "personalization", name: "Personalization", aka: "wallpaper lock screen themes Start taskbar", boxes: ["settings"] },
+  { id: "apps", name: "Apps", aka: "uninstall UWP default apps startup applications", boxes: ["settings"] },
+  { id: "accounts", name: "Accounts", aka: "Microsoft account Windows Hello PIN Work School", boxes: ["settings"] },
+  { id: "time-language", name: "Time and Language", aka: "time zone language packs region keyboard", boxes: ["settings"] },
+  { id: "gaming", name: "Gaming", aka: "Xbox Game Bar Game Mode screen recording", boxes: ["settings"] },
+  { id: "privacy", name: "Privacy", aka: "camera microphone app permissions diagnostics", boxes: ["settings"] },
+  { id: "update-security", name: "Update and Security", aka: "Windows Update Reset this PC File History Defender", boxes: ["settings"] }
+];
+
+const PROBLEMS = [
+  {
+    id: "frozen-app",
+    set: "14",
+    name: "Notepad is Not Responding",
+    blurb: "A desktop app is frozen and will not close from its own window. You need the Task Manager view that lists running programs and lets you force-close one.",
+    need: ["tm-processes"],
+    guide: "1.41 Task Manager.html",
+    hint: "Task Manager tab — End task."
+  },
+  {
+    id: "live-graphs",
+    set: "14",
+    name: "Is the disk or the GPU pegged?",
+    blurb: "The PC feels slow and you want live system-wide graphs for CPU, RAM, disk, network, and GPU — not a per-process table.",
+    need: ["tm-performance"],
+    guide: "1.41 Task Manager.html",
+    hint: "Task Manager tab with hardware graphs."
+  },
+  {
+    id: "slow-logon",
+    set: "14",
+    name: "Sign-in takes two minutes",
+    blurb: "After the password is accepted, the desktop crawls while several user-space apps auto-launch. Disable the high-impact ones that start at sign-in.",
+    need: ["tm-startup"],
+    guide: "1.41 Task Manager.html",
+    hint: "Task Manager tab for apps that run at logon."
+  },
+  {
+    id: "restart-service",
+    set: "14",
+    name: "Print Spooler will not start",
+    blurb: "A background Windows service with no window needs to be viewed and restarted from Task Manager.",
+    need: ["tm-services"],
+    guide: "1.41 Task Manager.html",
+    hint: "Task Manager tab for services, not Processes."
+  },
+  {
+    id: "other-user",
+    set: "14",
+    name: "Another session is eating RAM",
+    blurb: "Fast User Switching left a second account signed in. You need the Task Manager view that shows per-user resource use and lets you disconnect or sign that session off.",
+    need: ["tm-users"],
+    guide: "1.41 Task Manager.html",
+    hint: "Task Manager tab named after people, not processes."
+  },
+  {
+    id: "open-logs",
+    set: "14",
+    name: "Where are the Windows logs?",
+    blurb: "You need the MMC console used to monitor system health by managing event logs.",
+    need: ["event-viewer"],
+    guide: "1.42 MMC Snap-ins.html",
+    hint: "MMC snap-in — eventvwr.msc."
+  },
+  {
+    id: "app-crash-log",
+    set: "14",
+    name: "An application keeps throwing Errors",
+    blurb: "You are in Event Viewer and need the log category that records Information, Warning, and Error events for apps and the OS — not the audit log.",
+    need: ["app-system-logs"],
+    guide: "1.42 MMC Snap-ins.html",
+    hint: "MMC — Application & System Logs."
+  },
+  {
+    id: "failed-logons",
+    set: "14",
+    name: "Audit failed logons",
+    blurb: "Security wants Success/Failure audit events for logons and other security-related actions — not Application or System errors.",
+    need: ["security-log"],
+    guide: "1.42 MMC Snap-ins.html",
+    hint: "MMC — the Security log."
+  },
+  {
+    id: "new-volume",
+    set: "14",
+    name: "Second disk is offline and unformatted",
+    blurb: "A new HDD is in the chassis. You need the graphical MMC tool to bring it online, partition it, and format a volume.",
+    need: ["disk-management"],
+    guide: "1.42 MMC Snap-ins.html",
+    hint: "MMC — diskmgmt.msc."
+  },
+  {
+    id: "nightly-script",
+    set: "14",
+    name: "Run a cleanup script every night",
+    blurb: "Automate a program or script at a set time or trigger without the user sitting at the PC.",
+    need: ["task-scheduler"],
+    guide: "1.42 MMC Snap-ins.html",
+    hint: "MMC — taskschd.msc."
+  },
+  {
+    id: "yellow-bang",
+    set: "14",
+    name: "USB headset has a yellow bang",
+    blurb: "A device is in an error state. You need the tool to view hardware, update / roll back / disable the driver, or check resource conflicts. It lives as an MMC snap-in and as a Control Panel applet — either copy is correct.",
+    need: ["device-manager"],
+    guide: "1.42 MMC Snap-ins.html",
+    hint: "Same tool in MMC and Control Panel."
+  },
+  {
+    id: "import-cert",
+    set: "14",
+    name: "Import a user certificate",
+    blurb: "A vendor sent a personal certificate/key pair for the signed-in account. You need the MMC snap-in that views, imports, exports, or deletes those certificates.",
+    need: ["certificate-manager"],
+    guide: "1.42 MMC Snap-ins.html",
+    hint: "MMC — certmgr.msc."
+  },
+  {
+    id: "local-user-pro",
+    set: "14",
+    name: "Create a local tech account on Windows Pro",
+    blurb: "Build a local user and add it to a group. This snap-in exists on Pro / Enterprise / Education, not Home.",
+    need: ["lusrmgr"],
+    guide: "1.42 MMC Snap-ins.html",
+    hint: "MMC — lusrmgr.msc."
+  },
+  {
+    id: "collector-sets",
+    set: "14",
+    name: "Log CPU for the next 8 hours",
+    blurb: "Live Task Manager graphs are not enough. You need long-term counters and Data Collector Sets.",
+    need: ["perfmon"],
+    guide: "1.42 MMC Snap-ins.html",
+    hint: "MMC — Performance Monitor."
+  },
+  {
+    id: "block-usb-policy",
+    set: "14",
+    name: "Disable removable storage by policy",
+    blurb: "On a standalone Pro PC, lock down OS behavior, user rights, and security settings with the local policy snap-in.",
+    need: ["gpedit"],
+    guide: "1.42 MMC Snap-ins.html",
+    hint: "MMC — gpedit.msc."
+  },
+  {
+    id: "inventory",
+    set: "14",
+    name: "What hardware and BIOS is in this box?",
+    blurb: "You need a read-only inventory of hardware resources, components, and the software environment — not live graphs.",
+    need: ["msinfo32"],
+    guide: "1.43 Windows Additional Admin Tools.html",
+    hint: "Admin tools — msinfo32.exe."
+  },
+  {
+    id: "which-pid-disk",
+    set: "14",
+    name: "Which process is hammering the disk?",
+    blurb: "Task Manager Performance shows disk busy, but you need the admin utility with per-process CPU, Memory, Disk, and Network breakdowns.",
+    need: ["resmon"],
+    guide: "1.43 Windows Additional Admin Tools.html",
+    hint: "Admin tools — resmon.exe."
+  },
+  {
+    id: "startup-modes",
+    set: "14",
+    name: "Boot with Diagnostic startup",
+    blurb: "You opened System Configuration and need the tab that switches Normal, Diagnostic, or Selective startup.",
+    need: ["msconfig-general"],
+    guide: "1.43 Windows Additional Admin Tools.html",
+    hint: "Admin tools — msconfig General tab."
+  },
+  {
+    id: "safe-boot",
+    set: "14",
+    name: "Turn on Safe Boot and boot logging",
+    blurb: "Configure Safe Boot, boot logging, the default OS in a multiboot menu, or cap RAM/CPUs for testing.",
+    need: ["msconfig-boot"],
+    guide: "1.43 Windows Additional Admin Tools.html",
+    hint: "Admin tools — msconfig Boot tab."
+  },
+  {
+    id: "reclaim-temp",
+    set: "14",
+    name: "C: is full of temp files",
+    blurb: "Reclaim space by deleting temporary, cached, and other leftover files with the classic cleanup utility.",
+    need: ["cleanmgr"],
+    guide: "1.43 Windows Additional Admin Tools.html",
+    hint: "Admin tools — cleanmgr.exe."
+  },
+  {
+    id: "optimize-hdd",
+    set: "14",
+    name: "HDD is fragmented; SSD needs TRIM",
+    blurb: "Optimize drive layout: defrag an HDD or run TRIM on an SSD.",
+    need: ["dfrgui"],
+    guide: "1.43 Windows Additional Admin Tools.html",
+    hint: "Admin tools — dfrgui.exe."
+  },
+  {
+    id: "edit-hklm",
+    set: "14",
+    name: "Vendor says edit a registry key",
+    blurb: "View or change Windows’ hierarchical configuration database. Back up first.",
+    need: ["regedit"],
+    guide: "1.43 Windows Additional Admin Tools.html",
+    hint: "Admin tools — regedit.exe."
+  },
+  {
+    id: "proxy-zones",
+    set: "16",
+    name: "Browser must use a proxy and Trusted Sites",
+    blurb: "Configure proxy/LAN settings, security zones, cookies, certificates, and TLS for the system browser from Control Panel.",
+    need: ["internet-options"],
+    guide: "1.61 Control Panel.html",
+    hint: "Control Panel — Internet Options (inetcpl.cpl)."
+  },
+  {
+    id: "default-printer",
+    set: "16",
+    name: "Wrong printer is the default",
+    blurb: "Set the default printer, clear a stuck print queue, or add a wired/wireless printer from the classic devices applet.",
+    need: ["devices-printers"],
+    guide: "1.61 Control Panel.html",
+    hint: "Control Panel — Devices and Printers."
+  },
+  {
+    id: "uninstall-win32",
+    set: "16",
+    name: "Uninstall an old Win32 suite and turn Windows features off",
+    blurb: "Remove a classic desktop program, view installed updates, or enable/disable optional Windows features.",
+    need: ["programs-features"],
+    guide: "1.61 Control Panel.html",
+    hint: "Control Panel — Programs and Features."
+  },
+  {
+    id: "static-ip",
+    set: "16",
+    name: "Set a static IP and DNS on the Ethernet adapter",
+    blurb: "Change adapter IPv4/DNS, view the network map, or set the network profile from the classic networking applet — not the modern Settings page.",
+    need: ["network-sharing"],
+    guide: "1.61 Control Panel.html",
+    hint: "Control Panel — Network and Sharing Center."
+  },
+  {
+    id: "join-domain",
+    set: "16",
+    name: "Rename the PC and join the domain",
+    blurb: "View basic specs, rename the computer, join a domain or workgroup, or open System Protection. Use the Control Panel System applet.",
+    need: ["system-cp"],
+    guide: "1.61 Control Panel.html",
+    hint: "Control Panel — System, not Settings › System."
+  },
+  {
+    id: "allow-app-fw",
+    set: "16",
+    name: "Payroll.exe is blocked on the domain profile",
+    blurb: "Allow an application through the firewall, or edit inbound/outbound rules and logging.",
+    need: ["firewall"],
+    guide: "1.61 Control Panel.html",
+    hint: "Control Panel — Windows Defender Firewall."
+  },
+  {
+    id: "outlook-profile",
+    set: "16",
+    name: "Outlook needs a new Exchange profile",
+    blurb: "Create or repair a local mail profile and manage PST/OST data files.",
+    need: ["mail"],
+    guide: "1.61 Control Panel.html",
+    hint: "Control Panel — Mail."
+  },
+  {
+    id: "wrong-speakers",
+    set: "16",
+    name: "Sound is going to the HDMI TV",
+    blurb: "Pick the default playback and recording devices and adjust speaker properties.",
+    need: ["sound"],
+    guide: "1.61 Control Panel.html",
+    hint: "Control Panel — Sound."
+  },
+  {
+    id: "uac-creds",
+    set: "16",
+    name: "Lower UAC and clear a saved credential",
+    blurb: "Change a local account type, User Account Control level, or Windows Credential Manager entries from Control Panel.",
+    need: ["user-accounts"],
+    guide: "1.61 Control Panel.html",
+    hint: "Control Panel — User Accounts (not lusrmgr, not Settings › Accounts)."
+  },
+  {
+    id: "search-slow",
+    set: "16",
+    name: "File Explorer search misses half the files",
+    blurb: "Rebuild or expand the search catalog — locations and file types used by Windows Search.",
+    need: ["indexing"],
+    guide: "1.61 Control Panel.html",
+    hint: "Control Panel — Indexing Options."
+  },
+  {
+    id: "admin-folder",
+    set: "16",
+    name: "Where does Control Panel stash Event Viewer and Task Scheduler?",
+    blurb: "You need the Control Panel folder that groups Computer Management, Event Viewer, Services, Local Security Policy, and Task Scheduler.",
+    need: ["admin-tools"],
+    guide: "1.61 Control Panel.html",
+    hint: "Control Panel — Administrative Tools."
+  },
+  {
+    id: "quick-access",
+    set: "16",
+    name: "Explorer should open to This PC, not Quick Access",
+    blurb: "Change File Explorer’s default landing location and folder-opening behavior.",
+    need: ["feo-general"],
+    guide: "1.61 Control Panel.html",
+    hint: "Control Panel — File Explorer Options, General tab."
+  },
+  {
+    id: "see-extensions",
+    set: "16",
+    name: "Is this invoice.pdf.exe?",
+    blurb: "A user cannot see the real file extension. Uncheck “Hide extensions for known file types.”",
+    need: ["feo-hide-ext"],
+    guide: "1.61 Control Panel.html",
+    hint: "Control Panel — File Explorer Options, View tab (extensions)."
+  },
+  {
+    id: "show-hidden",
+    set: "16",
+    name: "Malware dropped a hidden folder",
+    blurb: "Reveal hidden files, folders, and drives from File Explorer Options.",
+    need: ["feo-hidden"],
+    guide: "1.61 Control Panel.html",
+    hint: "Control Panel — File Explorer Options, View tab (hidden items)."
+  },
+  {
+    id: "power-plan",
+    set: "16",
+    name: "Laptop needs High Performance",
+    blurb: "Switch the power plan among Balanced, Power Saver, and High Performance.",
+    need: ["power-options"],
+    guide: "1.61 Control Panel.html",
+    hint: "Control Panel — Power Options."
+  },
+  {
+    id: "lid-fast",
+    set: "16",
+    name: "Closing the lid must do nothing; Fast Startup is on",
+    blurb: "Choose what happens when the lid closes, and toggle Fast Startup (hybrid shutdown).",
+    need: ["power-lid-fast"],
+    guide: "1.61 Control Panel.html",
+    hint: "Control Panel — Power Options › lid / Fast Startup."
+  },
+  {
+    id: "usb-sleep",
+    set: "16",
+    name: "USB scanner sleeps and drops off the bus",
+    blurb: "A device dies after idle. Check sleep/hibernate behavior and USB selective suspend in advanced power settings.",
+    need: ["power-sleep-usb"],
+    guide: "1.61 Control Panel.html",
+    hint: "Control Panel — Power Options, sleep / USB selective suspend."
+  },
+  {
+    id: "magnifier",
+    set: "16",
+    name: "User needs Magnifier and Sticky Keys",
+    blurb: "Turn on accessibility features: Narrator, Magnifier, High Contrast, Sticky Keys, pointer size.",
+    need: ["ease-of-access"],
+    guide: "1.61 Control Panel.html",
+    hint: "Control Panel — Ease of Access."
+  },
+  {
+    id: "display-rdp",
+    set: "16",
+    name: "Fix scaling and turn on Remote Desktop",
+    blurb: "From the modern Settings app: display resolution/scale, notifications, Storage Sense, or Remote Desktop. Not Control Panel › System.",
+    need: ["system-settings"],
+    guide: "1.62 Windows Settings.html",
+    hint: "Windows Settings — System."
+  },
+  {
+    id: "pair-bt",
+    set: "16",
+    name: "Pair a Bluetooth mouse",
+    blurb: "Pair Bluetooth, add a printer/scanner, or tweak the touchpad from the modern Devices page.",
+    need: ["devices-settings"],
+    guide: "1.62 Windows Settings.html",
+    hint: "Windows Settings — Devices."
+  },
+  {
+    id: "vpn-reset",
+    set: "16",
+    name: "Add a VPN and Network Reset",
+    blurb: "Toggle Wi-Fi/Ethernet, add a VPN, set a proxy, view data usage, or run Network Reset in the Settings app.",
+    need: ["network-internet"],
+    guide: "1.62 Windows Settings.html",
+    hint: "Windows Settings — Network and Internet."
+  },
+  {
+    id: "wallpaper",
+    set: "16",
+    name: "Lock screen image and dark theme",
+    blurb: "Change wallpaper, colors, lock screen, themes, or Start/taskbar behavior.",
+    need: ["personalization"],
+    guide: "1.62 Windows Settings.html",
+    hint: "Windows Settings — Personalization."
+  },
+  {
+    id: "default-pdf",
+    set: "16",
+    name: "PDFs must open in Edge; remove a Store app",
+    blurb: "Set default apps by file type/protocol, manage startup apps, or uninstall a UWP/Store app from Settings.",
+    need: ["apps"],
+    guide: "1.62 Windows Settings.html",
+    hint: "Windows Settings — Apps."
+  },
+  {
+    id: "hello-pin",
+    set: "16",
+    name: "Set up Windows Hello and a work account",
+    blurb: "Microsoft account vs local, Work or School, Windows Hello PIN/biometrics, or family accounts.",
+    need: ["accounts"],
+    guide: "1.62 Windows Settings.html",
+    hint: "Windows Settings — Accounts."
+  },
+  {
+    id: "wrong-timezone",
+    set: "16",
+    name: "Clock is three hours off after travel",
+    blurb: "Set time zone, add a language pack, or change region/keyboard in Settings.",
+    need: ["time-language"],
+    guide: "1.62 Windows Settings.html",
+    hint: "Windows Settings — Time and Language."
+  },
+  {
+    id: "game-mode",
+    set: "16",
+    name: "Game Mode is stealing CPU from a CAD app",
+    blurb: "Xbox Game Bar, Game Mode, or screen recording live in the Gaming Settings page.",
+    need: ["gaming"],
+    guide: "1.62 Windows Settings.html",
+    hint: "Windows Settings — Gaming."
+  },
+  {
+    id: "mic-permission",
+    set: "16",
+    name: "Teams cannot use the microphone",
+    blurb: "An app is blocked from camera, microphone, or other hardware. Fix app permissions — not the Sound applet.",
+    need: ["privacy"],
+    guide: "1.62 Windows Settings.html",
+    hint: "Windows Settings — Privacy."
+  },
+  {
+    id: "reset-pc",
+    set: "16",
+    name: "Windows Update failed; Reset this PC is next",
+    blurb: "Pause/schedule Windows Update, open Windows Security, File History, or Reset this PC.",
+    need: ["update-security"],
+    guide: "1.62 Windows Settings.html",
+    hint: "Windows Settings — Update and Security."
+  },
+  {
+    id: "malware-view",
+    set: "16",
+    name: "Hunt a hidden dropper by extension",
+    blurb: "A user may have double-clicked a file that looked like a document. You need both File Explorer Options: show hidden items, and show extensions for known file types.",
+    need: ["feo-hidden", "feo-hide-ext"],
+    guide: "1.61 Control Panel.html",
+    hint: "Control Panel — two File Explorer Options (View tab) settings."
+  }
+];
+
+const MODES = {
+  all: { label: "All tickets", sets: ["14", "16"] },
+  "14": { label: "1.4 Task Mgr / MMC / Admin", sets: ["14"] },
+  "16": { label: "1.6 Control Panel / Settings", sets: ["16"] }
+};
+
+let modeId = "all";
+let queue = [];
+let index = 0;
+let chosen = [];
+let passed = false;
+let correctCount = 0;
+let checkedThisTicket = false;
+
+const $ = (id) => document.getElementById(id);
+function mode() { return MODES[modeId]; }
+function current() { return queue[index]; }
+function itemById(id) { return ITEMS.find((it) => it.id === id); }
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function visibleBoxes() {
+  const sets = mode().sets;
+  return Object.keys(BOXES).filter((id) => sets.includes(BOXES[id].set));
+}
+
+function setMode(id) {
+  if (!MODES[id]) id = "all";
+  modeId = id;
+  document.querySelectorAll(".modes button").forEach((b) => b.classList.toggle("on", b.dataset.mode === id));
+  document.querySelectorAll(".panel[data-box]").forEach((panel) => {
+    panel.hidden = !visibleBoxes().includes(panel.dataset.box);
+  });
+  const params = new URLSearchParams(location.search);
+  params.set("mode", id);
+  history.replaceState(null, "", "?" + params.toString());
+  startRound();
+}
+
+function startRound() {
+  queue = shuffle(PROBLEMS.filter((p) => mode().sets.includes(p.set)));
+  index = 0;
+  correctCount = 0;
+  $("play").style.display = "";
+  $("done").classList.remove("show");
+  loadTicket();
+}
+
+function loadTicket() {
+  const p = current();
+  chosen = [];
+  passed = false;
+  checkedThisTicket = false;
+  document.querySelectorAll("[data-search]").forEach((input) => { input.value = ""; });
+  $("ticketKicker").textContent = mode().label + " · service ticket";
+  $("problemName").textContent = p.name;
+  $("problemBlurb").textContent = p.blurb;
+  $("progress").textContent = "Problem " + (index + 1) + " of " + queue.length;
+  $("score").textContent = correctCount + " checked out";
+  $("guideLink").href = p.guide;
+  $("nextBtn").disabled = true;
+  $("feedback").className = "feedback";
+  $("feedback").innerHTML = "";
+  renderCatalogs();
+  renderList();
+}
+
+function haystack(item) {
+  return (item.name + " " + item.aka).toLowerCase();
+}
+
+function overlapNote(item, box) {
+  if (item.boxes.length < 2) return "";
+  const others = item.boxes.filter((b) => b !== box).map((b) => BOX_LABELS[b]);
+  return others.length ? "Also in " + others.join(", ") : "";
+}
+
+function renderCatalogs() {
+  visibleBoxes().forEach(renderCatalog);
+}
+
+function renderCatalog(box) {
+  const q = (document.querySelector('[data-search="' + box + '"]').value || "").trim().toLowerCase();
+  const items = ITEMS.filter((it) => it.boxes.includes(box) && (!q || haystack(it).includes(q)));
+  const ul = document.querySelector('[data-catalog="' + box + '"]');
+  const empty = document.querySelector('[data-empty="' + box + '"]');
+  ul.innerHTML = "";
+  empty.hidden = items.length > 0;
+  items.forEach((item) => {
+    const used = chosen.some((c) => c.id === item.id);
+    const li = document.createElement("li");
+    li.className = used ? "used" : "";
+    const note = overlapNote(item, box);
+    li.innerHTML =
+      "<span></span><span class='add'>" + (used ? "Added" : "+ Add") + "</span>";
+    const label = li.querySelector("span");
+    label.appendChild(document.createTextNode(item.name));
+    const aka = document.createElement("span");
+    aka.className = "meta-line";
+    aka.textContent = item.aka.split(" · ")[0];
+    label.appendChild(aka);
+    if (note) {
+      const ov = document.createElement("span");
+      ov.className = "overlap";
+      ov.textContent = note;
+      label.appendChild(ov);
+    }
+    if (!used) {
+      li.addEventListener("click", () => addItem(item, box));
+    }
+    ul.appendChild(li);
+  });
+}
+
+function renderList() {
+  const ul = $("chosen");
+  ul.innerHTML = "";
+  $("listEmpty").hidden = chosen.length > 0;
+  $("listCount").textContent = "(" + chosen.length + ")";
+  const needed = current().need;
+  chosen.forEach((pick) => {
+    const li = document.createElement("li");
+    if (checkedThisTicket) li.className = needed.includes(pick.id) ? "ok" : "bad";
+    const label = document.createElement("span");
+    label.appendChild(document.createTextNode(pick.name));
+    const src = document.createElement("span");
+    src.className = "src";
+    src.textContent = BOX_LABELS[pick.box] || pick.box;
+    label.appendChild(src);
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = "✕";
+    btn.setAttribute("aria-label", "Remove " + pick.name);
+    btn.addEventListener("click", () => removeItem(pick.id));
+    li.appendChild(label);
+    li.appendChild(btn);
+    ul.appendChild(li);
+  });
+}
+
+function addItem(item, box) {
+  if (passed || chosen.some((c) => c.id === item.id)) return;
+  chosen.push({ id: item.id, name: item.name, box: box });
+  checkedThisTicket = false;
+  $("feedback").className = "feedback";
+  $("nextBtn").disabled = true;
+  renderCatalogs();
+  renderList();
+}
+
+function removeItem(id) {
+  if (passed) return;
+  chosen = chosen.filter((c) => c.id !== id);
+  checkedThisTicket = false;
+  $("feedback").className = "feedback";
+  $("nextBtn").disabled = true;
+  renderCatalogs();
+  renderList();
+}
+
+function checkList() {
+  const needed = current().need;
+  const picked = chosen.map((c) => c.id);
+  const extra = chosen.filter((c) => !needed.includes(c.id));
+  const missing = needed.filter((id) => !picked.includes(id));
+  checkedThisTicket = true;
+  renderList();
+  const box = $("feedback");
+  if (!extra.length && !missing.length) {
+    passed = true;
+    correctCount++;
+    $("score").textContent = correctCount + " checked out";
+    $("nextBtn").disabled = false;
+    box.className = "feedback show pass";
+    box.innerHTML = "List checks out — right tool" + (needed.length === 1 ? "" : "s") + ", nothing extra.";
+    return;
+  }
+  passed = false;
+  $("nextBtn").disabled = true;
+  let html = "Not yet. ";
+  if (extra.length) html += extra.length + " extra (red). ";
+  if (missing.length) html += "Missing " + missing.length + " required tool" + (missing.length === 1 ? "" : "s") + ".";
+  html += "<ul>";
+  extra.forEach((c) => { html += "<li>Extra: " + escapeHtml(c.name) + "</li>"; });
+  missing.forEach((id) => {
+    const it = itemById(id);
+    html += "<li>Missing: " + escapeHtml(it ? it.name : id) + "</li>";
+  });
+  html += "</ul>";
+  box.className = "feedback show fail";
+  box.innerHTML = html;
+}
+
+function hint() {
+  const p = current();
+  const missing = p.need.filter((id) => !chosen.some((c) => c.id === id));
+  const box = $("feedback");
+  box.className = "feedback show fail";
+  if (!missing.length) {
+    box.textContent = "Every required tool is already on the list. Remove extras, then check again.";
+    return;
+  }
+  box.innerHTML = "Need <strong>" + p.need.length + "</strong> tool" + (p.need.length === 1 ? "" : "s") +
+    ". Still missing <strong>" + missing.length + "</strong>. " + escapeHtml(p.hint);
+}
+
+function nextProblem() {
+  if (!passed) return;
+  if (index >= queue.length - 1) {
+    $("play").style.display = "none";
+    $("done").classList.add("show");
+    $("doneMsg").textContent = "You cleared all " + queue.length + " tickets in " + mode().label + ".";
+    return;
+  }
+  index++;
+  loadTicket();
+}
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+document.querySelectorAll(".modes button").forEach((b) => {
+  b.addEventListener("click", () => setMode(b.dataset.mode));
+});
+document.querySelectorAll("[data-search]").forEach((input) => {
+  input.addEventListener("input", () => renderCatalog(input.getAttribute("data-search")));
+});
+$("checkBtn").addEventListener("click", checkList);
+$("nextBtn").addEventListener("click", nextProblem);
+$("clearBtn").addEventListener("click", () => {
+  if (passed) return;
+  chosen = [];
+  checkedThisTicket = false;
+  $("feedback").className = "feedback";
+  $("nextBtn").disabled = true;
+  renderCatalogs();
+  renderList();
+});
+$("hintBtn").addEventListener("click", hint);
+$("restartBtn").addEventListener("click", startRound);
+
+const startMode = new URLSearchParams(location.search).get("mode") || "all";
+setMode(startMode);
+</script>
+</body>
+</html>

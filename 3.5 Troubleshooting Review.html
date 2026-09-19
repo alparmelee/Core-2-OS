@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3.5 Troubleshooting Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101820;
+    --muted:#4b5563;
+    --paper:#eef3f8;
+    --line:rgba(16,24,32,0.12);
+    --accent:#1e40af;
+    --accent-soft:#dbeafe;
+    --good:#166534;
+    --good-soft:#dcfce7;
+    --danger:#b42318;
+    --danger-soft:#fee2e2;
+    --sky:#0e4d7b;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(30,64,175,0.12), transparent 55%),
+      linear-gradient(180deg, #e4eaf2 0%, var(--paper) 40%, #e8eef5 100%);
+    line-height:1.5;
+    min-height:100vh;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1120px, calc(100% - 2.2rem)); margin:0 auto; }
+
+  header{
+    padding:2.2rem 0 1.4rem;
+  }
+  .brand{
+    font-family:"Fraunces",serif;
+    font-size:clamp(2.2rem, 6vw, 3.4rem);
+    font-weight:700;
+    letter-spacing:-0.03em;
+    margin:0 0 0.35rem;
+    line-height:1;
+  }
+  header p{ margin:0; color:var(--muted); max-width:62ch; }
+  .modes{
+    display:flex; flex-wrap:wrap; gap:0.45rem; margin-top:1rem;
+  }
+  .modes button{
+    font:inherit; font-weight:700; font-size:0.8rem;
+    border:1px solid var(--line); background:#fff; color:var(--ink);
+    border-radius:999px; padding:0.45rem 0.85rem; cursor:pointer;
+  }
+  .modes button.on{
+    background:var(--accent); color:#fff; border-color:var(--accent);
+  }
+  .meta{
+    display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1rem;
+  }
+  .pill{
+    font-size:0.78rem; font-weight:700;
+    padding:0.28rem 0.7rem; border-radius:999px;
+    background:var(--accent-soft); color:var(--accent);
+  }
+
+  .ticket{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:1.2rem 1.35rem;
+    margin-bottom:1.1rem;
+    box-shadow:0 10px 28px rgba(16,24,32,0.06);
+  }
+  .ticket .kicker{
+    font-size:0.72rem; font-weight:700; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--accent); margin:0 0 0.35rem;
+  }
+  .ticket h2{
+    font-family:"Fraunces",serif;
+    font-size:clamp(1.35rem, 3vw, 1.85rem);
+    margin:0 0 0.45rem;
+    letter-spacing:-0.02em;
+  }
+  .ticket p{ margin:0; color:var(--muted); }
+
+  .board{
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    gap:1rem;
+    align-items:start;
+  }
+  @media (max-width:860px){ .board{ grid-template-columns:1fr; } }
+
+  .panel{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    overflow:hidden;
+  }
+  .panel h3{
+    margin:0; padding:0.95rem 1.1rem 0.7rem;
+    font-size:0.95rem;
+  }
+  .search-wrap{ padding:0 1.1rem 0.75rem; }
+  #search{
+    width:100%;
+    font:inherit;
+    font-size:0.92rem;
+    padding:0.65rem 0.8rem;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:#f8fafc;
+  }
+  #search:focus{ outline:2px solid var(--accent); outline-offset:1px; background:#fff; }
+  .catalog{
+    list-style:none; margin:0; padding:0 0.7rem 0.9rem;
+    max-height:52vh; overflow:auto;
+  }
+  .catalog li{
+    display:flex; align-items:center; justify-content:space-between; gap:0.6rem;
+    padding:0.55rem 0.65rem;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:0.88rem; font-weight:600;
+  }
+  .catalog li:hover{ background:var(--accent-soft); }
+  .catalog li.used{ opacity:0.4; cursor:default; }
+  .catalog li .add{
+    flex:0 0 auto;
+    font-size:0.72rem; font-weight:700; letter-spacing:0.04em;
+    color:var(--accent);
+  }
+  .empty{ padding:0.4rem 1.1rem 1rem; color:var(--muted); font-size:0.88rem; }
+
+  .list{
+    list-style:none; margin:0; padding:0 0.7rem 0.9rem;
+    min-height:12rem;
+  }
+  .list li{
+    display:flex; align-items:center; gap:0.55rem;
+    padding:0.55rem 0.65rem;
+    border:1px solid var(--line);
+    border-radius:10px;
+    margin-bottom:0.45rem;
+    font-size:0.88rem; font-weight:600;
+    background:#f8fafc;
+  }
+  .list li.ok{ background:var(--good-soft); border-color:#86efac; }
+  .list li.bad{ background:var(--danger-soft); border-color:#fca5a5; }
+  .list li button{
+    margin-left:auto;
+    border:0; background:transparent; cursor:pointer;
+    color:var(--muted); font-weight:700;
+  }
+  .list li button:hover{ color:var(--danger); }
+
+  .actions{
+    display:flex; flex-wrap:wrap; gap:0.5rem;
+    padding:0 1.1rem 1.1rem;
+  }
+  .actions button{
+    font:inherit; font-weight:700; font-size:0.85rem;
+    border:0; border-radius:999px; padding:0.62rem 1rem; cursor:pointer;
+    background:#e2e8f0; color:var(--ink);
+  }
+  .actions button.primary{ background:var(--accent); color:#fff; }
+  .actions button:disabled{ opacity:0.4; cursor:default; }
+
+  .feedback{
+    display:none;
+    margin:0 1.1rem 1.1rem;
+    padding:0.8rem 0.95rem;
+    border-radius:12px;
+    font-size:0.88rem;
+  }
+  .feedback.show{ display:block; }
+  .feedback.pass{ background:var(--good-soft); color:var(--good); }
+  .feedback.fail{ background:var(--danger-soft); color:#7f1d1d; }
+  .feedback ul{ margin:0.4rem 0 0; padding-left:1.15rem; }
+
+  .done{
+    display:none;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:1.6rem 1.4rem;
+    text-align:center;
+  }
+  .done.show{ display:block; }
+  .done h2{ font-family:"Fraunces",serif; margin:0 0 0.4rem; }
+  .done p{ color:var(--muted); margin:0 0 1rem; }
+
+  footer{
+    padding:2rem 0 2.6rem;
+    color:var(--muted);
+    font-size:0.84rem;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <p class="brand">3.5</p>
+      <p>Performance-based review. Pick a set, then a ticket appears — search the catalog, add every matching troubleshooting step, and check the list. Order does not matter; the set does.</p>
+      <div class="modes" role="tablist" aria-label="Review set">
+        <button type="button" class="on" data-mode="31">3.1 Windows OS</button>
+        <button type="button" data-mode="32">3.2 Mobile OS / apps</button>
+        <button type="button" data-mode="33-34">3.3 + 3.4 Security (2 tickets)</button>
+      </div>
+      <div class="meta">
+        <span class="pill" id="progress">Problem 1 of 12</span>
+        <span class="pill" id="score">0 checked out</span>
+      </div>
+    </header>
+
+    <div id="play">
+      <section class="ticket" aria-live="polite">
+        <p class="kicker" id="ticketKicker">Service ticket</p>
+        <h2 id="problemName">Loading…</h2>
+        <p id="problemBlurb"></p>
+      </section>
+
+      <div class="board">
+        <section class="panel">
+          <h3>Search troubleshooting steps</h3>
+          <div class="search-wrap">
+            <input id="search" type="search" placeholder="Type to find a step — e.g. Safe Mode, sfc, BitLocker…" autocomplete="off">
+          </div>
+          <ul class="catalog" id="catalog"></ul>
+          <p class="empty" id="catalogEmpty" hidden>No steps match that search.</p>
+        </section>
+
+        <section class="panel">
+          <h3>Your list <span id="listCount" style="color:var(--muted); font-weight:600;">(0)</span></h3>
+          <ul class="list" id="chosen"></ul>
+          <p class="empty" id="listEmpty">Nothing added yet. Search the catalog and click a step.</p>
+          <p class="feedback" id="feedback" role="status"></p>
+          <div class="actions">
+            <button type="button" class="primary" id="checkBtn">Check list</button>
+            <button type="button" id="nextBtn" disabled>Next problem</button>
+            <button type="button" id="clearBtn">Clear</button>
+            <button type="button" id="hintBtn">Hint</button>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="done" id="done">
+      <h2>Round complete</h2>
+      <p id="doneMsg"></p>
+      <div class="actions" style="justify-content:center; padding:0;">
+        <button type="button" class="primary" id="restartBtn">Run this set again</button>
+        <a id="guideLink" href="3.1 Troubleshoot Microsoft Windows OS Problems.html" style="align-self:center; font-weight:700;">Back to study guide</a>
+      </div>
+    </div>
+
+    <footer>
+      Source depends on the set you pick: <a href="3.1 Troubleshoot Microsoft Windows OS Problems.html">3.1</a>,
+      <a href="3.2 Troubleshoot Mobile OS and Application Issues.html">3.2</a>,
+      <a href="3.3 Troubleshoot Mobile OS and Application Security Issues.html">3.3</a>,
+      <a href="3.4 Troubleshoot Windows OS Security Issues.html">3.4</a>.
+      Extra or missing steps fail the check.
+    </footer>
+  </div>
+
+<script>
+const MODES = {
+  "31": {
+    label: "3.1 Windows OS",
+    guide: "3.1 Troubleshoot Microsoft Windows OS Problems.html",
+    extras: [],
+    problems: [
+  {
+    id: "bsod",
+    name: "Blue screen of death (BSOD)",
+    blurb: "Windows stops on a blue screen after bad hardware, a bad driver, or a failing app. Note the stop code, then pick every valid 3.1 fix for this symptom.",
+    steps: [
+      "Last Known Good Configuration",
+      "System Restore",
+      "Roll back drivers",
+      "Safe Mode",
+      "Reseat components",
+      "Hardware diagnostics"
+    ]
+  },
+  {
+    id: "boot",
+    name: "Boot issues",
+    blurb: "Windows will not start normally — missing bootloader, dual-boot conflict, or it only reaches Safe Mode. Non-bootable media can also block startup.",
+    steps: [
+      "Remove non-bootable media",
+      "Startup Repair",
+      "bootrec /rebuildbcd"
+    ]
+  },
+  {
+    id: "no-os",
+    name: "No OS found",
+    blurb: "Firmware or the bootloader cannot find a bootable OS — often bootloader corruption, a dual-boot overwrite, or missing boot files.",
+    steps: [
+      "Unplug non-bootable drives",
+      "Startup Repair",
+      "bootrec /rebuildbcd"
+    ]
+  },
+  {
+    id: "perf",
+    name: "Degraded performance",
+    blurb: "The PC feels slow or unresponsive — apps lag, the disk thrashes, or tasks take longer than normal.",
+    steps: [
+      "Task Manager",
+      "Windows Update checks",
+      "Free disk space",
+      "Defrag (HDD)",
+      "Laptop power source",
+      "Antivirus scan"
+    ]
+  },
+  {
+    id: "memory",
+    name: "Low memory warnings",
+    blurb: "Windows warns that memory is nearly full. Apps freeze, crash, or refuse to open while RAM pressure is high.",
+    steps: [
+      "Close memory-heavy apps",
+      "Virtual memory (paging file)"
+    ]
+  },
+  {
+    id: "shutdowns",
+    name: "Frequent shutdowns",
+    blurb: "The PC powers off or restarts unexpectedly. Check hardware health, memory, system files, and malware.",
+    steps: [
+      "Full hardware diagnostics",
+      "Windows Memory Diagnostics",
+      "System File Checker (sfc)",
+      "Anti-malware scan"
+    ]
+  },
+  {
+    id: "instability",
+    name: "System instability",
+    blurb: "Random freezes, errors, and unreliable behavior that is not a single crashing app.",
+    steps: [
+      "Full hardware diagnostics",
+      "Windows Memory Diagnostics",
+      "System File Checker (sfc)",
+      "Anti-malware scan"
+    ]
+  },
+  {
+    id: "time",
+    name: "Time drift",
+    blurb: "The clock slowly loses accuracy. That can break authentication, certificates, and file sync.",
+    steps: ["Set time automatically"]
+  },
+  {
+    id: "services",
+    name: "Services not starting",
+    blurb: "Windows or third-party services fail to start, leaving features offline until drivers, permissions, or dependencies are fixed.",
+    steps: [
+      "Device Manager",
+      "services.msc",
+      "sfc /scannow"
+    ]
+  },
+  {
+    id: "apps",
+    name: "Applications crashing",
+    blurb: "One or more apps close unexpectedly. Check logs first, then repair or reinstall the application.",
+    steps: [
+      "Event Viewer / Reliability Monitor",
+      "Reinstall the application"
+    ]
+  },
+  {
+    id: "usb",
+    name: "USB controller resource warnings",
+    blurb: "Windows reports USB endpoint or bandwidth problems — often too many devices on one controller.",
+    steps: [
+      "Move to another USB port",
+      "Balance USB 2.0 / 3.0"
+    ]
+  },
+  {
+    id: "profile",
+    name: "Slow profile load",
+    blurb: "Sign-in takes a long time, usually from network latency or WAN congestion while syncing a roaming profile.",
+    steps: ["Repair / optimize domain controllers"]
+  }
+    ]
+  },
+  "32": {
+    label: "3.2 Mobile OS / apps",
+    guide: "3.2 Troubleshoot Mobile OS and Application Issues.html",
+    extras: [],
+    problems: [
+      {
+        id: "app-launch",
+        name: "Application fails to launch",
+        blurb: "A mobile app will not open. Clear memory, patch bugs, or replace the install.",
+        steps: [
+          "Restart the mobile device to clear memory and stored caches",
+          "Check for and install application updates to fix potential software bugs",
+          "Delete and reinstall the application from the app store"
+        ]
+      },
+      {
+        id: "app-crash",
+        name: "Application fails to close / crashes",
+        blurb: "The app hangs or crashes instead of closing cleanly.",
+        steps: [
+          "Force close the application (iOS slide off list / Android Force Stop)",
+          "Restart the mobile device",
+          "Update the application or perform a complete uninstall and reinstall",
+          "Technical support teams can also examine crash logs"
+        ]
+      },
+      {
+        id: "app-update",
+        name: "Application fails to update",
+        blurb: "The app store will not update this app.",
+        steps: [
+          "Manually trigger the update or choose Update All in the app store",
+          "Verify a valid, current payment method is on file",
+          "Check network/internet connectivity",
+          "Verify sufficient available storage space",
+          "Restart the device to clear pending updates",
+          "Check for MDM corporate policy restrictions or app store outages"
+        ]
+      },
+      {
+        id: "app-install",
+        name: "Application fails to install",
+        blurb: "The store download or install fails before the app appears.",
+        steps: [
+          "Check for sufficient free storage space",
+          "Ensure a valid payment method is configured in the app store account",
+          "Verify network connectivity or move to an unfiltered network",
+          "Confirm MDM policies permit application installation"
+        ]
+      },
+      {
+        id: "slow-response",
+        name: "Slow to respond",
+        blurb: "The phone or tablet feels sluggish when opening apps or switching screens.",
+        steps: [
+          "Perform a device restart to free up resources and clear cache",
+          "Update the application or operating system to resolve underlying bugs"
+        ]
+      },
+      {
+        id: "os-update",
+        name: "OS fails to update",
+        blurb: "The mobile OS patch will not download or install.",
+        steps: [
+          "Free up storage space — OS patches require significant capacity",
+          "Connect to a high-speed network with adequate bandwidth",
+          "Change networks if content filtering blocks update servers",
+          "Restart the device and attempt the update again"
+        ]
+      },
+      {
+        id: "battery",
+        name: "Battery life issues",
+        blurb: "The battery drains faster than expected.",
+        steps: [
+          "Enable Airplane Mode in low or no coverage areas",
+          "Turn off unused features like Wi-Fi, Bluetooth, or GPS",
+          "Check battery health and usage history under Settings > Battery",
+          "Replace old or degraded batteries"
+        ]
+      },
+      {
+        id: "reboots",
+        name: "Random reboots",
+        blurb: "The device restarts on its own.",
+        steps: [
+          "Update the OS and all installed applications",
+          "Review crash logs or contact support to check for hardware failures",
+          "Inspect battery health"
+        ]
+      },
+      {
+        id: "wifi",
+        name: "Connectivity issues — Wi-Fi",
+        blurb: "The mobile device will not stay on Wi-Fi or cannot join the AP.",
+        steps: [
+          "Ensure Wi-Fi is toggled on",
+          "Verify security keys and settings match the access point",
+          "Move closer to the access point or connect to a different network",
+          "Restart the mobile device"
+        ]
+      },
+      {
+        id: "bluetooth",
+        name: "Connectivity issues — Bluetooth",
+        blurb: "Pairing or a Bluetooth accessory drops out.",
+        steps: [
+          "Confirm Bluetooth is enabled",
+          "Toggle Bluetooth off and on, or restart the device to re-establish pairings",
+          "Enable Bluetooth (and Wi-Fi) for proximity tools like AirDrop and move devices closer"
+        ]
+      },
+      {
+        id: "nfc",
+        name: "Connectivity issues — NFC",
+        blurb: "Tap-to-pay or NFC sharing is not working.",
+        steps: [
+          "Toggle NFC off and on",
+          "Restart the device",
+          "Ensure linked credit cards and payment details are up to date"
+        ]
+      },
+      {
+        id: "autorotate",
+        name: "Screen does not autorotate",
+        blurb: "The display stays portrait or landscape when the device is turned.",
+        steps: [
+          "Check if the screen orientation lock is enabled",
+          "Close and reopen the stuck application",
+          "Restart the mobile device",
+          "Contact device support if the G-sensor/accelerometer has failed"
+        ]
+      }
+    ]
+  },
+  "33-34": {
+    label: "3.3 + 3.4 Security",
+    guide: "3.3 Troubleshoot Mobile OS and Application Security Issues.html",
+    extras: [
+      "Close the browser immediately without clicking the prompt",
+      "Toggle Wi-Fi or Airplane mode",
+      "Reset network settings",
+      "Run Windows Update Troubleshooter",
+      "Wipe the system and restore from a known good backup",
+      "Block unauthorized sites in browser notification settings",
+      "Inspect the certificate via the lock icon",
+      "Restart the device and close background apps",
+      "Contact the app developer and update the app",
+      "Check firewall rules blocking updates"
+    ],
+    problems: [
+      {
+        id: "data-leak",
+        name: "Leaked personal files / data",
+        blurb: "3.3 — Personal files or account data leaked from local malware or a compromised cloud account (iCloud, Google Workspace, OneDrive).",
+        steps: [
+          "Run a malware scan",
+          "Perform a factory reset",
+          "Update passwords for cloud services (iCloud, Google Workspace, OneDrive)",
+          "Enable multi-factor authentication (MFA)"
+        ]
+      },
+      {
+        id: "browser-perf",
+        name: "Degraded browser performance",
+        blurb: "3.4 — The browser is sluggish from too many tabs, a bloated cache, or malicious JavaScript such as a crypto miner.",
+        steps: [
+          "Update the browser",
+          "Clear cookies and cache",
+          "Review Task Manager resource utilization",
+          "Test the site across alternative web browsers"
+        ]
+      }
+    ]
+  }
+};
+
+let modeId = "31";
+let catalog = [];
+let queue = [];
+let index = 0;
+let chosen = [];
+let passed = false;
+let correctCount = 0;
+let checkedThisTicket = false;
+
+const $ = (id) => document.getElementById(id);
+function mode() { return MODES[modeId]; }
+function current() { return queue[index]; }
+
+function rebuildCatalog() {
+  catalog = [...new Set(mode().problems.flatMap((p) => p.steps).concat(mode().extras || []))].sort((a, b) =>
+    a.localeCompare(b, undefined, { sensitivity: "base" })
+  );
+}
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setMode(id) {
+  if (!MODES[id]) id = "31";
+  modeId = id;
+  document.querySelectorAll(".modes button").forEach((b) => b.classList.toggle("on", b.dataset.mode === id));
+  $("guideLink").href = mode().guide;
+  const params = new URLSearchParams(location.search);
+  params.set("mode", id);
+  history.replaceState(null, "", "?" + params.toString());
+  startRound();
+}
+
+function startRound() {
+  rebuildCatalog();
+  queue = shuffle(mode().problems);
+  index = 0;
+  correctCount = 0;
+  $("play").style.display = "";
+  $("done").classList.remove("show");
+  loadTicket();
+}
+
+function loadTicket() {
+  const p = current();
+  chosen = [];
+  passed = false;
+  checkedThisTicket = false;
+  $("search").value = "";
+  $("ticketKicker").textContent = mode().label + " · service ticket";
+  $("problemName").textContent = p.name;
+  $("problemBlurb").textContent = p.blurb;
+  $("progress").textContent = "Problem " + (index + 1) + " of " + queue.length;
+  $("score").textContent = correctCount + " checked out";
+  $("nextBtn").disabled = true;
+  $("feedback").className = "feedback";
+  $("feedback").innerHTML = "";
+  renderCatalog();
+  renderList();
+  $("search").focus();
+}
+
+function renderCatalog() {
+  const q = $("search").value.trim().toLowerCase();
+  const items = catalog.filter((s) => !q || s.toLowerCase().includes(q));
+  const ul = $("catalog");
+  ul.innerHTML = "";
+  $("catalogEmpty").hidden = items.length > 0;
+  items.forEach((step) => {
+    const li = document.createElement("li");
+    const used = chosen.includes(step);
+    li.className = used ? "used" : "";
+    li.innerHTML = "<span></span><span class='add'>" + (used ? "Added" : "+ Add") + "</span>";
+    li.querySelector("span").textContent = step;
+    if (!used) {
+      li.addEventListener("click", () => addStep(step));
+    }
+    ul.appendChild(li);
+  });
+}
+function renderList() {
+  const ul = $("chosen");
+  ul.innerHTML = "";
+  $("listEmpty").hidden = chosen.length > 0;
+  $("listCount").textContent = "(" + chosen.length + ")";
+  const needed = current().steps;
+  chosen.forEach((step) => {
+    const li = document.createElement("li");
+    if (checkedThisTicket) li.className = needed.includes(step) ? "ok" : "bad";
+    const label = document.createElement("span");
+    label.textContent = step;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = "✕";
+    btn.setAttribute("aria-label", "Remove " + step);
+    btn.addEventListener("click", () => removeStep(step));
+    li.appendChild(label);
+    li.appendChild(btn);
+    ul.appendChild(li);
+  });
+}
+
+function addStep(step) {
+  if (passed || chosen.includes(step)) return;
+  chosen.push(step);
+  checkedThisTicket = false;
+  $("feedback").className = "feedback";
+  $("nextBtn").disabled = true;
+  renderCatalog();
+  renderList();
+}
+
+function removeStep(step) {
+  if (passed) return;
+  chosen = chosen.filter((s) => s !== step);
+  checkedThisTicket = false;
+  $("feedback").className = "feedback";
+  $("nextBtn").disabled = true;
+  renderCatalog();
+  renderList();
+}
+
+function checkList() {
+  const needed = current().steps;
+  const extra = chosen.filter((s) => !needed.includes(s));
+  const missing = needed.filter((s) => !chosen.includes(s));
+  checkedThisTicket = true;
+  renderList();
+  const box = $("feedback");
+  if (!extra.length && !missing.length && chosen.length === needed.length) {
+    passed = true;
+    correctCount++;
+    $("score").textContent = correctCount + " checked out";
+    $("nextBtn").disabled = false;
+    box.className = "feedback show pass";
+    box.innerHTML = "List checks out — every matching step is here, nothing extra.";
+    return;
+  }
+  passed = false;
+  $("nextBtn").disabled = true;
+  let html = "Not yet. ";
+  if (extra.length) html += extra.length + " extra step" + (extra.length === 1 ? "" : "s") + " (red). ";
+  if (missing.length) html += "Missing " + missing.length + " required step" + (missing.length === 1 ? "" : "s") + ".";
+  html += "<ul>";
+  extra.forEach((s) => { html += "<li>Extra: " + escapeHtml(s) + "</li>"; });
+  missing.forEach((s) => { html += "<li>Missing: " + escapeHtml(s) + "</li>"; });
+  html += "</ul>";
+  box.className = "feedback show fail";
+  box.innerHTML = html;
+}
+
+function hint() {
+  const needed = current().steps;
+  const missing = needed.filter((s) => !chosen.includes(s));
+  const box = $("feedback");
+  box.className = "feedback show fail";
+  if (!missing.length) {
+    box.textContent = "You already have every required step. Remove anything extra, then check again.";
+    return;
+  }
+  box.innerHTML = "Need <strong>" + needed.length + "</strong> steps for this ticket. Still missing <strong>" + missing.length + "</strong>. Search by a keyword from the study guide (driver, restore, sfc, USB…).";
+}
+
+function nextProblem() {
+  if (!passed) return;
+  if (index >= queue.length - 1) {
+    $("play").style.display = "none";
+    $("done").classList.add("show");
+    $("doneMsg").textContent = "You cleared all " + queue.length + " tickets in " + mode().label + ".";
+    return;
+  }
+  index++;
+  loadTicket();
+}
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+
+document.querySelectorAll(".modes button").forEach((b) => {
+  b.addEventListener("click", () => setMode(b.dataset.mode));
+});
+$("search").addEventListener("input", renderCatalog);
+$("checkBtn").addEventListener("click", checkList);
+$("nextBtn").addEventListener("click", nextProblem);
+$("clearBtn").addEventListener("click", () => {
+  if (passed) return;
+  chosen = [];
+  checkedThisTicket = false;
+  $("feedback").className = "feedback";
+  $("nextBtn").disabled = true;
+  renderCatalog();
+  renderList();
+});
+$("hintBtn").addEventListener("click", hint);
+$("restartBtn").addEventListener("click", startRound);
+
+const startMode = new URLSearchParams(location.search).get("mode") || "31";
+setMode(startMode);
+</script>
+</body>
+</html>
