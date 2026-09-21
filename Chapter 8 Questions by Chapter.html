@@ -151,6 +151,11 @@ function unitTitle(u){
 }
 function unitId(u){return "unit-"+String(u).replace(".","-");}
 function examOf(it){return String(it.id||"").charAt(0)==="B"?"Exam B":"Exam A";}
+function unitLink(it){
+  const f=UNIT_FILE[it.unit];
+  if(!f) return "";
+  return `<p class="qsrc"><a href="${esc(f)}" target="_blank" rel="noopener">Study ${esc(it.unit)}</a></p>`;
+}
 function parseHash(){
   const h=(location.hash||"").replace(/^#/,"");
   if(/^ch-?[1-4]$/i.test(h) || /^[1-4]$/.test(h)) return {ch:h.replace(/^ch-?/i,""), unit:null};
@@ -242,8 +247,8 @@ function render(){
             <button class="btn" type="button" data-act="toggle" style="margin-left:auto;min-height:36px;padding:.25rem .75rem">Show answer</button>
           </div>
           <div class="qtext">${esc(it.q)}</div>
-          ${sourceLine(it)}
-          <div class="ans">${answerBody(it)}</div>
+          ${unitLink(it)}
+          <div class="ans">${it.loc?`<p class="qsrc"><span class="where">${esc(it.loc)}</span></p>`:""}${answerBody(it)}</div>
         </article>`).join("")}
     </section>`).join("");
 }
