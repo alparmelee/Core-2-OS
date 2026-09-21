@@ -206,6 +206,47 @@
     color:var(--muted);
     font-size:0.94rem;
   }
+  .kit{
+    margin:1.1rem 0 0;
+    padding:1.05rem 1.15rem 1.15rem;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:16px;
+    max-width:46rem;
+  }
+  .kit h3{
+    font-family:"Fraunces",serif;
+    font-size:1.15rem;
+    margin:0 0 0.35rem;
+  }
+  .kit p{ margin:0 0 0.75rem; color:var(--muted); font-size:0.9rem; }
+  .kit-groups{
+    display:grid;
+    gap:0.85rem;
+  }
+  .kit-groups h4{
+    margin:0 0 0.4rem;
+    font-size:0.72rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--accent);
+  }
+  .kit-groups ul{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.35rem;
+  }
+  .kit-groups li{
+    font-size:0.78rem;
+    font-weight:600;
+    padding:0.32rem 0.6rem;
+    border-radius:999px;
+    background:var(--accent-soft);
+    color:var(--sky);
+  }
 
   footer{
     padding:2.4rem 0 3.2rem;
@@ -262,7 +303,35 @@
       <div class="section-head">
         <span class="eyebrow">Part A</span>
         <h2>Application issues</h2>
-        <p>When mobile apps fail to launch, close, update, install, or respond normally.</p>
+        <p>Most 3.2 fixes reuse the same short toolkit. Memorize the chips once; each symptom below only adds what is unique.</p>
+      </div>
+      <div class="kit">
+        <h3>Shared toolkit</h3>
+        <p>The exam writes these in slightly different sentences. Treat them as one action each — the 3.5 PBQ uses these exact labels.</p>
+        <div class="kit-groups">
+          <div>
+            <h4>Almost every app / OS ticket</h4>
+            <ul>
+              <li>Restart the device</li>
+              <li>Update the app</li>
+              <li>Reinstall the app</li>
+              <li>Update the OS</li>
+              <li>Check storage space</li>
+              <li>Check network / try another network</li>
+              <li>Check payment method</li>
+              <li>Check MDM policy</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Then only the extras</h4>
+            <ul>
+              <li>Force close the app</li>
+              <li>Toggle the radio off and on</li>
+              <li>Check battery health</li>
+              <li>Hardware / crash logs — contact support</li>
+            </ul>
+          </div>
+        </div>
       </div>
 
       <article class="term" id="app-launch">
@@ -272,9 +341,9 @@
         <div class="body">
           <h3>Application fails to launch</h3>
           <ul>
-            <li>Restart the mobile device to clear memory and stored caches</li>
-            <li>Check for and install application updates to fix potential software bugs</li>
-            <li>Delete and reinstall the application from the app store</li>
+            <li>Restart the device</li>
+            <li>Update the app</li>
+            <li>Reinstall the app</li>
           </ul>
         </div>
       </article>
@@ -285,11 +354,13 @@
         </div>
         <div class="body">
           <h3>Application fails to close / crashes</h3>
-          <p><strong>Force close</strong> the application — slide it off the app list on iOS, or select <strong>Force Stop</strong> in Android Settings — and reopen it.</p>
+          <p>iOS: slide it off the app list. Android: <strong>Force Stop</strong> in Settings, then reopen.</p>
           <ul>
-            <li>Restart the mobile device</li>
-            <li>Update the application or perform a complete uninstall and reinstall</li>
-            <li>Technical support teams can also examine crash logs</li>
+            <li>Force close the app</li>
+            <li>Restart the device</li>
+            <li>Update the app</li>
+            <li>Reinstall the app</li>
+            <li>Review crash logs / contact support</li>
           </ul>
         </div>
       </article>
@@ -301,17 +372,15 @@
         <div class="body">
           <h3>Application fails to update</h3>
           <ul>
-            <li>Manually trigger the update or choose <strong>Update All</strong> in the app store</li>
-            <li>Verify a valid, current payment method is on file</li>
-            <li>Check network/internet connectivity</li>
-            <li>Verify sufficient available storage space</li>
-            <li>Restart the device to clear pending updates</li>
-            <li>Check for Mobile Device Management (MDM) corporate policy restrictions or app store outages</li>
+            <li>Update the app</li>
+            <li>Check payment method</li>
+            <li>Check network / try another network</li>
+            <li>Check storage space</li>
+            <li>Restart the device</li>
+            <li>Check MDM policy</li>
           </ul>
           <ul class="tags">
-            <li>MDM</li>
-            <li>App store</li>
-            <li>Storage</li>
+            <li>Same blockers as a failed install, plus restart</li>
           </ul>
         </div>
       </article>
@@ -323,10 +392,10 @@
         <div class="body">
           <h3>Application fails to install</h3>
           <ul>
-            <li>Check for sufficient free storage space</li>
-            <li>Ensure a valid payment method is configured in the app store account</li>
-            <li>Verify network connectivity or move to an unfiltered network</li>
-            <li>Confirm MDM policies permit application installation</li>
+            <li>Check storage space</li>
+            <li>Check payment method</li>
+            <li>Check network / try another network</li>
+            <li>Check MDM policy</li>
           </ul>
         </div>
       </article>
@@ -338,8 +407,9 @@
         <div class="body">
           <h3>Slow to respond</h3>
           <ul>
-            <li>Perform a device restart to free up resources and clear cache</li>
-            <li>Update the application or operating system to resolve underlying bugs</li>
+            <li>Restart the device</li>
+            <li>Update the app</li>
+            <li>Update the OS</li>
           </ul>
         </div>
       </article>
@@ -361,10 +431,9 @@
         <div class="body">
           <h3>OS fails to update</h3>
           <ul>
-            <li>Free up storage space — OS patches require significant capacity</li>
-            <li>Connect to a high-speed network with adequate bandwidth</li>
-            <li>Change networks if content filtering blocks update servers</li>
-            <li>Restart the device and attempt the update again</li>
+            <li>Check storage space</li>
+            <li>Check network / try another network</li>
+            <li>Restart the device</li>
           </ul>
         </div>
       </article>
@@ -376,10 +445,10 @@
         <div class="body">
           <h3>Battery life issues</h3>
           <ul>
-            <li>Enable <strong>Airplane Mode</strong> in low or no coverage areas to stop the radio from constantly searching for a signal</li>
-            <li>Turn off unused features like Wi-Fi, Bluetooth, or GPS</li>
-            <li>Check battery health and usage history under <strong>Settings &gt; Battery</strong></li>
-            <li>Replace old or degraded batteries</li>
+            <li>Airplane Mode (poor coverage)</li>
+            <li>Turn off unused radios (Wi-Fi, Bluetooth, GPS)</li>
+            <li>Check battery health</li>
+            <li>Replace the battery</li>
           </ul>
         </div>
       </article>
@@ -391,9 +460,10 @@
         <div class="body">
           <h3>Random reboots</h3>
           <ul>
-            <li>Update the OS and all installed applications</li>
-            <li>Review crash logs or contact support to check for underlying hardware failures</li>
-            <li>Inspect battery health</li>
+            <li>Update the OS</li>
+            <li>Update the app</li>
+            <li>Review crash logs / contact support</li>
+            <li>Check battery health</li>
           </ul>
         </div>
       </article>
@@ -415,10 +485,10 @@
         <div class="body">
           <h3>Connectivity issues — Wi-Fi</h3>
           <ul>
-            <li>Ensure Wi-Fi is toggled on</li>
-            <li>Verify security keys and settings match the access point</li>
-            <li>Move closer to the access point or connect to a different network</li>
-            <li>Restart the mobile device</li>
+            <li>Toggle the radio off and on (Wi-Fi / Bluetooth / NFC)</li>
+            <li>Verify Wi-Fi password / AP settings</li>
+            <li>Check network / try another network</li>
+            <li>Restart the device</li>
           </ul>
         </div>
       </article>
@@ -430,9 +500,9 @@
         <div class="body">
           <h3>Connectivity issues — Bluetooth</h3>
           <ul>
-            <li>Confirm Bluetooth is enabled</li>
-            <li>Toggle Bluetooth off and on, or restart the device to re-establish pairings</li>
-            <li>Ensure Bluetooth (and Wi-Fi) are enabled when using proximity tools like AirDrop, and move devices closer together</li>
+            <li>Toggle the radio off and on (Wi-Fi / Bluetooth / NFC)</li>
+            <li>Restart the device</li>
+            <li>AirDrop: Bluetooth + Wi-Fi on; move closer</li>
           </ul>
         </div>
       </article>
@@ -444,9 +514,9 @@
         <div class="body">
           <h3>Connectivity issues — Near-field communication (NFC)</h3>
           <ul>
-            <li>Toggle NFC off and on</li>
+            <li>Toggle the radio off and on (Wi-Fi / Bluetooth / NFC)</li>
             <li>Restart the device</li>
-            <li>Ensure linked credit cards and payment details are up to date</li>
+            <li>Update linked payment cards</li>
           </ul>
         </div>
       </article>
@@ -458,10 +528,10 @@
         <div class="body">
           <h3>Screen does not autorotate</h3>
           <ul>
-            <li>Check if the screen orientation lock is enabled</li>
-            <li>Close and reopen the stuck application</li>
-            <li>Restart the mobile device</li>
-            <li>Contact device support if the internal G-sensor/accelerometer hardware has failed</li>
+            <li>Check orientation lock</li>
+            <li>Close and reopen the app</li>
+            <li>Restart the device</li>
+            <li>Hardware failure — contact support</li>
           </ul>
         </div>
       </article>

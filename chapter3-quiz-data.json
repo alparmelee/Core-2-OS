@@ -426,7 +426,7 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
       "category": "Application issues",
       "name": "Application fails to launch",
-      "definition": "Restart the mobile device to clear memory and stored caches Check for and install application updates to fix potential software bugs Delete and reinstall the application from the app store"
+      "definition": "Restart the device. Update the app. Reinstall the app."
     },
     {
       "id": "3.2-1",
@@ -434,7 +434,7 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
       "category": "Application issues",
       "name": "Application fails to close / crashes",
-      "definition": "Force close the application — slide it off the app list on iOS, or select Force Stop in Android Settings — and reopen it."
+      "definition": "Force close the app. Restart the device. Update the app. Reinstall the app. Review crash logs / contact support."
     },
     {
       "id": "3.2-2",
@@ -442,7 +442,7 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
       "category": "Application issues",
       "name": "Application fails to update",
-      "definition": "Manually trigger the update or choose Update All in the app store Verify a valid, current payment method is on file Check network/internet connectivity Verify sufficient available storage space Restart the device to clear pending updates Check for Mobile Device Management (MDM) corporate policy restrictions or app store outages MDM App store Storage"
+      "definition": "Update the app. Check payment method. Check network / try another network. Check storage space. Restart the device. Check MDM policy."
     },
     {
       "id": "3.2-3",
@@ -450,7 +450,7 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
       "category": "Application issues",
       "name": "Application fails to install",
-      "definition": "Check for sufficient free storage space Ensure a valid payment method is configured in the app store account Verify network connectivity or move to an unfiltered network Confirm MDM policies permit application installation"
+      "definition": "Check storage space. Check payment method. Check network / try another network. Check MDM policy."
     },
     {
       "id": "3.2-4",
@@ -458,7 +458,7 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
       "category": "Application issues",
       "name": "Slow to respond",
-      "definition": "Perform a device restart to free up resources and clear cache Update the application or operating system to resolve underlying bugs"
+      "definition": "Restart the device. Update the app. Update the OS."
     },
     {
       "id": "3.2-5",
@@ -466,7 +466,7 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
       "category": "OS and device health",
       "name": "OS fails to update",
-      "definition": "Free up storage space — OS patches require significant capacity Connect to a high-speed network with adequate bandwidth Change networks if content filtering blocks update servers Restart the device and attempt the update again"
+      "definition": "Check storage space. Check network / try another network. Restart the device."
     },
     {
       "id": "3.2-6",
@@ -474,7 +474,7 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
       "category": "OS and device health",
       "name": "Battery life issues",
-      "definition": "Enable Airplane Mode in low or no coverage areas to stop the radio from constantly searching for a signal Turn off unused features like Wi-Fi, Bluetooth, or GPS Check battery health and usage history under Settings > Battery Replace old or degraded batteries"
+      "definition": "Airplane Mode (poor coverage). Turn off unused radios (Wi-Fi, Bluetooth, GPS). Check battery health. Replace the battery."
     },
     {
       "id": "3.2-7",
@@ -482,7 +482,7 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
       "category": "OS and device health",
       "name": "Random reboots",
-      "definition": "Update the OS and all installed applications Review crash logs or contact support to check for underlying hardware failures Inspect battery health"
+      "definition": "Update the OS. Update the app. Review crash logs / contact support. Check battery health."
     },
     {
       "id": "3.2-8",
@@ -490,7 +490,7 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
       "category": "Connectivity and display",
       "name": "Connectivity issues — Wi-Fi",
-      "definition": "Ensure Wi-Fi is toggled on Verify security keys and settings match the access point Move closer to the access point or connect to a different network Restart the mobile device"
+      "definition": "Toggle the radio off and on (Wi-Fi / Bluetooth / NFC). Verify Wi-Fi password / AP settings. Check network / try another network. Restart the device."
     },
     {
       "id": "3.2-9",
@@ -498,7 +498,7 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
       "category": "Connectivity and display",
       "name": "Connectivity issues — Bluetooth",
-      "definition": "Confirm Bluetooth is enabled Toggle Bluetooth off and on, or restart the device to re-establish pairings Ensure Bluetooth (and Wi-Fi) are enabled when using proximity tools like AirDrop, and move devices closer together"
+      "definition": "Toggle the radio off and on (Wi-Fi / Bluetooth / NFC). Restart the device. AirDrop: Bluetooth + Wi-Fi on; move closer."
     },
     {
       "id": "3.2-10",
@@ -506,7 +506,7 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
       "category": "Connectivity and display",
       "name": "Connectivity issues — Near-field communication (NFC)",
-      "definition": "Toggle NFC off and on Restart the device Ensure linked credit cards and payment details are up to date"
+      "definition": "Toggle the radio off and on (Wi-Fi / Bluetooth / NFC). Restart the device. Update linked payment cards."
     },
     {
       "id": "3.2-11",
@@ -514,7 +514,7 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
       "category": "Connectivity and display",
       "name": "Screen does not autorotate",
-      "definition": "Check if the screen orientation lock is enabled Close and reopen the stuck application Restart the mobile device Contact device support if the internal G-sensor/accelerometer hardware has failed"
+      "definition": "Check orientation lock. Close and reopen the app. Restart the device. Hardware failure — contact support."
     },
     {
       "id": "3.3-0",

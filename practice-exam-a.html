@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Practice Exams A and B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDF0F4; --panel:#FFFFFF; --ink:#17202B; --muted:#586577; --line:#D3D9E1;
+  --accent:#2456D6; --accent-ink:#FFFFFF; --sel-bg:#E5ECFC;
+  --ok:#17794F; --ok-bg:#E2F3EA; --bad:#B4372A; --bad-bg:#FBE9E6;
+  --flag:#A86A00; --flag-bg:#FFF0CF; --term-bg:#141B24; --term-ink:#D8E3F0;
+  --sans:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F141B; --panel:#171F29; --ink:#E6EBF2; --muted:#96A3B5; --line:#2A3543;
+    --accent:#7BA0FF; --accent-ink:#0B1220; --sel-bg:#1D2B49;
+    --ok:#5CCB94; --ok-bg:#12301F; --bad:#FF8D7B; --bad-bg:#37201C;
+    --flag:#F0B450; --flag-bg:#332810; --term-bg:#0A0F15; --term-ink:#D8E3F0;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F141B; --panel:#171F29; --ink:#E6EBF2; --muted:#96A3B5; --line:#2A3543;
+  --accent:#7BA0FF; --accent-ink:#0B1220; --sel-bg:#1D2B49;
+  --ok:#5CCB94; --ok-bg:#12301F; --bad:#FF8D7B; --bad-bg:#37201C;
+  --flag:#F0B450; --flag-bg:#332810; --term-bg:#0A0F15; --term-ink:#D8E3F0;
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.5;-webkit-text-size-adjust:100%}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+h1,h2,h3,p{margin:0}
+
+/* buttons */
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:.55rem 1rem;font-weight:700;min-height:44px}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+
+/* start screen */
+.start{max-width:760px;margin:0 auto;padding:48px 20px 64px}
+.start h1{font-size:clamp(2.2rem,6vw,3.4rem);line-height:1.05;letter-spacing:-.02em;font-weight:700}
+.start .lede{margin-top:14px;color:var(--muted);max-width:56ch}
+.setup{margin-top:36px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:24px}
+fieldset{border:0;margin:0 0 26px;padding:0}
+legend{font-weight:700;margin-bottom:10px;padding:0}
+.choices{display:grid;gap:10px}
+.choice{position:relative;display:block}
+.choice input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.choice .box{display:block;border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--panel)}
+.choice .box b{display:block}
+.choice .box span{color:var(--muted);font-size:.93rem}
+.choice input:checked + .box{border-color:var(--accent);background:var(--sel-bg)}
+.choice input:focus-visible + .box{outline:3px solid var(--accent);outline-offset:2px}
+.check{display:flex;gap:10px;align-items:center;margin-bottom:24px}
+.check input{width:20px;height:20px;accent-color:var(--accent)}
+.best{margin-top:16px;color:var(--muted);font-size:.93rem}
+.note{margin-top:28px;color:var(--muted);font-size:.9rem;max-width:62ch}
+
+/* top bar */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;padding:10px 20px;background:var(--panel);border-bottom:1px solid var(--line)}
+.topbar .title{font-weight:700;margin-right:auto}
+.topbar .title small{display:block;font-weight:400;color:var(--muted);font-size:.85rem;line-height:1.2}
+.prog{color:var(--muted);font-size:.95rem}
+.timer{font-family:var(--mono);font-weight:600;font-size:1.25rem;min-width:5.2ch;text-align:right}
+.timer.low{color:var(--bad)}
+
+/* shell */
+.shell{display:grid;grid-template-columns:270px minmax(0,1fr);gap:20px;max-width:1120px;margin:0 auto;padding:20px}
+.qnav{align-self:start;position:sticky;top:calc(env(safe-area-inset-top,0px) + 76px);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.navhead{font-weight:700;margin-bottom:10px}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.nb{position:relative;min-height:40px;border:1.5px solid var(--line);background:var(--panel);border-radius:8px;font-weight:700;font-size:.9rem;padding:0}
+.nb.pbq{border-style:dashed}
+.nb.answered{background:var(--sel-bg);border-color:var(--accent)}
+.nb.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+.nb.bad{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+.nb.current{outline:3px solid var(--ink);outline-offset:1px}
+.nb.flagged::after{content:"";position:absolute;top:0;right:0;border-style:solid;border-width:0 14px 14px 0;border-color:transparent var(--flag) transparent transparent;border-top-right-radius:6px}
+.legend{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.82rem;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;border:1.5px solid var(--line);vertical-align:-1px;margin-right:5px}
+.legend i.a{background:var(--sel-bg);border-color:var(--accent)}
+.legend i.f{background:var(--flag);border-color:var(--flag)}
+.legend i.p{border-style:dashed}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;min-width:0}
+.qmeta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:14px}
+.qnum{font-weight:700;font-size:1.05rem}
+.tag{font-size:.82rem;font-weight:700;background:var(--sel-bg);color:var(--accent);padding:2px 10px;border-radius:99px}
+.tag.pb{background:var(--flag-bg);color:var(--flag)}
+.tag.diff-easy{background:var(--ok-bg);color:var(--ok)}
+.tag.diff-medium{background:var(--flag-bg);color:var(--flag)}
+.tag.diff-hard{background:var(--bad-bg);color:var(--bad)}
+.qsrc{margin:-6px 0 18px;font-size:.92rem;max-width:72ch}
+.qsrc a{color:var(--accent);font-weight:700;text-decoration:none}
+.qsrc a:hover{text-decoration:underline}
+.qsrc .where{color:var(--muted);font-weight:400}
+.flagbtn{margin-left:auto;min-height:38px;padding:.3rem .8rem;font-size:.92rem}
+.flagbtn[aria-pressed="true"]{background:var(--flag-bg);border-color:var(--flag);color:var(--flag)}
+.qtext{white-space:pre-line;font-size:1.08rem;max-width:72ch;margin-bottom:20px}
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;background:var(--panel)}
+.opt:hover{border-color:var(--accent)}
+.opt .ltr{flex:none;width:30px;height:30px;border:1.5px solid var(--muted);border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:.9rem;margin-top:-2px}
+.opt.multi .ltr{border-radius:6px}
+.opt .txt{flex:1;padding-top:1px}
+.opt .badge{flex:none;font-size:.8rem;font-weight:700;padding-top:3px}
+.opt.sel{background:var(--sel-bg);border-color:var(--accent)}
+.opt.sel .ltr{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.opt.correct{background:var(--ok-bg);border-color:var(--ok)}
+.opt.correct .ltr{background:var(--ok);border-color:var(--ok);color:var(--bg)}
+.opt.correct .badge{color:var(--ok)}
+.opt.wrong{background:var(--bad-bg);border-color:var(--bad)}
+.opt.wrong .ltr{background:var(--bad);border-color:var(--bad);color:var(--bg)}
+.opt.wrong .badge{color:var(--bad)}
+.locked{pointer-events:none}
+
+.term{display:flex;align-items:center;gap:10px;background:var(--term-bg);color:var(--term-ink);border-radius:10px;padding:14px 16px;font-family:var(--mono);max-width:640px}
+.term .prompt{flex:none;opacity:.7}
+.term input{flex:1;min-width:0;background:transparent;border:0;color:inherit;font-family:var(--mono);font-size:1rem;outline:0;padding:4px 0}
+.term:focus-within{outline:3px solid var(--accent);outline-offset:2px}
+.term.ok{outline:3px solid var(--ok)} .term.bad{outline:3px solid var(--bad)}
+.solution{margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--ok-bg);border:1px solid var(--ok);max-width:640px}
+.solution code{font-family:var(--mono);font-weight:600;word-break:break-all}
+.order{list-style:none;margin:0;padding:0;display:grid;gap:8px;max-width:640px}
+.order li{display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:10px;padding:8px 10px 8px 12px;background:var(--panel)}
+.order li.ok{border-color:var(--ok);background:var(--ok-bg)}
+.order li.bad{border-color:var(--bad);background:var(--bad-bg)}
+.order .pos{flex:none;width:28px;font-family:var(--mono);font-weight:600;color:var(--muted);text-align:right}
+.order .txt{flex:1}
+.order .mv{display:flex;gap:4px}
+.order .mv button{width:38px;height:38px;border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:0;line-height:1}
+.order .mv button:hover{border-color:var(--accent)}
+.match{display:grid;gap:10px;max-width:760px}
+.mrow{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:14px;align-items:center;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px}
+.mrow.ok{border-color:var(--ok);background:var(--ok-bg)}
+.mrow.bad{border-color:var(--bad);background:var(--bad-bg)}
+.mrow select{width:100%;min-height:44px;font-size:.92rem;border:1.5px solid var(--line);border-radius:8px;background:var(--panel);padding:0 8px;font-family:var(--mono);font-weight:600}
+.mrow .ans{grid-column:1/-1;font-size:.9rem;color:var(--bad);font-weight:700}
+.hint{color:var(--muted);font-size:.92rem;margin-bottom:12px}
+
+.banner{margin-top:18px;padding:12px 14px;border-radius:10px;font-weight:700;max-width:72ch}
+.banner.ok{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok)}
+.banner.bad{background:var(--bad-bg);color:var(--bad);border:1px solid var(--bad)}
+.foot{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px;padding-top:18px;border-top:1px solid var(--line)}
+.foot .sp{margin-left:auto}
+
+/* results */
+.results{max-width:900px;margin:0 auto;padding:36px 20px 64px}
+.score{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px}
+.score .pct{font-size:clamp(3.2rem,12vw,5.5rem);font-weight:700;line-height:1;letter-spacing:-.03em}
+.score p{color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:26px 0}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat b{display:block;font-size:1.5rem;line-height:1.2}
+.stat span{color:var(--muted);font-size:.9rem}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:30px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 18px}
+.filters .btn{min-height:40px;padding:.3rem .9rem}
+.filters .btn[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.rev{background:var(--panel);border:1px solid var(--line);border-left-width:6px;border-radius:12px;padding:20px;margin-bottom:14px}
+.rev.ok{border-left-color:var(--ok)} .rev.bad{border-left-color:var(--bad)} .rev.na{border-left-color:var(--flag)}
+.rev .qmeta{margin-bottom:10px}
+.verdict{font-weight:700}
+.verdict.ok{color:var(--ok)} .verdict.bad{color:var(--bad)} .verdict.na{color:var(--flag)}
+.empty{padding:26px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px}
+
+/* modal */
+.scrim{position:fixed;inset:0;background:rgba(8,12,18,.55);display:grid;place-items:center;padding:20px;z-index:50}
+.modal{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:24px;max-width:440px;width:100%}
+.modal h2{font-size:1.3rem;margin-bottom:8px}
+.modal p{color:var(--muted);margin-bottom:20px}
+.modal .row{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
+
+.qid{color:var(--muted);font-size:.9rem;font-family:var(--mono)}
+.gridwrap{overflow-x:auto;max-width:760px}
+.gtab{border-collapse:separate;border-spacing:0 8px;width:100%}
+.gtab th,.gtab td{padding:10px 12px;text-align:left;background:var(--panel);border-top:1.5px solid var(--line);border-bottom:1.5px solid var(--line)}
+.gtab thead th{background:transparent;border:0;padding:0 12px 2px;font-size:.92rem}
+.gtab thead th:not(:first-child),.gtab td{text-align:center}
+.gtab tbody th{border-left:1.5px solid var(--line);border-radius:10px 0 0 10px;font-weight:400}
+.gtab td:last-child{border-right:1.5px solid var(--line);border-radius:0 10px 10px 0}
+.gtab td input{width:22px;height:22px;accent-color:var(--accent)}
+.gtab tr.ok th,.gtab tr.ok td{background:var(--ok-bg);border-color:var(--ok)}
+.gtab tr.bad th,.gtab tr.bad td{background:var(--bad-bg);border-color:var(--bad)}
+.gtab .ans{font-size:.88rem;color:var(--bad);font-weight:700;margin-top:2px}
+@media (max-width:860px){
+  .shell{grid-template-columns:1fr;padding:12px}
+  .qnav{position:static;order:2}
+  .grid{grid-template-columns:repeat(8,1fr)}
+  .card{padding:18px}
+  .topbar{padding:8px 12px}
+  .mrow{grid-template-columns:1fr}
+}
+@media (max-width:420px){ .grid{grid-template-columns:repeat(6,1fr)} }
+@media (prefers-reduced-motion:no-preference){
+  .opt,.nb,.btn{transition:background-color .12s,border-color .12s}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ---------- DATA ---------- */
+const MC_RAW = [
+["A6","A system administrator is installing a new server into the metal racks in a data center. During the installation process, the administrator can feel a faint tingling sensation when mounting the server. Which of the following safety systems should be tested and verified first?",["Equipment grounding","Air filtration","Cable management","Waste disposal regulations"],"A"],
+["A7","A user has opened a help desk ticket regarding the battery life on their mobile phone. The battery in the phone held a charge for most of the day prior to connecting to the corporate network. The battery now only lasts about half a day and the back of the phone is warmer than usual. The phone is configured as follows:\nStorage: 216.2 GB of 512 GB used\nDisplay and Brightness: Automatic\nWi-Fi: Enabled\nAuto-lock: Disabled\nVPN: Not connected\nLow Power Mode: Disabled\nBattery Maximum Capacity: 100%\n\nWhich of the following changes would have the best impact on battery performance?",["Enable auto-lock","Connect to the VPN","Increase available storage space","Disable Wi-Fi"],"A"],
+["A8","A user in the accounting department is trying to install an app on their new corporate mobile phone, but the installation fails each time. Which of the following would be the most likely reason for this issue?",["Incorrect file system type","MDM policy restriction","Slow CPU speeds","Low battery level"],"B"],
+["A9","A system administrator has required the use of FRT for authentication on all laptops, mobile phones, and tablets. Which of the following will be required to meet this requirement?",["Fingerprint reader","Badge reader","Token generator","Integrated camera"],"D"],
+["A10","A desktop technician is cleaning the outside of computers used on a manufacturing assembly line. The assembly line creates sawdust and wood chips, so most of the computers are protected with enclosed computer cases. Which of the following would be the most important item for the technician to include during this cleaning process?",["Surge suppressor","Temperature sensor","Air filter mask","ESD mat"],"C"],
+["A11","After a user authenticates to a web site, the browser performs very slowly and some of the items on the page will not properly display. Which of the following would be the best way to resolve this issue?",["Disable browser notifications","Update the web server certificate","Update the system BIOS","Clear the browser cache"],"D"],
+["A12","The motherboard of a server in the corporate data center has started smoking, and flames can be seen inside the computer case. Which of the following would be the best way to extinguish this fire?",["Water hose","Foam-based extinguisher","Disconnect the power","Carbon dioxide extinguisher"],"D"],
+["A13","Which of these Windows features provides full disk encryption for all data on a storage drive?",["Domain Services","EFS","RDP","BitLocker"],"D"],
+["A14","A company maintains data retention requirements of five years for all customer names, addresses, and phone numbers. Which of the following would best describe this data?",["Credit card transactions","Government-issued information","PII","Healthcare data"],"C"],
+["A15","A user in the accounting department would like to ensure their mobile device data is always available. If the user's smartphone is damaged or stolen, they would like to replace the device and restore all data as quickly as possible. Which of the following would provide this functionality?",["Full device encryption","Remote backup","IoT isolation","Remote wipe"],"B"],
+["A16","Each time a user starts a specific corporate application, a page of disclaimers and usage requirements is shown before the login prompt. Which of the following would best describe this page?",["Splash screen","Acceptable use policy","Standard operating procedures","Topology diagram"],"A"],
+["A17","A system administrator is troubleshooting an older application on a Windows computer and needs to modify the UAC process. Which of the following options would provide access to these settings?",["Device Manager","System Information","Event Viewer","User Accounts"],"D"],
+["A18","An office power system occasionally experiences minor voltage spikes during the business day. Which of the following would be the best way to address this power issue?",["Power down when not actively working","Confirm the building has an electrical ground","Connect a surge suppressor to each system","Maintain an inventory of replacement power supplies"],"C"],
+["A19","What is the maximum amount of RAM supported by a 32-bit version of an operating system?",["4 GB","8 GB","16 GB","192 GB"],"A"],
+["A20","A user is attempting to start an application on his laptop computer. Each time the application shows the starting graphic, it suddenly disappears and the application icon disappears from the taskbar. A technician would like to get more information about each previous occurrence of the application crash. Which of these choices would provide these details?",["Event Viewer","Task Manager","Startup Repair","Safe Mode"],"A"],
+["A21","An attacker is using every combination of letters, numbers, and special characters in an attempt to discover a user's password. Which of the following would describe this attack type?",["Spoofing","Social engineering","Brute force attack","DDoS"],"C"],
+["A22","A system administrator is upgrading an email service in the corporate data center. During the upgrade, an error message appears and the upgrade fails. Subsequent attempts to perform the upgrade also fail. Which of the following processes should the system administrator follow to return the email server to its previous state?",["Rollback plan","Disaster recovery plan","Incident response plan","Power plan"],"A"],
+["A23","When connecting a new USB webcam to Windows 11, a message appears stating “The controller does not have enough resources for this device.” Which of the following would be the best next troubleshooting step?",["Close all large-memory processes","Modify the BCD","Move the webcam to a different USB interface","Use System Restore to rollback to a previous configuration"],"C"],
+["A24","A system administrator has created a shared folder on a server to store operating system images. Technicians access the shared folder to download the latest images when performing large-scale system installations. Which of the following will be the most likely method of accessing this data?",["Map the shared folder to an available drive letter","Download the shared folder through a proxy","Link the images to a cloud storage service","Access the folder using a remote access client"],"A"],
+["A25","A system administrator is installing a Windows Server device in the data center. Which of the following file systems would be the best choice for this task?",["ReFS","APFS","ext4","XFS"],"A"],
+["A26","A security technician has identified malware running in the OS kernel. Traditional anti-malware scans were not able to identify any problems on the computer. Which of the following would be the best description of this malware?",["Rootkit","Worm","Botnet","Cryptominer"],"A"],
+["A27","A help desk technician has been called to a training room with Android tablets as presentation devices. An application used during the training program will not start on any of the tablets. When the application is selected, the splash screen appears for a moment and then completely disappears with no error message. Which of the following would be the best next troubleshooting step?",["Install all operating system updates","Uninstall the application","Power cycle the tablets","Roll back to the previous application version"],"C"],
+["A28","A user on the headquarters network has opened a help desk ticket about their Windows desktop. When starting their computer, the login process proceeds normally but the Windows desktop takes fifteen minutes to appear. Yesterday, the desktop appeared in just a few seconds. Which of the following would be the most likely reason for this issue?",["Slow profile load","Incorrect boot device order","Faulty RAM","Incorrect username and password"],"A"],
+["A29","A system administrator has been asked to install a new application on a server, but the application is 64-bit and the server operating system is 32-bit. Which of the following describes the issue associated with this installation?",["File permissions","OS compatibility","Installation method","Available drive space"],"B"],
+["A30","A security guard has reported a person passing through a secure door without using a door badge. The intruder slipped through the door by closely following the person in front of them. Which of these would best describe these actions?",["Dumpster diving","Brute force","Phishing","Tailgating"],"D"],
+["A31","A Linux administrator needs to modify the configuration text file for a service. Which of the following utilities would provide this functionality?",["nano","chmod","df","sudo"],"A"],
+["A32","An internal audit has found a server in the DMZ which appears to be infected with malware. The malware does not appear to be part of a file in the OS, and the malware runs each time the system is started. What type of malware would be most likely found on this server?",["Trojan","Ransomware","Keylogger","Spyware","Boot sector virus"],"E"],
+["A33","A user has delivered a broken laptop to the help desk, and they are visibly upset and quite vocal about the problem they're having. The user is also asking for a very specific repair which doesn't appear to have any relationship to his issue. What's the best way to handle this situation?",["Repeat your understanding of the issue to the customer and provide an estimate and follow-up time","Refuse the repair until the customer calms down","Inform the customer of his mistake with the proposed repair","Refuse to make any commitments until the computer is examined"],"A"],
+["A34","A user in the finance department has purchased a new Android smartphone and has installed a number of productivity apps. After a day of use, the phone is displaying a large number of advertisements when browsing the Internet. Which of the following tasks should the user perform after completing a factory reset?",["Disable Bluetooth","Check app sharing permissions","Run a speed test on the cellular connection","Verify the source of each app before installation"],"D"],
+["A35","When making configuration changes, a technician is assigned a temporary administrator password to use for the duration of the update. Once the administrator credentials are used, they are automatically deleted. Which of the following would best describe this process?",["Single sign-on","Data loss prevention","User Access Console","Just-in-time access"],"D"],
+["A36","A user has been provided with a username and password for accessing the corporate VPN. The user has also been provided with a hardware device displaying a six digit code, and the code changes every 30 seconds. Which of the following would best describe the use of this device?",["ACL","Group Policy","SMS","Least privilege","MFA"],"E"],
+["A37","A user has installed multiple applications over the last week. During the startup process, the computer now takes over fifteen minutes to display the Windows desktop. Which of the following utilities would help the system administrator troubleshoot this issue?",["defrag","Performance Monitor","Task Manager","robocopy"],"C"],
+["A38","A server administrator is replacing the memory in a database server. Which of the following steps should be followed first?",["Remove the existing memory modules","Wear an air filter mask","Disconnect all power sources","Connect an ESD strap"],"C"],
+["A39","A technician is dismantling a test lab for a recently completed project, and the lab manager would like to use the existing computers on a new project. However, the security administrator would like to ensure none of the data from the previous project is accessible on the existing hard drives. Which of the following would be the best way to accomplish this?",["Quick format","Degauss","Regular format","Reinstall the operating system"],"C"],
+["A40","A system administrator needs to view a set of application log files contained in a folder named “logs.” Which of the following commands should be used to make this folder the current directory?",["cd logs","mv logs","dir logs","md logs"],"A"],
+["A41","A system administrator is configuring a server to use eight bootable partitions on a single SSD. Which of the following partition styles would be the best choice for this configuration?",["MBR","NTFS","diskpart","GPT"],"D"],
+["A42","A technician is installing a fresh Windows operating system on a file server. Unfortunately, the drive controller in the system is not recognized during the installation process. Which of the following would be the best way to manage this issue?",["Load third-party drivers","Restart the system","Use a remote network installation","Boot from the recovery partition"],"A"],
+["A43","A security administrator is concerned a bad actor may use packet analysis to determine a list of web sites visited by their users. Which of the following would prevent this type of reconnaissance?",["Enable full disk encryption","Login with multifactor authentication","Use a secure DNS","Configure the BIOS for Secure Boot"],"C"],
+["A44","A user in the sales department is attempting to upgrade the operating system of their smartphone, but the smartphone will not start the installation when selected. Which of the following is the most likely reason for this issue?",["Bluetooth is enabled","The smartphone storage is nearly full","Rotation lock is disabled","The phone is connected to a power source"],"B"],
+["A45","The hard drive in a macOS desktop has failed and none of the data on the drive is recoverable. A new storage drive has now been installed. Which of the following should be used to restore the data on the computer?",["Backup and Restore","Mission Control","Time Machine","Disk Utility"],"C"],
+["A46","A user purchased a copy of home tax software and has installed it on their company computer. This morning, the user logs in and finds the tax software has been automatically removed from the system. Which of the following would be the most likely reason for this result?",["The company per-seat licenses are all in use","The software uses an open-source license","The user has installed a personal license","The software requires a USB key for DRM"],"C"],
+["A47","A system administrator is upgrading four workstations from Windows 8.1 to Windows 11. All of the user files and applications are stored on the server, and no documents or settings need to be retained between versions. Which of these installation methods would be the best way to provide this upgrade?",["Factory reset","Repair installation","Clean install","In-place upgrade"],"C"],
+["A48","A computer on a manufacturing floor has been identified as a malware-infected system. Which of the following should be the best next step to resolve this issue?",["Disconnect the network cable","Perform a malware scan","Disable System Restore","Download the latest anti-malware signatures"],"A"],
+["A49","A technician has been called to resolve an issue with a networked laser printer not printing. When the technician arrives on-site, they find the printer will require a hardware replacement. All hardware is managed by a third-party and will take a week before the printer is operational again. Which of the following would be the technician's best next step?",["Work on the next ticket in the queue","Add a follow-up event for one week later","Inform the user of the repair status","Order a printer maintenance kit"],"C"],
+["A50","A system administrator is starting a Windows computer, but during startup they receive the message, “One or more services failed to start.” Additional reboots result in the same error message. Which of the following would be the best next troubleshooting step?",["Check for proper cooling","Run a hardware diagnostic","Modify the service permissions","Rebuild the BCD"],"C"],
+["A51","A system administrator would like all help desk computers to check for anti-virus signature updates every hour during the workday. Which of the following would be the best way to provide this functionality?",["System Configuration","Task Scheduler","Device Manager","Certificate Manager","SFC"],"B"],
+["A52","A workstation on a manufacturing floor is taking much longer to boot than normal. Which of the following would be the best way to troubleshoot this issue?",["Replace the CPU","Disable the startup applications","Upgrade the RAM","Install the latest OS patches"],"B"],
+["A53","A Windows user is installing a new application, and the installation process also installs a service. Which of the following permissions will be required for this installation?",["Guest","Power User","Administrator","Standard user"],"C"],
+["A54","A user working from home is not able to print to a laser printer at the corporate office. Which of the following would be the most likely reason for this issue?",["WPA3 settings","Outdated anti-virus signatures","Disconnected VPN","MDM configuration"],"C"],
+["A55","An employee has modified the NTFS permissions on a folder to provide read access to Everyone. However, users connecting from a different computer do not have access to the file. Which of the following is the reason for this issue?",["The NTFS permissions were not synchronized","Share permissions restrict access from remote devices","The user is an Administrator","Remote users are connecting with Guest accounts"],"B"],
+["A56","A healthcare company has replaced some of their desktop computers with laptops and will be disposing of the older computers. The security administrator would like to guarantee none of the existing data on the hard drives could be recovered once the systems are sent to the recycling center. Which of the following methods would meet this requirement?",["Quick format","Reinstall the OS","Remove all user folders","Shred the drives"],"D"],
+["A57","A technician was assigned a support ticket with an urgently requested a laptop screen repair. The support team was able to locate a replacement and install a new LCD display in less than 24 hours. The laptop was returned to the user and the user immediately left on a business trip. Which of the following would be the best next step for this repair?",["Order a backup replacement display","Update the user's login script","Run diagnostics on the original screen","Contact the user to verify satisfaction"],"D"],
+["A58","A user has received a pop up message on their computer stating applications on their computer are infected with a virus. A technician has determined the pop up message is a hoax and it needs to be removed from the computer. The technician has disabled System Restore to remove all previous restore points. Which of the following tasks would be the best next step?",["Update the anti-virus signatures","Educate the end-user","Schedule anti-virus scans for midnight each day","Boot the system with the original installation media"],"A"],
+["A59","A network administrator needs to manage a switch and a firewall in the local data center. Which of the following would be the best choice for this requirement?",["RDP","VPN","SSH","VNC"],"C"],
+["A60","A user is using a smartphone at their desk, and they occasionally receive a security warning in the browser. After some additional troubleshooting, the technician determines the security warnings are fake. Which of the following should a technician follow to best resolve this issue?",["Put the phone into airplane mode","Connect to the corporate network using a VPN connection","Run an anti-malware scan on the smartphone","Remove any paired Bluetooth devices"],"C"],
+["A61","A user on the research and development team reports her computer displays the message “Missing operating system” during boot. A technician runs hardware diagnostics and finds the RAM, CPU, storage drive, and power supply all pass the tests. The technician then finds a connected USB flash drive was causing the issue. Which of the following would prevent this issue from occurring in the future?",["Create a login script","Install the latest OS patches","Run SFC","Modify the BIOS boot order"],"D"],
+["A62","A user has opened a help desk ticket relating to desktop alerts randomly appearing throughout the day. Most of the alerts contain information about third-party products and services. Which of the following is the most likely cause of these messages?",["On-path attack","Corrupted email database","OS update failure","Adware"],"D"],
+["A63","In which of the following file types would a system administrator expect to see the command, “cd c:\\source”?",[".sh",".vbs",".py",".bat"],"D"],
+["A64","A malware infection has recently been removed from a computer. When starting the operating system, Windows shows errors during the startup process indicating some core operating system files are missing. Which of the following should be used to restore these missing files?",["gpupdate","winver","sfc","diskpart"],"C"],
+["A65","A desktop administrator has determined an employee in the corporate office has been using their computer to share copyrighted materials to others on the Internet. Which of the following should be the best next step?",["Create a firewall rule to block Internet access to this computer","Create a hash for each file which was shared","Compile a list of licenses for each set of copyrighted materials","Retrieve and securely store the computer"],"D"],
+["A66","A system administrator would like to require a specific level of password complexity for all Active Directory users. Which of the following would be the best way to complete this requirement?",["Login script","Folder redirection","Port security","Group Policy"],"D"],
+["A67","A system administrator is creating a series of shared folders which should not be visible when users browse the network for available resources. What symbol should be added to the end of a share name to provide this functionality?",[". (period)","$ (dollar sign)","! (exclamation mark / bang)","# (hash sign / number sign)"],"B"],
+["A68","A user is having problems with the 802.11 wireless connection on his iOS phone. Although there are names appearing in the network list, his phone does not show any connectivity to a wireless network. The user has confirmed airplane mode is not enabled, Bluetooth is on, and VPN is not enabled. Which of the following is the most likely reason for this lack of wireless connectivity?",["The phone does not include a data plan","The wireless network is disabled","The Bluetooth connection is conflicting with the Wi-Fi","The Wi-Fi password is incorrect","The wireless radio is disabled"],"D"],
+["A69","A desktop administrator is upgrading the video adapter in a workstation. Which of the following should the administrator use during this process?",["Tone generator","Anti-static strap","Safety goggles","Toner vacuum"],"B"],
+["A70","A help desk director would like to identify and track computer systems which have been returned for service or moved from one location to another. Which of the following would be the best solution for these requirements?",["Cable labels","Asset tags","Topology diagrams","Login names"],"B"],
+["A71","A technician is troubleshooting a computer infected with a virus. The user thought they were opening a spreadsheet, but the file was actually a virus executable. Which of the following Windows options were most likely associated with this issue?",["Always show icons, never thumbnails","Display the full path in the title bar","Always show menus","Hide extensions for known file types"],"D"],
+["A72","A financial management company would like to ensure mobile users are configured with the highest level of wireless encryption while working in the office. They would also like to include an additional user verification step during the login process. Which of the following would provide this functionality? (Choose TWO)",["RADIUS","UPnP","Multi-factor authentication","TKIP","TACACS","Kerberos","WPA3"],"CG"],
+["A73","A network consulting firm is upgrading the Internet firewalls for a large corporation. The proposal includes a description of the project and the network topology changes required to support the upgrade. The proposal also describes the risks involved with making this upgrade. Which of the following would be the last step in this upgrade?",["Detailed upgrade plan","Backout plan","Change control application","End-user acceptance"],"D"],
+["A74","An organization has been tasked with increasing the minimum password length. A systems administrator has created a policy to require all passwords to be at least ten characters long for all users. When testing this policy in the lab, a laptop computer allowed the creation of eight-character passwords. Which of the following commands should be used to apply this new policy on the laptop?",["net use","gpupdate","sfc","tasklist"],"B"],
+["A75","A technician has been tasked with removing malware on a training room laptop. After updating the anti-virus software and removing the malware, the technician creates a backup of the system. After the training class ends, the technician is notified the malware has returned. Which of the following steps was missed and caused the system to be infected again?",["Boot to a pre-installation environment","Identify malware symptoms","Disable System Restore before removal","Update to the latest BIOS version"],"C"],
+["A76","A data center manager requires each server to maintain at least fifteen minutes of uptime during a power failure. Which of these would be the best choice for this requirement?",["Cloud-based storage","UPS","Redundant power supplies","Surge suppressor"],"B"],
+["A77","A financial corporation is deploying laptops to their salespeople in the field. The sales teams require video playback functionality, but the Windows configuration does not include any multimedia utilities. Which of the following would be the most likely reason for these missing utilities?",["Laptops are using Windows N edition","Video playback is disabled in the BIOS","Laptop hardware does not support video playback","The video format is not recognized by the laptop"],"A"],
+["A78","A system administrator is adding an additional drive to a server and extending the size of an existing volume. Which of the following utilities would provide a graphical summary of the existing storage configuration?",["Disk Management","Performance Monitor","Event Viewer","Task Scheduler","Device Manager"],"A"],
+["A79","While using a Windows laptop during presentations, a company vice president has reported her system is interrupting the meeting with system notifications from the browser, PDF reader, the Microsoft Store, and other applications. Which of the following would be the best way to address this issue?",["Use a different laptop for presentations","Run the presentation software as Administrator","Enable Airplane mode while presenting","Disable notifications while specific applications are running"],"D"],
+["A80","A system administrator needs to upgrade a training room of twenty systems to the latest Windows version. Which of the following would be the most efficient method of performing this upgrade process?",["Recovery partition","Remote network installation","Repair installation","USB key"],"B"],
+["A81","A user has opened a help desk ticket for application slowdowns and unwanted pop-up windows. A technician updates the anti-virus software, scans the computer, and removes the malware. The technician then schedules future scans and creates a new restore point. Which of the following should be the next step in the removal process?",["Disable System Restore","Update the anti-virus signatures","Quarantine the system","Educate the end user"],"D"],
+["A82","An employee at a company is responsible for determining the correct access controls for each user, manage the authentication process, and track all access to network resources. Which of the following would best describe this employee's job function?",["PAM","DLP","MDM","IAM"],"D"],
+["A83","A user in the accounting department has opened a help desk ticket due to problems accessing the website of the company's payroll service provider. While testing other website connections on the computer, the technician finds many pop-up windows are displayed. Which of the following would be the best way for the technician to resolve this issue?",["Uninstall the browser and reinstall with a different version","Restore the workstation from a known good backup","Start in Safe Mode and connect to the payroll website","Modify the browser's proxy settings"],"B"],
+["A84","A business partner in a different country needs to access an internal company server during the very early morning hours. The internal firewall will limit the partner's access to this single server. Which of these would be the most important security task to perform on this server?",["Restrict log-in times for the partner account","Remove the server from the Active Directory domain","Use only 64-bit applications","Run a weekly anti-virus scan"],"A"],
+["A85","A Linux administrator has been asked to upgrade the web server software on a device. Which of the following would provide the administrator with the appropriate rights and permissions for this upgrade?",["chmod","apt","dig","sudo"],"D"],
+["A86","A user is connecting their laptop to an external monitor and keyboard, but the laptop goes into sleep mode if the laptop screen is shut. Which of the following utilities can be used to keep the laptop running when the lid is closed?",["Power Options","Device Manager","Personalization","User Accounts"],"A"],
+["A87","A network administrator is configuring a wireless network at a small office. The administrator would like to allow wireless access for all computers but exclude a single kiosk in the lobby. Which of the following configuration settings would meet this requirement?",["SSID suppression","Content filtering","Secure management access","DHCP reservation","IP filtering"],"E"],
+["A88","A company maintains a Windows system in the conference room for use during meetings. However, the system has not received any recent updates and will no longer connect to the corporate network due to missing security patches. Which of the following would be the most likely reason for this issue?",["BIOS administrator password is enabled","No users are actively logged in","Firewall is filtering traffic","Guest accounts are disabled"],"C"],
+["A89","A company is deploying laptops to all of their field sales teams. The company is concerned about protecting the security of data if the laptop is stolen or misplaced. Which of the following would be the best way to address this concern?",["Multifactor authentication","Strong password policies","Unique device certificates","Data-at-rest encryption"],"D"],
+["A90","A company has discovered a recent data breach, and this breach appears to have originated through a vulnerability introduced with a software upgrade. The vulnerability was added by the attacker at the source and distributed to all customers who performed the upgrade. Which of the following would best describe this attack type?",["Supply chain attack","Insider threat","Business email compromise","On-path attack"],"A"]
+];
+const MC_A = MC_RAW.map(([id,q,o,a])=>({id,kind:"mc",q,o,a:a.split("").map(c=>c.charCodeAt(0)-65)}));
+
+const norm = s => String(s||"").toLowerCase().replace(/\s+/g," ").trim();
+const PBQ_A = [
+ {id:"A1",kind:"cmd",
+  q:"A technician has recently removed malware from a Windows computer, but the technician is concerned some of the system files may have been modified. From the command line, analyze and repair any damaged operating system files.",
+  check:s=>/^sfc \/scannow$/.test(s), solution:"sfc /scannow"},
+ {id:"A2",kind:"order",
+  q:"A technician has been tasked with removing malware from a desktop computer. Arrange these ten malware removal tasks in the correct order to successfully remove the malware.",
+  answer:["Verify malware symptoms","Quarantine infected system","Disable System Restore","Remediate infected systems","Update anti-malware software","Scan and removal techniques","Reimage or reinstall","Schedule scans and run updates","Enable System Restore","Educate the end user"]},
+ {id:"A3",kind:"match",
+  q:"Match the best technology to the description. Some technologies will not be matched.",
+  terms:["PII","EULA","AUP","TOTP","GFS","FRT","BEC"],
+  rows:[
+   {d:"A user authenticates to a mobile phone using the built-in camera",a:"FRT"},
+   {d:"A database includes all client first names, last names, and home addresses",a:"PII"},
+   {d:"A backup series consists of monthly, weekly, and daily backup data",a:"GFS"},
+   {d:"The proper use of computers, tablets, and other devices is part of the employee handbook",a:"AUP"},
+   {d:"A user receives an email from the CEO, but the email was not actually sent by the CEO",a:"BEC"}]},
+ {id:"A4",kind:"cmd",
+  q:"A user needs to access a file located on the \\\\gate-room server. The file is located in a share called ship-diagnostics. Use the command line to connect to this share using drive g:.",
+  check:s=>/^net use g: \\\\gate-room\\ship-diagnostics\\?( \/persistent:(yes|no))?$/.test(s),
+  solution:"net use g: \\\\gate-room\\ship-diagnostics"}
+];
+
+/* ---------- EXAM B DATA ---------- */
+const MC_B_RAW = [
+["B6","A technician is delivering a new laptop to a user and moving the older laptop to a different user. Which of the following would allow the existing hard drive to be used but prevent recovery of any of the previous user’s data?",["Perform a regular format","Run a defragmentation","Connect the laptop to the Windows Domain","Delete the \\Users folder"],"A"],
+["B7","A company has just performed annual laser printer maintenance, and has accumulated hundreds of used toner cartridges. Which of the following would be the best way to dispose of the old cartridges?",["Take to a hazardous waste facility","Send in bulk to the local landfill","Separate the parts and dispose of normally","Contract with an incineration company"],"A"],
+["B8","A user needs to modify a spreadsheet for an upcoming meeting. The spreadsheet is currently stored on a remote computer in a shared drive. The user would like to access the shared drive as a drive letter inside of Windows File Explorer. Which of the following command line options would provide this functionality?",["tasklist","net use","diskpart","netstat"],"B"],
+["B9","A macOS server administrator needs a backup system to allow the recovery of data from any point in the last thirty days. Which of the following should be used for this requirement?",["Backup and Restore","Spotlight","Spaces","Time Machine"],"D"],
+["B10","Why would a technician use an ESD strap?",["Protect electronic parts from extreme heat","Keep electronic parts dry and free from moisture","Prevent damage from static electricity","Protect computer parts from dust"],"C"],
+["B11","A technician needs to uninstall a video editing utility from a macOS laptop. Which folder would be the most likely location of this utility?",["/Program Files","/Applications","/Library","/Users"],"B"],
+["B12","A technician is scheduled to replace a faulty motherboard today, but the motherboard delivery has been delayed and will not arrive until tomorrow. The new motherboard will repair a laptop used by a company executive. Which of the following would be the best way to handle these events?",["Move the installation to the next business day","Schedule another repair into today's newly opened time slot","Ask the delivery company for a refund on the shipping charges","Contact the end user and inform them of the shipping issue"],"D"],
+["B13","A system administrator has been tasked with locating all of the log files contained within an application folder. The folder currently contains over a thousand files, and only a portion of them have a .log extension. Which of these Windows commands would be the best way to find these files?",["sfc","diskpart","robocopy","dir"],"D"],
+["B14","A user runs a corporate app on their smartphone which downloads a database each time the app is started. This download process normally takes a few seconds, but today the download is taking minutes to complete. Which of the following should a technician follow as the best next troubleshooting step?",["Disable Bluetooth","Run a network speed check","Charge the smartphone battery","Check the cloud storage resource usage"],"B"],
+["B15","A system administrator is analyzing a problem with a USB flash drive on a Windows computer. When the flash drive is inserted, the CPU utilization increases to 100%. The administrator would like to disable one of the computer’s USB controllers for troubleshooting. Which of the following would provide this functionality?",["Services","Performance Monitor","Event Viewer","Device Manager"],"D"],
+["B16","A user is reporting some apps launched on their mobile phone will show an error message and then disappear without starting. This problem occurs with a group of apps normally used during the work day. Which of the following tasks would be the first step for troubleshooting this issue?",["Install the previous version of the apps","Connect the phone to a power source","Power cycle the phone","Disable the GPS radio"],"C"],
+["B17","A technician has been asked to power down and store a server which has been exploited by an external attacker. The legal department will be performing tests and gathering information from this server. Which of the following would be most important to ensure the integrity of the server data?",["Report the server location to the proper channels","Compile all support tickets associated with the server","Maintain a chain of custody","Take photos of the server in the storage room"],"C"],
+["B18","A user has opened a help desk ticket to remove malware from his laptop. A previous removal occurred two weeks earlier with a similar malware infection. Which of the following was missed during the first malware removal?",["Restart the computer","Educate the end-user","Enable System Protection","Quarantine infected systems"],"B"],
+["B19","Which of the following features would be found in Windows 11 Pro but not in Windows 11 Home?",["32-bit and 64-bit versions","Domain access","RDP client","Windows Workgroup"],"B"],
+["B20","A medical research company is using laptop computers when visiting testing centers. The IT security team is concerned about a data breach if a laptop is lost or stolen. Which of the following would be the best way to manage this issue?",["BIOS password","Authenticator application","Full disk encryption","Biometric authentication","Cable lock"],"C"],
+["B21","A security administrator is installing a new VPN connection for remote users. The administrator would like all users to authenticate with their Windows Active Directory credentials. Which of the following technologies would provide this functionality?",["RADIUS","WPA3","TKIP","AES"],"A"],
+["B22","A mobile user is using apps on their smartphone for most business tasks. To ensure no data will be lost, the smartphone will need to have multiple backups each day. The user travels most of the time and rarely visits the home office. Which of the following would be the best way to provide these backups?",["Connect an external USB drive","Use incremental backups each night","Connect the smartphone to a laptop","Use a cloud backup service"],"D"],
+["B23","A desktop administrator is moving an SSD from one laptop to another. Which of the following should be used to protect the SSD during the move?",["Padded envelope","Anti-static bag","Box with foam filler","Cloth wrap"],"B"],
+["B24","A user is performing a series of Google searches, but the results pages are displaying links and advertisements from a different website. This issue occurs each time a Google search is performed. The same Google search on a different computer results in a normal Google results page. Which of the following would resolve this issue?",["Run the search from Safe Mode","Install the latest operating system patches","Run a malware removal utility","Login as a different user"],"C"],
+["B25","A user in the accounting department is having an issue with his smartphone reaching websites and retrieving mail when working from home. Inside the office, the phone appears to work normally. Which of the following would be the best next step for troubleshooting this issue?",["Verify the network configuration at home","Install the latest operating system updates","Connect the phone to power when working at home","Restart the smartphone after arriving at home"],"A"],
+["B26","A security administrator has been asked to reinstall Windows on a web server diagnosed with a rootkit infection. Which of the following installation methods would be the best choice for this server?",["In-place upgrade","Remote network installation","Clean install","Repair installation"],"C"],
+["B27","A local coffee shop has a public wireless network for customers and a private wireless network for company devices. The shop owner wants to be sure customers can never connect to the company network. Which of the following should be configured on this network?",["Install a new access point for company devices","Configure WPA3 on the company network","Require static IP addresses on the customer network","Assign MAC filters to the company network","Use a firewall between the customer and corporate network"],"E"],
+["B28","A user in the shipping department has logged into the Windows domain. However, the desktop does not show the user’s normal wallpaper and all of the user’s spreadsheets and documents in the “My Documents” folder are missing. Which of these would be the best way to restore the user’s normal work environment?",["Rename the user’s folder and delete their profile in the registry","Boot into Safe Mode and disable all startup applications","Add the user to the Administrator group","Update to the latest operating system version"],"A"],
+["B29","A company’s shipping department maintains ten different computers for printing shipping labels and for tracking outgoing shipments. All of the systems are displaying an error when they access a third-party shipping management website over a secure connection. Which of the following would be the most likely reason for this issue?",["The computers have not been updated with the latest OS patches","The website certificate has expired","The local computer storage drives are not encrypted","The systems are infected with malware"],"B"],
+["B30","A manufacturing company performs a third-party audit of their accounting records each year. The auditors use laptops provided by the company to access internal resources. When the audit is complete, the auditors should be prevented from logging on until the following audit process begins. Which of the following would be the best way to accomplish this?",["Uninstall the audit software","Assign an expiration date to the auditor accounts","Remove the auditor accounts from all Windows groups","Require two-factor authentication for the auditor accounts"],"B"],
+["B31","A manufacturing company is donating some older computers to a local charity. Which of the following should be done to ensure the existing hard drives could still be used but none of the existing data would be recoverable?",["Degaussing","Regular format","Shredder","Quick format"],"B"],
+["B32","A user's video editing workstation often performs an overnight rendering process. On some mornings, the user is presented with a login screen instead of the rendering completion page. A technician finds the building occasionally loses power overnight. Which of the following should be used to avoid these issues with the video editing workstation?",["Use a surge suppressor","Save the rendered file to an external storage drive","Create a separate partition for user documents","Install a UPS"],"D"],
+["B33","A desktop administrator is troubleshooting an older computer which has been slowing down as more applications and files are stored on the hard drive. Which of the following commands would be the best choice for increasing the performance of this computer?",["defrag","format","sfc","xcopy","winver"],"A"],
+["B34","A user is receiving alerts on their desktop computer stating, “Access to this PC has been blocked for security reasons.” A technician has determined this message was not created by the company's security software. Which of the following would be the best next step in this troubleshooting process?",["Update the desktop computer operating system","Check the certificate of the corporate web server","Restart the desktop computer","Run an anti-malware utility"],"D"],
+["B35","A system administrator has inadvertently installed a Trojan horse which has deleted a number of files across many Windows file shares. The Trojan also had access to user documents and login credentials and transmitted numerous documents to an off-site file storage system. Which of the following would limit the scope of future exploits?",["Require multi-factor authentication","Disable all guest accounts","Modify the default permissions","Configure full disk encryption","Require complex passwords","Require a screensaver password"],"C"],
+["B36","A technician has created a Windows image which can be used across all of the computers in a test lab. Which of the following would be the best way to deploy these images?",["Clean install","Remote network installation","Repair installation","Bootable USB"],"B"],
+["B37","Which of the following Windows Share permissions has the priority when assigning access on a mapped drive?",["Allow","Full control","List folder contents","Deny"],"D"],
+["B38","A data center manager would like to ensure any potential power fault on a server would not be harmful to employees. Which of the following would be the best choice for this requirement?",["Electrical ground","Battery backup","Air filter mask","ESD mat"],"A"],
+["B39","A user in the shipping department has received a call from someone claiming to be from the IT Help Desk. The caller asks the user to disclose their location, employee ID, and login credentials. Which of the following would describe this situation?",["Denial of service","Social engineering","Brute force","Shoulder surfing"],"B"],
+["B40","A desktop administrator has just removed malware from a user’s desktop computer and has configured the system to automatically update anti-virus signatures and perform a scan each night. Which of the following should be the next step in the removal process?",["Enable System Restore","Educate the end-user","Quarantine the computer","Boot to Safe Mode"],"A"],
+["B41","A user would like to encrypt a small group of files in a shared folder without modifying other files on the drive. Which of the following would be the best way to accomplish this?",["EFS","Save the files with Administrator rights","BitLocker","Save the files with a dollar sign at the end of the filename"],"A"],
+["B42","Which of the following partition types limit a Windows installation to a maximum partition size of 2 TB?",["FAT32","GPT","APFS","MBR"],"D"],
+["B43","A user in the engineering department needs to use some applications written for Windows, but also needs to use applications designed for Linux. Which of the following would be the best way to provide access to these applications?",["Assign the user multiple computers","Boot the operating systems from two removable USBs","Configure the user's PC for multiboot","Compile the Linux applications in Windows"],"C"],
+["B44","A help desk technician has been tasked with rebuilding an email server which recently crashed. Which of the following would be the best source for the information required to reconstruct this system?",["Compliance report","Acceptable use policies","Network topology map","Knowledge base"],"D"],
+["B45","The employees of a company have direct access to applications and databases from their desktop computers. If the employees are using the company wireless network or the conference room, connectivity is only available after authenticating through a VPN. Which of the following would best describe this policy?",["Multifactor authentication","Group Policy","Least privilege","Zero trust"],"D"],
+["B46","A user has called the help desk to get assistance with random blue screens on their Windows laptop. The technician finds CPU utilization is constantly high, and many network sites are unavailable or only load half of the site content. The user mentions some random popup messages have appeared on the desktop during the workday. Which of the following would be the most likely reason for these issues?",["Storage drive is failing","Network proxy settings are incorrect","Operating system needs to be updated","Laptop has a malware infection","Video subsystem is faulty"],"D"],
+["B47","A technician is troubleshooting an issue with an iOS tablet randomly restarting during normal use. A check of the device shows no significant application updates and the operating system was upgraded to a new version three days ago. The user states the tablet was working normally last week. Which of the following would be the most likely reason for these random reboots?",["Faulty OS upgrade","Invalid device certificate","Malware infection","Faulty battery","Incorrect network settings"],"A"],
+["B48","A system administrator needs to modify a file in the \\Windows\\Installer directory, but the folder doesn’t appear in the list of available files. Which of these options would help the system administrator with this task?",["Safe Mode","File Explorer Options","User Accounts","Internet Options"],"B"],
+["B49","A Linux administrator is modifying a log file and needs to rename the file. Which of the following should be used to make this change?",["rm","mv","mkdir","pwd"],"B"],
+["B50","A desktop administrator is troubleshooting poor performance on a user’s laptop computer. The system takes an excessive amount of time during the boot process, and pop up messages appear while using the word processor and spreadsheet applications. Which of the following steps should the technician do next?",["Educate the end-user","Schedule periodic anti-virus scans","Enable System Protection","Disconnect the laptop from the network"],"D"],
+["B51","An executive has a laptop which runs very slowly after login and continues running slowly throughout the day. The user has complained certain applications cannot be started and others will randomly crash. A check of the laptop shows the memory utilization is very close to 100%. Which of the following would provide a short-term fix for this issue?",["Disable startup items","Update to the latest OS patches","Defragment the hard drive","Reboot the computer"],"D"],
+["B52","A help desk technician needs to view and control the desktop of a Windows computer at a remote location. Which of the following would be the best choice for this task?",["VPN","VNC","SSH","RDP"],"D"],
+["B53","A technician would like to modify a configuration in a user's UEFI BIOS, but the system will not provide a BIOS configuration hotkey after shutting down and powering on the computer. Which of the following would be the best way to address this issue?",["Change the File Explorer Options","Modify the Indexing Options","Turn off Fast Startup","Start the computer in Safe Mode","Modify the Ease of Access settings"],"C"],
+["B54","A user has noticed their mouse arrow has been moving around the screen when they are not touching the mouse. The user has watched the mouse opening applications and changing settings in the Control Panel. Which of the following would be the best way for an administrator to resolve this issue?",["Turn the firewall off and back on again","Run an anti-virus scan","Remove all recently installed applications","Upgrade to the latest OS patches"],"B"],
+["B55","A server administrator has been planning an operating system upgrade for a group of important services. The administrator has provided a detailed scope and risk assessment of the change, and the plan has been documented. However, the risk analysis wasn't completed until Friday afternoon, so the change cannot occur over the weekend. Which of the following is preventing the upgrade from occurring?",["Upgrade file availability","Change board approval","Not enough time to complete the upgrade","Need more people for the upgrade process"],"B"],
+["B56","A user receives a browser security alert on his laptop when visiting any website which uses HTTPS. If he uses his smartphone, he does not receive any error messages. Which of the following would best describe this situation?",["The date and time on the laptop is incorrect","The smartphone is not updated with the latest OS version","The laptop has an incorrect subnet mask","The laptop does not have the latest anti-virus signatures"],"A"],
+["B57","A user on the sales team has opened a help desk ticket because of short battery times on a new company-provided tablet. When using the tablet, the battery only lasts a few hours before shutting off. Which of the following would be the best choices for improving the battery life? (Select TWO)",["Install the latest operating system patches","Increase the brightness levels","Connect to the corporate VPN","Disable Bluetooth and cellular connections","Close apps which work in the background","Perform a soft reset"],"DE"],
+["B58","A system administrator would like to create a Windows distribution which can automatically configure itself to connect to the corporate domain and automatically configure individual user email settings. Which of the following would be the best choice for this requirement?",["Zero-touch deployment","Recovery partition installation","Image deployment","In-place upgrade"],"A"],
+["B59","A user in the accounting department has installed a new application for the upcoming tax year. Although the current application worked perfectly, the newer application runs significantly slower. Which of the following should be the first troubleshooting step?",["Roll back to the previous application","Run a repair installation","Verify the requirements for the new application","Perform a system file check"],"C"],
+["B60","A macOS user needs to protect all of the data on their laptop if the laptop is stolen or lost. Which of the following would be the best choice for this requirement?",["Spaces","Mission Control","FileVault","Keychain"],"C"],
+["B61","A data center manager is installing a new access door which will require multi-factor authentication. Which of the following should be used to meet this requirement? (Select TWO)",["Cabinet locks","Key fobs","Privacy filter","Palmprint scanner","USB lock","Cable lock"],"BD"],
+["B62","A company is deploying a new set of laptops for field service technicians who travel and work at customer locations. The IT department has been asked to create a secure authentication factor for a minimal cost. Which of the following would be the best choice for this security requirement?",["Retina scanner","TOTP app","Keyfob","Magnetometer"],"B"],
+["B63","An administrator has identified and removed malware on a corporate desktop computer. Which of the following malware removal steps should be performed next?",["Disconnect the computer from the corporate network","Educate the end-user","Schedule periodic anti-virus scans","Disable System Restore"],"C"],
+["B64","The clock on an executive's Windows laptop has consistently been losing time and is behind by a few minutes at the end of the week. The executive uses this laptop to monitor an assembly line and needs the time and date to be as accurate as possible. Which of these would be the best way to address this issue?",["Create a login script to update the date and time","Configure an NTP server","Set the clock for a different time zone","Replace the laptop batteries"],"B"],
+["B65","A network administrator is installing a set of upgraded Internet routers in the data center. Which of the following would be the best choices to secure the access to the internal data center door? (Select TWO)",["Biometric lock","ACL","Bollard","Additional lighting","Motion sensor","Access control vestibule"],"AF"],
+["B66","An administrator is troubleshooting an error message which appears each time an application is started. The administrator has uninstalled and reinstalled the application, but the error message still appears. Which of the following would be the best next troubleshooting step?",["Use Performance Monitor to view operational data","Check the Event Viewer logs","View the hardware settings in Device Manager","Disable unneeded background processes in Services"],"B"],
+["B67","Four users in the accounting department have received similar emails asking for payment of an outstanding invoice and a link to a third-party payment site. The emails contains purchase information which appears to be correct, but additional research shows the invoice numbers are not valid. Which of the following would best describe this attack type?",["Spear phishing","Denial of service","Shoulder surfing","Evil twin"],"A"],
+["B68","A user has dropped off their laptop at the repair desk. A message taped to the laptop states: “Doesn't work.” Which of the following would be the best next step?",["Start the laptop and look for any issues","Call the customer and ask for more information","Replace the power adapter and try booting the laptop","Use a diagnostics boot CD to run hardware tests"],"B"],
+["B69","Which of these describes a free, open-source operating system?",["macOS","Linux","Windows","iOS"],"B"],
+["B70","An IT manager would like to provide users with the option to recover daily versions of documents and spreadsheets. A user will have the option to roll back to any daily version in the last month. Which of the following would be the best way to implement this feature?",["Create a file-level backup each day","Maintain a monthly image level backup","Store full backup tapes at an off-site facility","Assign each user a USB flash drive"],"A"],
+["B71","A network administrator has a report showing a single user with numerous visits to a website. This website is known to violate the company’s AUP. Which of the following should the administrator do next?",["Create a firewall filter to block the website","Scan all computers with the latest anti-malware signatures","Contact the company’s security officer","Change the user’s password"],"C"],
+["B72","Which of the following script extensions would commonly be used inside of a Microsoft Office application?",[".vbs",".py",".bat",".js"],"A"],
+["B73","A system administrator has installed a SOHO network of five Windows computers. The administrator would like to provide a method of sharing documents and spreadsheets between all of the office computers. Which of the following would be the best way to provide this functionality?",["Domain","Proxy server","Workgroup","Remote Desktop"],"C"],
+["B74","An employee used their tablet to take pictures of the company's newest product. Those pictures were posted on an industry rumor website the following week. Which of the following should be evaluated as the MOST likely security concern?",["Cloud storage","USB flash drive use","Application updates","Deleted email messages"],"A"],
+["B75","A manufacturing company in the United States sells monthly subscriptions from their website. Which of the following regulated data types would be the MOST important to manage?",["Personal government-issued information","Credit card transactions","Healthcare data","Software license terms"],"B"],
+["B76","A user is traveling to a conference, and they would like to be sure any messages sent from their phone during the event remain private while using the event’s wireless network. Which of the following should be configured on this user’s phone?",["VPN","Strong password","Network-based firewall","Multi-factor authentication"],"A"],
+["B77","Last week, a computer on the manufacturing floor was upgraded from 8 GB of RAM to 16 GB. Since the upgrade, the system has rebooted itself randomly every few hours. Which of the following would be the best next troubleshooting step?",["Run Windows Update","Perform a hardware diagnostic","Upgrade the BIOS to the latest version","Replace the storage drive"],"B"],
+["B78","A server administrator has configured an automated process to backup VM snapshots each evening during non-working hours. The backups will be stored on a series of high-density tape drives. How can the administrator confirm these backups will be useful when a server recovery is needed?",["Send the backups to an off-site facility","Connect the tape drives to a battery backup","Create separate file-level backups","Perform occasional recovery tests"],"D"],
+["B79","A system administrator needs to configure a laptop to support inbound Remote Desktop services for the help desk team. Which of these Control Panel features provides access to these settings?",["Internet Options","Devices and Printers","Network and Sharing Center","System"],"D"],
+["B80","An Android phone user is traveling internationally and would like to avoid overage charges for using too much cellular data while overseas. Which of the following would be the best way to control data access?",["Install a VPN client","Remove all apps with high data requirements","Enable data usage notifications","Connect exclusively through a cellular hotspot"],"C"],
+["B81","A technician is upgrading the motherboard in a server. Which of the following should be the first task when beginning this upgrade?",["Wear safety goggles","Connect an ESD strap","Remove any motherboard batteries","Disconnect from all power sources"],"D"],
+["B82","A system administrator is installing a new video editing application on a user’s workstation from a USB flash drive. However, the installation process fails due to lack of available drive space. Which of the following would be the best way to complete the installation process?",["Use a share drive for the installation source","Compress the installation files","Install the application to a network share","Manually copy the installation files to the application directory"],"A"],
+["B83","A user would like to install an image and photo editing program on their home computer, but they would prefer an application without a monthly subscription. Which of the following would be the best licensing option for this requirement?",["Open-source","Corporate","Personal","DRM"],"A"],
+["B84","A system administrator is troubleshooting an application issue. The application uses an increasing amount of memory until all available RAM is eventually depleted. The computer must be rebooted every few days when this memory issue occurs. Which of the following utilities would show how much RAM is used by this application?",["Event Viewer","Device Manager","Task Manager","Programs and Features"],"C"],
+["B85","An administrator is troubleshooting a desktop computer experiencing a reboot issue. Before the Windows login screen appears, the system reboots in a continuous loop. Which of the following would be the best way to address this issue?",["Start Safe Mode and perform a defragmentation","Reinstall the operating system from the original media","Update the boot order from the system BIOS","Run Startup Repair from the Advanced Boot Options"],"D"],
+["B86","A user has downloaded a browser add-on which assists with new car purchases. During the installation, the Windows UAC is requesting permissions to continue with the install. Which of these is most likely?",["The operating system requires an update","The software is a Trojan horse","The workstation is already part of a botnet","A worm will be downloaded and installed"],"B"],
+["B87","A technician is working on many different terminal sessions on their screen from different servers. The technician has also used different authentication credentials on each server. Which of the following would be the best way to display the login name associated with each terminal session?",["winver","nslookup","whoami","net use"],"C"],
+["B88","A system administrator needs a way to deploy new smartphone configurations across four different user groups. Each group will require a different set of email and security configurations. Which of the following would be the best way to setup these smartphones?",["Assign configuration profiles for each group","Restore all smartphones from cloud backups","Provide customized instructions for each user","Assign separate support teams for each group"],"A"],
+["B89","A desktop administrator is troubleshooting an error which randomly causes a workstation to spike to 100% utilization. Which of these utilities would help the administrator track and report on system utilization over a 24-hour period?",["Performance Monitor","Device Manager","Services","Task Scheduler"],"A"],
+["B90","Which of these would be the best way to prevent an attacker from modifying default routes on a SOHO wireless network?",["Configure MAC address filtering","Enable WPS connectivity","Change the router's default password","Disable unneeded interfaces"],"C"]
+];
+const MC_B = MC_B_RAW.map(([id,q,o,a])=>({id,kind:"mc",q,o,a:a.split("").map(c=>c.charCodeAt(0)-65)}));
+
+const chkdskOK = s => {
+  const t=s.split(" ");
+  return t[0]==="chkdsk" && t.length>1 && t.slice(1).every(x=>/^[a-z]:$/.test(x)||x==="/f"||x==="/r") && t.slice(1).some(x=>x==="/f"||x==="/r");
+};
+const PBQ_B = [
+ {id:"B1",kind:"match",
+  q:"A system administrator is troubleshooting complaints of a performance problem on a Windows laptop. Specify the best Windows utility to accomplish each of the following tasks.",
+  terms:["System Configuration","System Information","Task Manager","Device Manager","Performance Monitor","Registry Editor","Task Scheduler"],
+  rows:[
+   {d:"Task 1: The first step is to determine the current status of the system. Select a utility to view the real-time display of CPU utilization, memory usage, disk access, network utilization, and more.",a:"Task Manager"},
+   {d:"Task 2: There were no obvious resource issues identified in the previous step, and the administrator believes the problem may be intermittent. Use a Windows utility to gather long-term information over a 24-hour period.",a:"Performance Monitor"},
+   {d:"Task 3: The long-term analysis shows high CPU utilizations when a specific application is running. This issue may be related to a known bug. Launch a utility to view the Windows and BIOS versions of this laptop.",a:"System Information"},
+   {d:"Task 4: After updating Windows, the performance issues appear to be resolved. Going forward, the administrator would like to automatically perform a daily check to install any pending updates.",a:"Task Scheduler"}]},
+ {id:"B2",kind:"cmd",
+  q:"A network administrator is troubleshooting an intermittent Internet link outage to a server at 8.8.8.8. The administrator believes the outage is occurring on one of the WAN connections between locations. Use a Windows network utility to identify the router closest to the outage.",
+  check:s=>/^(tracert|pathping)( -\w+)* 8\.8\.8\.8$/.test(s), solution:"tracert 8.8.8.8 (pathping 8.8.8.8 also works)"},
+ {id:"B3",kind:"match",
+  q:"A system administrator is updating the scripts used by different processes and services. Select the best scripting language the administrator should choose for each task. Not all scripting languages will be used.",
+  terms:[".bat",".ps1",".vbs",".sh",".js",".py"],
+  rows:[
+   {d:"For onboarding, create an Active Directory account and automatically add the user to the necessary groups",a:".ps1"},
+   {d:"Change a webpage to show the flag of the visitor's country based on their IP address",a:".js"},
+   {d:"Use a single script to backup log files in Windows, Linux, and macOS",a:".py"},
+   {d:"Analyze data in an Excel spreadsheet and convert all measurements to metric values",a:".vbs"},
+   {d:"Each night, four load-balanced Linux web servers should be restarted in series",a:".sh"}]},
+ {id:"B4",kind:"grid",
+  q:"Select the Windows 11 Editions which include the following features. Multiple Windows Editions may be selected for a single feature.",
+  cols:["Home","Pro","Enterprise"],
+  rows:[
+   {d:"Workgroup support only",a:["Home"]},
+   {d:"Domain support",a:["Pro","Enterprise"]},
+   {d:"Supports 6 TB of RAM",a:["Enterprise"]},
+   {d:"BitLocker encryption",a:["Pro","Enterprise"]},
+   {d:"Remote Desktop Service",a:["Pro","Enterprise"]}]},
+ {id:"B5",kind:"cmd",
+  q:"A system administrator is concerned a Windows system may contain logical file system errors. Scan and repair any logical file system errors from the Windows command line.",
+  check:chkdskOK, solution:"chkdsk /f (chkdsk /r also works, with an optional drive letter)"}
+];
+
+/* ---------- HELPERS ---------- */
+const app = document.getElementById("app");
+const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const LET = "ABCDEFG";
+
+const UNIT_FILE = {
+  "1.1":"1.1 Operating Systems and File Systems.html",
+  "1.2":"1.2 OS Installation and Boot Methods.html",
+  "1.3":"1.3 Microsoft Windows Editions.html",
+  "1.41":"1.41 Task Manager.html",
+  "1.42":"1.42 MMC Snap-ins.html",
+  "1.43":"1.43 Windows Additional Admin Tools.html",
+  "1.5":"1.5 Microsoft Command-Line Tools.html",
+  "1.51":"1.51 Additional MS Commands.html",
+  "1.61":"1.61 Control Panel.html",
+  "1.62":"1.62 Windows Settings.html",
+  "1.71":"1.71 Windows Networking.html",
+  "1.81":"1.81 macOS Features and Tools.html",
+  "1.91":"1.91 Linux Commands.html",
+  "1.92":"1.92 Linux Features and Tools.html",
+  "1.10":"1.10 Installing Applications.html",
+  "2.1":"2.1 Security Measures and Their Purposes.html",
+  "2.21":"2.21 Windows OS Security Settings.html",
+  "2.3":"2.3 Wireless Security Protocols and Authentication Methods.html",
+  "2.4":"2.4 Malware and Adware Types.html",
+  "2.5":"2.5 Social Engineering Attacks, Threats, and Vulnerabilities.html",
+  "2.6":"2.6 Malware Investigation and Remediation.html",
+  "2.7":"2.7 Data-at-Rest Encryption and Security Best Practices.html",
+  "2.8":"2.8 Mobile Device Hardening Techniques.html",
+  "2.9":"2.9 Data Destruction and Sanitization.html",
+  "2.10":"2.10 Router, Wireless, and Firewall Settings.html",
+  "2.11":"2.11 Browser Security and Configuration.html",
+  "3.1":"3.1 Troubleshoot Microsoft Windows OS Problems.html",
+  "3.2":"3.2 Troubleshoot Mobile OS and Application Issues.html",
+  "3.3":"3.3 Troubleshoot Mobile OS and Application Security Issues.html",
+  "3.4":"3.4 Troubleshoot Windows OS Security Issues.html",
+  "4.1":"4.1 Documentation and Support Systems Information Management.html",
+  "4.2":"4.2 Change Management Best Practices.html",
+  "4.3":"4.3 Backup and Recovery Best Practices.html",
+  "4.4":"4.4 Safety and Environmental Controls.html",
+  "4.5":"4.5 MSDS, Disposal, and Power Protection.html",
+  "4.6":"4.6 Incident Response, Licensing, and Compliance.html",
+  "4.7":"4.7 Professionalism and Customer Service.html",
+  "4.8":"4.8 Scripting Basics and Use Cases.html",
+  "4.9":"4.9 Remote Access Tools and Security.html"
+};
+const SRC = {
+  A1:["1.51","sfc","sfc /scannow — repair OS files","easy"],
+  A2:["2.6","step-1","Malware removal process, all 10 steps","hard"],
+  A3:["4.6","pii","PII / AUP here; also 2.1 FRT, 2.5 BEC, 4.3 GFS","hard"],
+  A4:["1.71","mapped-drives","Mapped drives — net use letter: \\\\server\\share","easy"],
+  A6:["4.4","high-voltage","Equipment grounding / rack ground","medium"],
+  A7:["3.2","battery","Battery life — auto-lock and radios","medium"],
+  A8:["3.2","app-install","App fails to install — MDM policy","medium"],
+  A9:["2.1","frt","Facial recognition (FRT) uses the camera","easy"],
+  A10:["4.4","ppe","PPE — air filter mask for dust/toner","medium"],
+  A11:["2.11","clear-cache","Clear browser cache","medium"],
+  A12:["4.4","fire","CO2 extinguisher for electrical fire","medium"],
+  A13:["2.7","fde","Full disk encryption / BitLocker","easy"],
+  A14:["4.6","pii","PII — names, addresses, phone numbers","easy"],
+  A15:["4.3","onsite-offsite","Offsite / cloud backup for a replacement device","medium"],
+  A16:["4.6","splash","Splash screen before login","easy"],
+  A17:["1.61","user-accounts","Control Panel › User Accounts (UAC)","medium"],
+  A18:["4.5","surge","Surge suppressor for voltage spikes","medium"],
+  A19:["1.3","ram","32-bit Windows max RAM = 4 GB","easy"],
+  A20:["1.42","event-viewer","Event Viewer — application crash history","medium"],
+  A21:["2.5","brute-force","Brute force password attack","easy"],
+  A22:["4.2","rollback","Rollback plan after a failed change","medium"],
+  A23:["3.1","usb-controller","USB controller resources — try another port","medium"],
+  A24:["1.71","mapped-drives","Map a shared folder to a drive letter","easy"],
+  A25:["1.1","refs","ReFS — Windows Server file system","easy"],
+  A26:["2.4","rootkit","Rootkit in the OS kernel","easy"],
+  A27:["3.2","app-crash","App splash then exit — restart the device","medium"],
+  A28:["3.1","slow-profile","Slow profile load after a normal login","medium"],
+  A29:["1.10","","32-bit OS cannot run a 64-bit application","medium"],
+  A30:["2.5","tailgating","Tailgating / piggybacking through a door","easy"],
+  A31:["1.92","nano","nano — edit a Linux text file","easy"],
+  A32:["2.4","boot-sector-virus","Boot sector virus (not a file in the OS)","hard"],
+  A33:["4.7","listening","Clarify / repeat your understanding","medium"],
+  A34:["3.3","unofficial-stores","Verify app source after a factory reset","medium"],
+  A35:["2.1","jit-access","Just-in-time access — temporary admin","medium"],
+  A36:["2.1","hardware-token","MFA hardware token / rotating code","easy"],
+  A37:["1.41","startup","Task Manager › Startup apps","medium"],
+  A38:["4.4","disconnect","Disconnect power before opening the case","medium"],
+  A39:["2.9","regular-format","Reuse a drive: regular format, not degauss","medium"],
+  A40:["1.51","cd-root","cd — change directory","easy"],
+  A41:["1.2","gpt","GPT — more than four bootable partitions","easy"],
+  A42:["1.2","third-party-drivers","Load third-party storage drivers at install","medium"],
+  A43:["2.11","secure-dns","Secure DNS hides visited sites from packet capture","hard"],
+  A44:["3.2","os-update","OS update needs free storage","medium"],
+  A45:["1.81","time-machine","Time Machine restore on macOS","easy"],
+  A46:["4.6","personal-corporate","Personal license on a company PC","medium"],
+  A47:["1.2","clean-install","Clean install when nothing local must be kept","medium"],
+  A48:["2.6","step-2","Quarantine — disconnect from the network first","medium"],
+  A49:["4.7","timelines","Tell the user the repair status","medium"],
+  A50:["3.1","services","Service failed to start — permissions / dependencies","medium"],
+  A51:["1.42","task-scheduler","Task Scheduler — hourly signature updates","easy"],
+  A52:["1.41","startup","Slow boot — disable startup applications","medium"],
+  A53:["2.21","ug-admin","Installing a service requires Administrator","medium"],
+  A54:["1.71","vpn","Home to office printer — VPN must be connected","medium"],
+  A55:["2.21","perm-ntfsshare","Remote access: more restrictive of NTFS vs share","hard"],
+  A56:["2.9","shredding","Shred drives when recovery must be impossible","medium"],
+  A57:["4.7","follow-up","Contact the user to verify satisfaction","medium"],
+  A58:["2.6","step-5","After disable System Restore: update anti-malware","hard"],
+  A59:["4.9","ssh","SSH to manage a switch or firewall","easy"],
+  A60:["3.3","fake-warnings","Fake security warnings — anti-malware scan","medium"],
+  A61:["3.1","no-os","Missing OS — USB in the BIOS boot order","medium"],
+  A62:["2.4","adware","Random product desktop alerts — adware","medium"],
+  A63:["4.8","bat",".bat files run Windows cmd commands like cd","easy"],
+  A64:["1.51","sfc","sfc restores missing Windows system files","easy"],
+  A65:["4.6","chain-of-custody","Retrieve and securely store the computer","medium"],
+  A66:["2.21","ad-grouppolicy","Password complexity — Group Policy","easy"],
+  A67:["1.71","shared-resources","Hidden / admin share name ends with $","easy"],
+  A68:["3.2","wifi","SSIDs listed but no join — wrong Wi-Fi password","medium"],
+  A69:["4.4","esd-straps","Anti-static strap when replacing a card","easy"],
+  A70:["4.1","asset-tags","Asset tags to track returned / moved PCs","easy"],
+  A71:["1.61","feo-hide-ext","Hide extensions for known file types","medium"],
+  A72:["2.3","wpa3","Choose TWO: WPA3 encryption and MFA (also 2.1)","hard"],
+  A73:["4.2","acceptance","Change management last step: end-user acceptance","medium"],
+  A74:["1.5","","gpupdate applies a new Group Policy on the laptop","medium"],
+  A75:["2.6","step-3","Disable System Restore before malware removal","hard"],
+  A76:["4.5","ups","UPS for minutes of runtime in a power failure","easy"],
+  A77:["1.3","n-versions","Windows N editions omit multimedia utilities","medium"],
+  A78:["1.42","disk-management","Disk Management — graphical volumes","easy"],
+  A79:["1.62","system-settings","Settings › System — Focus Assist / notifications","medium"],
+  A80:["1.2","remote-install","Remote network installation for many PCs","medium"],
+  A81:["2.6","step-10","Last malware step: educate the end user","medium"],
+  A82:["2.1","iam","IAM — access, authentication, tracking","easy"],
+  A83:["3.4","browser-popups","Browser pop-ups — restore from a known-good backup","hard"],
+  A84:["2.7","restrict-login-times","Restrict logon hours for the partner account","medium"],
+  A85:["1.91","sudo","sudo for elevated Linux rights","easy"],
+  A86:["1.61","power-lid-fast","Power Options — lid close action","easy"],
+  A87:["2.10","ip-filtering","IP filtering to exclude one wireless client","medium"],
+  A88:["2.21","firewall-ports","Firewall filtering can block updates and the network","hard"],
+  A89:["2.7","fde","Data-at-rest encryption if a laptop is stolen","easy"],
+  A90:["2.5","supply-chain","Supply chain attack at the software vendor","medium"],
+  B1:["1.41","performance","Task Manager, then Performance Monitor, msinfo32, Task Scheduler","hard"],
+  B2:["1.5","","tracert / pathping to find the failing hop","medium"],
+  B3:["4.8","ps1","Script extensions — .ps1 .js .py .vbs .sh","hard"],
+  B4:["1.3","win11-pro","Windows 11 editions: Home / Pro / Enterprise features","hard"],
+  B5:["1.5","","chkdsk /f or /r — logical file system errors","easy"],
+  B6:["2.9","regular-format","Reuse a drive: regular format, not degauss","medium"],
+  B7:["4.5","toner","Toner cartridges — hazardous waste facility","medium"],
+  B8:["1.71","mapped-drives","net use — map a share to a drive letter","easy"],
+  B9:["1.81","time-machine","Time Machine — point-in-time macOS backup","easy"],
+  B10:["4.4","esd-straps","ESD strap — static electricity","easy"],
+  B11:["1.81","applications","macOS apps live in /Applications","easy"],
+  B12:["4.7","timelines","Tell the user about the delay","medium"],
+  B13:["1.5","","dir — find files by extension","medium"],
+  B14:["3.3","degraded-response","Slow app download — check network speed first","medium"],
+  B15:["1.42","device-manager","Device Manager — disable a USB controller","medium"],
+  B16:["3.2","app-crash","Apps crash on launch — power cycle first","medium"],
+  B17:["4.6","chain-of-custody","Exploited server — chain of custody","medium"],
+  B18:["2.6","step-10","Malware came back — educate the end user","medium"],
+  B19:["1.3","domain-workgroup","Domain join is Pro+, not Home","easy"],
+  B20:["2.7","fde","Full disk encryption if a laptop is stolen","easy"],
+  B21:["2.3","radius","RADIUS — VPN auth against Active Directory","medium"],
+  B22:["4.3","onsite-offsite","Traveling phone — cloud backup","medium"],
+  B23:["4.4","antistatic-bags","Anti-static bag for an SSD in transit","easy"],
+  B24:["3.4","redirection","Hijacked Google results — malware removal","medium"],
+  B25:["3.2","wifi","Works in the office, not at home — check the home network","medium"],
+  B26:["1.2","clean-install","Rootkit — clean install, not in-place","medium"],
+  B27:["2.10","guest","Keep guest Wi-Fi off the company LAN — firewall","hard"],
+  B28:["3.1","slow-profile","Wrong desktop after domain login — profile issue","medium"],
+  B29:["3.4","cert-warnings","Every PC fails the same HTTPS site — expired certificate","medium"],
+  B30:["2.7","account-expiration","Auditor accounts — set an expiration date","medium"],
+  B31:["2.9","regular-format","Donate PCs that can still be used — regular format","medium"],
+  B32:["4.5","ups","Overnight power loss — UPS","easy"],
+  B33:["1.43","dfrgui","Aging HDD slowing down — defrag","medium"],
+  B34:["3.4","false-av","Fake “PC blocked” alert — anti-malware","medium"],
+  B35:["2.7","restrict-permissions","Trojan used broad access — tighten default permissions","hard"],
+  B36:["1.2","image-deployment","Same image on a lab of PCs — remote network install","medium"],
+  B37:["2.21","perm-ntfsshare","Share permission Deny wins","hard"],
+  B38:["4.4","high-voltage","Power fault safety — equipment grounding","medium"],
+  B39:["2.5","vishing","Fake help-desk call for credentials — social engineering","medium"],
+  B40:["2.6","step-9","Signatures scheduled — next enable System Restore","medium"],
+  B41:["2.21","enc-efs","Encrypt a few files, not the whole drive — EFS","easy"],
+  B42:["1.2","mbr","MBR max partition 2 TB","easy"],
+  B43:["1.2","multiboot","Windows and Linux apps on one PC — multiboot","medium"],
+  B44:["4.1","knowledge-base","Rebuild a server — knowledge base","easy"],
+  B45:["2.1","zero-trust","Office LAN is open; wireless needs VPN — zero trust","medium"],
+  B46:["2.4","virus","BSOD, high CPU, pop-ups — malware","medium"],
+  B47:["3.2","random-reboots","iOS reboots after an OS upgrade","medium"],
+  B48:["1.61","feo-hidden","Hidden \\Windows\\Installer — File Explorer Options","medium"],
+  B49:["1.91","mv","Linux rename a file — mv","easy"],
+  B50:["2.6","step-2","Pop-ups and slow boot — disconnect from the network first","medium"],
+  B51:["3.1","low-memory","RAM pegged — reboot is the short-term fix","medium"],
+  B52:["4.9","rdp","View and control a remote Windows desktop — RDP","easy"],
+  B53:["1.61","power-lid-fast","No BIOS key after shutdown — turn off Fast Startup","medium"],
+  B54:["2.4","spyware","Mouse moving by itself — anti-virus scan","medium"],
+  B55:["4.2","ccb","Change documented Friday — CCB has not approved","medium"],
+  B56:["3.1","time-drift","HTTPS warnings only on the laptop — wrong date/time","medium"],
+  B57:["3.2","battery","Short tablet battery — radios off and close background apps","hard"],
+  B58:["1.2","zero-touch","Auto-join domain and configure mail — zero-touch","medium"],
+  B59:["1.10","","New app is slow — verify system requirements first","medium"],
+  B60:["1.81","filevault","Encrypt a whole macOS laptop — FileVault","easy"],
+  B61:["2.1","key-fobs","Door MFA — key fob plus palmprint","hard"],
+  B62:["2.1","authenticator-app","Cheap MFA for field techs — TOTP app","easy"],
+  B63:["2.6","step-8","Malware gone — next schedule periodic scans","medium"],
+  B64:["3.1","time-drift","Clock loses time — NTP","medium"],
+  B65:["2.1","access-vestibule","Data center door — biometric lock and vestibule","hard"],
+  B66:["1.42","event-viewer","App error after reinstall — Event Viewer","medium"],
+  B67:["2.5","phishing","Fake invoice emails to accounting — spear phishing","medium"],
+  B68:["4.7","clarifying","Ticket says “Doesn't work” — call for more information","medium"],
+  B69:["1.1","linux","Free open-source OS — Linux","easy"],
+  B70:["4.3","full","Daily versions of documents — file-level backup","medium"],
+  B71:["4.6","aup","AUP violation — contact the security officer","medium"],
+  B72:["4.8","vbs","Script inside Microsoft Office — .vbs","easy"],
+  B73:["1.71","domain-joined-vs-workgroup","Five PCs sharing files — workgroup","medium"],
+  B74:["2.8","","Photos leaked from a tablet — cloud storage","medium"],
+  B75:["4.6","pci","Website subscriptions — PCI credit-card data","easy"],
+  B76:["4.9","vpn","Private messages on event Wi-Fi — VPN","easy"],
+  B77:["3.1","system-instability","Reboots after a RAM upgrade — hardware diagnostic","medium"],
+  B78:["4.3","testing","Tape backups of VMs — test a restore","medium"],
+  B79:["1.61","system-cp","Inbound Remote Desktop — Control Panel › System","medium"],
+  B80:["3.3","data-limit","International data overage — data-usage notifications","medium"],
+  B81:["4.4","disconnect","Motherboard upgrade — disconnect power first","medium"],
+  B82:["1.10","","Installer on USB, disk full — run it from a share","medium"],
+  B83:["4.6","open-source","Home photo editor, no subscription — open-source","easy"],
+  B84:["1.41","processes","Which app is eating RAM — Task Manager","easy"],
+  B85:["3.1","boot-issues","Reboot loop before login — Startup Repair","medium"],
+  B86:["2.4","trojan","UAC on a car-shopping add-on — Trojan","medium"],
+  B87:["1.5","","Which account is this terminal — whoami","easy"],
+  B88:["2.8","config-profiles","Different mail/security per group — configuration profiles","medium"],
+  B89:["1.42","perfmon","Utilization over 24 hours — Performance Monitor","easy"],
+  B90:["2.10","default-passwords","SOHO router routes changed — change the default password","easy"]
+};
+function attachSrc(it){
+  const s=SRC[it.id];
+  if(s){it.unit=s[0];it.hash=s[1];it.loc=s[2];it.diff=s[3];}
+  return it;
+}
+MC_A.forEach(attachSrc);
+MC_B.forEach(attachSrc);
+PBQ_A.forEach(attachSrc);
+PBQ_B.forEach(attachSrc);
+function sourceHref(it){
+  const f=UNIT_FILE[it.unit]; if(!f) return "";
+  return f+(it.hash?"#"+encodeURIComponent(it.hash):"");
+}
+function diffLabel(d){return d==="easy"?"Easy":d==="hard"?"Hard":"Medium";}
+function sourceLine(it){
+  const href=sourceHref(it);
+  if(!href) return "";
+  return `<p class="qsrc"><a href="${esc(href)}" target="_blank" rel="noopener">Study ${esc(it.unit)}</a>${it.loc?` <span class="where">— ${esc(it.loc)}</span>`:""}</p>`;
+}
+
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const fmt = ms => {const s=Math.max(0,Math.round(ms/1000));const m=Math.floor(s/60);return m+":"+String(s%60).padStart(2,"0");};
+let S=null, timerId=null;
+
+const EXAMS = {
+  A:{label:"Exam A",pbq:PBQ_A,mc:MC_A},
+  B:{label:"Exam B",pbq:PBQ_B,mc:MC_B},
+  AB:{label:"Exams A and B",pbq:[...PBQ_A,...PBQ_B],mc:[...MC_A,...MC_B]}
+};
+const LENGTHS = {
+  full:{label:"Full",pbq:null,mc:null},
+  short:{label:"Short",pbq:2,mc:28,min:30},
+  quick:{label:"Quick",pbq:0,mc:10,min:10}
+};
+
+function loadBest(){try{return JSON.parse(localStorage.getItem("examA-best")||"{}");}catch(e){return {};}}
+function saveBest(key,pct){try{const b=loadBest();if(b[key]==null||pct>b[key]){b[key]=pct;localStorage.setItem("examA-best",JSON.stringify(b));}}catch(e){}}
+
+/* ---------- START SCREEN ---------- */
+function renderStart(){
+  clearInterval(timerId); S=null;
+  const best=loadBest();
+  const bestTxt=Object.keys(best).filter(k=>/^(A|B|AB)-(full|short|quick)$/.test(k)).map(k=>{const [e,l]=k.split("-");return EXAMS[e].label+", "+LENGTHS[l].label.toLowerCase()+": "+best[k]+"%";}).join("; ");
+  app.innerHTML=`
+  <div class="start">
+    <h1>Practice Exams</h1>
+    <p class="lede">Operating systems, security, software troubleshooting, and operational procedures. Performance-based questions come first, then multiple choice, like the real thing.</p>
+    <form class="setup" id="setup">
+      <fieldset>
+        <legend>Exam</legend>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="exam" value="A"><span class="box"><b>Practice Exam A</b><span>89 questions: 4 performance-based, 85 multiple choice.</span></span></label>
+          <label class="choice"><input type="radio" name="exam" value="B" checked><span class="box"><b>Practice Exam B</b><span>90 questions: 5 performance-based, 85 multiple choice.</span></span></label>
+          <label class="choice"><input type="radio" name="exam" value="AB"><span class="box"><b>Both, mixed together</b><span>Questions from A and B shuffled into one pool.</span></span></label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Mode</legend>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="mode" value="exam" checked><span class="box"><b>Exam simulation</b><span>No feedback until you finish. Flag questions and come back to them.</span></span></label>
+          <label class="choice"><input type="radio" name="mode" value="study"><span class="box"><b>Study mode</b><span>Check each answer as you go and see the correct one right away.</span></span></label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Length</legend>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="len" value="full" checked><span class="box"><b>Full</b><span>Every question in your selection. 90 minutes per exam.</span></span></label>
+          <label class="choice"><input type="radio" name="len" value="short"><span class="box"><b>Short: 30 questions</b><span>2 performance-based, 28 multiple choice. 30 minutes.</span></span></label>
+          <label class="choice"><input type="radio" name="len" value="quick"><span class="box"><b>Quick: 10 questions</b><span>10 random multiple choice. 10 minutes.</span></span></label>
+        </div>
+      </fieldset>
+      <label class="check" id="timedRow"><input type="checkbox" id="timed" checked><span>Use the time limit (exam simulation only)</span></label>
+      <button class="btn primary" type="submit">Start</button>
+      ${bestTxt?`<p class="best">Best scores on this device: ${esc(bestTxt)}</p>`:""}
+    </form>
+    <p class="note">Multiple-choice questions are shuffled each attempt. Exam A question A5 is left out because it needs a screenshot. In study mode, each question links to the unit where that topic lives. Exam B answers were worked out from the questions rather than copied from a published key, so double-check any answer that surprises you.</p>
+  </div>`;
+  const form=document.getElementById("setup");
+  const val=n=>form.querySelector('input[name="'+n+'"]:checked').value;
+  const syncTimed=()=>{const m=val("mode");document.getElementById("timedRow").style.display=m==="exam"?"flex":"none";};
+  form.addEventListener("change",syncTimed);syncTimed();
+  form.addEventListener("submit",e=>{
+    e.preventDefault();
+    const ex=val("exam"), len=val("len"), mode=val("mode"), E=EXAMS[ex];
+    let pbq,mc,min;
+    if(len==="full"){pbq=[...E.pbq];mc=shuffle(E.mc);min=90*(ex==="AB"?2:1);}
+    else{
+      const L=LENGTHS[len];
+      pbq=L.pbq?shuffle(E.pbq).slice(0,L.pbq).sort((x,y)=>E.pbq.indexOf(x)-E.pbq.indexOf(y)):[];
+      mc=shuffle(E.mc).slice(0,L.mc);min=L.min;
+    }
+    const timed=mode==="exam"&&document.getElementById("timed").checked;
+    begin([...pbq,...mc],mode,timed?min:0,ex+"-"+len,E.label);
+  });
+}
+
+/* ---------- SESSION ---------- */
+function begin(items,mode,minutes,len,title){
+  clearInterval(timerId);
+  S={mode,items,idx:0,ans:{},flags:new Set(),checked:{},orderInit:{},startAt:Date.now(),
+     endAt:minutes?Date.now()+minutes*60000:null,len:len||null,title:title||"Missed questions",done:false,filter:"all"};
+  items.forEach(it=>{
+    if(it.kind==="order"){let s;do{s=shuffle(it.answer);}while(s.join("|")===it.answer.join("|"));S.orderInit[it.id]=s;}
+  });
+  renderQuiz();
+  if(S.endAt){timerId=setInterval(tick,1000);}
+  window.scrollTo(0,0);
+}
+function tick(){
+  if(!S||S.done||!S.endAt)return;
+  const rem=S.endAt-Date.now();
+  const el=document.getElementById("timer");
+  if(el){el.textContent=fmt(rem);el.classList.toggle("low",rem<5*60000);}
+  if(rem<=0)finish();
+}
+const isAnswered=it=>{
+  const a=S.ans[it.id];
+  if(it.kind==="mc")return !!(a&&a.length);
+  if(it.kind==="cmd")return !!(a&&a.trim());
+  if(it.kind==="order")return !!a;
+  if(it.kind==="match")return !!(a&&a.some(Boolean));
+  if(it.kind==="grid")return !!(a&&a.some(x=>x.length));
+};
+const isCorrect=it=>{
+  const a=S.ans[it.id]; if(!isAnswered(it))return false;
+  if(it.kind==="mc")return a.length===it.a.length&&[...a].sort().join()===[...it.a].sort().join();
+  if(it.kind==="cmd")return it.check(norm(a));
+  if(it.kind==="order")return a.join("|")===it.answer.join("|");
+  if(it.kind==="match")return it.rows.every((r,i)=>a[i]===r.a);
+  if(it.kind==="grid")return it.rows.every((r,i)=>[...(a[i]||[])].sort().join()===[...r.a].sort().join());
+};
+const kindLabel=it=>it.kind==="mc"?"":"Performance-based";
+
+/* ---------- QUIZ VIEW ---------- */
+function renderQuiz(){
+  const modeLabel=S.mode==="exam"?"Exam simulation":"Study mode";
+  app.innerHTML=`
+  <div class="topbar">
+    <div class="title">${esc(S.title)}<small>${modeLabel}</small></div>
+    <div class="prog" id="prog"></div>
+    ${S.endAt?`<div class="timer" id="timer" aria-label="Time remaining">${fmt(S.endAt-Date.now())}</div>`:""}
+    <button class="btn" data-act="finish">Finish</button>
+  </div>
+  <div class="shell">
+    <nav class="qnav" aria-label="Question navigator">
+      <div class="navhead">Questions</div>
+      <div class="grid" id="grid"></div>
+      <div class="legend"><span><i class="a"></i>Answered</span><span><i class="f"></i>Flagged</span><span><i class="p"></i>Performance-based</span></div>
+    </nav>
+    <main class="card" id="qcard"></main>
+  </div>`;
+  renderNav();renderCard();
+}
+function renderNav(){
+  const g=document.getElementById("grid"); if(!g)return;
+  g.innerHTML=S.items.map((it,i)=>{
+    let c="nb";
+    if(it.kind!=="mc")c+=" pbq";
+    if(S.mode==="study"&&S.checked[it.id])c+=isCorrect(it)?" ok":" bad";
+    else if(isAnswered(it))c+=" answered";
+    if(S.flags.has(it.id))c+=" flagged";
+    if(i===S.idx)c+=" current";
+    return `<button class="${c}" data-act="goto" data-i="${i}" aria-label="Question ${i+1}${isAnswered(it)?", answered":""}${S.flags.has(it.id)?", flagged":""}"${i===S.idx?' aria-current="true"':""}>${i+1}</button>`;
+  }).join("");
+  const n=S.items.filter(isAnswered).length;
+  document.getElementById("prog").textContent=`Question ${S.idx+1} of ${S.items.length}  |  ${n} answered`;
+}
+
+function itemBody(it,{reveal,locked}){
+  const a=S.ans[it.id];
+  const lk=locked?" locked":"";
+  if(it.kind==="mc"){
+    const multi=it.a.length>1, sel=a||[];
+    return `<div class="opts${lk}" role="${multi?"group":"radiogroup"}" aria-label="Answer choices">`+it.o.map((t,i)=>{
+      const s=sel.includes(i);let c="opt"+(multi?" multi":"")+(s?" sel":"");let b="";
+      if(reveal){if(it.a.includes(i)){c+=" correct";b=s?"Correct, your answer":"Correct answer";}else if(s){c+=" wrong";b="Your answer";}}
+      return `<button type="button" class="${c}" data-act="opt" data-i="${i}" role="${multi?"checkbox":"radio"}" aria-checked="${s}"><span class="ltr">${LET[i]}</span><span class="txt">${esc(t)}</span>${b?`<span class="badge">${b}</span>`:""}</button>`;
+    }).join("")+`</div>`;
+  }
+  if(it.kind==="cmd"){
+    const ok=reveal&&isCorrect(it);
+    return `<p class="hint">Type the command and press Enter or use the navigator to move on.</p>
+    <div class="term${reveal?(ok?" ok":" bad"):""}"><span class="prompt">C:\\&gt;</span><input type="text" data-act="cmd" value="${esc(a||"")}" ${locked?"readonly":""} autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Command line"></div>
+    ${reveal?`<div class="solution">Accepted answer: <code>${esc(it.solution)}</code></div>`:""}`;
+  }
+  if(it.kind==="order"){
+    const list=a||S.orderInit[it.id];
+    return `<p class="hint">Use the arrows to put the steps in order. Step 1 happens first.</p>
+    <ol class="order">${list.map((t,i)=>{
+      let c="";if(reveal)c=t===it.answer[i]?"ok":"bad";
+      return `<li class="${c}"><span class="pos">${i+1}</span><span class="txt">${esc(t)}</span>${locked?"":`<span class="mv"><button type="button" data-act="up" data-i="${i}" aria-label="Move up: ${esc(t)}"${i===0?" disabled":""}>&#9650;</button><button type="button" data-act="down" data-i="${i}" aria-label="Move down: ${esc(t)}"${i===list.length-1?" disabled":""}>&#9660;</button></span>`}</li>`;
+    }).join("")}</ol>
+    ${reveal&&!isCorrect(it)?`<div class="solution"><b>Correct order</b><ol style="margin:8px 0 0;padding-left:22px">${it.answer.map(t=>`<li>${esc(t)}</li>`).join("")}</ol></div>`:""}`;
+  }
+  if(it.kind==="match"){
+    const cur=a||[];
+    return `<p class="hint">Pick one term for each description. Some terms will not be used.</p>
+    <div class="match">${it.rows.map((r,i)=>{
+      const v=cur[i]||"";let c="mrow";if(reveal)c+=v===r.a?" ok":" bad";
+      return `<div class="${c}"><div>${esc(r.d)}</div><select data-act="sel" data-i="${i}" ${locked?"disabled":""} aria-label="Term for: ${esc(r.d)}"><option value="">Select</option>${it.terms.map(t=>`<option value="${esc(t)}"${v===t?" selected":""}>${esc(t)}</option>`).join("")}</select>${reveal&&v!==r.a?`<div class="ans">Correct answer: ${r.a}</div>`:""}</div>`;
+    }).join("")}</div>`;
+  }
+  if(it.kind==="grid"){
+    const cur=a||[];
+    return `<p class="hint">Check every edition that includes the feature.</p>
+    <div class="gridwrap"><table class="gtab"><thead><tr><th scope="col">Feature</th>${it.cols.map(c=>`<th scope="col">${c}</th>`).join("")}</tr></thead><tbody>${it.rows.map((r,ri)=>{
+      const sel=cur[ri]||[];let c="";
+      if(reveal)c=[...sel].sort().join()===[...r.a].sort().join()?"ok":"bad";
+      return `<tr class="${c}"><th scope="row">${esc(r.d)}${reveal&&c==="bad"?`<div class="ans">Correct: ${r.a.join(", ")}</div>`:""}</th>${it.cols.map(col=>`<td><input type="checkbox" data-act="gridc" data-r="${ri}" data-c="${col}" aria-label="${esc(r.d)}: ${col}" ${sel.includes(col)?"checked":""} ${locked?"disabled":""}></td>`).join("")}</tr>`;
+    }).join("")}</tbody></table></div>`;
+  }
+}
+
+function renderCard(focusSel){
+  const it=S.items[S.idx], reveal=S.mode==="study"&&!!S.checked[it.id];
+  const last=S.idx===S.items.length-1;
+  const flagged=S.flags.has(it.id);
+  let banner="";
+  if(reveal){
+    const ok=isCorrect(it);
+    let t=ok?"Correct.":"Not quite.";
+    if(!ok&&it.kind==="mc")t+=" The correct answer"+(it.a.length>1?"s are ":" is ")+it.a.map(i=>LET[i]).join(" and ")+".";
+    banner=`<div class="banner ${ok?"ok":"bad"}" role="status">${t}</div>`;
+  }
+  document.getElementById("qcard").innerHTML=`
+    <div class="qmeta">
+      <span class="qnum">Question ${S.idx+1}</span><span class="qid">${it.id}</span>
+      ${it.diff?`<span class="tag diff-${esc(it.diff)}">${diffLabel(it.diff)}</span>`:""}
+      ${it.kind!=="mc"?`<span class="tag pb">Performance-based</span>`:(it.a.length>1?`<span class="tag">Choose ${it.a.length}</span>`:"")}
+      <button class="btn ghost flagbtn" data-act="flag" aria-pressed="${flagged}">${flagged?"Flagged for review":"Flag for review"}</button>
+    </div>
+    <div class="qtext">${esc(it.q)}</div>
+    ${S.mode==="study"?sourceLine(it):""}
+    ${itemBody(it,{reveal,locked:reveal})}
+    ${banner}
+    <div class="foot">
+      <button class="btn" data-act="prev"${S.idx===0?" disabled":""}>Previous</button>
+      ${S.mode==="study"&&!reveal?`<button class="btn primary" data-act="check"${isAnswered(it)?"":" disabled"}>Check answer</button>`:""}
+      <button class="btn ${last?"primary":""} sp" data-act="${last?"finish":"next"}">${last?"Finish":"Next"}</button>
+    </div>`;
+  if(focusSel){const el=document.querySelector(focusSel);if(el)el.focus();}
+}
+function syncCheckBtn(){
+  const b=document.querySelector('[data-act="check"]');
+  if(b)b.disabled=!isAnswered(S.items[S.idx]);
+}
+
+/* ---------- INTERACTION ---------- */
+function go(i){if(i<0||i>=S.items.length)return;S.idx=i;renderNav();renderCard();window.scrollTo({top:0});}
+function toggleOpt(i){
+  const it=S.items[S.idx];
+  if(it.kind!=="mc"||(S.mode==="study"&&S.checked[it.id]))return;
+  let a=[...(S.ans[it.id]||[])];
+  if(it.a.length>1){
+    if(a.includes(i))a=a.filter(x=>x!==i);else{a.push(i);if(a.length>it.a.length)a.shift();}
+  }else a=[i];
+  S.ans[it.id]=a;
+  document.querySelectorAll("#qcard .opt").forEach((el,k)=>{
+    const s=a.includes(k);el.classList.toggle("sel",s);el.setAttribute("aria-checked",s);
+  });
+  renderNav();syncCheckBtn();
+}
+function moveOrder(i,d){
+  const it=S.items[S.idx];
+  const list=[...(S.ans[it.id]||S.orderInit[it.id])];
+  const j=i+d;if(j<0||j>=list.length)return;
+  [list[i],list[j]]=[list[j],list[i]];
+  S.ans[it.id]=list;
+  renderCard(`[data-act="${d<0?"up":"down"}"][data-i="${j}"]:not([disabled])`);
+  if(!document.activeElement||document.activeElement===document.body)renderCard();
+  renderNav();
+}
+app.addEventListener("click",e=>{
+  const t=e.target.closest("[data-act]"); if(!t)return;
+  const act=t.dataset.act;
+  if(!S&&act!=="x")return;
+  if(S&&S.done)return;
+  if(act==="opt")toggleOpt(+t.dataset.i);
+  else if(act==="goto")go(+t.dataset.i);
+  else if(act==="prev")go(S.idx-1);
+  else if(act==="next")go(S.idx+1);
+  else if(act==="up")moveOrder(+t.dataset.i,-1);
+  else if(act==="down")moveOrder(+t.dataset.i,1);
+  else if(act==="flag"){const id=S.items[S.idx].id;S.flags.has(id)?S.flags.delete(id):S.flags.add(id);renderNav();renderCard(`[data-act="flag"]`);}
+  else if(act==="check"){const id=S.items[S.idx].id;S.checked[id]=true;renderNav();renderCard();}
+  else if(act==="finish")confirmFinish();
+});
+app.addEventListener("input",e=>{
+  if(!S||S.done)return;
+  const t=e.target;
+  if(t.dataset.act==="cmd"){S.ans[S.items[S.idx].id]=t.value;renderNav();syncCheckBtn();}
+});
+app.addEventListener("change",e=>{
+  if(!S||S.done)return;
+  const t=e.target;
+  if(t.dataset.act==="gridc"){
+    const it=S.items[S.idx];
+    const a=S.ans[it.id]||it.rows.map(()=>[]);
+    const r=+t.dataset.r,c=t.dataset.c;
+    a[r]=t.checked?[...a[r].filter(x=>x!==c),c]:a[r].filter(x=>x!==c);
+    S.ans[it.id]=a;renderNav();syncCheckBtn();
+  }
+  if(t.dataset.act==="sel"){
+    const it=S.items[S.idx];
+    const a=S.ans[it.id]||new Array(it.rows.length).fill("");
+    a[+t.dataset.i]=t.value;S.ans[it.id]=a;renderNav();syncCheckBtn();
+  }
+});
+app.addEventListener("keydown",e=>{
+  if(e.target.dataset&&e.target.dataset.act==="cmd"&&e.key==="Enter"){e.preventDefault();
+    if(S.mode==="study"&&!S.checked[S.items[S.idx].id]&&isAnswered(S.items[S.idx])){S.checked[S.items[S.idx].id]=true;renderNav();renderCard();}
+    else go(S.idx+1);}
+});
+document.addEventListener("keydown",e=>{
+  if(!S||S.done||document.querySelector(".scrim"))return;
+  const tag=(e.target.tagName||"").toLowerCase();
+  if(tag==="input"||tag==="select"||tag==="textarea"||e.ctrlKey||e.metaKey||e.altKey)return;
+  const it=S.items[S.idx];
+  if(e.key==="ArrowRight")go(S.idx+1);
+  else if(e.key==="ArrowLeft")go(S.idx-1);
+  else if(it.kind==="mc"&&/^[a-g]$/i.test(e.key)){const i=e.key.toLowerCase().charCodeAt(0)-97;if(i<it.o.length)toggleOpt(i);}
+});
+
+/* ---------- FINISH ---------- */
+function confirmFinish(){
+  const un=S.items.filter(it=>!isAnswered(it)).length, fl=S.flags.size;
+  const bits=[];
+  if(un)bits.push(`${un} unanswered`);
+  if(fl)bits.push(`${fl} flagged for review`);
+  const s=document.createElement("div");
+  s.className="scrim";
+  s.innerHTML=`<div class="modal" role="dialog" aria-modal="true" aria-labelledby="mt">
+    <h2 id="mt">Finish and see your score?</h2>
+    <p>${bits.length?"You still have "+bits.join(" and ")+". ":""}You can't change answers after you finish.</p>
+    <div class="row"><button class="btn" id="mc">Keep working</button><button class="btn primary" id="mf">Finish and score</button></div></div>`;
+  document.body.appendChild(s);
+  const close=()=>s.remove();
+  s.querySelector("#mc").onclick=close;
+  s.querySelector("#mf").onclick=()=>{close();finish();};
+  s.addEventListener("keydown",e=>{if(e.key==="Escape")close();});
+  s.querySelector("#mf").focus();
+}
+function finish(){
+  if(!S||S.done)return;
+  clearInterval(timerId);
+  document.querySelectorAll(".scrim").forEach(x=>x.remove());
+  S.done=true;S.endedAt=Date.now();
+  const correct=S.items.filter(isCorrect).length;
+  S.pct=Math.round(correct/S.items.length*100);
+  if(S.len)saveBest(S.len,S.pct);
+  renderResults();
+  window.scrollTo(0,0);
+}
+
+/* ---------- RESULTS ---------- */
+function renderResults(){
+  const items=S.items, total=items.length;
+  const correct=items.filter(isCorrect);
+  const unans=items.filter(it=>!isAnswered(it));
+  const wrong=items.filter(it=>isAnswered(it)&&!isCorrect(it));
+  const pb=items.filter(it=>it.kind!=="mc"), mcs=items.filter(it=>it.kind==="mc");
+  const used=fmt(Math.min(S.endedAt-S.startAt,S.endAt?S.endAt-S.startAt:Infinity));
+  const missed=[...wrong,...unans];
+  app.innerHTML=`
+  <div class="results">
+    <div class="score"><div class="pct">${S.pct}%</div><p>${correct.length} of ${total} correct</p></div>
+    <div class="stats">
+      <div class="stat"><b>${correct.length}</b><span>Correct</span></div>
+      <div class="stat"><b>${wrong.length}</b><span>Incorrect</span></div>
+      <div class="stat"><b>${unans.length}</b><span>Unanswered</span></div>
+      ${pb.length?`<div class="stat"><b>${pb.filter(isCorrect).length} / ${pb.length}</b><span>Performance-based</span></div>`:""}
+      <div class="stat"><b>${mcs.filter(isCorrect).length} / ${mcs.length}</b><span>Multiple choice</span></div>
+      <div class="stat"><b>${used}</b><span>Time used</span></div>
+    </div>
+    <div class="actions">
+      ${missed.length?`<button class="btn primary" id="again">Practice ${missed.length} missed question${missed.length===1?"":"s"}</button>`:""}
+      <button class="btn" id="new">New exam</button>
+    </div>
+    <h2>Review</h2>
+    <div class="filters" role="group" aria-label="Filter review">
+      ${[["all","All ("+total+")"],["bad","Incorrect ("+wrong.length+")"],["na","Unanswered ("+unans.length+")"],["flag","Flagged ("+S.flags.size+")"]].map(([k,l])=>`<button class="btn" data-f="${k}" aria-pressed="${S.filter===k}">${l}</button>`).join("")}
+    </div>
+    <div id="review"></div>
+  </div>`;
+  document.getElementById("new").onclick=renderStart;
+  const ag=document.getElementById("again");
+  if(ag)ag.onclick=()=>begin(missed.map(m=>m),"study",0,null);
+  document.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{S.filter=b.dataset.f;document.querySelectorAll("[data-f]").forEach(x=>x.setAttribute("aria-pressed",x===b));renderReview();});
+  renderReview();
+}
+function renderReview(){
+  const list=S.items.map((it,i)=>({it,i})).filter(({it})=>{
+    const f=S.filter;
+    if(f==="all")return true;
+    if(f==="bad")return isAnswered(it)&&!isCorrect(it);
+    if(f==="na")return !isAnswered(it);
+    if(f==="flag")return S.flags.has(it.id);
+  });
+  const box=document.getElementById("review");
+  if(!list.length){box.innerHTML=`<div class="empty">Nothing here. Try a different filter.</div>`;return;}
+  box.innerHTML=list.map(({it,i})=>{
+    const ok=isCorrect(it), na=!isAnswered(it);
+    const cls=ok?"ok":na?"na":"bad", v=ok?"Correct":na?"Not answered":"Incorrect";
+    return `<article class="rev ${cls}">
+      <div class="qmeta"><span class="qnum">Question ${i+1}</span><span class="qid">${it.id}</span>${it.diff?`<span class="tag diff-${esc(it.diff)}">${diffLabel(it.diff)}</span>`:""}<span class="verdict ${cls}">${v}</span>${it.kind!=="mc"?`<span class="tag pb">Performance-based</span>`:""}${S.flags.has(it.id)?`<span class="tag pb">Flagged</span>`:""}</div>
+      <div class="qtext">${esc(it.q)}</div>
+      ${sourceLine(it)}
+      ${itemBody(it,{reveal:true,locked:true})}
+    </article>`;
+  }).join("");
+}
+
+renderStart();
+</script>
+</body>
+</html>

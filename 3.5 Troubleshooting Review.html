@@ -212,6 +212,7 @@
         <button type="button" data-mode="32">3.2 Mobile OS / apps</button>
         <button type="button" data-mode="33-34">3.3 + 3.4 Security (2 tickets)</button>
       </div>
+      <p id="modeNote" style="margin-top:0.75rem; max-width:68ch;"></p>
       <div class="meta">
         <span class="pill" id="progress">Problem 1 of 12</span>
         <span class="pill" id="score">0 checked out</span>
@@ -397,123 +398,126 @@ const MODES = {
   "32": {
     label: "3.2 Mobile OS / apps",
     guide: "3.2 Troubleshoot Mobile OS and Application Issues.html",
+    note: "3.2 reuses one short toolkit. Restart, Update the app, Reinstall, Storage, Network, Payment, and MDM are the same catalog line every time — add them only when that ticket actually needs them.",
     extras: [],
     problems: [
       {
         id: "app-launch",
         name: "Application fails to launch",
-        blurb: "A mobile app will not open. Clear memory, patch bugs, or replace the install.",
+        blurb: "A mobile app will not open. Use the shared toolkit: restart, then patch or replace the install.",
         steps: [
-          "Restart the mobile device to clear memory and stored caches",
-          "Check for and install application updates to fix potential software bugs",
-          "Delete and reinstall the application from the app store"
+          "Restart the device",
+          "Update the app",
+          "Reinstall the app"
         ]
       },
       {
         id: "app-crash",
         name: "Application fails to close / crashes",
-        blurb: "The app hangs or crashes instead of closing cleanly.",
+        blurb: "The app hangs or crashes instead of closing cleanly. Force-close first, then the same restart / update / reinstall path.",
         steps: [
-          "Force close the application (iOS slide off list / Android Force Stop)",
-          "Restart the mobile device",
-          "Update the application or perform a complete uninstall and reinstall",
-          "Technical support teams can also examine crash logs"
+          "Force close the app",
+          "Restart the device",
+          "Update the app",
+          "Reinstall the app",
+          "Review crash logs / contact support"
         ]
       },
       {
         id: "app-update",
         name: "Application fails to update",
-        blurb: "The app store will not update this app.",
+        blurb: "The store will not patch this app. Same blockers as a failed install, plus restart.",
         steps: [
-          "Manually trigger the update or choose Update All in the app store",
-          "Verify a valid, current payment method is on file",
-          "Check network/internet connectivity",
-          "Verify sufficient available storage space",
-          "Restart the device to clear pending updates",
-          "Check for MDM corporate policy restrictions or app store outages"
+          "Update the app",
+          "Check payment method",
+          "Check network / try another network",
+          "Check storage space",
+          "Restart the device",
+          "Check MDM policy"
         ]
       },
       {
         id: "app-install",
         name: "Application fails to install",
-        blurb: "The store download or install fails before the app appears.",
+        blurb: "The store download fails before the app appears. Storage, payment, network, MDM — not restart.",
         steps: [
-          "Check for sufficient free storage space",
-          "Ensure a valid payment method is configured in the app store account",
-          "Verify network connectivity or move to an unfiltered network",
-          "Confirm MDM policies permit application installation"
+          "Check storage space",
+          "Check payment method",
+          "Check network / try another network",
+          "Check MDM policy"
         ]
       },
       {
         id: "slow-response",
         name: "Slow to respond",
-        blurb: "The phone or tablet feels sluggish when opening apps or switching screens.",
+        blurb: "The phone or tablet feels sluggish. Restart, then patch software.",
         steps: [
-          "Perform a device restart to free up resources and clear cache",
-          "Update the application or operating system to resolve underlying bugs"
+          "Restart the device",
+          "Update the app",
+          "Update the OS"
         ]
       },
       {
         id: "os-update",
         name: "OS fails to update",
-        blurb: "The mobile OS patch will not download or install.",
+        blurb: "The OS patch will not download or install. Storage and network first, then restart.",
         steps: [
-          "Free up storage space — OS patches require significant capacity",
-          "Connect to a high-speed network with adequate bandwidth",
-          "Change networks if content filtering blocks update servers",
-          "Restart the device and attempt the update again"
+          "Check storage space",
+          "Check network / try another network",
+          "Restart the device"
         ]
       },
       {
         id: "battery",
         name: "Battery life issues",
-        blurb: "The battery drains faster than expected.",
+        blurb: "The battery drains faster than expected. Radios and health — not the app-install toolkit.",
         steps: [
-          "Enable Airplane Mode in low or no coverage areas",
-          "Turn off unused features like Wi-Fi, Bluetooth, or GPS",
-          "Check battery health and usage history under Settings > Battery",
-          "Replace old or degraded batteries"
+          "Airplane Mode (poor coverage)",
+          "Turn off unused radios (Wi-Fi, Bluetooth, GPS)",
+          "Check battery health",
+          "Replace the battery"
         ]
       },
       {
         id: "reboots",
         name: "Random reboots",
-        blurb: "The device restarts on its own.",
+        blurb: "The device restarts on its own. Patch software, then battery and logs.",
         steps: [
-          "Update the OS and all installed applications",
-          "Review crash logs or contact support to check for hardware failures",
-          "Inspect battery health"
+          "Update the OS",
+          "Update the app",
+          "Review crash logs / contact support",
+          "Check battery health"
         ]
       },
       {
         id: "wifi",
         name: "Connectivity issues — Wi-Fi",
-        blurb: "The mobile device will not stay on Wi-Fi or cannot join the AP.",
+        blurb: "Will not join or stay on Wi-Fi. Toggle the radio, then password / distance / restart.",
         steps: [
-          "Ensure Wi-Fi is toggled on",
-          "Verify security keys and settings match the access point",
-          "Move closer to the access point or connect to a different network",
-          "Restart the mobile device"
+          "Toggle the radio off and on (Wi-Fi / Bluetooth / NFC)",
+          "Verify Wi-Fi password / AP settings",
+          "Check network / try another network",
+          "Restart the device"
         ]
       },
       {
         id: "bluetooth",
         name: "Connectivity issues — Bluetooth",
-        blurb: "Pairing or a Bluetooth accessory drops out.",
+        blurb: "Pairing drops. Toggle the radio and restart; AirDrop also needs Wi-Fi and distance.",
         steps: [
-          "Confirm Bluetooth is enabled",
-          "Toggle Bluetooth off and on, or restart the device to re-establish pairings",
-          "Enable Bluetooth (and Wi-Fi) for proximity tools like AirDrop and move devices closer"
+          "Toggle the radio off and on (Wi-Fi / Bluetooth / NFC)",
+          "Restart the device",
+          "AirDrop: Bluetooth + Wi-Fi on; move closer"
         ]
       },
       {
         id: "nfc",
         name: "Connectivity issues — NFC",
-        blurb: "Tap-to-pay or NFC sharing is not working.",
+        blurb: "Tap-to-pay or NFC sharing fails. Toggle, restart, then wallet cards.",
         steps: [
-          "Toggle NFC off and on",
+          "Toggle the radio off and on (Wi-Fi / Bluetooth / NFC)",
           "Restart the device",
-          "Ensure linked credit cards and payment details are up to date"
+          "Update linked payment cards"
         ]
       },
       {
@@ -521,10 +525,10 @@ const MODES = {
         name: "Screen does not autorotate",
         blurb: "The display stays portrait or landscape when the device is turned.",
         steps: [
-          "Check if the screen orientation lock is enabled",
-          "Close and reopen the stuck application",
-          "Restart the mobile device",
-          "Contact device support if the G-sensor/accelerometer has failed"
+          "Check orientation lock",
+          "Close and reopen the app",
+          "Restart the device",
+          "Hardware failure — contact support"
         ]
       }
     ]
@@ -604,6 +608,7 @@ function setMode(id) {
   modeId = id;
   document.querySelectorAll(".modes button").forEach((b) => b.classList.toggle("on", b.dataset.mode === id));
   $("guideLink").href = mode().guide;
+  $("modeNote").textContent = mode().note || "";
   const params = new URLSearchParams(location.search);
   params.set("mode", id);
   history.replaceState(null, "", "?" + params.toString());
