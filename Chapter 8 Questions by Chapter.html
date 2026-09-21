@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chapter 8 · Questions by Chapter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDF0F4; --panel:#FFFFFF; --ink:#17202B; --muted:#586577; --line:#D3D9E1;
+  --accent:#2456D6; --accent-ink:#FFFFFF; --sel-bg:#E5ECFC;
+  --ok:#17794F; --ok-bg:#E2F3EA; --bad:#B4372A; --bad-bg:#FBE9E6;
+  --flag:#A86A00; --flag-bg:#FFF0CF;
+  --sans:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  box-sizing:border-box;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F141B; --panel:#171F29; --ink:#E6EBF2; --muted:#96A3B5; --line:#2A3543;
+    --accent:#7BA0FF; --accent-ink:#0B1220; --sel-bg:#1D2B49;
+    --ok:#5CCB94; --ok-bg:#12301F; --bad:#FF8D7B; --bad-bg:#37201C;
+    --flag:#F0B450; --flag-bg:#332810;
+  }
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:92px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.5}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+h1,h2,h3,p{margin:0}
+
+.topbar{
+  position:sticky;top:0;z-index:20;
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;
+  padding:10px 20px;background:var(--panel);border-bottom:1px solid var(--line);
+}
+.topbar .back{font-weight:700;white-space:nowrap}
+.topbar .title{font-weight:700;margin-right:auto}
+.topbar .title small{display:block;font-weight:400;color:var(--muted);font-size:.85rem}
+
+.wrap{max-width:1100px;margin:0 auto;padding:22px 20px 72px}
+.lede{color:var(--muted);max-width:62ch;margin:0 0 18px}
+
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:.45rem .9rem;font-weight:700;min-height:40px}
+.btn:hover{border-color:var(--accent)}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn.ghost{background:transparent}
+.search{
+  width:min(420px,100%);min-height:42px;border:1.5px solid var(--line);border-radius:10px;
+  background:var(--panel);padding:0 12px;margin:0 0 18px;
+}
+.search:focus{border-color:var(--accent);outline:0}
+
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:22px}
+.toc{
+  align-self:start;position:sticky;top:76px;
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;
+}
+.toc h2{font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:10px}
+.toc a{display:flex;justify-content:space-between;gap:8px;padding:5px 0;font-size:.92rem;color:inherit}
+.toc a:hover{color:var(--accent);text-decoration:none}
+.toc .n{color:var(--muted);font-family:var(--mono);font-size:.82rem}
+
+.unit{margin-bottom:28px}
+.unit h2{
+  font-size:1.25rem;margin-bottom:4px;
+  padding-bottom:8px;border-bottom:1px solid var(--line);
+}
+.unit h2 a{color:inherit}
+.unit .count{color:var(--muted);font-weight:400;font-size:1rem}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:12px}
+.qmeta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:12px}
+.qid{color:var(--muted);font-size:.9rem;font-family:var(--mono)}
+.tag{font-size:.78rem;font-weight:700;background:var(--sel-bg);color:var(--accent);padding:2px 10px;border-radius:99px}
+.tag.pb{background:var(--flag-bg);color:var(--flag)}
+.tag.diff-easy{background:var(--ok-bg);color:var(--ok)}
+.tag.diff-medium{background:var(--flag-bg);color:var(--flag)}
+.tag.diff-hard{background:var(--bad-bg);color:var(--bad)}
+.qsrc{margin:-2px 0 14px;font-size:.92rem}
+.qsrc .where{color:var(--muted);font-weight:400}
+.qtext{white-space:pre-line;font-size:1.05rem;max-width:72ch;margin-bottom:14px}
+.opts{display:grid;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--panel)}
+.opt .ltr{flex:none;width:28px;height:28px;border:1.5px solid var(--muted);border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:.88rem}
+.opt.correct{background:var(--ok-bg);border-color:var(--ok)}
+.opt.correct .ltr{background:var(--ok);border-color:var(--ok);color:var(--bg)}
+.opt .badge{margin-left:auto;font-size:.8rem;font-weight:700;color:var(--ok)}
+.solution{margin-top:8px;padding:12px 14px;border-radius:10px;background:var(--ok-bg);border:1px solid var(--ok);max-width:720px}
+.solution code{font-family:var(--mono);font-weight:600;word-break:break-all}
+.order{list-style:none;margin:0;padding:0;display:grid;gap:6px;max-width:640px}
+.order li{display:flex;gap:12px;border:1.5px solid var(--ok);border-radius:10px;padding:8px 12px;background:var(--ok-bg)}
+.order .pos{flex:none;width:28px;font-family:var(--mono);font-weight:600;color:var(--muted)}
+.match{display:grid;gap:8px;max-width:760px}
+.mrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;border:1.5px solid var(--ok);border-radius:10px;padding:10px 12px;background:var(--ok-bg)}
+.mrow b{font-family:var(--mono);font-size:.95rem}
+.gridwrap{overflow-x:auto;max-width:760px}
+.gtab{border-collapse:separate;border-spacing:0 8px;width:100%}
+.gtab th,.gtab td{padding:10px 12px;text-align:left;background:var(--ok-bg);border-top:1.5px solid var(--ok);border-bottom:1.5px solid var(--ok)}
+.gtab thead th{background:transparent;border:0;padding:0 12px 2px}
+.gtab thead th:not(:first-child),.gtab td{text-align:center}
+.gtab tbody th{border-left:1.5px solid var(--ok);border-radius:10px 0 0 10px;font-weight:400}
+.gtab td:last-child{border-right:1.5px solid var(--ok);border-radius:0 10px 10px 0}
+.empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px}
+.ans{display:none}
+.card.open .ans{display:block}
+.card.open [data-act="toggle"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+@media (max-width:860px){
+  .layout{grid-template-columns:1fr}
+  .toc{position:static}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="back" href="index.html">← Index</a>
+  <div class="title">Chapter 8 · Questions by chapter <small>Exam A and Exam B, grouped by unit</small></div>
+  <a class="btn ghost" href="practice-exam-a.html">Practice exams</a>
+</header>
+<div class="wrap">
+  <p class="lede">Every question from both practice exams, sorted into Chapters 1–4. Open a card to see the answer, or jump to the study guide for that unit.</p>
+  <div class="filters" id="chTabs" role="tablist" aria-label="Chapter"></div>
+  <input class="search" id="q" type="search" placeholder="Search questions, units, or IDs" aria-label="Search questions">
+  <div class="filters">
+    <button class="btn" type="button" id="showAll">Show all answers</button>
+    <button class="btn ghost" type="button" id="hideAll">Hide answers</button>
+  </div>
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Units in this chapter"></nav>
+    <main id="list"></main>
+  </div>
+</div>
+<script src="exam-data.js"></script>
+<script>
+const CHAPTERS = {
+  "1":"Operating Systems",
+  "2":"Security",
+  "3":"Software Troubleshooting",
+  "4":"Operational Procedures"
+};
+function unitTitle(u){
+  const f=UNIT_FILE[u];
+  return f ? f.replace(/\.html$/i,"") : "Unit "+u;
+}
+function unitId(u){return "unit-"+String(u).replace(".","-");}
+function examOf(it){return String(it.id||"").charAt(0)==="B"?"Exam B":"Exam A";}
+function parseHash(){
+  const h=(location.hash||"").replace(/^#/,"");
+  if(/^ch-?[1-4]$/i.test(h) || /^[1-4]$/.test(h)) return {ch:h.replace(/^ch-?/i,""), unit:null};
+  const u=h.replace(/^u-?/i,"");
+  if(/^\d+\.\d+$/.test(u)) return {ch:u.split(".")[0], unit:u};
+  return {ch:"all", unit:null};
+}
+function setHash(ch, unit){
+  const next = unit ? unit : (ch && ch!=="all" ? "ch-"+ch : "");
+  const cur=(location.hash||"").replace(/^#/,"");
+  if(cur===next) return;
+  history.replaceState(null,"", next ? "#"+next : location.pathname+location.search);
+}
+function filtered(){
+  const {ch}=parseHash();
+  const q=(document.getElementById("q").value||"").trim().toLowerCase();
+  let items=ALL_QUESTIONS.filter(it=>it.unit);
+  if(ch && ch!=="all") items=items.filter(it=>chapterOf(it)===ch);
+  if(q){
+    items=items.filter(it=>{
+      const blob=[it.id,it.unit,it.q,it.loc||"",examOf(it),(it.o||[]).join(" ")].join(" ").toLowerCase();
+      return blob.includes(q);
+    });
+  }
+  items.sort((a,b)=>{
+    const ra=unitRank(a.unit), rb=unitRank(b.unit);
+    if(ra!==rb) return ra-rb;
+    return String(a.id).localeCompare(String(b.id),undefined,{numeric:true});
+  });
+  const map=new Map();
+  for(const it of items){
+    if(!map.has(it.unit)) map.set(it.unit,[]);
+    map.get(it.unit).push(it);
+  }
+  return {ch, items, map};
+}
+function answerBody(it){
+  if(it.kind==="mc"){
+    return `<div class="opts">`+it.o.map((t,i)=>{
+      const ok=it.a.includes(i);
+      return `<div class="opt${ok?" correct":""}"><span class="ltr">${LET[i]}</span><span class="txt">${esc(t)}</span>${ok?`<span class="badge">Correct</span>`:""}</div>`;
+    }).join("")+`</div>`;
+  }
+  if(it.kind==="cmd"){
+    return `<div class="solution">Accepted answer: <code>${esc(it.solution)}</code></div>`;
+  }
+  if(it.kind==="order"){
+    return `<ol class="order">${it.answer.map((t,i)=>`<li><span class="pos">${i+1}</span><span class="txt">${esc(t)}</span></li>`).join("")}</ol>`;
+  }
+  if(it.kind==="match"){
+    return `<div class="match">${it.rows.map(r=>`<div class="mrow"><div>${esc(r.d)}</div><b>${esc(r.a)}</b></div>`).join("")}</div>`;
+  }
+  if(it.kind==="grid"){
+    return `<div class="gridwrap"><table class="gtab"><thead><tr><th>Feature</th>${it.cols.map(c=>`<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${it.rows.map(r=>`<tr><th>${esc(r.d)}</th>${it.cols.map(c=>`<td>${r.a.includes(c)?"✓":""}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  }
+  return "";
+}
+function renderTabs(ch){
+  const counts={all:ALL_QUESTIONS.filter(it=>it.unit).length};
+  for(const k of Object.keys(CHAPTERS)) counts[k]=ALL_QUESTIONS.filter(it=>chapterOf(it)===k).length;
+  document.getElementById("chTabs").innerHTML=
+    [["all","All chapters"]].concat(Object.entries(CHAPTERS).map(([k,t])=>[k,"Ch "+k+" · "+t]))
+    .map(([k,label])=>`<button class="btn" type="button" data-ch="${k}" aria-pressed="${ch===k}">${label} (${counts[k]})</button>`)
+    .join("");
+}
+function render(){
+  const {ch, items, map}=filtered();
+  renderTabs(ch);
+  const toc=document.getElementById("toc");
+  const list=document.getElementById("list");
+  if(!items.length){
+    toc.innerHTML=`<h2>Units</h2><p class="lede">Nothing matches.</p>`;
+    list.innerHTML=`<div class="empty">No questions match this filter.</div>`;
+    return;
+  }
+  toc.innerHTML=`<h2>Units (${map.size})</h2>`+[...map.entries()].map(([u,arr])=>
+    `<a href="#${unitId(u)}"><span>${esc(unitTitle(u))}</span><span class="n">${arr.length}</span></a>`
+  ).join("");
+  list.innerHTML=[...map.entries()].map(([u,arr])=>`
+    <section class="unit" id="${unitId(u)}">
+      <h2><a href="${esc(sourceHref({unit:u,hash:""})||"#")}">${esc(unitTitle(u))}</a> <span class="count">(${arr.length})</span></h2>
+      ${arr.map(it=>`
+        <article class="card" data-id="${esc(it.id)}">
+          <div class="qmeta">
+            <span class="qid">${esc(it.id)}</span>
+            <span class="tag">${examOf(it)}</span>
+            ${it.diff?`<span class="tag diff-${esc(it.diff)}">${diffLabel(it.diff)}</span>`:""}
+            ${it.kind!=="mc"?`<span class="tag pb">Performance-based</span>`:""}
+            <button class="btn" type="button" data-act="toggle" style="margin-left:auto;min-height:36px;padding:.25rem .75rem">Show answer</button>
+          </div>
+          <div class="qtext">${esc(it.q)}</div>
+          ${sourceLine(it)}
+          <div class="ans">${answerBody(it)}</div>
+        </article>`).join("")}
+    </section>`).join("");
+}
+function applyOpen(open){
+  document.querySelectorAll(".card").forEach(card=>{
+    card.classList.toggle("open", open);
+    const b=card.querySelector("[data-act=toggle]");
+    if(b) b.textContent=open?"Hide answer":"Show answer";
+  });
+}
+document.getElementById("chTabs").addEventListener("click",e=>{
+  const b=e.target.closest("[data-ch]"); if(!b) return;
+  setHash(b.dataset.ch, null);
+  render();
+  window.scrollTo({top:0});
+});
+document.getElementById("q").addEventListener("input",()=>render());
+document.getElementById("showAll").onclick=()=>applyOpen(true);
+document.getElementById("hideAll").onclick=()=>applyOpen(false);
+document.getElementById("list").addEventListener("click",e=>{
+  const b=e.target.closest("[data-act=toggle]"); if(!b) return;
+  const card=b.closest(".card");
+  const open=!card.classList.contains("open");
+  card.classList.toggle("open", open);
+  b.textContent=open?"Hide answer":"Show answer";
+});
+function scrollToUnit(unit){
+  if(!unit) return;
+  const el=document.getElementById(unitId(unit));
+  if(el) el.scrollIntoView();
+}
+window.addEventListener("hashchange",()=>{
+  const h=(location.hash||"").replace(/^#/,"");
+  if(/^unit-\d+-\d+$/.test(h)){
+    const el=document.getElementById(h);
+    if(el) el.scrollIntoView();
+    return;
+  }
+  render();
+  scrollToUnit(parseHash().unit);
+});
+render();
+scrollToUnit(parseHash().unit);
+</script>
+</body>
+</html>
