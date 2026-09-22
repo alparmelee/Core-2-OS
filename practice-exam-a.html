@@ -154,6 +154,9 @@ legend{font-weight:700;margin-bottom:10px;padding:0}
 .banner{margin-top:18px;padding:12px 14px;border-radius:10px;font-weight:700;max-width:72ch}
 .banner.ok{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok)}
 .banner.bad{background:var(--bad-bg);color:var(--bad);border:1px solid var(--bad)}
+.why{margin-top:14px;padding:14px 16px;border-radius:10px;background:var(--sel-bg);border:1px solid var(--line);max-width:72ch}
+.why h3{font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 8px}
+.why p{margin:0}
 .foot{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px;padding-top:18px;border-top:1px solid var(--line)}
 .foot .sp{margin-left:auto}
 
@@ -214,6 +217,7 @@ legend{font-weight:700;margin-bottom:10px;padding:0}
 <div id="app"></div>
 
 <script src="exam-data.js"></script>
+<script src="exam-explain.js"></script>
 <script>
 /* ---------- ENGINE ---------- */
 const app = document.getElementById("app");
@@ -432,6 +436,7 @@ function renderCard(focusSel){
     ${S.mode==="study"?sourceLine(it):""}
     ${itemBody(it,{reveal,locked:reveal})}
     ${banner}
+    ${reveal&&it.why?`<div class="why"><h3>Why this answer</h3><p>${esc(it.why)}</p></div>`:""}
     <div class="foot">
       <button class="btn" data-act="prev"${S.idx===0?" disabled":""}>Previous</button>
       ${S.mode==="study"&&!reveal?`<button class="btn primary" data-act="check"${isAnswered(it)?"":" disabled"}>Check answer</button>`:""}
@@ -605,6 +610,7 @@ function renderReview(){
       <div class="qtext">${esc(it.q)}</div>
       ${sourceLine(it)}
       ${itemBody(it,{reveal:true,locked:true})}
+      ${it.why?`<div class="why"><h3>Why this answer</h3><p>${esc(it.why)}</p></div>`:""}
     </article>`;
   }).join("");
 }

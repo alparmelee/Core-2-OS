@@ -267,6 +267,14 @@ def extract_simulator_terms(html: str, section_id: str) -> list[dict]:
 def main():
     all_terms = []
     sections = []
+    existing_scenarios = {}
+    prev_path = ROOT / "chapter1-quiz-data.json"
+    if prev_path.exists():
+        prev = json.loads(prev_path.read_text(encoding="utf-8"))
+        for t in prev.get("terms", []):
+            if t.get("scenario"):
+                existing_scenarios[t["id"]] = t["scenario"]
+                existing_scenarios[(t.get("section"), t.get("name"))] = t["scenario"]
 
     for section_id, filename, title in CHAPTER1:
         path = ROOT / filename
@@ -286,6 +294,9 @@ def main():
                 "name": t["name"],
                 "definition": t["definition"],
             }
+            prev = existing_scenarios.get(entry["id"]) or existing_scenarios.get((section_id, t["name"]))
+            if prev:
+                entry["scenario"] = prev
             section_terms.append(entry)
             all_terms.append(entry)
 
@@ -311,9 +322,12 @@ def main():
     out.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"\nWrote {len(all_terms)} terms to {out.name}")
 
+    js_out = ROOT / "chapter1-quiz-data.js"
+    js_out.write_text("window.QUIZ_DATA = " + json.dumps(data, ensure_ascii=False) + ";\n", encoding="utf-8")
+    print(f"Wrote {js_out.name}")
+
     quiz_html = ROOT / "Chapter 1 Practice Quiz.html"
-    embedded = json.dumps(data, ensure_ascii=False)
-    quiz_html.write_text(QUIZ_PAGE_HTML.replace("/*__QUIZ_DATA__*/", embedded), encoding="utf-8")
+    quiz_html.write_text(QUIZ_PAGE_HTML, encoding="utf-8")
     print(f"Wrote {quiz_html.name}")
 
 
@@ -456,6 +470,12 @@ QUIZ_PAGE_HTML = r"""<!DOCTYPE html>
     line-height:1.35;
     margin:0 0 1.25rem;
   }
+  .prompt-text.is-scenario{
+    font-family:inherit;
+    font-size:1.05rem;
+    font-weight:500;
+    white-space:pre-line;
+  }
   .choices{ display:grid; gap:0.55rem; }
   .choice{
     text-align:left;
@@ -510,12 +530,13 @@ QUIZ_PAGE_HTML = r"""<!DOCTYPE html>
 
     <div data-screen="setup">
       <h1>Chapter 1 Practice Quiz</h1>
-      <p class="subtitle"><span id="term-count">0</span> terms from objectives 1.1–1.11 — study guides and interactive simulators.</p>
+      <p class="subtitle"><span id="term-count">0</span> <span id="pool-kind">terms</span> from objectives 1.1–1.11 — study guides and help-desk scenarios.</p>
       <div class="card">
         <h2>Quiz mode</h2>
         <div class="mode-row">
           <label><input type="radio" name="quiz-mode" value="term-to-def" checked> Term → pick the correct definition</label>
           <label><input type="radio" name="quiz-mode" value="def-to-term"> Definition → pick the correct term</label>
+          <label><input type="radio" name="quiz-mode" value="scenario"> Scenario → pick the term that fits the ticket</label>
         </div>
         <p class="setup-focus" id="setup-focus">Click a section to start instantly.</p>
         <h2>Start a section</h2>
@@ -566,7 +587,7 @@ QUIZ_PAGE_HTML = r"""<!DOCTYPE html>
     </div>
   </div>
 
-  <script>window.QUIZ_DATA = /*__QUIZ_DATA__*/;</script>
+  <script src="chapter1-quiz-data.js"></script>
   <script src="study-quiz.js"></script>
 </body>
 </html>

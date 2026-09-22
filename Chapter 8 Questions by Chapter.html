@@ -87,31 +87,44 @@ h1,h2,h3,p{margin:0}
 .qsrc{margin:-2px 0 14px;font-size:.92rem}
 .qsrc .where{color:var(--muted);font-weight:400}
 .qtext{white-space:pre-line;font-size:1.05rem;max-width:72ch;margin-bottom:14px}
-.opts{display:grid;gap:8px}
+.opts{display:grid;gap:8px;margin-bottom:14px}
 .opt{display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--panel)}
 .opt .ltr{flex:none;width:28px;height:28px;border:1.5px solid var(--muted);border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:.88rem}
-.opt.correct{background:var(--ok-bg);border-color:var(--ok)}
-.opt.correct .ltr{background:var(--ok);border-color:var(--ok);color:var(--bg)}
-.opt .badge{margin-left:auto;font-size:.8rem;font-weight:700;color:var(--ok)}
+.opt .badge{display:none;margin-left:auto;font-size:.8rem;font-weight:700;color:var(--ok)}
+.card.open .opt.correct{background:var(--ok-bg);border-color:var(--ok)}
+.card.open .opt.correct .ltr{background:var(--ok);border-color:var(--ok);color:var(--bg)}
+.card.open .opt.correct .badge{display:block}
+.hint{color:var(--muted);font-size:.92rem;margin:0 0 10px}
+.term{display:flex;align-items:center;gap:10px;background:#141B24;color:#D8E3F0;border-radius:10px;padding:14px 16px;font-family:var(--mono);max-width:640px;margin-bottom:8px}
+.term .prompt{opacity:.7}
+.bank{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+.bank span{border:1px solid var(--line);border-radius:99px;padding:4px 10px;font-family:var(--mono);font-size:.85rem}
 .solution{margin-top:8px;padding:12px 14px;border-radius:10px;background:var(--ok-bg);border:1px solid var(--ok);max-width:720px}
 .solution code{font-family:var(--mono);font-weight:600;word-break:break-all}
 .order{list-style:none;margin:0;padding:0;display:grid;gap:6px;max-width:640px}
-.order li{display:flex;gap:12px;border:1.5px solid var(--ok);border-radius:10px;padding:8px 12px;background:var(--ok-bg)}
+.order li{display:flex;gap:12px;border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:var(--panel)}
+.card.open .order:not(.preview) li{border-color:var(--ok);background:var(--ok-bg)}
 .order .pos{flex:none;width:28px;font-family:var(--mono);font-weight:600;color:var(--muted)}
 .match{display:grid;gap:8px;max-width:760px}
-.mrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;border:1.5px solid var(--ok);border-radius:10px;padding:10px 12px;background:var(--ok-bg)}
+.mrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--panel)}
+.card.open .mrow:not(.preview){border-color:var(--ok);background:var(--ok-bg)}
 .mrow b{font-family:var(--mono);font-size:.95rem}
 .gridwrap{overflow-x:auto;max-width:760px}
 .gtab{border-collapse:separate;border-spacing:0 8px;width:100%}
-.gtab th,.gtab td{padding:10px 12px;text-align:left;background:var(--ok-bg);border-top:1.5px solid var(--ok);border-bottom:1.5px solid var(--ok)}
+.gtab th,.gtab td{padding:10px 12px;text-align:left;background:var(--panel);border-top:1.5px solid var(--line);border-bottom:1.5px solid var(--line)}
+.card.open .gtab:not(.preview) th,.card.open .gtab:not(.preview) td{background:var(--ok-bg);border-color:var(--ok)}
 .gtab thead th{background:transparent;border:0;padding:0 12px 2px}
 .gtab thead th:not(:first-child),.gtab td{text-align:center}
-.gtab tbody th{border-left:1.5px solid var(--ok);border-radius:10px 0 0 10px;font-weight:400}
-.gtab td:last-child{border-right:1.5px solid var(--ok);border-radius:0 10px 10px 0}
+.gtab tbody th{border-left:1.5px solid var(--line);border-radius:10px 0 0 10px;font-weight:400}
+.gtab td:last-child{border-right:1.5px solid var(--line);border-radius:0 10px 10px 0}
+.card.open .gtab:not(.preview) tbody th,.card.open .gtab:not(.preview) td:last-child{border-color:var(--ok)}
 .empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px}
 .ans{display:none}
 .card.open .ans{display:block}
 .card.open [data-act="toggle"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.why{margin-top:14px;padding:14px 16px;border-radius:10px;background:var(--sel-bg);border:1px solid var(--line);max-width:72ch}
+.why h3{font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px}
+.why p{white-space:pre-line}
 @media (max-width:860px){
   .layout{grid-template-columns:1fr}
   .toc{position:static}
@@ -138,6 +151,7 @@ h1,h2,h3,p{margin:0}
   </div>
 </div>
 <script src="exam-data.js"></script>
+<script src="exam-explain.js"></script>
 <script>
 const CHAPTERS = {
   "1":"Operating Systems",
@@ -192,7 +206,18 @@ function filtered(){
   }
   return {ch, items, map};
 }
-function answerBody(it){
+function scramble(id, arr){
+  const a=[...arr];
+  let h=0;
+  for(const c of String(id)) h=(h*31+c.charCodeAt(0))>>>0;
+  for(let i=a.length-1;i>0;i--){
+    h=(Math.imul(h,1664525)+1013904223)>>>0;
+    const j=h%(i+1);
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function promptBody(it){
   if(it.kind==="mc"){
     return `<div class="opts">`+it.o.map((t,i)=>{
       const ok=it.a.includes(i);
@@ -200,10 +225,31 @@ function answerBody(it){
     }).join("")+`</div>`;
   }
   if(it.kind==="cmd"){
+    return `<p class="hint">Enter the command you would run.</p>
+    <div class="term"><span class="prompt">C:\\&gt;</span></div>`;
+  }
+  if(it.kind==="order"){
+    return `<p class="hint">These steps need to be put in order. Show the answer to see the correct sequence.</p>
+    <ol class="order preview">${scramble(it.id,it.answer).map(t=>`<li><span class="txt">${esc(t)}</span></li>`).join("")}</ol>`;
+  }
+  if(it.kind==="match"){
+    return `<p class="hint">Match a term to each description. Some terms will not be used.</p>
+    <div class="match">${it.rows.map(r=>`<div class="mrow preview"><div>${esc(r.d)}</div><b>Select</b></div>`).join("")}</div>
+    <div class="bank">${it.terms.map(t=>`<span>${esc(t)}</span>`).join("")}</div>`;
+  }
+  if(it.kind==="grid"){
+    return `<p class="hint">Check every edition that includes the feature.</p>
+    <div class="gridwrap"><table class="gtab preview"><thead><tr><th>Feature</th>${it.cols.map(c=>`<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${it.rows.map(r=>`<tr><th>${esc(r.d)}</th>${it.cols.map(()=>`<td></td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  }
+  return "";
+}
+function answerBody(it){
+  if(it.kind==="mc") return "";
+  if(it.kind==="cmd"){
     return `<div class="solution">Accepted answer: <code>${esc(it.solution)}</code></div>`;
   }
   if(it.kind==="order"){
-    return `<ol class="order">${it.answer.map((t,i)=>`<li><span class="pos">${i+1}</span><span class="txt">${esc(t)}</span></li>`).join("")}</ol>`;
+    return `<p class="hint">Correct order</p><ol class="order">${it.answer.map((t,i)=>`<li><span class="pos">${i+1}</span><span class="txt">${esc(t)}</span></li>`).join("")}</ol>`;
   }
   if(it.kind==="match"){
     return `<div class="match">${it.rows.map(r=>`<div class="mrow"><div>${esc(r.d)}</div><b>${esc(r.a)}</b></div>`).join("")}</div>`;
@@ -247,8 +293,9 @@ function render(){
             <button class="btn" type="button" data-act="toggle" style="margin-left:auto;min-height:36px;padding:.25rem .75rem">Show answer</button>
           </div>
           <div class="qtext">${esc(it.q)}</div>
+          ${promptBody(it)}
           ${unitLink(it)}
-          <div class="ans">${it.loc?`<p class="qsrc"><span class="where">${esc(it.loc)}</span></p>`:""}${answerBody(it)}</div>
+          <div class="ans">${answerBody(it)}${it.why?`<div class="why"><h3>Why this answer</h3><p>${esc(it.why)}</p></div>`:""}</div>
         </article>`).join("")}
     </section>`).join("");
 }

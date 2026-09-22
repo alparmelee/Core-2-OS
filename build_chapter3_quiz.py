@@ -36,6 +36,14 @@ CHAPTER3 = [
 def main():
     all_terms = []
     sections = []
+    existing_scenarios = {}
+    prev_path = ROOT / "chapter3-quiz-data.json"
+    if prev_path.exists():
+        prev = json.loads(prev_path.read_text(encoding="utf-8"))
+        for t in prev.get("terms", []):
+            if t.get("scenario"):
+                existing_scenarios[t["id"]] = t["scenario"]
+                existing_scenarios[(t.get("section"), t.get("name"))] = t["scenario"]
 
     for section_id, filename, title in CHAPTER3:
         path = ROOT / filename
@@ -52,6 +60,11 @@ def main():
                 "name": t["name"],
                 "definition": t["definition"],
             }
+            prev = existing_scenarios.get(entry["id"]) or existing_scenarios.get(
+                (section_id, t["name"])
+            )
+            if prev:
+                entry["scenario"] = prev
             section_terms.append(entry)
             all_terms.append(entry)
 
@@ -77,20 +90,23 @@ def main():
     out.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"\nWrote {len(all_terms)} terms to {out.name}")
 
+    js_out = ROOT / "chapter3-quiz-data.js"
+    js_out.write_text(
+        "window.QUIZ_DATA = " + json.dumps(data, ensure_ascii=False) + ";\n",
+        encoding="utf-8",
+    )
+    print(f"Wrote {js_out.name}")
+
     quiz_html = ROOT / "Chapter 3 Practice Quiz.html"
-    embedded = json.dumps(data, ensure_ascii=False)
     page = quiz_page_html(
         chapter=3,
         title=data["title"],
         range_label="3.1–3.4",
         accent="#1e40af",
         accent_soft="#dbeafe",
+        data_js="chapter3-quiz-data.js",
     )
-    page = page.replace(
-        "study guides and interactive simulators.",
-        "troubleshooting study guides.",
-    )
-    quiz_html.write_text(page.replace("/*__QUIZ_DATA__*/", embedded), encoding="utf-8")
+    quiz_html.write_text(page, encoding="utf-8")
     print(f"Wrote {quiz_html.name}")
 
 

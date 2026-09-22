@@ -1,6 +1,7 @@
 /**
  * Shared practice-quiz engine for CompTIA study guides.
  * Expects window.QUIZ_DATA = { title, sections, terms }.
+ * Optional term.scenario enables "scenario" mode (prompt is a made-up ticket).
  */
 (function () {
   "use strict";
@@ -22,6 +23,18 @@
 
   function supportsChapterFilter() {
     return Boolean(window.QUIZ_DATA?.supportsChapterFilter);
+  }
+
+  function termsHaveScenarios() {
+    return (window.QUIZ_DATA.terms || []).some((t) => t.scenario);
+  }
+
+  function selectedMode() {
+    return document.querySelector('input[name="quiz-mode"]:checked')?.value || "term-to-def";
+  }
+
+  function isScenarioMode() {
+    return selectedMode() === "scenario";
   }
 
   function sectionCount(section) {
@@ -121,12 +134,17 @@
       card.className = "section-card" + (count < 4 ? " is-empty" : "");
       card.dataset.section = s.id;
       card.disabled = count < 4;
-      card.innerHTML = `<span class="section-card-id">${s.id}</span><span class="section-card-title">${s.title}</span><span class="section-card-count">${count} terms</span>`;
+      const kind = isScenarioMode() ? (count === 1 ? "scenario" : "scenarios") : count === 1 ? "term" : "terms";
+      card.innerHTML = `<span class="section-card-id">${s.id}</span><span class="section-card-title">${s.title}</span><span class="section-card-count">${count} ${kind}</span>`;
       card.addEventListener("click", () => startQuiz([s.id]));
       container.appendChild(card);
     });
     const termCount = $("#term-count");
     if (termCount) termCount.textContent = visibleTotal();
+    const kind = $("#pool-kind");
+    if (kind) kind.textContent = isScenarioMode() ? "scenarios" : "terms";
+    const allBtn = $("#start-all-btn");
+    if (allBtn) allBtn.textContent = isScenarioMode() ? "Quiz all scenarios" : "Quiz all sections";
     updateSetupHeading(getSelectedSections());
   }
 
@@ -141,7 +159,9 @@
         focusHint +
         (window.QUIZ_DATA.chapter === 5
           ? "Pick a letter range below to start instantly, or customize with checkboxes."
-          : "Pick a section below to start instantly, or customize with checkboxes.");
+          : isScenarioMode()
+            ? "Each term has a made-up help-desk ticket. Pick a section, or quiz the whole chapter."
+            : "Pick a section below to start instantly, or customize with checkboxes.");
       return;
     }
     const labels = sections.map((id) => {
@@ -200,14 +220,21 @@
     );
   }
 
+  function startableSections() {
+    return window.QUIZ_DATA.sections.filter((s) => sectionCount(s) >= 4).map((s) => s.id);
+  }
+
   function startQuiz(forcedSections) {
     const sections = forcedSections || getSelectedSections();
     if (!sections.length) {
       alert("Select at least one section.");
       return;
     }
-    state.mode = document.querySelector('input[name="quiz-mode"]:checked')?.value || "term-to-def";
+    state.mode = selectedMode();
     state.pool = visibleTerms().filter((t) => sections.includes(t.section));
+    if (state.mode === "scenario") {
+      state.pool = state.pool.filter((t) => t.scenario || t.definition);
+    }
     if (state.pool.length < 4) {
       alert("Need at least 4 terms in the selected sections for multiple-choice questions.");
       return;
@@ -226,7 +253,7 @@
     state.answered = false;
 
     $("#progress-label").textContent = `Question ${state.index + 1} of ${total}`;
-    $("#progress-fill").style.width = `${((state.index) / total) * 100}%`;
+    $("#progress-fill").style.width = `${(state.index / total) * 100}%`;
     $("#score-live").textContent = `${state.correct} correct`;
 
     const badge = $("#section-badge");
@@ -240,12 +267,17 @@
       categoryEl.hidden = !category;
     }
 
+    const prompt = $("#prompt-text");
+    prompt.classList.toggle("is-scenario", q.mode === "scenario");
     if (q.mode === "term-to-def") {
       $("#prompt-label").textContent = "Which definition best describes this term?";
-      $("#prompt-text").textContent = q.term.name;
+      prompt.textContent = q.term.name;
+    } else if (q.mode === "scenario") {
+      $("#prompt-label").textContent = "Which term, tool, or command fits this scenario?";
+      prompt.textContent = q.term.scenario || q.term.definition;
     } else {
       $("#prompt-label").textContent = "Which term matches this definition?";
-      $("#prompt-text").textContent = q.term.definition;
+      prompt.textContent = q.term.definition;
     }
 
     const choicesEl = $("#choices");
@@ -253,11 +285,11 @@
     $("#feedback").hidden = true;
     $("#next-btn").hidden = true;
 
-    q.choices.forEach((choice, i) => {
+    q.choices.forEach((choice) => {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "choice";
-      btn.textContent = truncate(choice.text, 220);
+      btn.textContent = truncate(choice.text, q.mode === "term-to-def" ? 220 : 160);
       btn.title = choice.text;
       btn.addEventListener("click", () => selectAnswer(btn, choice.correct, q));
       choicesEl.appendChild(btn);
@@ -314,14 +346,15 @@
     const review = $("#review-list");
     review.innerHTML = "";
     if (!state.missed.length) {
-      review.innerHTML = '<p class="all-good">Perfect score — you nailed every term!</p>';
+      review.innerHTML = `<p class="all-good">Perfect score — you nailed every ${state.mode === "scenario" ? "scenario" : "term"}!</p>`;
       return;
     }
     state.missed.forEach((q) => {
       const item = document.createElement("div");
       item.className = "review-item";
       const context = [q.term.section, q.term.category].filter(Boolean).join(" · ");
-      item.innerHTML = `<div class="review-meta">${context}</div><strong>${q.term.name}</strong><p>${q.term.definition}</p>`;
+      const extra = q.mode === "scenario" && q.term.scenario ? `<p>${q.term.scenario}</p>` : "";
+      item.innerHTML = `<div class="review-meta">${context}</div><strong>${q.term.name}</strong>${extra}<p>${q.term.definition}</p>`;
       review.appendChild(item);
     });
   }
@@ -354,13 +387,25 @@
       });
     }
 
+    if (params.mode) {
+      const modeInput = document.querySelector(`input[name="quiz-mode"][value="${params.mode}"]`);
+      if (modeInput) modeInput.checked = true;
+    }
+
+    const scenarioRadio = document.querySelector('input[name="quiz-mode"][value="scenario"]');
+    if (scenarioRadio && !termsHaveScenarios()) scenarioRadio.closest("label")?.remove();
+    document.querySelectorAll('input[name="quiz-mode"]').forEach((el) => {
+      el.addEventListener("change", () => {
+        renderSetup();
+        renderSectionToggles();
+      });
+    });
+
     renderSetup();
     renderSectionToggles();
     $("#start-btn")?.addEventListener("click", () => startQuiz());
     $("#start-all-btn")?.addEventListener("click", () => {
-      const all = window.QUIZ_DATA.sections
-        .filter((s) => sectionCount(s) >= 4)
-        .map((s) => s.id);
+      const all = startableSections();
       setSectionSelection(all);
       startQuiz(all);
     });
@@ -368,10 +413,6 @@
     $("#retry-btn")?.addEventListener("click", retryMissed);
     $("#restart-btn")?.addEventListener("click", () => showScreen("setup"));
 
-    if (params.mode) {
-      const modeInput = document.querySelector(`input[name="quiz-mode"][value="${params.mode}"]`);
-      if (modeInput) modeInput.checked = true;
-    }
     if (params.sections.length) {
       setSectionSelection(params.sections);
       updateSetupHeading(params.sections);
@@ -380,10 +421,7 @@
         return;
       }
     } else if (params.start) {
-      const all = window.QUIZ_DATA.sections
-        .filter((s) => sectionCount(s) >= 4)
-        .map((s) => s.id);
-      startQuiz(all);
+      startQuiz(startableSections());
       return;
     }
     showScreen("setup");
