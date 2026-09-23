@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.111 Configure Cloud-Based Productivity Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#121820;
+    --muted:#4a5568;
+    --paper:#f3f1f7;
+    --line:rgba(18,24,32,0.12);
+    --accent:#5b5fc7;
+    --accent-soft:#e3e1ff;
+    --sky:#3b3f8c;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(91,95,199,0.14), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(59,63,140,0.08), transparent 50%),
+      linear-gradient(180deg, #ebe8f4 0%, var(--paper) 40%, #f3f1f7 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+  .hero{
+    position:relative; min-height:100vh; display:flex; align-items:flex-end;
+    color:#f6f5fc; overflow:hidden;
+  }
+  .hero::before{
+    content:""; position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(24,20,48,0.25) 0%, rgba(24,20,48,0.72) 52%, rgba(24,20,48,0.94) 100%),
+      linear-gradient(135deg, #2b2d6b 0%, #5b5fc7 45%, #c4b5fd 100%);
+  }
+  .hero-inner{ position:relative; z-index:1; width:min(1080px, calc(100% - 2.4rem)); margin:0 auto 4.2rem; }
+  .brand{ font-family:"Fraunces",serif; font-size:clamp(3.4rem, 10vw, 6.6rem); font-weight:700; line-height:0.92; letter-spacing:-0.03em; margin:0 0 0.85rem; }
+  .hero h1{ margin:0 0 0.65rem; font-size:clamp(1.05rem, 2.1vw, 1.35rem); font-weight:500; max-width:40ch; color:#e8e6fa; }
+  .hero > .hero-inner > p{ margin:0 0 1.5rem; max-width:54ch; color:#b8b4d4; }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{ text-decoration:none; font-weight:600; font-size:0.92rem; padding:0.7rem 1.15rem; border-radius:999px; background:#e3e1ff; color:#2b2d6b; }
+  .hero-cta a.ghost{ background:transparent; color:#e8e6fa; border:1px solid rgba(232,230,250,0.4); }
+  .toc{ position:sticky; top:0; z-index:30; backdrop-filter:blur(12px); background:rgba(243,241,247,0.92); border-bottom:1px solid var(--line); }
+  .toc .wrap{ display:flex; gap:0.3rem; overflow-x:auto; padding:0.7rem 0; scrollbar-width:thin; }
+  .toc a{ flex:0 0 auto; text-decoration:none; color:var(--muted); font-size:0.78rem; font-weight:600; padding:0.42rem 0.75rem; border-radius:999px; }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{ display:inline-block; font-size:0.72rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--accent); margin-bottom:0.5rem; }
+  .section-head h2{ font-family:"Fraunces",serif; font-size:clamp(1.75rem, 3.4vw, 2.5rem); margin:0 0 0.5rem; letter-spacing:-0.02em; line-height:1.12; }
+  .section-head p{ margin:0; color:var(--muted); }
+  .term{ display:grid; grid-template-columns:minmax(240px, 320px) 1fr; gap:1.35rem 1.7rem; align-items:start; padding:1.45rem 0; border-top:1px solid var(--line); }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{ border:1px solid var(--line); border-radius:18px; min-height:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.45rem; overflow:hidden; background:linear-gradient(160deg, #fff, var(--accent-soft)); padding:1.1rem; text-align:center; }
+  .visual.photo{ padding:0; width:100%; max-width:none; aspect-ratio:16 / 9; background:#0a0a0a; overflow:hidden; }
+  .visual.photo img{ width:100%; height:100%; object-fit:contain; display:block; }
+  .body h3{ font-family:"Fraunces",serif; font-size:1.35rem; margin:0 0 0.55rem; letter-spacing:-0.01em; }
+  .aka{ display:inline-block; font-size:0.76rem; font-weight:600; color:var(--sky); background:rgba(59,63,140,0.08); padding:0.18rem 0.55rem; border-radius:999px; margin:0 0 0.65rem; }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body code, footer code{ font-family:"Cascadia Mono","Consolas",monospace; font-size:0.86em; background:rgba(18,24,32,0.06); border-radius:5px; padding:0.05rem 0.35rem; }
+  .demo{ margin:0.85rem 0 0; padding:0.9rem 1.05rem; border-left:4px solid var(--accent); background:rgba(91,95,199,0.08); border-radius:0 12px 12px 0; color:var(--muted); font-size:0.9rem; }
+  footer{ padding:2.4rem 0 3.2rem; color:var(--muted); font-size:0.84rem; }
+  footer .wrap{ border-top:1px solid var(--line); padding-top:1.2rem; }
+  @media (max-width:780px){ .term{ grid-template-columns:1fr; } .hero-inner{ margin-bottom:3rem; } }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">1.111</p>
+    <h1>Configure Cloud-Based Productivity Tools</h1>
+    <p>Mail, files, sync, collab apps, and admin identity/licenses — from the 1.11 Microsoft 365-style lab.</p>
+    <div class="hero-cta">
+      <a href="#mail-files">Start studying</a>
+      <a class="ghost" href="1.11 Configure Cloud-Based Productivity Tools.html">Open 1.11 interactive lab</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#mail-files">Mail &amp; files</a>
+    <a href="#apps">Apps</a>
+    <a href="#admin">Admin</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="mail-files">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>Mail, storage, and sync</h2>
+        <p>Hosted email, cloud file repos, and the rules that keep folders in step with the cloud.</p>
+      </div>
+
+      <article class="term" id="email">
+        <div class="visual photo">
+          <img src="1.11/Email Systems.jpg" alt="Email Systems" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Email Systems</h3>
+          <span class="aka">Outlook → Mail flow (MX records)</span>
+          <p>Cloud-based communication infrastructure (e.g., Exchange Online, Gmail) providing business email hosting, domain routing, MX record configuration, and mailbox setup.</p>
+          <p>MX records tell the internet which host accepts mail for the domain. Until those DNS records point at the cloud tenant, mailboxes exist but inbound mail never arrives.</p>
+          <div class="demo">Practice in the <a href="1.11 Configure Cloud-Based Productivity Tools.html">1.11 interactive lab</a> — open Outlook and check <strong>Mail flow (MX records)</strong>.</div>
+        </div>
+      </article>
+
+      <article class="term" id="cloud-storage">
+        <div class="visual photo">
+          <img src="1.11/Cloud Storage.webp" alt="Cloud Storage" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Cloud Storage</h3>
+          <span class="aka">Open OneDrive</span>
+          <p>Centralized online repositories (e.g., OneDrive, Google Drive) enabling secure file storage, file sharing permissions, version control, and cloud accessibility.</p>
+          <p>Users get the same files from a browser, phone, or synced PC. Sharing is permission-based (view vs edit, link vs named people), and version history is how you undo a bad overwrite.</p>
+          <div class="demo">Practice in the <a href="1.11 Configure Cloud-Based Productivity Tools.html">1.11 interactive lab</a> — open <strong>OneDrive</strong> from the waffle menu.</div>
+        </div>
+      </article>
+
+      <article class="term" id="sync">
+        <div class="visual photo">
+          <img src="1.11/Sync and Folder Settings.png" alt="Sync and Folder Settings" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Sync and Folder Settings</h3>
+          <span class="aka">OneDrive → Sync settings</span>
+          <p>Configuration rules controlling how local directories synchronize with cloud storage, including selective sync, bandwidth limits, and sync options.</p>
+          <p>Selective sync keeps huge folders off a small laptop disk. Bandwidth caps stop a first sync from saturating the office WAN. Files On-Demand can show placeholders until someone opens the file.</p>
+          <div class="demo">Practice in the <a href="1.11 Configure Cloud-Based Productivity Tools.html">1.11 interactive lab</a> — open OneDrive <strong>Sync settings</strong>.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="apps">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Collaboration apps</h2>
+        <p>The suite pieces users actually click — chat, meetings, and live documents.</p>
+      </div>
+
+      <article class="term" id="collab">
+        <div class="visual photo">
+          <img src="1.11/Collaboration Tools.jfif" alt="Collaboration Tools" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Collaboration Tools</h3>
+          <span class="aka">Open Teams</span>
+          <p>Integrated cloud application suites designed for multi-user real-time document editing, project management, and team communication.</p>
+          <p>Think Microsoft 365 or Google Workspace as a whole: chat, files, and live docs in one identity, not five separate logins.</p>
+          <div class="demo">Practice in the <a href="1.11 Configure Cloud-Based Productivity Tools.html">1.11 interactive lab</a> — open <strong>Teams</strong>.</div>
+        </div>
+      </article>
+
+      <article class="term" id="sheets">
+        <div class="visual photo">
+          <img src="1.11/Spreadsheets.png" alt="Spreadsheets" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Spreadsheets</h3>
+          <span class="aka">Open Excel Online</span>
+          <p>Cloud-based data tools (e.g., Excel Online, Google Sheets) enabling multi-user data analysis, simultaneous cell editing, automated calculations, and live version tracking.</p>
+          <div class="demo">Practice in the <a href="1.11 Configure Cloud-Based Productivity Tools.html">1.11 interactive lab</a> — open <strong>Excel Online</strong>.</div>
+        </div>
+      </article>
+
+      <article class="term" id="video">
+        <div class="visual photo">
+          <img src="1.11/Videoconferencing.jfif" alt="Videoconferencing" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Videoconferencing</h3>
+          <span class="aka">Teams → Meet now</span>
+          <p>Real-time virtual meeting software (e.g., Microsoft Teams, Zoom, Google Meet) facilitating remote video calls, screen sharing, meeting recordings, and breakout rooms.</p>
+          <div class="demo">Practice in the <a href="1.11 Configure Cloud-Based Productivity Tools.html">1.11 interactive lab</a> — in Teams, start <strong>Meet now</strong>.</div>
+        </div>
+      </article>
+
+      <article class="term" id="slides">
+        <div class="visual photo">
+          <img src="1.11/Presentation Tools.jpg" alt="Presentation Tools" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Presentation Tools</h3>
+          <span class="aka">Open PowerPoint Online</span>
+          <p>Cloud applications (e.g., PowerPoint Online, Google Slides) allowing teams to remotely co-author, present, and update digital slide decks.</p>
+          <div class="demo">Practice in the <a href="1.11 Configure Cloud-Based Productivity Tools.html">1.11 interactive lab</a> — open <strong>PowerPoint Online</strong>.</div>
+        </div>
+      </article>
+
+      <article class="term" id="docs">
+        <div class="visual photo">
+          <img src="1.11/Word Processing Tools.png" alt="Word Processing Tools" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Word Processing Tools</h3>
+          <span class="aka">Open Word Online</span>
+          <p>Online document platforms (e.g., Word Online, Google Docs) allowing multiple users to edit text, leave inline comments, and track changes in real time.</p>
+          <div class="demo">Practice in the <a href="1.11 Configure Cloud-Based Productivity Tools.html">1.11 interactive lab</a> — open <strong>Word Online</strong>.</div>
+        </div>
+      </article>
+
+      <article class="term" id="im">
+        <div class="visual photo">
+          <img src="1.11/Instant Messaging.jpg" alt="Instant Messaging" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Instant Messaging</h3>
+          <span class="aka">Teams → Chat</span>
+          <p>Real-time chat systems (e.g., Slack, Microsoft Teams, Google Chat) providing direct messaging, topic-based channels, file attachments, and status indicators.</p>
+          <div class="demo">Practice in the <a href="1.11 Configure Cloud-Based Productivity Tools.html">1.11 interactive lab</a> — open Teams <strong>Chat</strong>.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="admin">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Identity and licensing</h2>
+        <p>The admin-center work that makes the suite actually usable for the company.</p>
+      </div>
+
+      <article class="term" id="identity">
+        <div class="visual photo">
+          <img src="1.11/Identity Synchronization.png" alt="Identity Synchronization" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Identity Synchronization</h3>
+          <span class="aka">Admin Center → Identity</span>
+          <p>Process of mirroring local Active Directory users and credentials to cloud identity providers (e.g., Entra ID Connect) for single sign-on (SSO) and hybrid user access.</p>
+          <p>Users keep one password. On-prem AD remains the source; a sync tool (Entra ID Connect / Azure AD Connect) copies accounts to the cloud so Outlook, Teams, and OneDrive honor the same identity.</p>
+          <div class="demo">Practice in the <a href="1.11 Configure Cloud-Based Productivity Tools.html">1.11 interactive lab</a> — open Admin Center → <strong>Identity</strong>.</div>
+        </div>
+      </article>
+
+      <article class="term" id="licenses">
+        <div class="visual photo">
+          <img src="1.11/Licensing Assignment.webp" alt="Licensing Assignment" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Licensing Assignment</h3>
+          <span class="aka">Admin Center → Licenses</span>
+          <p>Administrative process of provisioning, purchasing, and revoking subscription licenses (e.g., Microsoft 365, Google Workspace) to managed user accounts.</p>
+          <p>A mailbox or Teams account that looks “broken” is often just unlicensed. Revoke the seat when someone leaves so you are not paying for an empty account.</p>
+          <div class="demo">Practice in the <a href="1.11 Configure Cloud-Based Productivity Tools.html">1.11 interactive lab</a> — open Admin Center → <strong>Licenses</strong>.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    Images in the <code>1.11</code> folder. Study notes for Core 2 objective 1.11 (11 terms).
+    Related interactive lab: <a href="1.11 Configure Cloud-Based Productivity Tools.html">1.11 Configure Cloud-Based Productivity Tools.html</a>.
+  </div>
+</footer>
+
+<script src="study-lightbox.js"></script>
+<script src="study-editor.js"></script>
+</body>
+</html>

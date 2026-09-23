@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.101 Installing Applications</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#121820;
+    --muted:#4a5568;
+    --paper:#eef2f7;
+    --line:rgba(18,24,32,0.12);
+    --accent:#0067c0;
+    --accent-soft:#d6ebff;
+    --sky:#0e4d7b;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:"Sora",sans-serif;
+    background:
+      radial-gradient(900px 500px at 90% -10%, rgba(0,103,192,0.12), transparent 55%),
+      radial-gradient(700px 420px at -10% 20%, rgba(14,77,123,0.08), transparent 50%),
+      linear-gradient(180deg, #e6edf5 0%, var(--paper) 40%, #eef2f7 100%);
+    line-height:1.55;
+  }
+  a{ color:var(--accent); }
+  .wrap{ width:min(1080px, calc(100% - 2.4rem)); margin:0 auto; }
+  .hero{
+    position:relative; min-height:100vh; display:flex; align-items:flex-end;
+    color:#f4f8fc; overflow:hidden;
+  }
+  .hero::before{
+    content:""; position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,28,56,0.25) 0%, rgba(8,28,56,0.72) 52%, rgba(8,28,56,0.94) 100%),
+      linear-gradient(135deg, #0a3d62 0%, #0067c0 45%, #7dd3fc 100%);
+  }
+  .hero-inner{ position:relative; z-index:1; width:min(1080px, calc(100% - 2.4rem)); margin:0 auto 4.2rem; }
+  .brand{ font-family:"Fraunces",serif; font-size:clamp(3.4rem, 10vw, 6.6rem); font-weight:700; line-height:0.92; letter-spacing:-0.03em; margin:0 0 0.85rem; }
+  .hero h1{ margin:0 0 0.65rem; font-size:clamp(1.05rem, 2.1vw, 1.35rem); font-weight:500; max-width:40ch; color:#dceaf8; }
+  .hero > .hero-inner > p{ margin:0 0 1.5rem; max-width:54ch; color:#a8c0d8; }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.7rem; }
+  .hero-cta a{ text-decoration:none; font-weight:600; font-size:0.92rem; padding:0.7rem 1.15rem; border-radius:999px; background:#dceaf8; color:#0a3d62; }
+  .hero-cta a.ghost{ background:transparent; color:#dceaf8; border:1px solid rgba(220,234,248,0.4); }
+  .toc{ position:sticky; top:0; z-index:30; backdrop-filter:blur(12px); background:rgba(238,242,247,0.92); border-bottom:1px solid var(--line); }
+  .toc .wrap{ display:flex; gap:0.3rem; overflow-x:auto; padding:0.7rem 0; scrollbar-width:thin; }
+  .toc a{ flex:0 0 auto; text-decoration:none; color:var(--muted); font-size:0.78rem; font-weight:600; padding:0.42rem 0.75rem; border-radius:999px; }
+  .toc a:hover{ background:var(--accent-soft); color:var(--accent); }
+  section{ padding:3.1rem 0 0.5rem; }
+  .section-head{ margin-bottom:1.4rem; max-width:46rem; }
+  .eyebrow{ display:inline-block; font-size:0.72rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--accent); margin-bottom:0.5rem; }
+  .section-head h2{ font-family:"Fraunces",serif; font-size:clamp(1.75rem, 3.4vw, 2.5rem); margin:0 0 0.5rem; letter-spacing:-0.02em; line-height:1.12; }
+  .section-head p{ margin:0; color:var(--muted); }
+  .term{ display:grid; grid-template-columns:minmax(240px, 320px) 1fr; gap:1.35rem 1.7rem; align-items:start; padding:1.45rem 0; border-top:1px solid var(--line); }
+  .term:last-of-type{ border-bottom:1px solid var(--line); }
+  .visual{ border:1px solid var(--line); border-radius:18px; min-height:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.45rem; overflow:hidden; background:linear-gradient(160deg, #fff, var(--accent-soft)); padding:1.1rem; text-align:center; }
+  .visual.photo{ padding:0; width:100%; max-width:none; aspect-ratio:16 / 9; background:#0a0a0a; overflow:hidden; }
+  .visual.photo img{ width:100%; height:100%; object-fit:contain; display:block; }
+  .body h3{ font-family:"Fraunces",serif; font-size:1.35rem; margin:0 0 0.55rem; letter-spacing:-0.01em; }
+  .aka{ display:inline-block; font-size:0.76rem; font-weight:600; color:var(--sky); background:rgba(14,77,123,0.08); padding:0.18rem 0.55rem; border-radius:999px; margin:0 0 0.65rem; }
+  .body p{ margin:0 0 0.7rem; }
+  .body p:last-child{ margin-bottom:0; }
+  .body code, footer code{ font-family:"Cascadia Mono","Consolas",monospace; font-size:0.86em; background:rgba(18,24,32,0.06); border-radius:5px; padding:0.05rem 0.35rem; }
+  .demo{ margin:0.85rem 0 0; padding:0.9rem 1.05rem; border-left:4px solid var(--accent); background:rgba(0,103,192,0.08); border-radius:0 12px 12px 0; color:var(--muted); font-size:0.9rem; }
+  footer{ padding:2.4rem 0 3.2rem; color:var(--muted); font-size:0.84rem; }
+  footer .wrap{ border-top:1px solid var(--line); padding-top:1.2rem; }
+  @media (max-width:780px){ .term{ grid-template-columns:1fr; } .hero-inner{ margin-bottom:3rem; } }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="brand">1.101</p>
+    <h1>Installing Applications</h1>
+    <p>System requirements, how you deliver the installer, and what a new app can break — from the 1.10 lab.</p>
+    <div class="hero-cta">
+      <a href="#requirements">Start studying</a>
+      <a class="ghost" href="1.10 Installing Applications.html">Open 1.10 interactive lab</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <div class="wrap">
+    <a href="#requirements">Requirements</a>
+    <a href="#deployment">Deployment</a>
+    <a href="#impact">Impact</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="requirements">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part A</span>
+        <h2>System Requirements</h2>
+        <p>Check architecture, memory, CPU, storage, and license hardware before you click Install.</p>
+      </div>
+
+      <article class="term" id="bitness">
+        <div class="visual photo">
+          <img src="1.10/32-bit vs. 64-bit dependent application requirements.webp" alt="32-bit vs. 64-bit dependent application requirements" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>32-bit vs. 64-bit dependent application requirements</h3>
+          <span class="aka">OS bitness must match the app and its drivers</span>
+          <p>Hardware drivers are specific to the OS version — 32-bit (x86) or 64-bit (x64). A 32-bit OS cannot run 64-bit apps. A 64-bit OS can run 32-bit apps.</p>
+          <p>On 64-bit Windows, 32-bit programs run through WOW64. They work, but they stay limited to 32-bit address space. Device drivers are stricter: a 32-bit driver will not load on a 64-bit OS.</p>
+          <div class="demo">Practice in the <a href="1.10 Installing Applications.html">1.10 interactive lab</a> — open <strong>32-bit vs. 64-bit dependent application requirements</strong> and try every OS/app pair.</div>
+        </div>
+      </article>
+
+      <article class="term" id="graphics">
+        <div class="visual photo">
+          <img src="1.10/Dedicated vs. integrated graphics card.jpg" alt="Dedicated vs. integrated graphics card" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Dedicated vs. integrated graphics card</h3>
+          <span class="aka">Shared system RAM vs. its own VRAM</span>
+          <p>Integrated: CPU and GPU are the same chip and share system memory for graphics — common in laptops. Dedicated (discrete): has its own VRAM, for high-end graphics requirements.</p>
+          <p>Integrated is cheaper and easier on battery. Dedicated (a separate card) is what you want for gaming, 3D, CAD, and heavy video work.</p>
+          <div class="demo">Practice in the <a href="1.10 Installing Applications.html">1.10 interactive lab</a> — click <strong>Dedicated vs. integrated graphics card</strong>.</div>
+        </div>
+      </article>
+
+      <article class="term" id="vram">
+        <div class="visual photo">
+          <img src="1.10/Video random-access memory (VRAM) requirements.webp" alt="Video random-access memory (VRAM) requirements" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Video random-access memory (VRAM) requirements</h3>
+          <span class="aka">Framebuffers, textures, 3D geometry</span>
+          <p>VRAM is high-speed memory dedicated exclusively to storing graphical assets — framebuffers, 3D geometry, textures, and depth buffers. Dedicated cards have built-in VRAM; integrated graphics borrow a portion of main system RAM, reducing what is left for other applications.</p>
+          <div class="demo">Practice in the <a href="1.10 Installing Applications.html">1.10 interactive lab</a> — drag the shared-VRAM slider and watch system RAM shrink.</div>
+        </div>
+      </article>
+
+      <article class="term" id="ram">
+        <div class="visual photo">
+          <img src="1.10/RAM requirements.jpg" alt="RAM requirements" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>RAM requirements</h3>
+          <span class="aka">App + OS + everything else already open</span>
+          <p>A critical specification — the application may perform poorly or not at all without enough RAM. This is above and beyond the OS requirements, depends on the application, and must account for every other running application.</p>
+          <div class="demo">Practice in the <a href="1.10 Installing Applications.html">1.10 interactive lab</a> — use the RAM budget calculator.</div>
+        </div>
+      </article>
+
+      <article class="term" id="cpu">
+        <div class="visual photo">
+          <img src="1.10/Central processing unit (CPU) requirements.jfif" alt="Central processing unit (CPU) requirements" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Central processing unit (CPU) requirements</h3>
+          <span class="aka">Higher GHz is a rough “faster” number</span>
+          <p>Processing speed is usually measured in gigahertz (GHz) — a broad measurement where higher numbers mean faster CPUs. Requirements vary a lot by application: word processing needs far less than video editing.</p>
+          <p>Core count and generation also matter, but CompTIA still wants you to treat the published GHz minimum as a go/no-go check for the workload.</p>
+          <div class="demo">Practice in the <a href="1.10 Installing Applications.html">1.10 interactive lab</a> — match workload type to available CPU speed.</div>
+        </div>
+      </article>
+
+      <article class="term" id="hwtoken">
+        <div class="visual photo">
+          <img src="1.10/External hardware tokens.png" alt="External hardware tokens" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>External hardware tokens</h3>
+          <span class="aka">Dongle — app runs only while it is plugged in</span>
+          <p>Used to manage application usage and limit access to authorized users — the application will only operate with the hardware token connected. Commonly a USB device. Can be a challenge to manage, and is often used with high-end software that carries high per-seat licensing costs.</p>
+          <div class="demo">Practice in the <a href="1.10 Installing Applications.html">1.10 interactive lab</a> — toggle the USB hardware token on CAD Suite Pro.</div>
+        </div>
+      </article>
+
+      <article class="term" id="storage">
+        <div class="visual photo">
+          <img src="1.10/Storage requirements.webp" alt="Storage requirements" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Storage requirements</h3>
+          <span class="aka">Install size is not the whole story</span>
+          <p>A drive-space concern with two parts: the initial installation space requirement, and ongoing application-use requirements. Some applications consume a lot of additional storage after installation — so the initial install size may not be the most important number.</p>
+          <div class="demo">Practice in the <a href="1.10 Installing Applications.html">1.10 interactive lab</a> — slide months of use and watch caches grow past free space.</div>
+        </div>
+      </article>
+
+      <article class="term" id="compat">
+        <div class="visual photo">
+          <img src="1.10/Application to OS compatibility.jpg" alt="Application to OS compatibility" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Application to OS compatibility</h3>
+          <span class="aka">Architecture, dependencies, and API version</span>
+          <p>The software must match the system architecture (32-bit vs. 64-bit), have its software dependencies satisfied, and meet the operating system API requirements of the host environment in order to run properly.</p>
+          <p>Typical missing pieces: Visual C++ Redistributable, a .NET runtime, or an OS build below the app’s minimum.</p>
+          <div class="demo">Practice in the <a href="1.10 Installing Applications.html">1.10 interactive lab</a> — walk the compatibility checklist.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="deployment">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part B</span>
+        <h2>Deployment Methods</h2>
+        <p>How the bits actually get onto the PC — disc, ISO, download, or a cloned image.</p>
+      </div>
+
+      <article class="term" id="physicalvsiso">
+        <div class="visual photo">
+          <img src="1.10/Physical media vs. mountable ISO file.jfif" alt="Physical media vs. mountable ISO file" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Physical media vs. mountable ISO file</h3>
+          <span class="aka">Optical / USB vs. a sector-by-sector image file</span>
+          <p>Physical media — optical disc, USB drive, etc. — is increasingly rare. An ISO is an optical disk image: a single file that is a sector-by-sector copy of a disc's files and folders, which can be mounted directly.</p>
+          <p>On Windows, right-click an <code>.iso</code> and choose Mount to get a virtual drive letter with no disc in the tray.</p>
+          <div class="demo">Practice in the <a href="1.10 Installing Applications.html">1.10 interactive lab</a> — compare Insert disc vs Mount ISO.</div>
+        </div>
+      </article>
+
+      <article class="term" id="download">
+        <div class="visual photo">
+          <img src="1.10/Downloadable package.jpg" alt="Downloadable package" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Downloadable package</h3>
+          <span class="aka">Manufacturer site or official store only</span>
+          <p>Get the installer direct from the manufacturer or a centralized app store — and avoid third-party download sites, which carry a higher risk of tampered or bundled software.</p>
+          <div class="demo">Practice in the <a href="1.10 Installing Applications.html">1.10 interactive lab</a> — switch the download source to a third-party site and read the warning.</div>
+        </div>
+      </article>
+
+      <article class="term" id="imagedeploy">
+        <div class="visual photo">
+          <img src="1.10/Image deployment.webp" alt="Image deployment" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Image deployment</h3>
+          <span class="aka">One master image → many identical PCs</span>
+          <p>Create a standard OS "master image" (gold image) and clone it across many target systems over the network or via physical media. A perfect fit for virtual machines, and very fast to deploy at scale.</p>
+          <div class="demo">Practice in the <a href="1.10 Installing Applications.html">1.10 interactive lab</a> — deploy the gold image to a fleet and compare it to hand-install time.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="impact">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Part C</span>
+        <h2>Impact Considerations</h2>
+        <p>A new app is not just an installer — it can hurt the device, the network, the job, and the business.</p>
+      </div>
+
+      <article class="term" id="deviceimpact">
+        <div class="visual photo">
+          <img src="1.10/Device impact considerations for new applications.jfif" alt="Device impact considerations for new applications" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Device impact considerations for new applications</h3>
+          <span class="aka">Crashes, slowness, or lost files after an upgrade</span>
+          <p>Think through what a new application or upgrade can do to the device it runs on: it may stop working after an upgrade, cause slowdowns, or even delete files.</p>
+          <p>Pilot first, keep the old installer for rollback, and back up user data before a major version jump.</p>
+          <div class="demo">Practice in the <a href="1.10 Installing Applications.html">1.10 interactive lab</a> — open <strong>Device impact considerations for new applications</strong>.</div>
+        </div>
+      </article>
+
+      <article class="term" id="networkimpact">
+        <div class="visual photo">
+          <img src="1.10/Network impact considerations for new applications.webp" alt="Network impact considerations for new applications" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Network impact considerations for new applications</h3>
+          <span class="aka">Firewall, VPN, and file-share rights</span>
+          <p>A new application often needs access to internal services, plus the rights and permissions to reach file shares — both of which need to be planned and provisioned.</p>
+          <div class="demo">Practice in the <a href="1.10 Installing Applications.html">1.10 interactive lab</a> — toggle internal services and share permissions.</div>
+        </div>
+      </article>
+
+      <article class="term" id="operationimpact">
+        <div class="visual photo">
+          <img src="1.10/Operation impact considerations for new applications.webp" alt="Operation impact considerations for new applications" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Operation impact considerations for new applications</h3>
+          <span class="aka">Time-sensitive jobs vs. a changed workflow</span>
+          <p>Many jobs are time-sensitive. An updated application may require a change to an existing workflow — or it may not work with that workflow at all.</p>
+          <p>If the job is nightly or shift-based, schedule the change outside that window and retrain before go-live.</p>
+          <div class="demo">Practice in the <a href="1.10 Installing Applications.html">1.10 interactive lab</a> — flip time-sensitive and workflow-changed toggles.</div>
+        </div>
+      </article>
+
+      <article class="term" id="businessimpact">
+        <div class="visual photo">
+          <img src="1.10/Business impact considerations for new applications.avif" alt="Business impact considerations for new applications" loading="lazy">
+        </div>
+        <div class="body">
+          <h3>Business impact considerations for new applications</h3>
+          <span class="aka">One outage can stall the next department</span>
+          <p>Critical business processes are sensitive to downtime and outages. A change to one application can create issues elsewhere — other parts of the business rely on its results.</p>
+          <div class="demo">Practice in the <a href="1.10 Installing Applications.html">1.10 interactive lab</a> — take the order-entry app offline and watch fulfillment, shipping, and finance stall.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    Images in the <code>1.10</code> folder. Study notes for Core 2 objective 1.10 (15 terms).
+    Related interactive lab: <a href="1.10 Installing Applications.html">1.10 Installing Applications.html</a>.
+  </div>
+</footer>
+
+<script src="study-lightbox.js"></script>
+<script src="study-editor.js"></script>
+</body>
+</html>
