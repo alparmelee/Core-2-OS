@@ -37,13 +37,19 @@ def main():
     all_terms = []
     sections = []
     existing_scenarios = {}
+    existing_roles = {}
+    prev_terms = []
     prev_path = ROOT / "chapter3-quiz-data.json"
     if prev_path.exists():
         prev = json.loads(prev_path.read_text(encoding="utf-8"))
-        for t in prev.get("terms", []):
+        prev_terms = prev.get("terms", [])
+        for t in prev_terms:
             if t.get("scenario"):
                 existing_scenarios[t["id"]] = t["scenario"]
                 existing_scenarios[(t.get("section"), t.get("name"))] = t["scenario"]
+            if t.get("role"):
+                existing_roles[t["id"]] = t["role"]
+                existing_roles[(t.get("section"), t.get("name"))] = t["role"]
 
     for section_id, filename, title in CHAPTER3:
         path = ROOT / filename
@@ -65,8 +71,22 @@ def main():
             )
             if prev:
                 entry["scenario"] = prev
+            role = existing_roles.get(entry["id"]) or existing_roles.get(
+                (section_id, t["name"])
+            )
+            if role:
+                entry["role"] = role
             section_terms.append(entry)
             all_terms.append(entry)
+
+        extracted_ids = {e["id"] for e in section_terms}
+        extras = [
+            t
+            for t in prev_terms
+            if t.get("section") == section_id and t.get("id") not in extracted_ids
+        ]
+        section_terms.extend(extras)
+        all_terms.extend(extras)
 
         sections.append(
             {

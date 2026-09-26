@@ -71,16 +71,23 @@
     return text.slice(0, max - 1).trim() + "…";
   }
 
-  function pickDistractors(term, pool, count) {
-    const same = pool.filter((t) => t.id !== term.id && t.section === term.section);
-    const other = pool.filter((t) => t.id !== term.id && t.section !== term.section);
+  function pickDistractors(term, pool, count, mode) {
+    const nameKey = (term.name || "").trim().toLowerCase();
+    let rest = pool.filter((t) => t.id !== term.id && (t.name || "").trim().toLowerCase() !== nameKey);
+    if (mode === "scenario" && term.role) {
+      const sameRole = rest.filter((t) => t.role === term.role);
+      if (sameRole.length) rest = sameRole;
+    }
+    const same = rest.filter((t) => t.section === term.section);
+    const other = rest.filter((t) => t.section !== term.section);
     const candidates = shuffle(same.length >= count ? same : same.concat(other));
     return candidates.slice(0, count);
   }
 
-  function buildQuestions(terms, mode) {
+  function buildQuestions(terms, mode, distractorPool) {
+    const pool = distractorPool && distractorPool.length ? distractorPool : terms;
     return shuffle(terms).map((term) => {
-      const distractors = pickDistractors(term, terms, 3);
+      const distractors = pickDistractors(term, pool, 3, mode);
       const choices =
         mode === "term-to-def"
           ? shuffle([
@@ -101,6 +108,21 @@
     });
   }
 
+  function categorySlug(value) {
+    return (value || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+  }
+
+  function termMatchesCategory(term, wanted) {
+    if (!wanted) return true;
+    const cat = (term.category || "").trim().toLowerCase();
+    const needle = wanted.trim().toLowerCase();
+    return cat === needle || categorySlug(cat) === categorySlug(needle) || cat.includes(needle);
+  }
+
   function getUrlParams() {
     const p = new URLSearchParams(window.location.search);
     const section = p.get("section");
@@ -114,6 +136,7 @@
       start: p.get("start") === "1",
       mode: p.get("mode") || null,
       core: p.get("core") === "1",
+      category: p.get("category") || "",
     };
   }
 
@@ -224,14 +247,16 @@
     return window.QUIZ_DATA.sections.filter((s) => sectionCount(s) >= 4).map((s) => s.id);
   }
 
-  function startQuiz(forcedSections) {
+  function startQuiz(forcedSections, forcedCategory) {
     const sections = forcedSections || getSelectedSections();
     if (!sections.length) {
       alert("Select at least one section.");
       return;
     }
+    const category = forcedCategory !== undefined ? forcedCategory : getUrlParams().category;
     state.mode = selectedMode();
-    state.pool = visibleTerms().filter((t) => sections.includes(t.section));
+    const sectionPool = visibleTerms().filter((t) => sections.includes(t.section));
+    state.pool = category ? sectionPool.filter((t) => termMatchesCategory(t, category)) : sectionPool;
     if (state.mode === "scenario") {
       state.pool = state.pool.filter((t) => t.scenario || t.definition);
     }
@@ -239,7 +264,7 @@
       alert("Need at least 4 terms in the selected sections for multiple-choice questions.");
       return;
     }
-    state.questions = buildQuestions(state.pool, state.mode);
+    state.questions = buildQuestions(state.pool, state.mode, sectionPool);
     state.index = 0;
     state.correct = 0;
     state.missed = [];
@@ -417,7 +442,7 @@
       setSectionSelection(params.sections);
       updateSetupHeading(params.sections);
       if (params.start) {
-        startQuiz(params.sections);
+        startQuiz(params.sections, params.category);
         return;
       }
     } else if (params.start) {

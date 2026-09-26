@@ -6,25 +6,25 @@
       "id": "3.1",
       "title": "Troubleshoot Microsoft Windows OS Problems",
       "file": "3.1 Troubleshoot Microsoft Windows OS Problems.html",
-      "count": 49
+      "count": 50
     },
     {
       "id": "3.2",
       "title": "Troubleshoot Mobile OS and Application Issues",
       "file": "3.2 Troubleshoot Mobile OS and Application Issues.html",
-      "count": 12
+      "count": 57
     },
     {
       "id": "3.3",
       "title": "Troubleshoot Mobile OS and Application Security Issues",
       "file": "3.3 Troubleshoot Mobile OS and Application Security Issues.html",
-      "count": 14
+      "count": 15
     },
     {
       "id": "3.4",
       "title": "Troubleshoot Windows OS Security Issues",
       "file": "3.4 Troubleshoot Windows OS Security Issues.html",
-      "count": 10
+      "count": 17
     }
   ],
   "terms": [
@@ -35,7 +35,8 @@
       "category": "Crashes and boot failures",
       "name": "Blue screen of death (BSOD)",
       "definition": "Windows stops with a blue screen when bad hardware, bad drivers, or a failing app prevents the OS from continuing. Note the stop code / QR details for targeting the right fix.",
-      "scenario": "After a new GPU driver, the PC dies on a solid blue stop screen with a QR code and hex dump. What crash is that?"
+      "scenario": "Windows stops on a blue screen with a stop code after a bad driver, bad hardware, or a failing app. What crash is that?",
+      "role": "problem"
     },
     {
       "id": "3.1-1",
@@ -44,7 +45,8 @@
       "category": "Crashes and boot failures",
       "name": "Last Known Good Configuration",
       "definition": "Boot into the last successful startup registry and driver set after a bad driver or config change.",
-      "scenario": "A driver change wrecked boot. You want the last successful startup registry and driver set — not a restore point. What feature is that?"
+      "scenario": "A user changed a registry setting last night to enable a feature, and now the PC won't boot past a blue screen. They don't know exactly which setting broke it. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-2",
@@ -53,7 +55,8 @@
       "category": "Crashes and boot failures",
       "name": "System Restore",
       "definition": "Roll system files, drivers, and settings back to a restore point without wiping personal documents.",
-      "scenario": "You need to roll Windows files, drivers, and settings back to a snapshot without wiping Documents. What tool do you use?"
+      "scenario": "A BSOD started after installing an unknown third-party utility a few days ago, and the user doesn't remember exactly what else they changed. They want to undo recent system-wide changes without losing their documents. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-3",
@@ -62,7 +65,8 @@
       "category": "Crashes and boot failures",
       "name": "Roll back drivers",
       "definition": "In Device Manager, undo a recently installed driver that started the crashes.",
-      "scenario": "Crashes started right after yesterday’s display driver. In Device Manager you undo just that driver. What is that action called?"
+      "scenario": "BSODs started right after updating a specific GPU driver. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-4",
@@ -71,7 +75,8 @@
       "category": "Crashes and boot failures",
       "name": "Safe Mode",
       "definition": "Boot with only essential drivers/services so you can remove bad software or roll back drivers that block a normal start.",
-      "scenario": "Windows will not start normally. You boot with only essential drivers so you can uninstall the bad software. What boot mode is that?"
+      "scenario": "The PC blue-screens every time it boots normally, and you need to get in to uninstall a bad app or roll back a driver. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-5",
@@ -80,7 +85,8 @@
       "category": "Crashes and boot failures",
       "name": "Reseat components",
       "definition": "Power down and reseat RAM, GPU, and power connectors — loose hardware often looks like a software stop error.",
-      "scenario": "Stop codes look like software, but RAM and the GPU were never clicked fully home. What hardware step do you try first?"
+      "scenario": "A desktop was just moved to a new desk, and now it randomly blue-screens with no software changes made. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-6",
@@ -89,7 +95,8 @@
       "category": "Crashes and boot failures",
       "name": "Hardware diagnostics",
       "definition": "Run UEFI/BIOS or vendor tools to test CPU and RAM when stop codes point at memory or kernel faults.",
-      "scenario": "The stop code points at memory or the kernel. You run UEFI/vendor tests on CPU and RAM. What kind of check is that?"
+      "scenario": "The BSOD stop code specifically references a memory or kernel fault, and reseating components didn't help. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-7",
@@ -98,7 +105,8 @@
       "category": "Crashes and boot failures",
       "name": "Boot issues",
       "definition": "Windows fails to start normally — missing OS/bootloader, dual-boot conflicts, or the system only reaches Safe Mode. Non-bootable media can also block startup.",
-      "scenario": "The machine never reaches a normal desktop — missing bootloader, dual-boot fight, or it only lands in Safe Mode. What class of problem is that?"
+      "scenario": "Windows fails to start normally — missing bootloader, dual-boot conflict, leftover media, or it only reaches Safe Mode. What class of problem is that?",
+      "role": "problem"
     },
     {
       "id": "3.1-8",
@@ -107,7 +115,8 @@
       "category": "Crashes and boot failures",
       "name": "Remove non-bootable media",
       "definition": "Unplug USB installers, external drives, and optical discs that the firmware may try to boot before the OS disk.",
-      "scenario": "Firmware keeps trying a leftover USB installer before the Windows disk. What do you pull first?"
+      "scenario": "A laptop won't boot past the firmware screen, and there's a USB installer stick still plugged in from a reimage last week. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-9",
@@ -116,7 +125,8 @@
       "category": "Crashes and boot failures",
       "name": "Startup Repair",
       "definition": "Use the automated WinRE tool first when Windows fails to start or only boots into Safe Mode.",
-      "scenario": "Windows fails to start or only reaches Safe Mode. You try WinRE’s automated fix before any command-line tools. What is that tool?"
+      "scenario": "Windows fails to start normally and only reaches Safe Mode, with no problematic media plugged in. What's the first tool to try?",
+      "role": "solution"
     },
     {
       "id": "3.1-10",
@@ -125,7 +135,8 @@
       "category": "Crashes and boot failures",
       "name": "bootrec /rebuildbcd",
       "definition": "From the Recovery Console, rebuild the Boot Configuration Database when Startup Repair is not enough.",
-      "scenario": "WinRE’s automated fix did not restore boot. From Recovery Console you rebuild the Boot Configuration Database. Which command?"
+      "scenario": "Startup Repair ran but couldn't fix the boot problem. What's the next step?",
+      "role": "solution"
     },
     {
       "id": "3.1-11",
@@ -134,7 +145,8 @@
       "category": "Crashes and boot failures",
       "name": "“No OS found”",
       "definition": "The firmware or bootloader cannot find a bootable OS — often bootloader corruption, dual-boot overwrites, or missing boot files.",
-      "scenario": "Firmware or the bootloader cannot find any bootable operating system. What message/condition is that?"
+      "scenario": "Firmware or the bootloader cannot find a bootable operating system. What message is that?",
+      "role": "problem"
     },
     {
       "id": "3.1-12",
@@ -143,7 +155,8 @@
       "category": "Crashes and boot failures",
       "name": "Unplug non-bootable drives",
       "definition": "Disconnect extra media and secondary disks so firmware boots the correct Windows volume.",
-      "scenario": "An extra HDD and an optical drive are in the boot order, so firmware never hits the real Windows volume. What do you disconnect?"
+      "scenario": "A tech just added a second (non-bootable, data-only) internal drive to a desktop, and now firmware shows \"No OS found\" on restart. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-13",
@@ -152,7 +165,8 @@
       "category": "Crashes and boot failures",
       "name": "Startup Repair",
       "definition": "Let WinRE repair missing or damaged boot files that trigger a “No OS found” message.",
-      "scenario": "The PC reports no operating system. You let WinRE repair missing or damaged boot files before typing commands. What tool is that?"
+      "scenario": "\"No OS found\" appears, no extra media is connected, and boot files seem to be missing or damaged. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-14",
@@ -161,7 +175,8 @@
       "category": "Crashes and boot failures",
       "name": "bootrec /rebuildbcd",
       "definition": "Manually rebuild the BCD from the Recovery Console command prompt if Startup Repair does not restore boot.",
-      "scenario": "“No OS found” is still there after WinRE. From the recovery command prompt you rebuild the BCD by hand. Which command?"
+      "scenario": "Startup Repair didn't resolve the \"No OS found\" error. What's the next step?",
+      "role": "solution"
     },
     {
       "id": "3.1-15",
@@ -170,7 +185,8 @@
       "category": "Performance and stability",
       "name": "Degraded performance",
       "definition": "The PC feels slow or unresponsive — apps lag, disk thrashing is high, or tasks take longer than normal.",
-      "scenario": "Apps lag, the disk thrashes, and everyday tasks take longer than they used to. What symptom is that?"
+      "scenario": "The PC feels slow or unresponsive — apps lag and tasks take longer than normal. What symptom is that?",
+      "role": "problem"
     },
     {
       "id": "3.1-16",
@@ -179,7 +195,8 @@
       "category": "Performance and stability",
       "name": "Task Manager",
       "definition": "Use Processes and a ~60-second Performance view to find the apps consuming CPU, disk, or memory.",
-      "scenario": "You open Processes and watch Performance for about a minute to see which app is eating CPU, disk, or RAM. What utility is that?"
+      "scenario": "A PC feels slow and you don't yet know why — you want to identify which specific app or process is hogging CPU, disk, or memory. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-17",
@@ -188,7 +205,8 @@
       "category": "Performance and stability",
       "name": "Windows Update checks",
       "definition": "Install pending OS patches that fix known performance bugs and resource leaks.",
-      "scenario": "Pending OS patches are known to fix the resource leak causing the slowness. What check do you run?"
+      "scenario": "The PC has been sluggish for weeks and hasn't installed updates in months. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-18",
@@ -197,7 +215,8 @@
       "category": "Performance and stability",
       "name": "Free disk space",
       "definition": "Clear unused files so the volume has headroom for paging, updates, and temp files.",
-      "scenario": "The volume is packed, so paging, updates, and temp files have nowhere to go. What do you free up?"
+      "scenario": "The C: drive is at 98% full and the PC is sluggish, especially during updates and multitasking. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-19",
@@ -206,7 +225,8 @@
       "category": "Performance and stability",
       "name": "Defrag (HDD)",
       "definition": "On hard disks, run Optimize/Defragment. Skip routine defrag on SSDs — they use TRIM/optimize instead.",
-      "scenario": "The PC uses a spinning hard disk, not an SSD. You run Optimize/Defragment. What maintenance is that?"
+      "scenario": "An older PC with a traditional spinning hard drive (not an SSD) feels slow opening files. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-20",
@@ -215,7 +235,8 @@
       "category": "Performance and stability",
       "name": "Laptop power source",
       "definition": "Seat the charger firmly — on battery or a weak adapter, Windows may throttle the CPU.",
-      "scenario": "A laptop is slow until you click the charger in firmly — Windows was throttling on battery. What did you check?"
+      "scenario": "A laptop is fast when plugged in but noticeably sluggish on battery. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-21",
@@ -224,7 +245,8 @@
       "category": "Performance and stability",
       "name": "Antivirus scan",
       "definition": "Run a full scan when Task Manager shows unexplained high CPU or disk use from malware.",
-      "scenario": "Task Manager shows unexplained high CPU and disk with no heavy app open. You run a full scan for malware. What scan is that?"
+      "scenario": "Task Manager shows unexplained high CPU and disk usage from a process the user doesn't recognize. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-22",
@@ -233,7 +255,8 @@
       "category": "Performance and stability",
       "name": "Low memory warnings",
       "definition": "Windows warns that memory is nearly full — apps may freeze, crash, or refuse to open while RAM pressure is high.",
-      "scenario": "Windows pops a banner that RAM is nearly full; apps freeze or refuse to open. What warning is that?"
+      "scenario": "Windows warns that RAM is nearly full; apps freeze, crash, or refuse to open. What warning is that?",
+      "role": "problem"
     },
     {
       "id": "3.1-23",
@@ -242,7 +265,8 @@
       "category": "Performance and stability",
       "name": "Close memory-heavy apps",
       "definition": "Sort Task Manager by Memory, save work, then close or restart the programs using the most RAM.",
-      "scenario": "You sort Task Manager by Memory, save work, and quit the browsers eating most of the RAM. What step is that?"
+      "scenario": "RAM usage is high, apps are freezing, and the user has time to sort through what's open and close the worst offenders without losing work. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-24",
@@ -251,7 +275,8 @@
       "category": "Performance and stability",
       "name": "Virtual memory (paging file)",
       "definition": "Review the paging file under System > About > Advanced system settings > Performance Settings > Virtual Memory.",
-      "scenario": "You open Advanced system settings → Performance → Virtual Memory to review the paging file. What setting is that?"
+      "scenario": "RAM is consistently near capacity as a longer-term pattern (not just once), and you want to review how Windows is managing overflow to disk. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-25",
@@ -260,7 +285,8 @@
       "category": "Performance and stability",
       "name": "Frequent shutdowns",
       "definition": "The system powers off or stops without a scheduled shutdown — often hardware faults, corrupted system files, or malware.",
-      "scenario": "The PC powers off with no shutdown click — not a scheduled restart. What symptom is that?"
+      "scenario": "The PC powers off with no scheduled shutdown. What symptom is that?",
+      "role": "problem"
     },
     {
       "id": "3.1-26",
@@ -269,7 +295,8 @@
       "category": "Performance and stability",
       "name": "Full hardware diagnostics",
       "definition": "Test motherboard, CPU, and RAM with UEFI/BIOS or vendor diagnostic tools.",
-      "scenario": "Unexpected power-offs continue. You run UEFI/vendor tests on the motherboard, CPU, and RAM. What kind of test is that?"
+      "scenario": "A desktop shuts off randomly with no clear cause, and no component has been tested yet. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-27",
@@ -278,7 +305,8 @@
       "category": "Performance and stability",
       "name": "Windows Memory Diagnostics",
       "definition": "Reboot into the built-in RAM test when random power-offs suggest memory errors.",
-      "scenario": "Random power-offs smell like bad RAM. You reboot into Windows’ built-in memory test. What tool is that?"
+      "scenario": "Random shutdowns are happening and you specifically suspect faulty RAM. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-28",
@@ -287,7 +315,8 @@
       "category": "Performance and stability",
       "name": "System File Checker (sfc)",
       "definition": "Run sfc /scannow to repair corrupted Windows files that can force unexpected stops.",
-      "scenario": "Unexpected stops look like damaged Windows files. You run sfc /scannow. What tool is that?"
+      "scenario": "Random shutdowns are happening and Windows system files may be corrupted. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-29",
@@ -296,7 +325,8 @@
       "category": "Performance and stability",
       "name": "Anti-malware scan",
       "definition": "Scan for malware that can crash services or force the machine offline.",
-      "scenario": "The machine keeps dropping offline and killing services; you scan for malware that can force those stops. What scan is that?"
+      "scenario": "A PC shuts down unexpectedly and you suspect malware is crashing a system service. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-30",
@@ -305,7 +335,8 @@
       "category": "Performance and stability",
       "name": "System instability",
       "definition": "Random crashes, freezes, or reboots with no single app clearly to blame.",
-      "scenario": "Random crashes, freezes, and reboots with no single app to blame. What symptom is that?"
+      "scenario": "Random crashes, freezes, or reboots with no single app clearly to blame. What symptom is that?",
+      "role": "problem"
     },
     {
       "id": "3.1-31",
@@ -314,7 +345,8 @@
       "category": "Performance and stability",
       "name": "Full hardware diagnostics",
       "definition": "Stress-test CPU, RAM, and related hardware when there is no clear software cause.",
-      "scenario": "Instability has no software lead. You stress-test CPU, RAM, and related hardware. What kind of test is that?"
+      "scenario": "Random crashes and freezes happen with no clear app to blame, and no hardware testing has been done yet. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-32",
@@ -323,7 +355,8 @@
       "category": "Performance and stability",
       "name": "Windows Memory Diagnostics",
       "definition": "Run the built-in RAM test when freezes or BSODs look memory-related.",
-      "scenario": "Freezes and blue screens look memory-related. You run the built-in RAM test. What tool is that?"
+      "scenario": "Freezes and BSODs look memory-related. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-33",
@@ -332,7 +365,8 @@
       "category": "Performance and stability",
       "name": "System File Checker (sfc)",
       "definition": "Scan and repair corrupted Windows system files with sfc /scannow.",
-      "scenario": "Random instability continues. You scan and repair corrupted Windows system files. What tool is that?"
+      "scenario": "The system is unstable and core Windows files may be damaged. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-34",
@@ -341,7 +375,8 @@
       "category": "Performance and stability",
       "name": "Anti-malware scan",
       "definition": "Scan for malware that injects into processes or tampers with system files.",
-      "scenario": "Processes look injected and system files keep changing. You scan for malware tampering with the OS. What scan is that?"
+      "scenario": "The system is unstable and you suspect something has injected into running processes. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-35",
@@ -350,7 +385,8 @@
       "category": "Performance and stability",
       "name": "Time drift",
       "definition": "The clock slowly loses accuracy because of unreliable hardware timekeeping — which can break auth, certificates, and sync.",
-      "scenario": "The clock slowly loses minutes, and Kerberos tickets plus HTTPS certs start failing. What problem is that?"
+      "scenario": "The clock slowly loses minutes, and HTTPS certs or Kerberos start failing. What problem is that?",
+      "role": "problem"
     },
     {
       "id": "3.1-36",
@@ -359,7 +395,8 @@
       "category": "Performance and stability",
       "name": "Set time automatically",
       "definition": "In Settings > Time & Language > Date & Time, enable automatic time (and DST) so Windows syncs to time servers, or sync manually.",
-      "scenario": "In Date & Time you turn on automatic time (and DST) so Windows syncs to time servers. What setting is that?"
+      "scenario": "Every HTTPS site throws a certificate warning on one laptop only — other devices on the same network are fine. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-37",
@@ -368,7 +405,8 @@
       "category": "Services, applications, and peripherals",
       "name": "Services not starting",
       "definition": "Windows or third-party services fail to start, leaving features offline until drivers, permissions, or dependencies are fixed.",
-      "scenario": "Print Spooler and a backup agent never come up after reboot, so those features stay offline. What symptom is that?"
+      "scenario": "Print Spooler or another Windows service never comes up after reboot. What symptom is that?",
+      "role": "problem"
     },
     {
       "id": "3.1-38",
@@ -377,7 +415,8 @@
       "category": "Services, applications, and peripherals",
       "name": "Device Manager",
       "definition": "Check device status, then update, roll back, or replace drivers that block related services.",
-      "scenario": "A yellow bang on a device is blocking the related service. You update, roll back, or replace the driver there. What console is that?"
+      "scenario": "A service won't start, and you suspect it's tied to a piece of hardware whose driver may need updating or rolling back. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-39",
@@ -386,7 +425,8 @@
       "category": "Services, applications, and peripherals",
       "name": "services.msc",
       "definition": "Start the service manually, adjust the log-on account, and verify dependencies in the Services app.",
-      "scenario": "You open the Services app, start the service, fix the log-on account, and check dependencies. What MMC is that?"
+      "scenario": "A service shows \"Stopped,\" Device Manager shows no driver issues, and you suspect a wrong log-on account or unmet dependency. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-40",
@@ -395,7 +435,8 @@
       "category": "Services, applications, and peripherals",
       "name": "sfc /scannow",
       "definition": "Repair corrupted built-in Windows service binaries. For third-party app services, reinstall the app with admin rights.",
-      "scenario": "A built-in Windows service will not start because its binary is corrupt. You repair system files; for a third-party service you would reinstall the app. Which command?"
+      "scenario": "A built-in Windows service won't start because its binary appears corrupted. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-41",
@@ -404,7 +445,8 @@
       "category": "Services, applications, and peripherals",
       "name": "Applications crashing",
       "definition": "One or more programs close unexpectedly, hang, or fail to stay open during normal use.",
-      "scenario": "One program keeps closing, hanging, or refusing to stay open during normal use. What symptom is that?"
+      "scenario": "One program keeps closing, hanging, or refusing to stay open. What symptom is that?",
+      "role": "problem"
     },
     {
       "id": "3.1-42",
@@ -413,7 +455,8 @@
       "category": "Services, applications, and peripherals",
       "name": "Event Viewer / Reliability Monitor",
       "definition": "Inspect crash logs and reliability history to identify the failing module or recent change.",
-      "scenario": "You check crash logs and reliability history to see which module or recent change killed the app. What pair of tools is that?"
+      "scenario": "An app keeps crashing and you don't yet know why. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-43",
@@ -422,7 +465,8 @@
       "category": "Services, applications, and peripherals",
       "name": "Reinstall the application",
       "definition": "Repair or reinstall the failing app after logs point to a corrupted install.",
-      "scenario": "Logs say the install is corrupted, so you repair or put the same program back on the PC. What step is that?"
+      "scenario": "Logs point to a corrupted install as the cause of an app's crashes. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-44",
@@ -431,7 +475,8 @@
       "category": "Services, applications, and peripherals",
       "name": "USB controller resource warnings",
       "definition": "Connecting a device exceeds the USB controller’s available endpoints, so Windows warns or the device misbehaves.",
-      "scenario": "Plugging in a webcam triggers a warning that the USB controller is out of endpoints. What warning is that?"
+      "scenario": "Plugging in a USB device triggers a warning that the controller is out of endpoints. What warning is that?",
+      "role": "problem"
     },
     {
       "id": "3.1-45",
@@ -440,7 +485,8 @@
       "category": "Services, applications, and peripherals",
       "name": "Move to another USB port",
       "definition": "Disconnect the device and plug it into a different port or controller to free endpoints.",
-      "scenario": "The USB device misbehaves on this port, so you unplug it and try a different port or controller. What step is that?"
+      "scenario": "Plugging in one more USB device triggers a \"not enough resources\" warning on a hub with several devices already connected. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-46",
@@ -449,7 +495,8 @@
       "category": "Services, applications, and peripherals",
       "name": "Balance USB 2.0 / 3.0",
       "definition": "Keep USB 2.0 devices on USB 2.0 controllers and USB 3.0 devices on USB 3.0 controllers to spread endpoint load.",
-      "scenario": "You keep USB 2.0 gadgets on 2.0 controllers and USB 3.0 gadgets on 3.0 so endpoints are not stacked on one hub. What practice is that?"
+      "scenario": "USB endpoint warnings keep happening because USB 2.0 and 3.0 devices are all crammed onto the same controller. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.1-47",
@@ -458,7 +505,8 @@
       "category": "Services, applications, and peripherals",
       "name": "Slow profile load",
       "definition": "Sign-in takes a long time, usually from network latency or WAN congestion while syncing a roaming profile to a domain controller.",
-      "scenario": "Domain sign-in takes forever while a roaming profile crawls over a congested WAN to the DC. What symptom is that?"
+      "scenario": "Domain sign-in takes a long time while a roaming profile syncs, but once it finishes the desktop is normal. What symptom is that?",
+      "role": "problem"
     },
     {
       "id": "3.1-48",
@@ -467,7 +515,18 @@
       "category": "Services, applications, and peripherals",
       "name": "Repair / optimize domain controllers",
       "definition": "Domain admins fix or optimize local DCs and profile sync paths so roaming profiles load without WAN bottlenecks.",
-      "scenario": "Help desk escalates to domain admins to fix local DCs and profile sync so logon is not waiting on the WAN. What fix is that?"
+      "scenario": "Sign-in takes a very long time over the WAN, but once it finishes, all the user's normal files and settings are there correctly. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.1-49",
+      "section": "3.1",
+      "sectionTitle": "Troubleshoot Microsoft Windows OS Problems",
+      "category": "Services, applications, and peripherals",
+      "name": "Rebuild user profile",
+      "definition": "A corrupted or temporary profile shows a default wallpaper and empty Documents after a fast domain logon. Rename C:\\Users\\username, delete that profile's SID under HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList, sign in again, then copy files back from the renamed folder.",
+      "scenario": "A user reaches the desktop quickly, but it shows default wallpaper and an empty Documents folder. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.2-0",
@@ -476,7 +535,8 @@
       "category": "Application issues",
       "name": "Application fails to launch",
       "definition": "Restart the device. Update the app. Reinstall the app.",
-      "scenario": "A phone app will not open at all. After a reboot you update it, then reinstall it. What issue are you working?"
+      "scenario": "A phone app will not open at all. After a reboot you update it, then reinstall it. What issue are you working?",
+      "role": "problem"
     },
     {
       "id": "3.2-1",
@@ -485,7 +545,8 @@
       "category": "Application issues",
       "name": "Application fails to close / crashes",
       "definition": "Force close the app. Restart the device. Update the app. Reinstall the app. Review crash logs / contact support.",
-      "scenario": "The app is stuck on screen or dies mid-use. You force-close it, reboot, update, then reinstall and check crash logs. What issue is that?"
+      "scenario": "The app is stuck on screen or dies mid-use. You force-close it, reboot, update, then reinstall and check crash logs. What issue is that?",
+      "role": "problem"
     },
     {
       "id": "3.2-2",
@@ -494,7 +555,8 @@
       "category": "Application issues",
       "name": "Application fails to update",
       "definition": "Update the app. Check payment method. Check network / try another network. Check storage space. Restart the device. Check MDM policy.",
-      "scenario": "The store will not patch the app. You check payment, network, storage, reboot, and MDM before trying again. What issue is that?"
+      "scenario": "The store will not patch the app. You check payment, network, storage, reboot, and MDM before trying again. What issue is that?",
+      "role": "problem"
     },
     {
       "id": "3.2-3",
@@ -503,7 +565,8 @@
       "category": "Application issues",
       "name": "Application fails to install",
       "definition": "Check storage space. Check payment method. Check network / try another network. Check MDM policy.",
-      "scenario": "A new app will not install. Storage, payment method, network, and MDM policy are the first checks. What issue is that?"
+      "scenario": "A new app will not install. Storage, payment method, network, and MDM policy are the first checks. What issue is that?",
+      "role": "problem"
     },
     {
       "id": "3.2-4",
@@ -512,7 +575,8 @@
       "category": "Application issues",
       "name": "Slow to respond",
       "definition": "Restart the device. Update the app. Update the OS.",
-      "scenario": "The phone feels laggy in one app. You reboot, then update the app and the OS. What symptom is that?"
+      "scenario": "The phone feels laggy in one app. You reboot, then update the app and the OS. What symptom is that?",
+      "role": "problem"
     },
     {
       "id": "3.2-5",
@@ -521,7 +585,8 @@
       "category": "OS and device health",
       "name": "OS fails to update",
       "definition": "Check storage space. Check network / try another network. Restart the device.",
-      "scenario": "The phone OS update will not finish. You free storage, try another network, and reboot. What issue is that?"
+      "scenario": "The phone OS update will not finish. You free storage, try another network, and reboot. What issue is that?",
+      "role": "problem"
     },
     {
       "id": "3.2-6",
@@ -530,7 +595,8 @@
       "category": "OS and device health",
       "name": "Battery life issues",
       "definition": "Airplane Mode (poor coverage). Turn off unused radios (Wi-Fi, Bluetooth, GPS). Check battery health. Replace the battery.",
-      "scenario": "The phone dies by lunch. You try Airplane Mode in poor coverage, kill unused radios, then check battery health. What issue is that?"
+      "scenario": "The phone dies by lunch. You try Airplane Mode in poor coverage, kill unused radios, then check battery health. What issue is that?",
+      "role": "problem"
     },
     {
       "id": "3.2-7",
@@ -539,7 +605,8 @@
       "category": "OS and device health",
       "name": "Random reboots",
       "definition": "Update the OS. Update the app. Review crash logs / contact support. Check battery health.",
-      "scenario": "The phone restarts by itself. You update OS and apps, review crash logs, and check the battery. What symptom is that?"
+      "scenario": "The phone restarts by itself. You update OS and apps, review crash logs, and check the battery. What symptom is that?",
+      "role": "problem"
     },
     {
       "id": "3.2-8",
@@ -548,7 +615,8 @@
       "category": "Connectivity and display",
       "name": "Connectivity issues — Wi-Fi",
       "definition": "Toggle the radio off and on (Wi-Fi / Bluetooth / NFC). Verify Wi-Fi password / AP settings. Check network / try another network. Restart the device.",
-      "scenario": "The phone will not join the office SSID. You toggle Wi-Fi, recheck the password/AP, try another network, then reboot. What issue is that?"
+      "scenario": "The phone will not join the office SSID. You toggle Wi-Fi, recheck the password/AP, try another network, then reboot. What issue is that?",
+      "role": "problem"
     },
     {
       "id": "3.2-9",
@@ -557,7 +625,8 @@
       "category": "Connectivity and display",
       "name": "Connectivity issues — Bluetooth",
       "definition": "Toggle the radio off and on (Wi-Fi / Bluetooth / NFC). Restart the device. AirDrop: Bluetooth + Wi-Fi on; move closer.",
-      "scenario": "Headphones will not pair. You toggle Bluetooth, reboot, and for AirDrop you also turn Wi-Fi on and move closer. What issue is that?"
+      "scenario": "Headphones will not pair. You toggle Bluetooth, reboot, and for AirDrop you also turn Wi-Fi on and move closer. What issue is that?",
+      "role": "problem"
     },
     {
       "id": "3.2-10",
@@ -566,7 +635,8 @@
       "category": "Connectivity and display",
       "name": "Connectivity issues — Near-field communication (NFC)",
       "definition": "Toggle the radio off and on (Wi-Fi / Bluetooth / NFC). Restart the device. Update linked payment cards.",
-      "scenario": "Tap-to-pay will not fire. You toggle NFC, reboot, and update the cards in the wallet app. What issue is that?"
+      "scenario": "Tap-to-pay will not fire. You toggle NFC, reboot, and update the cards in the wallet app. What issue is that?",
+      "role": "problem"
     },
     {
       "id": "3.2-11",
@@ -575,7 +645,458 @@
       "category": "Connectivity and display",
       "name": "Screen does not autorotate",
       "definition": "Check orientation lock. Close and reopen the app. Restart the device. Hardware failure — contact support.",
-      "scenario": "Turning the phone sideways does not rotate the screen. You check orientation lock, reopen the app, then reboot. What issue is that?"
+      "scenario": "Turning the phone sideways does not rotate the screen. You check orientation lock, reopen the app, then reboot. What issue is that?",
+      "role": "problem"
+    },
+    {
+      "id": "3.2-12",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Application issues",
+      "name": "Restart the device",
+      "definition": "Power-cycle the phone or tablet first when an app will not open.",
+      "scenario": "A user taps an app icon and nothing happens at all — no error, no freeze, nothing else has been changed recently. What's the first, quickest fix to try?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-13",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Application issues",
+      "name": "Update the app",
+      "definition": "Install the pending store update when the app dies right after launch.",
+      "scenario": "The app opens, then immediately closes itself. The App Store shows a pending update for that app. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-14",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Application issues",
+      "name": "Reinstall the app",
+      "definition": "Remove and reinstall the app after restart and update have already failed.",
+      "scenario": "The app is already on the latest version, the device has been restarted, and it still won't launch. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-15",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Application issues",
+      "name": "Force close the app",
+      "definition": "Force close: iOS — slide it off the app list; Android — Force Stop, then reopen.",
+      "scenario": "A banking app is frozen on screen and won't respond to any taps. What's the immediate fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-16",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Application issues",
+      "name": "Restart the device",
+      "definition": "Restart the device after a force-close fails to stop the crash.",
+      "scenario": "Force closing the app didn't help — it crashes again the moment it's reopened. What's the next fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-17",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Application issues",
+      "name": "Update the app",
+      "definition": "Install the available app update after a restart did not stop the crash.",
+      "scenario": "The app crashes on launch, restarting the device didn't help, and there's a known update available for the app. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-18",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Application issues",
+      "name": "Reinstall the app",
+      "definition": "Reinstall after update and restart still leave the app crashing.",
+      "scenario": "The app is fully updated and the device has been restarted, but it still crashes every time. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-19",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Application issues",
+      "name": "Review crash logs / contact support",
+      "definition": "Pull crash logs or contact the vendor when a clean reinstall still fails.",
+      "scenario": "The app still crashes after a fresh reinstall, and the cause isn't obvious. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-20",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Application issues",
+      "name": "Check payment method",
+      "definition": "Fix the store payment method when an update is blocked by a declined card.",
+      "scenario": "An app update is stuck, and the user's card on file for the App Store/Play Store has expired. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-21",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Application issues",
+      "name": "Check network / try another network",
+      "definition": "Switch networks (Wi-Fi vs cellular) when the store download fails on one path.",
+      "scenario": "An app update keeps failing on cellular data specifically. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-22",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Application issues",
+      "name": "Check storage space",
+      "definition": "Free storage so the store can download and unpack the update.",
+      "scenario": "The device has only 200MB free and an app update is stalling. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-23",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Application issues",
+      "name": "Restart the device",
+      "definition": "Restart after payment, network, and storage already check out.",
+      "scenario": "Payment, network, and storage are all fine, but the update still won't complete. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-24",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Application issues",
+      "name": "Check MDM policy",
+      "definition": "MDM may block that app version — check the management policy.",
+      "scenario": "A work phone under corporate management won't let a specific app update at all. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-25",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Application issues",
+      "name": "Check storage space",
+      "definition": "Free space before a new install can land on the device.",
+      "scenario": "A new app won't install and the device shows only 50MB of free space. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-26",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Application issues",
+      "name": "Check payment method",
+      "definition": "Fix the store payment method when a paid install is declined.",
+      "scenario": "A paid app won't install because the purchase is being declined. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-27",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Application issues",
+      "name": "Check network / try another network",
+      "definition": "Try another network when the install never leaves 0%.",
+      "scenario": "An app install is stuck at 0% on Wi-Fi. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-28",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Application issues",
+      "name": "Check MDM policy",
+      "definition": "MDM allow-lists may block unapproved apps — check policy.",
+      "scenario": "A company-issued phone blocks installation of an app that isn't on the approved list. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-29",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Application issues",
+      "name": "Restart the device",
+      "definition": "Restart first when an app is sluggish and nothing else has been tried.",
+      "scenario": "An app has been laggy all day for no clear reason, and no other troubleshooting has been tried yet. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-30",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Application issues",
+      "name": "Update the app",
+      "definition": "Install the pending app update after a restart did not fix lag.",
+      "scenario": "A restart didn't help, and the app has a known update available in the store. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-31",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Application issues",
+      "name": "Update the OS",
+      "definition": "Update the OS after app update and restart still leave the device sluggish.",
+      "scenario": "The app is fully updated and the device was restarted, but it's still sluggish — and the device hasn't had an OS update installed in a long time. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-32",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "OS and device health",
+      "name": "Check storage space",
+      "definition": "Free storage so the OS update can download.",
+      "scenario": "An OS update won't download because the device only has 500MB free. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-33",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "OS and device health",
+      "name": "Check network / try another network",
+      "definition": "Try another network when the OS update fails on one SSID.",
+      "scenario": "An OS update fails every time on public Wi-Fi. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-34",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "OS and device health",
+      "name": "Restart the device",
+      "definition": "Restart after storage and network already check out for an OS update.",
+      "scenario": "Storage and network are both fine, but the OS update still won't install. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-35",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "OS and device health",
+      "name": "Airplane Mode",
+      "definition": "Turn on Airplane Mode in poor coverage so the radio stops hunting.",
+      "scenario": "A user is in a rural area with very weak cell signal, and their battery is draining fast because the phone keeps searching for a signal. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-36",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "OS and device health",
+      "name": "Turn off unused radios",
+      "definition": "Turn off unused Wi-Fi, Bluetooth, and GPS radios to save battery.",
+      "scenario": "A user isn't using Wi-Fi, Bluetooth, or GPS right now, but all three are left on and battery is draining faster than usual. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-37",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "OS and device health",
+      "name": "Check battery health",
+      "definition": "Check battery health on an aging phone that no longer lasts the day.",
+      "scenario": "A two-year-old phone that used to last all day now dies by early afternoon with normal use. What's the fix to check first?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-38",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "OS and device health",
+      "name": "Replace the battery",
+      "definition": "Replace the battery after health confirms it is worn out.",
+      "scenario": "Battery health check confirms the battery is significantly degraded (well below original capacity). What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-39",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "OS and device health",
+      "name": "Update the OS",
+      "definition": "Update the OS when random reboots line up with a stale system build.",
+      "scenario": "A phone randomly restarts a few times a week, and it hasn't had an OS update in months. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-40",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "OS and device health",
+      "name": "Update the app",
+      "definition": "Update the suspect app when reboots only happen while it is open.",
+      "scenario": "Random reboots happen only when one specific app is open, and that app has a pending update. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-41",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "OS and device health",
+      "name": "Review crash logs / contact support",
+      "definition": "Review crash logs or contact support after OS and app updates fail.",
+      "scenario": "The OS and the suspect app are both fully updated, but random reboots continue. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-42",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "OS and device health",
+      "name": "Check battery health",
+      "definition": "A worn battery can cause random reboots — check battery health.",
+      "scenario": "Random reboots happen, and a battery health check shows it's severely degraded. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-43",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Connectivity and display",
+      "name": "Toggle the Wi-Fi radio",
+      "definition": "Toggle Wi-Fi off and on first when it will not join any network.",
+      "scenario": "A phone shows Wi-Fi is on but won't connect to any network, and no other steps have been tried. What's the first fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-44",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Connectivity and display",
+      "name": "Verify Wi-Fi password / AP settings",
+      "definition": "Recheck the Wi-Fi password and AP settings after a radio toggle fails.",
+      "scenario": "Toggling Wi-Fi off and on didn't help, and the user isn't 100% sure they typed the router password correctly. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-45",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Connectivity and display",
+      "name": "Check network / try another network",
+      "definition": "Try another network to isolate a device problem from this AP.",
+      "scenario": "The password is confirmed correct, but the connection still fails only on this one network. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-46",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Connectivity and display",
+      "name": "Restart the device",
+      "definition": "Restart the device after Wi-Fi toggle, password, and another network fail.",
+      "scenario": "Toggling Wi-Fi, rechecking the password, and trying another network all failed. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-47",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Connectivity and display",
+      "name": "Toggle the Bluetooth radio",
+      "definition": "Toggle Bluetooth off and on first when pairing fails.",
+      "scenario": "A user's Bluetooth headphones won't pair, and nothing else has been tried yet. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-48",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Connectivity and display",
+      "name": "Restart the device",
+      "definition": "Restart after a Bluetooth radio toggle does not restore pairing.",
+      "scenario": "Toggling Bluetooth didn't fix the pairing issue. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-49",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Connectivity and display",
+      "name": "Move closer (AirDrop)",
+      "definition": "AirDrop needs Bluetooth + Wi-Fi on and the devices close together.",
+      "scenario": "Two iPhones are 15 feet apart in different rooms and AirDrop won't find each other, though Bluetooth and Wi-Fi are both on. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-50",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Connectivity and display",
+      "name": "Toggle the NFC radio",
+      "definition": "Toggle NFC off and on first when tap-to-pay fails.",
+      "scenario": "Tap-to-pay isn't working at a terminal, and nothing has been checked yet. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-51",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Connectivity and display",
+      "name": "Restart the device",
+      "definition": "Restart after an NFC toggle does not restore tap-to-pay.",
+      "scenario": "Toggling NFC didn't fix tap-to-pay. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-52",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Connectivity and display",
+      "name": "Update linked payment cards",
+      "definition": "Update the wallet cards after a reissued card fails tap-to-pay.",
+      "scenario": "NFC and the radio toggle both check out fine, but the specific card being used for tap-to-pay was recently reissued. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-53",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Connectivity and display",
+      "name": "Check orientation lock",
+      "definition": "Check orientation / rotation lock first.",
+      "scenario": "A user turns their phone sideways and the screen doesn't rotate — nothing else has been checked. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-54",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Connectivity and display",
+      "name": "Close and reopen the app",
+      "definition": "Close and reopen the app when only that app refuses to rotate.",
+      "scenario": "Orientation lock is off, but one specific app still won't rotate while others do. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-55",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Connectivity and display",
+      "name": "Restart the device",
+      "definition": "Restart when rotation fails in every app after lock and reopen checks.",
+      "scenario": "Orientation lock is off and the app was reopened, but rotation still doesn't work in any app. What's the fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.2-56",
+      "section": "3.2",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Issues",
+      "category": "Connectivity and display",
+      "name": "Hardware failure — contact support",
+      "definition": "If rotation fails in every app after a restart, the accelerometer/gyroscope may be bad — contact support.",
+      "scenario": "A restart didn't fix it, and rotation fails across every app. What's the fix?",
+      "role": "solution"
     },
     {
       "id": "3.3-0",
@@ -583,8 +1104,9 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues",
       "category": "Threats and risk sources",
       "name": "Application source / unofficial application stores",
-      "definition": "Sideloading apps from third-party sites or APK files poses severe security risks because uncurated sources may contain malware that can access device data.",
-      "scenario": "The user sideloaded an APK from a random website instead of the official store. What risk source is that?"
+      "definition": "Sideloading from uncurated third-party sources risks malware with access to device data — stick to trusted, centralized stores like Google Play or the Apple App Store.",
+      "scenario": "A user downloads an APK file from a random website to get a \"free\" version of a paid app instead of using the Play Store. What's the risk, and what's the recommendation?",
+      "role": "problem"
     },
     {
       "id": "3.3-1",
@@ -592,8 +1114,9 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues",
       "category": "Threats and risk sources",
       "name": "Developer mode",
-      "definition": "Enables advanced OS access, USB debugging, memory statistics, and detailed logging capabilities.",
-      "scenario": "USB debugging, verbose logs, and extra OS switches are turned on for tinkering. What mode is that?"
+      "definition": "Tap the build number seven times under Settings > About Phone — it enables advanced OS access, USB debugging, memory stats, and detailed logging.",
+      "scenario": "An Android user wants to enable USB debugging and detailed logging for testing. How do they enable it, and what does it grant?",
+      "role": "problem"
     },
     {
       "id": "3.3-2",
@@ -601,8 +1124,9 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues",
       "category": "Threats and risk sources",
       "name": "Root access / jailbreak",
-      "definition": "Modifies core firmware to override the factory operating system, granting complete control over the device and enabling sideloading.",
-      "scenario": "The user patched firmware to override the factory OS so they can sideload anything and own the device. What modification is that?"
+      "definition": "Jailbreak (iOS) grants complete control over the device and strips away MDM management capabilities, which is what enables the sideloading. Android equivalent: root — triggers an MDM bypass.",
+      "scenario": "A user on a corporate-managed iPhone wants to install apps outside the App Store, so they jailbreak the device. What happens to the device's management, and what specifically enabled the sideloading?",
+      "role": "problem"
     },
     {
       "id": "3.3-3",
@@ -610,8 +1134,9 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues",
       "category": "Threats and risk sources",
       "name": "Unauthorized / malicious application",
-      "definition": "Unapproved apps or infected development environments (e.g., XcodeGhost) can inject malicious code, harvest data, or secretly sign users up for paid services without consent.",
-      "scenario": "An unapproved app — or a poisoned Xcode-style toolchain — is harvesting data and signing the user up for paid services. What kind of app is that?"
+      "definition": "Unauthorized/malicious application — infected dev environments can inject malicious code or enroll users in paid services without consent; check the download source and verify app legitimacy before installing.",
+      "scenario": "A user installs an app built using a compromised, unofficial version of a development toolchain (like the XcodeGhost incident), and it secretly signs them up for a paid subscription. What's the underlying risk category, and what should users do before installing apps generally?",
+      "role": "problem"
     },
     {
       "id": "3.3-4",
@@ -619,8 +1144,9 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues",
       "category": "Threats and risk sources",
       "name": "Application spoofing",
-      "definition": "Malicious apps masquerade as legitimate tools (e.g., photo editors or QR scanners) while performing hidden malicious actions in the background.",
-      "scenario": "A “photo editor” icon is a fake; the real work is hidden in the background. What technique is that?"
+      "definition": "Application spoofing — a malicious app masquerading as a legitimate tool.",
+      "scenario": "A user installs what looks like a simple QR code scanner app, but it's secretly harvesting contacts and messages in the background. What's this called?",
+      "role": "problem"
     },
     {
       "id": "3.3-5",
@@ -628,8 +1154,9 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues",
       "category": "Common symptoms",
       "name": "High network traffic",
-      "definition": "Unexpected spikes in data transmission can indicate a malware infection, such as command-and-control communications or encrypted traffic proxying.",
-      "scenario": "Cellular graphs spike at night with no streaming. You suspect C2 or proxy traffic. What symptom is that?"
+      "definition": "High network traffic, possibly malware command-and-control or encrypted traffic proxying — track usage with a data-monitoring tool and run a malware scan.",
+      "scenario": "A user notices their phone's data usage has spiked dramatically overnight with no explanation, and they suspect the device is secretly communicating with a remote server. What's the likely cause, and what should they do?",
+      "role": "problem"
     },
     {
       "id": "3.3-6",
@@ -637,8 +1164,9 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues",
       "category": "Common symptoms",
       "name": "Degraded response time",
-      "definition": "Unresponsive screens, sluggish app performance, or choppy animations can be caused by resource-heavy malware or buggy software.",
-      "scenario": "The screen feels sticky, apps hitch, and animations stutter — malware or a buggy app is chewing resources. What symptom is that?"
+      "definition": "Degraded response time — restart the device, close background apps, apply OS/app updates, or as a last resort, factory reset.",
+      "scenario": "A phone has become sluggish, animations stutter, and the screen is slow to respond — but the cause isn't confirmed yet. What's the troubleshooting order?",
+      "role": "problem"
     },
     {
       "id": "3.3-7",
@@ -646,8 +1174,9 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues",
       "category": "Common symptoms",
       "name": "Data-usage limit notification",
-      "definition": "Reaching a cellular data threshold — using native Android limits/warnings or third-party monitoring apps — can serve as an early warning sign that background malware is exfiltrating data.",
-      "scenario": "The carrier warning says the monthly cellular cap is already hit, which can be an early sign of data leaving the phone. What notification is that?"
+      "definition": "A data-usage limit notification — an early warning sign of background malware exfiltrating data.",
+      "scenario": "A user gets a notification that they've hit their monthly cellular data cap much earlier than usual, with no change in their normal usage habits. What could this indicate?",
+      "role": "problem"
     },
     {
       "id": "3.3-8",
@@ -655,8 +1184,9 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues",
       "category": "Common symptoms",
       "name": "Limited internet connectivity",
-      "definition": "Malware or misconfigurations can degrade network performance.",
-      "scenario": "Wi-Fi and cell still show bars, but pages crawl because malware or a bad config is degrading the path. What symptom is that?"
+      "definition": "Limited internet connectivity — toggle Wi-Fi or Airplane Mode, restart the device, run a malware scan, or reset network settings (iOS).",
+      "scenario": "A phone's internet feels slow and unreliable across multiple networks, and the user suspects either malware or a misconfiguration. What are the fixes to try?",
+      "role": "problem"
     },
     {
       "id": "3.3-9",
@@ -664,8 +1194,9 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues",
       "category": "Common symptoms",
       "name": "No internet connectivity",
-      "definition": "Malware may intentionally block internet connections to prevent anti-malware definition updates or security software downloads.",
-      "scenario": "The phone has no usable internet at all — malware may be blocking it so security tools cannot update. What symptom is that?"
+      "definition": "No internet connectivity — malware may intentionally block internet access to prevent anti-malware updates or security downloads.",
+      "scenario": "A phone has zero internet connectivity at all, and the user can't even download a security app to check for malware. What might be causing this deliberately?",
+      "role": "problem"
     },
     {
       "id": "3.3-10",
@@ -673,8 +1204,9 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues",
       "category": "Common symptoms",
       "name": "High number of ads",
-      "definition": "Persistent or excessive ad pop-ups are often driven by adware or fake ad-blocking malware (e.g., Fake Ads Block) designed to generate ad revenue for attackers.",
-      "scenario": "Pop-up ads cover every screen, often from adware or a fake “ad blocker.” What symptom is that?"
+      "definition": "High number of ads — adware or fake ad-blocking malware (e.g., Fake Ads Block) generating ad revenue for attackers.",
+      "scenario": "A user's phone shows constant pop-up ads even while using unrelated apps, and they recently installed a \"free ad blocker\" app. What's the likely cause?",
+      "role": "problem"
     },
     {
       "id": "3.3-11",
@@ -682,8 +1214,9 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues",
       "category": "Common symptoms",
       "name": "Fake security warnings",
-      "definition": "Malicious browser pop-ups imitate official system alerts to trick users into downloading “security updates” that actually install malware.",
-      "scenario": "A browser overlay pretends to be an OS alert and begs the user to “update security,” which would install malware. What symptom is that?"
+      "definition": "This is a fake security warning — close the browser window immediately without clicking the prompt.",
+      "scenario": "While browsing, a pop-up appears saying \"Your device is infected — click here to install a security update.\" What should the user do?",
+      "role": "problem"
     },
     {
       "id": "3.3-12",
@@ -691,8 +1224,9 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues",
       "category": "Common symptoms",
       "name": "Unexpected application behavior",
-      "definition": "Sudden crashes, unresponsiveness, broken features, or excessive battery drain are typically app-specific bugs.",
-      "scenario": "One app suddenly crashes, drains battery, and loses features while the rest of the phone is fine. What symptom is that?"
+      "definition": "Unexpected application behavior — typically an app-specific bug; contact the app developer and update to the latest version.",
+      "scenario": "A specific app keeps crashing, feels unresponsive, has a broken feature, and drains the battery fast — but no other apps are affected. What's the likely cause and fix?",
+      "role": "problem"
     },
     {
       "id": "3.3-13",
@@ -700,8 +1234,19 @@
       "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues",
       "category": "Common symptoms",
       "name": "Leaked personal files / data",
-      "definition": "Caused by local malware breaches or compromised cloud storage accounts.",
-      "scenario": "Photos and contacts showed up on a forum; likely local malware or a hijacked cloud account. What incident is that?"
+      "definition": "Leaked personal files/data — run a malware scan, perform a factory reset, update passwords for cloud services (iCloud, Google Workspace, OneDrive), and enable multi-factor authentication (MFA).",
+      "scenario": "A user discovers private photos and files from their phone have shown up online, and they're not sure if it was a local infection or their cloud account being compromised. What's the full response?",
+      "role": "problem"
+    },
+    {
+      "id": "3.3-14",
+      "section": "3.3",
+      "sectionTitle": "Troubleshoot Mobile OS and Application Security Issues",
+      "category": "Threats and risk sources",
+      "name": "Xcode (iOS developer mode)",
+      "definition": "iOS developer mode is managed through Xcode on macOS.",
+      "scenario": "An iOS developer wants to enable developer mode on an iPhone for app testing. How is that managed?",
+      "role": "problem"
     },
     {
       "id": "3.4-0",
@@ -709,8 +1254,9 @@
       "sectionTitle": "Troubleshoot Windows OS Security Issues",
       "category": "Windows OS security symptoms",
       "name": "Unable to access the network",
-      "definition": "Malware can intentionally block network access to prevent downloading anti-malware tools or installing operating system security patches that close known vulnerabilities.",
-      "scenario": "The Windows PC cannot reach the network at all — malware may be blocking patches and AV downloads. What symptom is that?"
+      "definition": "Unable to access the network — malware may block the path so patches and AV tools can't download; run a malware cleaner or wipe and restore from a known-good backup.",
+      "scenario": "A Windows PC suddenly has no network access, and the user can't download Defender updates or a malware cleaner. What's the likely cause, and what's the fix?",
+      "role": "problem"
     },
     {
       "id": "3.4-1",
@@ -718,8 +1264,9 @@
       "sectionTitle": "Troubleshoot Windows OS Security Issues",
       "category": "Windows OS security symptoms",
       "name": "Desktop alerts",
-      "definition": "Rogue browser pop-ups or pushed web messages often impersonate official system notifications to trick users into extending fake subscriptions or downloading malicious software.",
-      "scenario": "Rogue browser messages impersonate Windows notifications and push a fake subscription. What symptom is that?"
+      "definition": "Desktop alerts — rogue browser or web messages impersonating system notifications; block unauthorized sites in browser notification settings, or run a malware scan.",
+      "scenario": "Pop-ups that look like Windows notifications keep asking the user to extend an antivirus subscription or download software. What's this, and how do you handle it?",
+      "role": "problem"
     },
     {
       "id": "3.4-2",
@@ -727,8 +1274,9 @@
       "sectionTitle": "Troubleshoot Windows OS Security Issues",
       "category": "Windows OS security symptoms",
       "name": "False alerts regarding antivirus protection",
-      "definition": "Scareware mimics legitimate security tools, claiming your system is disabled or infected with specific threats (e.g., Trojan spyware). They direct users to call fake tech support numbers or pay money.",
-      "scenario": "A scareware window claims Defender is disabled and a Trojan is active, then shows a fake support number. What symptom is that?"
+      "definition": "False alerts regarding antivirus protection (scareware) — the files can be deleted manually, but wiping the system and restoring from backup is the most reliable fix.",
+      "scenario": "A full-screen window claims the PC is disabled, names a Trojan spyware file, and shows a phone number to call. What's this, and what's the most reliable fix?",
+      "role": "problem"
     },
     {
       "id": "3.4-3",
@@ -736,8 +1284,9 @@
       "sectionTitle": "Troubleshoot Windows OS Security Issues",
       "category": "Windows OS security symptoms",
       "name": "Altered system or personal files",
-      "definition": "Files or system binaries are unexpectedly renamed, moved, or missing.",
-      "scenario": "Documents and system binaries were renamed, moved, or are just gone. What symptom is that?"
+      "definition": "Altered system or personal files (missing / renamed) — a clear malware indicator; use a dedicated cleaner or wipe and restore from a known-good backup.",
+      "scenario": "Documents and system binaries were renamed or have vanished from where the user left them. What's the symptom, and what does it indicate?",
+      "role": "problem"
     },
     {
       "id": "3.4-4",
@@ -745,8 +1294,9 @@
       "sectionTitle": "Troubleshoot Windows OS Security Issues",
       "category": "Windows OS security symptoms",
       "name": "Unwanted notifications within the OS",
-      "definition": "Operating systems allow apps to push unwanted pop-ups.",
-      "scenario": "Installed apps keep pushing pop-ups through the OS notification center. What symptom is that?"
+      "definition": "Unwanted notifications within the OS — configure them app-by-app under Settings > System > Notifications so spam is off and system alerts stay on.",
+      "scenario": "Installed apps spam the Windows notification center, but the user still wants critical system alerts. What's this, and where do you control it?",
+      "role": "problem"
     },
     {
       "id": "3.4-5",
@@ -754,8 +1304,9 @@
       "sectionTitle": "Troubleshoot Windows OS Security Issues",
       "category": "Windows OS security symptoms",
       "name": "OS update failures",
-      "definition": "Malware, network misconfigurations, firewall filtering rules, or network bandwidth caps can block system updates.",
-      "scenario": "Windows Update will not finish — malware, a firewall rule, or a bandwidth cap may be blocking it. What symptom is that?"
+      "definition": "OS update failures — verify internet access, check firewall or bandwidth caps, then run Windows Update Troubleshooter via Settings > System > Troubleshoot > Other troubleshooters.",
+      "scenario": "Windows Update keeps failing. The PC can browse other websites. What should you check, and which built-in tool do you run?",
+      "role": "problem"
     },
     {
       "id": "3.4-6",
@@ -763,8 +1314,9 @@
       "sectionTitle": "Troubleshoot Windows OS Security Issues",
       "category": "Browser-related symptoms",
       "name": "Random / frequent pop-ups",
-      "definition": "Fake application prompts appear despite modern browser pop-up blockers being enabled by default.",
-      "scenario": "Fake app prompts keep appearing even though the browser’s pop-up blocker is on. What symptom is that?"
+      "definition": "Random / frequent pop-ups — on a modern browser this usually means malware; run a full scan or restore from a known-good backup.",
+      "scenario": "Fake app prompts keep appearing even though the browser's pop-up blocker is on. What's this, and what does it usually mean?",
+      "role": "problem"
     },
     {
       "id": "3.4-7",
@@ -772,8 +1324,9 @@
       "sectionTitle": "Troubleshoot Windows OS Security Issues",
       "category": "Browser-related symptoms",
       "name": "Certificate warnings",
-      "definition": "Browsers display “connection is not private” or untrusted site errors. Click the lock icon next to the HTTPS URL to inspect certificate details.",
-      "scenario": "The browser says the connection is not private. You click the lock next to HTTPS to inspect the cert. What warning is that?"
+      "definition": "Certificate warnings — click the lock icon next to the HTTPS URL to inspect issuer, expiration, and other cert details.",
+      "scenario": "The browser says \"Your connection is not private.\" What warning is that, and how do you inspect the certificate?",
+      "role": "problem"
     },
     {
       "id": "3.4-8",
@@ -781,8 +1334,9 @@
       "sectionTitle": "Troubleshoot Windows OS Security Issues",
       "category": "Browser-related symptoms",
       "name": "Redirection",
-      "definition": "Entering a search query or URL redirects the user to unintended, illegitimate websites designed to display ads or distribute further malware.",
-      "scenario": "Typing a normal search or URL dumps the user on a junk ad or malware site. What browser issue is that?"
+      "definition": "Redirection — almost always malware sending the browser to an ad or payload site; run an anti-malware scan or wipe and restore from a known-good backup.",
+      "scenario": "The user types a normal Google search but lands on a junk ad or malware site instead. What's this called, and how do you fix it?",
+      "role": "problem"
     },
     {
       "id": "3.4-9",
@@ -790,9 +1344,80 @@
       "sectionTitle": "Troubleshoot Windows OS Security Issues",
       "category": "Browser-related symptoms",
       "name": "Degraded browser performance",
-      "definition": "Sluggish loading and high system resource usage can be caused by excessive open tabs, bloated browser caches, or malicious JavaScript (e.g., background crypto miners using 100% CPU).",
-      "scenario": "The browser is sluggish and CPU sits at 100% — too many tabs, a bloated cache, or a JS miner. What symptom is that?"
+      "definition": "Degraded browser performance — too many tabs, a bloated cache, or malicious JavaScript such as a background crypto miner.",
+      "scenario": "The browser is sluggish and Task Manager shows 100% CPU on one tab. What's the symptom, and what are common causes?",
+      "role": "problem"
+    },
+    {
+      "id": "3.4-10",
+      "section": "3.4",
+      "sectionTitle": "Troubleshoot Windows OS Security Issues",
+      "category": "Windows OS security symptoms",
+      "name": "Inability to access files",
+      "definition": "Inability to access files — altered permissions or Access Denied on personal documents; treat it as malware and use a cleaner or wipe and restore.",
+      "scenario": "A user can still see their documents, but opening them returns \"Access denied\" and the permissions look changed. What's this specifically?",
+      "role": "problem"
+    },
+    {
+      "id": "3.4-11",
+      "section": "3.4",
+      "sectionTitle": "Troubleshoot Windows OS Security Issues",
+      "category": "Windows OS security symptoms",
+      "name": "Settings > System > Notifications",
+      "definition": "Configure notifications app-by-app under Settings > System > Notifications.",
+      "scenario": "App spam fills the Windows notification center, but the user still needs alerts from system services. Where do you turn the extras off app-by-app?",
+      "role": "solution"
+    },
+    {
+      "id": "3.4-12",
+      "section": "3.4",
+      "sectionTitle": "Troubleshoot Windows OS Security Issues",
+      "category": "Windows OS security symptoms",
+      "name": "Windows Update Troubleshooter",
+      "definition": "Windows Update Troubleshooter — Settings > System > Troubleshoot > Other troubleshooters; it detects Update problems and tries to fix them automatically.",
+      "scenario": "Internet access and firewall rules already check out, but Windows Update still fails. Which built-in tool do you run, and where?",
+      "role": "solution"
+    },
+    {
+      "id": "3.4-13",
+      "section": "3.4",
+      "sectionTitle": "Troubleshoot Windows OS Security Issues",
+      "category": "Windows OS security symptoms",
+      "name": "Wipe and restore from backup",
+      "definition": "Wipe the system and restore from a known-good backup — more reliable than manually deleting scareware files.",
+      "scenario": "Scareware claims Defender is disabled and wants a support-line call. Deleting the executable didn't fully clean it. What's the most reliable fix?",
+      "role": "solution"
+    },
+    {
+      "id": "3.4-14",
+      "section": "3.4",
+      "sectionTitle": "Troubleshoot Windows OS Security Issues",
+      "category": "Browser-related symptoms",
+      "name": "Click the lock icon",
+      "definition": "Click (or right-click) the lock icon next to the HTTPS URL to inspect the certificate.",
+      "scenario": "The browser shows a certificate warning. How do you view who issued the cert and when it expires?",
+      "role": "solution"
+    },
+    {
+      "id": "3.4-15",
+      "section": "3.4",
+      "sectionTitle": "Troubleshoot Windows OS Security Issues",
+      "category": "Browser-related symptoms",
+      "name": "Check domain, CA, or system time",
+      "definition": "Domain name mismatch, an untrusted Certificate Authority, or an incorrect local date and time.",
+      "scenario": "Certificate warnings keep appearing on sites that used to work. What are the three common causes to check?",
+      "role": "solution"
+    },
+    {
+      "id": "3.4-16",
+      "section": "3.4",
+      "sectionTitle": "Troubleshoot Windows OS Security Issues",
+      "category": "Browser-related symptoms",
+      "name": "Update browser / clear cache",
+      "definition": "Update the browser, clear cookies and cache, review Task Manager resource use, and test the same site in another browser.",
+      "scenario": "The browser is slow and using a lot of CPU. A malware scan already came back clean. What fixes should you try next?",
+      "role": "solution"
     }
   ],
-  "total": 85
+  "total": 139
 }

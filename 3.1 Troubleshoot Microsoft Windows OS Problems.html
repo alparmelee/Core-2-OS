@@ -902,6 +902,17 @@
           <p>Domain admins fix or optimize local DCs and profile sync paths so roaming profiles load without WAN bottlenecks.</p>
         </div>
       </article>
+
+      <article class="term sub" id="rebuild-user-profile">
+        <div class="visual photo">
+          <img src="3.1/New 3.1/Slow profile load.jfif" alt="Rebuild user profile" loading="lazy">
+        </div>
+        <div class="body">
+          <a class="parent-link" href="#slow-profile">Fix · Corrupted profile</a>
+          <h3>Rebuild user profile</h3>
+          <p>A corrupted or temporary profile shows a default wallpaper and empty Documents after a fast domain logon. Rename C:\Users\username, delete that profile's SID under HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList, sign in again, then copy files back from the renamed folder.</p>
+        </div>
+      </article>
       </div>
     </div>
   </section>
