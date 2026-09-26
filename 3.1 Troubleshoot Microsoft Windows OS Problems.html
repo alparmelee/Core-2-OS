@@ -587,6 +587,7 @@
           <span class="role-label">Problem</span>
           <h3>Low memory warnings</h3>
           <p>Windows warns that memory is nearly full — apps may freeze, crash, or refuse to open while RAM pressure is high.</p>
+          <p>If the question asks for a <strong>short-term fix</strong> and RAM is already near 100%, <strong>reboot</strong>. That ends every process and frees memory immediately. Closing heavy apps in Task Manager is the same idea if you can still work. Disable startup items, OS patches, and defrag are longer-term or the wrong resource (disk, not RAM).</p>
         </div>
       </article>
 
@@ -736,6 +737,7 @@
           <span class="role-label">Problem</span>
           <h3>Time drift</h3>
           <p>The clock slowly loses accuracy because of unreliable hardware timekeeping — which can break auth, certificates, and sync.</p>
+          <p>HTTPS certificates are only valid between a start date and an end date. The browser compares those dates to <em>this PC’s</em> clock. If the laptop clock is wrong, <strong>every</strong> HTTPS site can throw a security alert even though the sites are fine. A phone or another PC with a correct clock will not show the error. That “all HTTPS, this device only” pattern is time/date — not a bad subnet mask, stale AV signatures, or the phone’s OS version.</p>
         </div>
       </article>
 
@@ -886,6 +888,7 @@
           <span class="role-label">Problem</span>
           <h3>Slow profile load</h3>
           <p>Sign-in takes a long time, usually from network latency or WAN congestion while syncing a roaming profile to a domain controller.</p>
+          <p>A <strong>corrupted or temporary profile</strong> looks different: the user reaches the desktop quickly, but it is a default wallpaper and Documents / My Documents is empty. Rebuild it: rename <code>C:\Users\username</code>, delete that profile’s SID under <code>HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList</code>, then have them sign in again so Windows creates a clean profile. Copy files back from the renamed folder. Safe Mode, making them an Administrator, or an OS upgrade will not fix this.</p>
         </div>
       </article>
 

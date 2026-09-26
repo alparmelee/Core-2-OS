@@ -188,6 +188,7 @@
           <h3>Storage requirements</h3>
           <span class="aka">Install size is not the whole story</span>
           <p>A drive-space concern with two parts: the initial installation space requirement, and ongoing application-use requirements. Some applications consume a lot of additional storage after installation — so the initial install size may not be the most important number.</p>
+          <p>The installer package itself also eats space if you copy it onto C: first. Leave the source on USB or a network share and install only the program files locally. That is different from putting the finished application on a share — a video editor on the LAN would be slow and fragile.</p>
           <div class="demo">Practice in the <a href="1.10 Installing Applications.html">1.10 interactive lab</a> — slide months of use and watch caches grow past free space.</div>
         </div>
       </article>
@@ -212,7 +213,7 @@
       <div class="section-head">
         <span class="eyebrow">Part B</span>
         <h2>Deployment Methods</h2>
-        <p>How the bits actually get onto the PC — disc, ISO, download, or a cloned image.</p>
+        <p>How the bits actually get onto the PC — disc, USB, ISO, a network share, a download, or a cloned image.</p>
       </div>
 
       <article class="term" id="physicalvsiso">
@@ -224,6 +225,7 @@
           <span class="aka">Optical / USB vs. a sector-by-sector image file</span>
           <p>Physical media — optical disc, USB drive, etc. — is increasingly rare. An ISO is an optical disk image: a single file that is a sector-by-sector copy of a disc's files and folders, which can be mounted directly.</p>
           <p>On Windows, right-click an <code>.iso</code> and choose Mount to get a virtual drive letter with no disc in the tray.</p>
+          <p>A <strong>network share</strong> is another install source: copy the setup folder to a file share and run it from a UNC path or mapped drive. That keeps the large installer off the workstation. If USB setup fails because the local disk is full, CompTIA wants you to <em>change the source</em> to a share — not install the app itself onto the share, compress the files, or copy payloads by hand into Program Files.</p>
           <div class="demo">Practice in the <a href="1.10 Installing Applications.html">1.10 interactive lab</a> — compare Insert disc vs Mount ISO.</div>
         </div>
       </article>
@@ -283,6 +285,7 @@
           <h3>Network impact considerations for new applications</h3>
           <span class="aka">Firewall, VPN, and file-share rights</span>
           <p>A new application often needs access to internal services, plus the rights and permissions to reach file shares — both of which need to be planned and provisioned.</p>
+          <p>A share can also hold the <em>installer</em> (source). That is not the same as installing the program <em>to</em> the share as its home folder. Use the share to host setup.exe; still put a disk-heavy app on the local drive once there is room.</p>
           <div class="demo">Practice in the <a href="1.10 Installing Applications.html">1.10 interactive lab</a> — toggle internal services and share permissions.</div>
         </div>
       </article>

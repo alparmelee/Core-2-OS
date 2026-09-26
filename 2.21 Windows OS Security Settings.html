@@ -376,6 +376,7 @@
           <h3>Port security</h3>
           <span class="aka">firewall.cpl → Advanced settings → Inbound rules</span>
           <p>Port security controls network traffic by selectively opening or closing specific communication ports, to block unauthorized entry and restrict unnecessary network protocols.</p>
+          <p>That includes Windows Update and domain traffic. If a rarely used PC (conference room, kiosk) has not received patches and then cannot join the corporate network, the 2.2 answer is a <strong>firewall filtering</strong> those ports — not a BIOS password, an empty logon session, or Guest being disabled.</p>
           <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Port security</strong> in the topic list.</div>
         </div>
       </article>
@@ -567,7 +568,10 @@
         <div class="body">
           <h3>NTFS vs. share permissions</h3>
           <span class="aka">Share tab vs Security (NTFS) tab</span>
-          <p><b>Share </b>permissions act like a guard at the front gate, controlling who gets in through the network. <br>- Exclusively to network users. <br>- Set only at the folder level.<br><br><b>NTFS</b> permissions act like individual lockboxes inside the house, controlling access to specific files and subfolders. If either one denies you, you can't get in.<br>- Apply to both network and local users<br>-Can be applied at the folder or file level.<br><br></p><p>A Windows resource with conflicting NTFS and share permissions will assume The least restrictive permission.</p>
+          <p><b>Share</b> permissions act like a guard at the front gate, controlling who gets in through the network.</p>
+          <p>Share permissions apply only to network users and only at the folder. A mapped drive is network access, so the Share tab is in play. The share ACEs are Allow or Deny on Read, Change, or Full control. <strong>Deny always wins</strong> over Allow — that is the permission with priority.</p>
+          <p><b>NTFS</b> permissions act like lockboxes inside the house (folder or file, local or network). List folder contents is an NTFS right, not a share right.</p>
+          <p>If either Share or NTFS denies you, you are out. When both allow but at different levels, take the <strong>more restrictive</strong> of the two (Read + Modify = Read). Local interactive use ignores Share permissions entirely.</p>
           <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>NTFS vs. share permissions</strong> in the topic list.</div>
         </div>
       </article>
@@ -577,8 +581,11 @@
         </div>
         <div class="body">
           <h3>File and folder attributes</h3>
-          <span class="aka">File → Properties → Attributes</span>
-          <p>File and folder attributes are metadata flags stored by the file system that define specific operating behaviors and access characteristics — such as read-only, hidden, archived, or encrypted.<br><br></p><h3 data-path-to-node="9">Key Takeaways for Practice Exams</h3><ul data-path-to-node="10"><li><p data-path-to-node="10,0,0"><b data-path-to-node="10,0,0" data-index-in-node="0">Local Access:</b> Ignore Share permissions entirely; take the NTFS permission as-is.</p></li><li><p data-path-to-node="10,1,0"><b data-path-to-node="10,1,0" data-index-in-node="0">Remote Access:</b> Compare Share vs. NTFS and pick whichever one is more limiting:</p><ul data-path-to-node="10,1,1"><li><p data-path-to-node="10,1,1,0,0"><b data-path-to-node="10,1,1,0,0" data-index-in-node="0">Share (Read)</b> + <b data-path-to-node="10,1,1,0,0" data-index-in-node="15">NTFS (Modify)</b> = <b data-path-to-node="10,1,1,0,0" data-index-in-node="31">Read</b> (Read is more restrictive than Modify)</p></li><li><p data-path-to-node="10,1,1,1,0"><b data-path-to-node="10,1,1,1,0" data-index-in-node="0">Share (Full Control)</b> + <b data-path-to-node="10,1,1,1,0" data-index-in-node="23">NTFS (Read)</b> = <b data-path-to-node="10,1,1,1,0" data-index-in-node="37">Read</b> (Read is more restrictive than Full Control)</p></li></ul></li></ul>
+          <span class="aka">File → Properties → Attributes · attrib</span>
+          <p>File and folder attributes are metadata flags stored by the file system that define specific operating behaviors and access characteristics — such as read-only, hidden, archived, or encrypted.</p>
+          <p>The <code>attrib</code> command displays or changes those flags. Common switches: read-only (<code>R</code>), archive (<code>A</code>), system (<code>S</code>), hidden (<code>H</code>). <code>+</code> turns an attribute on; <code>-</code> turns it off. Put the flag <em>before</em> the path:</p>
+          <p><code>attrib +R [drive:][path][filename]</code></p>
+          <p>Wrong order: <code>attrib file.txt +R</code> or <code>attrib /R file.txt</code>.</p><h3 data-path-to-node="9">Key Takeaways for Practice Exams</h3><ul data-path-to-node="10"><li><p data-path-to-node="10,0,0"><b data-path-to-node="10,0,0" data-index-in-node="0">Local Access:</b> Ignore Share permissions entirely; take the NTFS permission as-is.</p></li><li><p data-path-to-node="10,1,0"><b data-path-to-node="10,1,0" data-index-in-node="0">Remote Access:</b> Compare Share vs. NTFS and pick whichever one is more limiting:</p><ul data-path-to-node="10,1,1"><li><p data-path-to-node="10,1,1,0,0"><b data-path-to-node="10,1,1,0,0" data-index-in-node="0">Share (Read)</b> + <b data-path-to-node="10,1,1,0,0" data-index-in-node="15">NTFS (Modify)</b> = <b data-path-to-node="10,1,1,0,0" data-index-in-node="31">Read</b> (Read is more restrictive than Modify)</p></li><li><p data-path-to-node="10,1,1,1,0"><b data-path-to-node="10,1,1,1,0" data-index-in-node="0">Share (Full Control)</b> + <b data-path-to-node="10,1,1,1,0" data-index-in-node="23">NTFS (Read)</b> = <b data-path-to-node="10,1,1,1,0" data-index-in-node="37">Read</b> (Read is more restrictive than Full Control)</p></li></ul></li></ul>
           <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>File and folder attributes</strong> in the topic list.</div>
         </div>
       </article>
@@ -590,6 +597,13 @@
           <h3>Inheritance</h3>
           <span class="aka">Security tab → Advanced → Inheritance</span>
           <p>Permission inheritance is a mechanism where files and subfolders automatically receive (inherit) the access permissions of their parent folder.</p>
+          <p><strong>Propagation</strong> is the same idea said the other way: permissions on the parent folder travel down to children created inside it.</p>
+          <p>Explicit permissions (set on the object itself) beat inherited ones. Precedence:</p>
+          <p><strong>Explicit Deny &gt; Explicit Allow &gt; Inherited Deny &gt; Inherited Allow</strong></p>
+          <p>So “inherited permissions take precedence over explicit” is <strong>false</strong>.</p>
+          <p>Copy and move change whether NTFS permissions stick or reset:</p>
+          <p><strong>Same volume</strong> — a <em>move</em> keeps the original permissions. A <em>copy</em> inherits the new parent (it does not keep the originals).</p>
+          <p><strong>Different volume</strong> — a copy <em>or</em> a move inherits the new parent. (A cross-volume move is really a copy-plus-delete.)</p>
           <div class="demo">Practice in the <a href="2.2 Configure and Apply Basic Microsoft Windows OS Security Settings.html">2.2 interactive lab</a> — click <strong>Inheritance</strong> in the topic list.</div>
         </div>
       </article>
